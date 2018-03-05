@@ -1,0 +1,16 @@
+language: python
+
+before_install:
+ - cd javascript
+ - git clone --depth 1 git@github.com:mozilla/rhino.git
+ - gradlew jar
+
+script:
+ - java -jar javascript/rhino/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar max.js
+
+notifications:
+  email:
+    recipients:
+      # - ci-notifications@myorg.org
+    on_success: always
+    on_failure: always
