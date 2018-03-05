@@ -5,6 +5,8 @@ before_install:
  - unzip rhino-1.7.8.zip -d /tmp
 
 script:
+ - pwd
+ - echo ${HOME}
  - java -jar /tmp/rhino1.7.8/lib/rhino-1.7.8.jar max.js
 
 notifications:
