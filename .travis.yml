@@ -7,7 +7,7 @@ before_install:
 script:
  - pwd
  - echo ${HOME}
- - java -jar /tmp/rhino1.7.8/lib/rhino-1.7.8.jar max.js
+ - java -jar /tmp/rhino1.7.8/lib/rhino-1.7.8.jar javascript/max.js
 
 notifications:
   email:
