@@ -1,0 +1,18 @@
+v8: https://github.com/v8/v8/wiki/Building-from-Source
+ status: stuck in step ./build/install-build-deps.sh -- 
+
+spidermonkey: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Build_Documentation
+ status: build error. /home/damorim/Software/javascript/gecko-dev/js/src/shell/js.cpp:8893:9: error: ‘PRLibSpec’ was not declared in this scope
+
+--------------------
+rhino: https://github.com/mozilla/rhino
+ status OK
+ java -jar buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar <file>
+
+javascriptcore: http://constellation.github.io/blog/2016/05/02/how-to-build-javascriptcore-on-your-machine/
+ status OK
+ ./<WebKit dir>/WebKitBuild/Release/bin/jsc <file>
+
+chakra
+ status OK
+ ./<ChacraCOre dir>/out/Release/ch <file>
