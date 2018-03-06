@@ -3,9 +3,10 @@ language: python
 before_install:
  - wget https://github.com/mozilla/rhino/releases/download/Rhino1_7_8_Release/rhino-1.7.8.zip
  - unzip rhino-1.7.8.zip -d /tmp
+ - pip install -U pytest
 
 script:
- - java -jar /tmp/rhino1.7.8/lib/rhino-1.7.8.jar seeds/max.js
+ - pytest regression_tests/test_math.py
 
 notifications:
   email:
