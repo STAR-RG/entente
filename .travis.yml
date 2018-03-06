@@ -14,7 +14,6 @@ install:
  - pip install -r requirements.txt
 
 script:
- - python regression_tests/test_math.py
  - pytest regression_tests/test_math.py
 
 notifications:

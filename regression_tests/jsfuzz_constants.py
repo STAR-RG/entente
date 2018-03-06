@@ -2,8 +2,6 @@ import os, fnmatch
 
 ## find a file within a directory
 def find(pattern, path):
-    print 'pattern: ' + pattern
-    print 'path: ' + path
     result = []
     for root, dirs, files in os.walk(path):
         for name in files:
