@@ -8,7 +8,6 @@ before_install:
  - unzip rhino-1.7.8.zip -d /tmp
 
 install:
- - pip install .
  - pip install -r requirements.txt
 
 script:
