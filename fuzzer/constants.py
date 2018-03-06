@@ -17,7 +17,11 @@ if not os.path.exists(os.path.join(base_dir,'javascript')):
 
 js_dir = os.path.join(base_dir, 'javascript/')
 seeds_dir = os.path.join(base_dir, 'seeds/')
+# rhino
 rhino = find('*.jar', os.path.join(js_dir, 'rhino/buildGradle/libs/'))
+# javascriptcore
 javascriptcore_release_dir = os.path.join(js_dir, 'WebKit/WebKitBuild/Release/')
 javascriptcore_lib_dir = os.path.join(javascriptcore_release_dir, 'lib/')
 javascriptcore = find('jsc', os.path.join(javascriptcore_release_dir, 'bin/'))
+# chacra
+chacra = find('ch', os.path.join(js_dir, 'ChakraCore/out/Release/'))
