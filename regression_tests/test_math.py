@@ -1,5 +1,5 @@
 import shlex, subprocess
-from jsfuzz_constants import seeds_dir, rhino_path
+from fuzzer.constants import seeds_dir, rhino_path
 import os
 
 ## this is a pytest test

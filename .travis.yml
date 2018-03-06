@@ -11,10 +11,10 @@ before_install:
  - ls javascript/rhino/buildGradle/libs
 
 install:
- - pip install -r requirements.txt
+ - pip install tox-travis 
 
 script:
- - pytest regression_tests/test_math.py
+ - tox
 
 notifications:
   email:
