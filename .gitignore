@@ -102,3 +102,4 @@ ENV/
 
 *~
 .pytest_cache
+.#*

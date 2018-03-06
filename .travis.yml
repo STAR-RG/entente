@@ -6,9 +6,13 @@ python:
 before_install:
  - wget https://github.com/mozilla/rhino/releases/download/Rhino1_7_8_Release/rhino-1.7.8.zip
  - unzip rhino-1.7.8.zip -d /tmp
+
+install:
+ - pip install .
  - pip install -r requirements.txt
 
 script:
+ - python regression_tests/test_math.py
  - pytest regression_tests/test_math.py
 
 notifications:
