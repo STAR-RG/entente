@@ -8,6 +8,7 @@ before_install:
  - unzip rhino-1.7.8.zip -d /tmp
  - mkdir -p javascript/rhino/buildGradle/libs
  - cp /tmp/rhino1.7.8/lib/rhino-1.7.8.jar javascript/rhino/buildGradle/libs
+ - ls javascript/rhino/buildGradle/libs
 
 install:
  - pip install -r requirements.txt
