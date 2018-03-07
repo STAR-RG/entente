@@ -1,26 +1,29 @@
 TODO: The "tip" of the repo may contain short-lived regressions. We should find out
       the equivalent of the v8 'dev' channel in the other tools
 
+TODO: Mateus, please make this doc to contain only installation instructions as to facilitate the work of students. -Marcelo            
+
 v8: https://github.com/v8/v8/wiki/Building-from-Source
  status: stuck in step ./build/install-build-deps.sh -- 
 
-spidermonkey: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Build_Documentation
- status: build error. /home/damorim/Software/javascript/gecko-dev/js/src/shell/js.cpp:8893:9: error: ‘PRLibSpec’ was not declared in this scope
-         reason: https://bugzilla.mozilla.org/show_bug.cgi?id=1441454
-	 workaround: '../configure --enable-nspr-build'
-
 --------------------
+spidermonkey: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Build_Documentation
+   problem: if you just follow instruction you will certainly observe a build error. ‘PRLibSpec’ was not declared in this scope. (reason: https://bugzilla.mozilla.org/show_bug.cgi?id=1441454)
+   workaround: '../configure --enable-nspr-build'
+ status: OK
+ <checkout-dir>/gecko-dev/js/src/build_OPT.OBJ/dist/bin/js <file>
+
 rhino: https://github.com/mozilla/rhino
  status OK
  testsuite: same as spidermonkey?
  supports: ES6 (not complete?) - maybe Nashorn is a better alternative?
- java -jar <rhino dir>/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar <file>
+ java -jar <checkout-dir>/rhino>/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar <file>
 
 javascriptcore: http://constellation.github.io/blog/2016/05/02/how-to-build-javascriptcore-on-your-machine/
  status OK
  testsuite: includes chakra/mozilla
- ./<WebKit dir>/WebKitBuild/Release/bin/jsc <file>
+ <checkout-dir>/WebKit/WebKitBuild/Release/bin/jsc <file>
 
 chakra: https://github.com/microsoft/ChakraCore
  status OK
- ./<ChacraCOre dir>/out/Release/ch <file>
+ <checkout-dir>/ChacraCore/out/Release/ch <file>
