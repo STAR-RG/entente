@@ -25,3 +25,5 @@ javascriptcore_lib_dir = os.path.join(javascriptcore_release_dir, 'lib/')
 javascriptcore = find('jsc', os.path.join(javascriptcore_release_dir, 'bin/'))
 # chacra
 chacra = find('ch', os.path.join(js_dir, 'ChakraCore/out/Release/'))
+# spider monkey
+spidermonkey = find('js', os.path.join(js_dir, 'gecko-dev/js/src/build_OPT.OBJ/dist/bin'))
