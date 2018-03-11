@@ -12,7 +12,7 @@ def find(pattern, path):
 ## constants
 base_dir = os.getcwd()
 
-if not os.path.exists(os.path.join(base_dir,'javascript')):
+if not os.path.exists(os.path.join(base_dir, 'javascript')):
     raise NameError("please load this module from the base directory (or generalize this code)")
 
 js_dir = os.path.join(base_dir, 'javascript/')
