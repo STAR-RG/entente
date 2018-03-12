@@ -7,7 +7,7 @@
 JS_DIR=${HOME}/projects/jsfuzz/javascript
 
 RHINO_PATH="${JS_DIR}/rhino/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar"
-JAVA_SCRIPT_CORE_PATH="${S_DIR}/WebKit/WebKitBuild/Release/bin"
+JAVA_SCRIPT_CORE_PATH="${JS_DIR}/WebKit/WebKitBuild/Release/bin"
 CHACRA_PATH="${JS_DIR}/ChakraCore/out/Release"
 SPIDER_MONKEY="${JS_DIR}/gecko-dev/js/src/build_OPT.OBJ/dist/bin"
 

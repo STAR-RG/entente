@@ -5,11 +5,7 @@ from fuzzer.constants import seeds_dir
 
 def test_max():
     pathName = os.path.join(seeds_dir, 'max.js')
-    myset = callAll(pathName)
-    assert len(myset) == 1
-    assert 67 == int(myset.pop())
-
-@pytest.mark.skip(reason="no way of currently testing this")
-def test_urlconnection():
-    myset = callAll('urlconnection.js')
-    assert len(myset) == 1
+    res = callAll(pathName)
+    assert 67 == int(res.jsc_out)
+    assert 67 == int(res.chacra_out)
+    assert 67 == int(res.spiderm_out)
