@@ -1,29 +1,34 @@
-TODO: The "tip" of the repo may contain short-lived regressions. We should find out
-      the equivalent of the v8 'dev' channel in the other tools
+* Tasks
+** TODO The "tip" of the repo may contain short-lived regressions. 
+	We should find out the equivalent of the v8 'dev' channel in the other tools
+** TODO Mateus, please make this doc to contain only installation instructions as to facilitate the work of students. -Marcelo            
 
-TODO: Mateus, please make this doc to contain only installation instructions as to facilitate the work of students. -Marcelo            
+* Engines
+** v8: https://github.com/v8/v8/wiki/Building-from-Source
+ - recommended branch: 6.5.254.31 (stable/beta used in chrome for linux/windows)
+   - run "fetch v8 --no-history" to avoid downloading the entire repo
+   - to get this branch: "git checkout 6.5.254.31; git pull"
+   - you don't need to get all the stuff in "install-build-deps.sh' to compile v8.
+ - status: ok
+ - <checkout-dir>/v8/out.gn/x64.release/d8
 
-v8: https://github.com/v8/v8/wiki/Building-from-Source
- status: stuck in step ./build/install-build-deps.sh -- 
+** spidermonkey: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Build_Documentation
+ - problem: if you just follow instruction you will certainly observe a build error. ‘PRLibSpec’ was not declared in this scope. (reason: https://bugzilla.mozilla.org/show_bug.cgi?id=1441454)
+	workaround: '../configure --enable-nspr-build'
+ - status: OK
+ - <checkout-dir>/gecko-dev/js/src/build_OPT.OBJ/dist/bin/js <file>
 
---------------------
-spidermonkey: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Build_Documentation
-   problem: if you just follow instruction you will certainly observe a build error. ‘PRLibSpec’ was not declared in this scope. (reason: https://bugzilla.mozilla.org/show_bug.cgi?id=1441454)
-   workaround: '../configure --enable-nspr-build'
- status: OK
- <checkout-dir>/gecko-dev/js/src/build_OPT.OBJ/dist/bin/js <file>
+** rhino: https://github.com/mozilla/rhino
+ - status OK
+ - testsuite: same as spidermonkey?
+ - supports: ES6 (not complete?) - maybe Nashorn is a better alternative?
+ - java -jar <checkout-dir>/rhino>/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar <file>
 
-rhino: https://github.com/mozilla/rhino
- status OK
- testsuite: same as spidermonkey?
- supports: ES6 (not complete?) - maybe Nashorn is a better alternative?
- java -jar <checkout-dir>/rhino>/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar <file>
+** javascriptcore: http://constellation.github.io/blog/2016/05/02/how-to-build-javascriptcore-on-your-machine/
+ - status OK
+ - testsuite: includes chakra/mozilla
+ - <checkout-dir>/WebKit/WebKitBuild/Release/bin/jsc <file>
 
-javascriptcore: http://constellation.github.io/blog/2016/05/02/how-to-build-javascriptcore-on-your-machine/
- status OK
- testsuite: includes chakra/mozilla
- <checkout-dir>/WebKit/WebKitBuild/Release/bin/jsc <file>
-
-chakra: https://github.com/microsoft/ChakraCore
- status OK
- <checkout-dir>/ChacraCore/out/Release/ch <file>
+** chakra: https://github.com/microsoft/ChakraCore
+ - status OK
+ - <checkout-dir>/ChacraCore/out/Release/ch <file>
