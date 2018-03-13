@@ -6,9 +6,17 @@
 * Engines
 ** v8: https://github.com/v8/v8/wiki/Building-from-Source
  - recommended branch: 6.5.254.31 (stable/beta used in chrome for linux/windows)
-   - run "fetch v8 --no-history" to avoid downloading the entire repo
-   - to get this branch: "git checkout 6.5.254.31; git pull"
-   - you don't need to get all the stuff in "install-build-deps.sh' to compile v8.
+   - run "fetch --no-history v8" // to avoid downloading the entire repo
+   - cd v8
+   - git checkout 6.5.254.31 // to get this branch
+   
+   // @Mateus, If I just run git pull I get an error message "fatal: refusing to merge unrelated histories". if I use "git pull --allow-unrelated-histories" I get lots of conflicts.
+   - git pull 
+
+   // @Mateus, at this point should we continue from "Building V8 TL;DR"?
+
+   // @Mateus, are you suggesting we should modify something or pass some command-line option?
+   - you don't need to get all the stuff in "install-build-deps.sh' to compile v8. 
  - status: ok
  - <checkout-dir>/v8/out.gn/x64.release/d8
 
