@@ -2,7 +2,13 @@ import esprima
 import json
 from esprima import nodes # https://github.com/Kronuz/esprima-python
 
-class SillyVisitor(esprima.NodeVisitor):
+def parse_and_rewrite(code_string):
+    visitor = RewriteVisitor()
+    ast = esprima.parseScript(code_string, delegate=visitor)
+    visitor.visit(ast) # side-effects on the ast
+    return ast
+
+class RewriteVisitor(esprima.NodeVisitor):
     def transform_Literal(self, node, metadata):
         if type(node.value) is unicode:
             return nodes.Literal('Alo!', "Alo")
@@ -13,12 +19,9 @@ class SillyVisitor(esprima.NodeVisitor):
         else:
             return node
 
-def parse_and_rename():
-    program = 'const answer = "Hello"'
-    visitor = SillyVisitor()
-    ast = esprima.parseScript(program, delegate=visitor)
-    visitor.visit(ast)
-    print(json.dumps(ast.toDict(), indent=2))
-
 if __name__ == "__main__":
-    parse_and_rename()
+    ast = parse_and_rewrite('const answer = "Hello"')
+    ## to read the tree (with types)
+    print(json.dumps(ast.toDict(), indent=2))
+    ## to read the code
+    ## ????
