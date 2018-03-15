@@ -1,0 +1,10 @@
+update fuzzer to use executables 
+
+- download binaries from https://imperialcollegelondon.box.com/s/5hoh6lfidlz7hxdct3cdh5pwduga7a63
+
+if you observe error "libicuuc.so.55: cannot open shared object file" proceed as follows
+
+ 1. Look for .deb file for libicuuc.so.55 on the web. For ubuntu, it can be found here: https://packages.ubuntu.com/xenial/amd64/libicu55/download
+ 2. sudo dpkg -i <file.deb>
+ 3. sudo apt-get -f install
+ 

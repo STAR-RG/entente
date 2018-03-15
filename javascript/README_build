@@ -1,10 +1,8 @@
-* Tasks
-** TODO update fuzzer to use precompiled binaries available in https://imperialcollegelondon.box.com/s/5hoh6lfidlz7hxdct3cdh5pwduga7a63
-** DONE The "tip" of the repo may contain short-lived regressions. 
+* TODOs
 	We should find out the equivalent of the v8 'dev' channel in the other tools
-** DONE Mateus, please make this doc to contain only installation instructions as to facilitate the work of students. -Marcelo            
 
-* Engines
+*** Engines ***
+
 ** v8: https://github.com/v8/v8/wiki/Building-from-Source
  - recommended branch: 6.5.254.31 (stable/beta used in chrome for linux/windows)
  - follow the instructions on the link above with the following changes:
