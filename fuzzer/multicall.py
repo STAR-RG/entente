@@ -7,7 +7,6 @@ import os
     objects encapsulating output and error streams of 
     corresponding calls
 '''
-enable_v8 = False
 
 def callAll(pathName):
     res = Results(pathName)
@@ -21,13 +20,12 @@ def callAll(pathName):
     out, err = callSpiderMonkey(pathName)
     res.set_spiderm_results(out, err)
     # v8
-    if enable_v8:
-        out, err = callV8(pathName)
-        res.set_v8_results(out, err)
+    out, err = callV8(pathName)
+    res.set_v8_results(out, err)
 
     return res
 
-def callJSEngine(engine_name, cmd_line):
+def callJSEngine(cmd_line):
     args = shlex.split(cmd_line)
     p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return p.communicate()
@@ -35,26 +33,22 @@ def callJSEngine(engine_name, cmd_line):
 '''
     not using this engine
 '''
-def callRhino(pathName):
-    cmd_line = "java -jar " + constants.rhino + " " + pathName
-    return callJSEngine('Rhino', cmd_line)
-
 def callJavaScriptCore(pathName):
     cmd_line = constants.javascriptcore + " " + pathName
-    os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
-    return callJSEngine('JavaScriptCore', cmd_line)
+    #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
+    return callJSEngine(cmd_line)
 
 def callChakra(pathName):
     cmd_line = constants.chakra + " " + pathName
-    return callJSEngine('Chakra', cmd_line)
+    return callJSEngine(cmd_line)
 
 def callSpiderMonkey(pathName):
     cmd_line = constants.spidermonkey + " " + pathName
-    return callJSEngine('SpiderMonkey', cmd_line)
+    return callJSEngine(cmd_line)
 
 def callV8(pathName):
     cmd_line = constants.v8 + " " + pathName
-    return callJSEngine('v8', cmd_line)
+    return callJSEngine(cmd_line)
 
 class Results:
     def __init__(self, path_name):

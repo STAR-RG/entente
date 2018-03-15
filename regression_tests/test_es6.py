@@ -2,7 +2,7 @@ from regression_tests import *
 
 def test_ec6():
     counters = {}
-    path_name = os.path.join(constants.js_dir, 'WebKit/JSTests/es6')
+    path_name = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6')
     with open('diff_report_test_ec6.txt', 'w') as file:
         buffer = ''
         for file_name in os.listdir(path_name):
