@@ -1,42 +1,57 @@
 * Tasks
-** TODO The "tip" of the repo may contain short-lived regressions. 
+** TODO update fuzzer to use precompiled binaries available in https://imperialcollegelondon.box.com/s/5hoh6lfidlz7hxdct3cdh5pwduga7a63
+** DONE The "tip" of the repo may contain short-lived regressions. 
 	We should find out the equivalent of the v8 'dev' channel in the other tools
-** TODO Mateus, please make this doc to contain only installation instructions as to facilitate the work of students. -Marcelo            
+** DONE Mateus, please make this doc to contain only installation instructions as to facilitate the work of students. -Marcelo            
 
 * Engines
 ** v8: https://github.com/v8/v8/wiki/Building-from-Source
  - recommended branch: 6.5.254.31 (stable/beta used in chrome for linux/windows)
-   - run "fetch --no-history v8" // to avoid downloading the entire repo
-   - cd v8
-   - git checkout 6.5.254.31 // to get this branch
-   
-   // @Mateus, If I just run git pull I get an error message "fatal: refusing to merge unrelated histories". if I use "git pull --allow-unrelated-histories" I get lots of conflicts.
-   - git pull 
-
-   // @Mateus, at this point should we continue from "Building V8 TL;DR"?
-
-   // @Mateus, are you suggesting we should modify something or pass some command-line option?
-   - you don't need to get all the stuff in "install-build-deps.sh' to compile v8. 
+ - follow the instructions on the link above with the following changes:
+   - run "fetch --no-history v8"  to avoid downloading the entire repo
+   - most likely you won't need all the stuff that
+     "install-build-deps.sh' installs to compile v8. This script is
+     used to install dependencies across *all projects under the
+     chromium umbrella*.
+   - checkout the recommended branch with "git checkout 6.5.254.31; git pull"
  - status: ok
  - <checkout-dir>/v8/out.gn/x64.release/d8
+   - You'll also need to copy the .bin files contained in the folder
+     if you want to move the binary.
 
 ** spidermonkey: https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/Build_Documentation
- - problem: if you just follow instruction you will certainly observe a build error. ‘PRLibSpec’ was not declared in this scope. (reason: https://bugzilla.mozilla.org/show_bug.cgi?id=1441454)
-	workaround: '../configure --enable-nspr-build'
+ - recommended branch: mozilla-beta tip 
+    - see https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Source_Code/Mercurial
+ - problem: ‘PRLibSpec’ was not declared in this scope 
+   - reason: https://bugzilla.mozilla.org/show_bug.cgi?id=1441454
+   - workaround: '../configure --enable-nspr-build'
  - status: OK
  - <checkout-dir>/gecko-dev/js/src/build_OPT.OBJ/dist/bin/js <file>
 
-** rhino: https://github.com/mozilla/rhino
+*** DONE why is the js binary so big? (224 mb)
+ - debug info (check out with the 'bloaty' tool from google)
+   - strip it with 'strip --strip-uneeded' - should bring the size down to 24MB
+
+** javascriptcore: http://constellation.github.io/blog/2016/05/02/how-to-build-javascriptcore-on-your-machine/
+ - recommended branch: https://svn.webkit.org/repository/webkit/tags/Safari-606.1.9.1/
+   - closest thing I could find to a "beta" release
  - status OK
+ - testsuite: includes chakra/mozilla
+ - <checkout-dir>/WebKitBuild/Release/bin/jsc <file>
+
+** chakra: https://github.com/microsoft/ChakraCore
+ - recommended branch: release/1.9
+ - status OK
+ - <checkout-dir>/ChacraCore/out/Release/ch <file>
+
+** Nashorn: included with JDK 8/9
+ - recommend installing latest version of JDK 9
+ - status OK
+ - run 'jjs' after installing JDK 8/9
+
+** rhino: https://github.com/mozilla/rhino
+ - status OK/Deprecated?
+   - replaced by Nashorn in the latest JDKs
  - testsuite: same as spidermonkey?
  - supports: ES6 (not complete?) - maybe Nashorn is a better alternative?
  - java -jar <checkout-dir>/rhino>/buildGradle/libs/rhino-1.7.9-SNAPSHOT.jar <file>
-
-** javascriptcore: http://constellation.github.io/blog/2016/05/02/how-to-build-javascriptcore-on-your-machine/
- - status OK
- - testsuite: includes chakra/mozilla
- - <checkout-dir>/WebKit/WebKitBuild/Release/bin/jsc <file>
-
-** chakra: https://github.com/microsoft/ChakraCore
- - status OK
- - <checkout-dir>/ChacraCore/out/Release/ch <file>
