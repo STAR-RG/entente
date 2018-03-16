@@ -1,38 +1,43 @@
-import shlex, subprocess
-import constants
-import os
+import shlex, constants, os
+from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired
 
 '''
-    This function calls all engines and returns a Results 
-    objects encapsulating output and error streams of 
-    corresponding calls
+    This function calls all engines and returns a Results object (see class below) 
+    encapsulating the output and error streams of corresponding calls
 '''
 
 def callAll(pathName):
     res = Results(pathName)
     # JavaScriptCore
-    out, err = callJavaScriptCore(pathName)
-    res.set_jsc_results(out, err)
+    outerr = callJavaScriptCore(pathName)
+    res.set_jsc_results(outerr)
     # Chakra
-    out, err = callChakra(pathName)
-    res.set_chakra_results(out, err)
+    outerr = callChakra(pathName)
+    res.set_chakra_results(outerr)
     # SpiderMonkey
-    out, err = callSpiderMonkey(pathName)
-    res.set_spiderm_results(out, err)
+    outerr = callSpiderMonkey(pathName)
+    res.set_spiderm_results(outerr)
     # v8
-    out, err = callV8(pathName)
-    res.set_v8_results(out, err)
+    outerr = callV8(pathName)
+    res.set_v8_results(outerr)
 
     return res
 
+'''
+    This function makes the system call to the JS engine binary
+'''
 def callJSEngine(cmd_line):
-    args = shlex.split(cmd_line)
-    p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    return p.communicate()
+    cmd = shlex.split(cmd_line)
+    try:
+        # Using Python3 API because of the timeout, which appears to be 
+        # essential as I found a case of hang
+        msg = check_output(cmd, stderr=STDOUT, timeout=1).decode('utf-8')
+    except CalledProcessError as errorExc:
+        msg = errorExc.output.decode('utf-8')
+    except TimeoutExpired as timeoutExc:
+        msg = 'TIMEOUT'
+    return msg
 
-'''
-    not using this engine
-'''
 def callJavaScriptCore(pathName):
     cmd_line = constants.javascriptcore + " " + pathName
     #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
@@ -50,6 +55,11 @@ def callV8(pathName):
     cmd_line = constants.v8 + " " + pathName
     return callJSEngine(cmd_line)
 
+'''
+    An object of this class encapsulates the results of multiple 
+    calls to JS engines. It is used, for example, to check if 
+    there is observed discrepancies across calls.
+'''
 class Results:
     def __init__(self, path_name):
         self.path_name = path_name
@@ -58,56 +68,42 @@ class Results:
         return ("***  " + self.path_name + "\n" 
         "-------------" +
         "JavaScriptCore" + 
-        self.jsc_out + "\n" +
-        self.jsc_err + "\n" +
+        self.jsc_outerr + "\n" +
         "-------------" +
         "Chakra" + 
-        self.chakra_out + "\n" +
-        self.chakra_err + "\n" +
+        self.chakra_outerr + "\n" +
         "-------------" +
         "SpiderMonkey" + 
-        self.spiderm_out + "\n" +
-        self.spiderm_err + "\n" +
+        self.spiderm_outerr + "\n" +
         "-------------" +
         "v8" + 
-        self.v8_out + "\n" +
-        self.v8_err + "\n")
+        self.v8_outerr + "\n")
     
     def update_counters(self, counters):
-        output = 'output_'
-        output += 'N' if self.jsc_out == '' else "Y"
-        output += 'N' if self.chakra_out == '' else "Y"
-        output += 'N' if self.spiderm_out == '' else "Y"
-        output += 'N' if self.v8_out == '' else "Y"
+        output = 'output_and_error: '
+        output += 'N' if not self.jsc_outerr else "Y"
+        output += 'N' if not self.chakra_outerr else "Y"
+        output += 'N' if not self.spiderm_outerr else "Y"
+        output += 'N' if not self.v8_outerr else "Y"
         counters[output] = counters.get(output, 0) + 1
-        error = 'error_'
-        error += 'N' if self.jsc_err == '' else "Y"
-        error += 'N' if self.chakra_err == '' else "Y"
-        error += 'N' if self.spiderm_err == '' else "Y"
-        error += 'N' if self.v8_err == '' else "Y"
-        counters[error] = counters.get(error, 0) + 1
         
     def should_report(self):
-        contains_report_in_jsc = self.jsc_out != '' or self.jsc_err != ''
-        contains_report_in_chakra = self.chakra_out != '' or self.chakra_err != ''
-        contains_report_in_spiderm = self.spiderm_out != '' or self.spiderm_err != ''
-        contains_report_in_v8 = self.v8_out != '' or self.v8_err != ''
-        atleastone = contains_report_in_jsc or contains_report_in_chakra or contains_report_in_spiderm or contains_report_in_v8
-        all = contains_report_in_jsc and contains_report_in_chakra and contains_report_in_spiderm and contains_report_in_v8
+        atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
+        all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
         return atleastone and not all
 
-    def set_jsc_results(self, out, err):
-        self.jsc_out = out
-        self.jsc_err = err
+    def set_jsc_results(self, outerr):
+        self.jsc_outerr = outerr
 
-    def set_chakra_results(self, out, err):
-        self.chakra_out = out
-        self.chakra_err = err
+    def set_chakra_results(self, outerr):
+        self.chakra_outerr = outerr
 
-    def set_spiderm_results(self, out, err):
-        self.spiderm_out = out
-        self.spiderm_err = err
+    def set_spiderm_results(self, outerr):
+        self.spiderm_outerr = outerr
 
-    def set_v8_results(self, out, err):
-        self.v8_out = out
-        self.v8_err = err
+    def set_v8_results(self, outerr):
+        self.v8_outerr = outerr
+
+if __name__ == "__main__":
+    # example
+    callAll(os.path.join(constants.seeds_dir, 'max.js'))

@@ -1,17 +1,16 @@
-import jsparser, multicall, tempfile, constants, os, shutil, shlex, subprocess, progressbar, ntpath
+import multicall, tempfile, constants, os, shutil, shlex, subprocess, progressbar, ntpath
 
-## TODO: colocar arquivos de log em um mesmo diretorio, a ser criado dinamicamente se nao existir
 ## TODO: evitar escrita do arquivo de log se nao houver saida
 ## TODO: cache discrepancy -- one per type or error per file
 
-num_iterations = 100
+num_iterations = 10
 
 def fuzz_file(file_path):
 
-    with open(os.path.join(constants.base_dir, ntpath.basename(file_path) + ".log"), "w") as logfile:
+    with open(os.path.join(constants.logs_dir, "all.log"), "w") as generallog_file_object:
+        generallog_file_object.write(file_path + "\n")
         bar = progressbar.ProgressBar()
         #pylint: disable=W0612
-        print('fuzzing...' + file_path)
         for num_it in bar(range(1, num_iterations+1)):
             # copy original file to temporary directory
             temp_dir = tempfile.gettempdir()
@@ -23,14 +22,33 @@ def fuzz_file(file_path):
             fuzzed_file = os.path.join(temp_dir, temp_file_name + 'fuzzed')
             args = shlex.split("radamsa " + "--output " + fuzzed_file + " " + temp_path)
             p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            (out, err) = p.communicate()
-            if out!='' or err != '':
-                raise EnvironmentError('problem accessing radamsa. check if you have radamsa installed.' + out + err)
+            p.communicate()
 
             # check discrepancy
-            res = multicall.callAll(fuzzed_file)
+            try:
+                res = multicall.callAll(fuzzed_file)
+            except UnicodeDecodeError as exc:
+                # TODO: It is silly but we can't handle properly non-unicode outputs 
+                # just because the .decode('utf-8') to convert bytes into strings 
+                # raises this exception when the non-unicode char is mapped.
+                continue
+
             if res.should_report():
-                logfile.write(res.__str__())
+                # create log dir if it does not exist
+                if not os.path.exists(constants.logs_dir):
+                    os.makedirs(constants.logs_dir)  
+                # create log file as there is something to report
+                with open(os.path.join(constants.logs_dir, ntpath.basename(file_path) + ".log"), "w") as logfile:
+                    logfile.write('original: ' + file_path + '\n')
+                    with open(file_path, "r") as file_object:
+                        logfile.write(file_object.read())
+                    logfile.write('*** modified: ' + fuzzed_file + '\n')
+                    with open(fuzzed_file, "r") as file_object:
+                        try:
+                            logfile.write(file_object.read())
+                        except UnicodeDecodeError as exc:
+                            logfile.write('Could not print fuzzed file because it contains non-utf-8 chars!' )
+                    logfile.write(res.__str__())
 
 def fuzz_dir (dir_path):
 

@@ -2,6 +2,8 @@ import esprima
 import json
 from esprima import nodes # https://github.com/Kronuz/esprima-python
 
+# TODO: please check. cant figure out how to pretty-print plain js code from the ast. -Marcelo
+
 def parse_and_rewrite(code_string):
     visitor = RewriteVisitor()
     ast = esprima.parseScript(code_string, delegate=visitor)
