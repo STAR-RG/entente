@@ -1,7 +1,8 @@
-import os, util
+import os
+from fuzzer import util
 
 ## constants
-base_dir = os.path.join(os.getcwd(), '..')
+base_dir = os.getcwd()
 seeds_dir = os.path.join(base_dir, 'seeds/')
 logs_dir = os.path.join(base_dir, 'logs/')
 

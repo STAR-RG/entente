@@ -1,6 +1,6 @@
 pytest
 tox
 esprima
-json
 progressbar2
-ntpath
+#json
+#ntpath

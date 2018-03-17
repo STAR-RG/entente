@@ -1,11 +1,11 @@
-import shlex, constants, os
+import shlex, os
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired
+from fuzzer import constants
 
 '''
     This function calls all engines and returns a Results object (see class below) 
     encapsulating the output and error streams of corresponding calls
 '''
-
 def callAll(pathName):
     res = Results(pathName)
     # JavaScriptCore
@@ -28,6 +28,7 @@ def callAll(pathName):
 '''
 def callJSEngine(cmd_line):
     cmd = shlex.split(cmd_line)
+    #pylint: disable=W0612
     try:
         # Using Python3 API because of the timeout, which appears to be 
         # essential as I found a case of hang

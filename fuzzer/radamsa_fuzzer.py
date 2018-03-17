@@ -1,6 +1,6 @@
-import multicall, tempfile, constants, os, shutil, shlex, subprocess, progressbar, ntpath
+import tempfile, os, shutil, shlex, subprocess, progressbar, ntpath
+from fuzzer import constants, multicall
 
-## TODO: evitar escrita do arquivo de log se nao houver saida
 ## TODO: cache discrepancy -- one per type or error per file
 
 num_iterations = 10
