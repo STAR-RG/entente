@@ -12,6 +12,6 @@ def test_ec6():
                 res.update_counters(counters)
                 buffer.append(str(res))           
         file.write('**** summary ****\n')
-        file.write(counters)
+        file.write(str(counters))
         file.write("\n")
         file.write(''.join(buffer))
