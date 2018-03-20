@@ -3,6 +3,10 @@ import json
 from esprima import nodes # https://github.com/Kronuz/esprima-python
 
 # TODO: please check. cant figure out how to pretty-print plain js code from the ast. -Marcelo
+# not included in esprima. We need to use something like https://github.com/estools/escodegen
+# Escodegen, however, is javascript-only. We most likely will have to call the codegen through
+# Node. See example here: http://esprima.org/demo/rewrite.html
+ 
 
 def parse_and_rewrite(code_string):
     visitor = RewriteVisitor()
