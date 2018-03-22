@@ -15,3 +15,6 @@ def find_file_bypattern(pattern, path):
             if fnmatch.fnmatch(name, pattern):
                 result.append(os.path.join(root, name))
     return result
+
+if __name__ == "__main__":
+    print('for testing...')

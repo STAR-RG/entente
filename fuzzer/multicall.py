@@ -1,4 +1,4 @@
-import shlex, os
+import shlex, os, hashlib
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired
 from fuzzer import constants
 
@@ -37,6 +37,7 @@ def callJSEngine(cmd_line):
         msg = errorExc.output.decode('utf-8')
     except TimeoutExpired as timeoutExc:
         msg = 'TIMEOUT'
+
     return msg
 
 def callJavaScriptCore(pathName):
@@ -65,20 +66,44 @@ class Results:
     def __init__(self, path_name):
         self.path_name = path_name
 
-    def __str__(self):
+    def str(self):
         return ("***  " + self.path_name + "\n" 
-        "-------------" +
-        "JavaScriptCore" + 
+        "-------------JavaScriptCore\n" + 
         self.jsc_outerr + "\n" +
-        "-------------" +
-        "Chakra" + 
+        "-------------Chakra\n" + 
         self.chakra_outerr + "\n" +
-        "-------------" +
-        "SpiderMonkey" + 
+        "-------------SpiderMonkey\n" + 
         self.spiderm_outerr + "\n" +
-        "-------------" +
-        "v8" + 
+        "-------------v8\n" + 
         self.v8_outerr + "\n")
+
+    '''
+        This string function abstract the parts of error messages 
+        related to the code that originated the error. This is 
+        important to identify duplicate errors.
+    '''
+    def str_canonical(self):
+        return (
+        "-------------JavaScriptCore\n" + 
+        self.abstract(self.jsc_outerr) + "\n" +
+        "-------------Chakra\n" + 
+        self.abstract(self.chakra_outerr) + "\n" +
+        "-------------SpiderMonkey\n" + 
+        self.abstract(self.spiderm_outerr) + "\n" +
+        "-------------v8\n" + 
+        self.abstract(self.v8_outerr) + "\n")
+
+    def abstract(self, str):
+        for line in str.splitlines():
+            if 'Error' in line:
+                ind = str.index('Error')
+                return line[ind:] # shows what comes after Error
+        return ''                
+
+    def hash(self):
+        bytes = self.str_canonical().encode()
+        hash_object = hashlib.md5(bytes)
+        return hash_object.hexdigest()
     
     def update_counters(self, counters):
         output = 'output_and_error: '
@@ -88,7 +113,7 @@ class Results:
         output += 'N' if not self.v8_outerr else "Y"
         counters[output] = counters.get(output, 0) + 1
         
-    def should_report(self):
+    def is_locally_interesting(self):
         atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
         all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
         return atleastone and not all

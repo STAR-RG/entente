@@ -33,7 +33,7 @@ def fuzz_file(file_path):
                 # raises this exception when the non-unicode char is mapped.
                 continue
 
-            if res.should_report():
+            if res.is_locally_interesting():
                 # create log dir if it does not exist
                 if not os.path.exists(constants.logs_dir):
                     os.makedirs(constants.logs_dir)  
