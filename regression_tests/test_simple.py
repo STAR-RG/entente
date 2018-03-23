@@ -1,4 +1,6 @@
-from regression_tests import *
+#from regression_tests import *
+import os
+from utils import multicall, constants
 
 def test_max():
     pathName = os.path.join(constants.seeds_dir, 'max.js')

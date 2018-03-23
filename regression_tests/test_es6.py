@@ -1,4 +1,5 @@
 from regression_tests import *
+from utils import multicall, constants
 import hashlib
 
 def test_ec6():

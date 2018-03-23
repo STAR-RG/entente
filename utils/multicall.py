@@ -132,4 +132,5 @@ class Results:
 
 if __name__ == "__main__":
     # example
-    callAll(os.path.join(constants.seeds_dir, 'max.js'))
+    res = callAll(os.path.join(constants.seeds_dir, 'max.js'))
+    print (res)
