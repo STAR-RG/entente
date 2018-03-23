@@ -16,9 +16,7 @@ def parse_and_rewrite(code_string):
 
 class RewriteVisitor(esprima.NodeVisitor):
     def transform_Literal(self, node, metadata):
-        if type(node.value) is unicode:
-            return nodes.Literal('Alo!', "Alo")
-        elif type(node.value) is str:
+        if type(node.value) is str:
             return nodes.Literal('Alo!', "Alo")
         elif type(node.value) is int:
             return nodes.Literal(99, "99")  
@@ -29,5 +27,3 @@ if __name__ == "__main__":
     ast = parse_and_rewrite('const answer = "Hello"')
     ## to read the tree (with types)
     print(json.dumps(ast.toDict(), indent=2))
-    ## to read the code
-    ## ????

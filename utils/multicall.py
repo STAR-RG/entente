@@ -1,6 +1,6 @@
 import shlex, os, hashlib
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired
-from fuzzer import constants
+from utils import constants
 
 '''
     This function calls all engines and returns a Results object (see class below) 
@@ -66,7 +66,7 @@ class Results:
     def __init__(self, path_name):
         self.path_name = path_name
 
-    def str(self):
+    def __str__(self):
         return ("***  " + self.path_name + "\n" 
         "-------------JavaScriptCore\n" + 
         self.jsc_outerr + "\n" +
@@ -105,15 +105,15 @@ class Results:
         hash_object = hashlib.md5(bytes)
         return hash_object.hexdigest()
     
-    def update_counters(self, counters):
-        output = 'output_and_error: '
-        output += 'N' if not self.jsc_outerr else "Y"
-        output += 'N' if not self.chakra_outerr else "Y"
-        output += 'N' if not self.spiderm_outerr else "Y"
-        output += 'N' if not self.v8_outerr else "Y"
-        counters[output] = counters.get(output, 0) + 1
+    # def update_counters(self, counters):
+    #     output = 'output_and_error: '
+    #     output += 'N' if not self.jsc_outerr else "Y"
+    #     output += 'N' if not self.chakra_outerr else "Y"
+    #     output += 'N' if not self.spiderm_outerr else "Y"
+    #     output += 'N' if not self.v8_outerr else "Y"
+    #     counters[output] = counters.get(output, 0) + 1
         
-    def is_locally_interesting(self):
+    def is_interesting(self):
         atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
         all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
         return atleastone and not all

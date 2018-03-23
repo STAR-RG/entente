@@ -1,0 +1,195 @@
+number of files: 605
+number of warnings: 35
+number of cache hits: 22
+number of buckets: 13
+
+>>>>> files in bucket #1:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.replace.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_String.prototype.search.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_String.prototype.split.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.match.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/RegExp.prototype_properties_RegExp.prototype[Symbol.match].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/RegExp.prototype_properties_RegExp.prototype[Symbol.replace].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/miscellaneous_built-in_prototypes_are_not_instances.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_String.prototype.match.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.species_RegExp.prototype[Symbol.split].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_String.prototype.replace.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/RegExp.prototype_properties_RegExp.prototype[Symbol.search].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.search.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp_constructor.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/function_name_property_variables_function.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/RegExp.prototype_properties_RegExp.prototype[Symbol.split].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.split.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/RegExp.prototype_properties_RegExp.prototype.flags.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #2:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype[Symbol.search].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype[Symbol.replace].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype[Symbol.split].js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype[Symbol.match].js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: Unable to get property 'call' of undefined or null reference
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #3:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.padEnd.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.padStart.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: bad error: SyntaxError: Expected ']'
+-------------SpiderMonkey
+Error: bad error: SyntaxError: missing ] after element list
+-------------v8
+Error: bad error: SyntaxError: Unexpected identifier
+
+>>>>> files in bucket #4:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype.flags.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: Unable to get property 'get' of undefined or null reference
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+
+
+>>>>> files in bucket #5:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/proper_tail_calls_tail_call_optimisation_direct_recursion.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/proper_tail_calls_tail_call_optimisation_mutual_recursion.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+
+-------------SpiderMonkey
+Error: too much recursion
+-------------v8
+Error: Maximum call stack size exceeded
+
+>>>>> files in bucket #6:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.match_String.prototype.startsWith.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: String.prototype.startsWith: first argument cannot be a RegExp
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #7:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.match_String.prototype.includes.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: String.prototype.includes: first argument cannot be a RegExp
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #8:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype.test.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: RegExp.prototype.test: 'this' is not a RegExp object
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #9:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Promise_basic_functionality.js
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Promise_is_subclassable_basic_functionality.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: 'drainMicrotasks' is not defined
+-------------SpiderMonkey
+Error: drainMicrotasks is not defined
+-------------v8
+Error: drainMicrotasks is not defined
+
+>>>>> files in bucket #10:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype.toString.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: RegExp.prototype.toString: 'this' is not a RegExp object
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #11:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/well-known_symbols_Symbol.match_String.prototype.endsWith.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: String.prototype.endsWith: first argument cannot be a RegExp
+-------------SpiderMonkey
+
+-------------v8
+
+
+>>>>> files in bucket #12:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Array.prototype_methods_Array.prototype.values.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+
+-------------SpiderMonkey
+
+-------------v8
+Error: Test failed
+
+>>>>> files in bucket #13:
+ /home/damorim/projects/jsfuzz/seeds/WebKit.JSTests.es6/Proxy_ownKeys_duplicates.js
+
+pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+
+-------------SpiderMonkey
+Error: proxy [[OwnPropertyKeys]] can't report property '"A"' more than once
+-------------v8
+
