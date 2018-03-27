@@ -1,6 +1,5 @@
 pytest
 tox
-esprima
 progressbar2
 #json
 #ntpath
