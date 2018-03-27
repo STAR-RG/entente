@@ -9,6 +9,7 @@ from fuzzer import radamsa_fuzzer
 class Multicalls:
 
     def __init__(self, long_file):
+        self.numskipped = 0
         self.hashmap = {}
         self.hits = 0
         self.numfiles = 0
@@ -25,25 +26,40 @@ class Multicalls:
             if hashcode in self.hashmap:
                 self.hits += 1
                 tests = self.hashmap[hashcode]
-            else:    
+            else:
                 self.hashmap[hashcode] = tests = set()
             tests.add(res)
             self.long_file.write(str(res))
+        elif res.is_invalid():
+            self.numskipped += 1
 
-'''
-    Process files in a directory, running multicall on each file.
-'''
-def multicall_directories(path_name, should_fuzz):
+
+def multicall_directories(path_name, should_fuzz, validator=None):
+    """
+        Process files in a directory, running multicall on each file.
+
+        :param callable validator: Function used to exclude files (e.g. parsing error). Calling the function on a valid
+        file should return None/empty string; otherwise the reason for the error should be returned as a string.
+
+    """
     name = ntpath.basename(path_name)
-    
+
     with open(os.path.join(constants.logs_dir, 'short_diff_report'+name+'.txt'), 'w') as short_file, \
         open(os.path.join(constants.logs_dir, 'long_diff_report'+name+'.txt'), 'w') as long_file:
 
-        mcalls = Multicalls(long_file) 
+        mcalls = Multicalls(long_file)
 
         # multicall JS engines on each file
         for file_name in os.listdir(path_name):
             file_path = os.path.join(path_name, file_name)
+
+            if validator is not None:
+                validation_error = validator(file_path)
+                if validation_error:
+                    res = Results(file_path, validation_error)
+                    mcalls.notify(res)
+                    continue # skip this file
+
             if should_fuzz:
                 radamsa_fuzzer.fuzz_file(10, file_path, mcalls)
             else:
@@ -53,6 +69,7 @@ def multicall_directories(path_name, should_fuzz):
         # TODO: consider moving this to notify method -Marcelo
         # generating log
         short_file.write('number of files processed: {}\n'.format(mcalls.numfiles))
+        short_file.write('number of skipped files: {}\n'.format(mcalls.numskipped))
         short_file.write('number of warnings observed: {}\n'.format(mcalls.numwarnings))
         short_file.write('number of cache hits: {}\n'.format(mcalls.hits))
         short_file.write('number of buckets: {}\n'.format(len(mcalls.hashmap)))
@@ -68,6 +85,7 @@ def multicall_directories(path_name, should_fuzz):
             short_file.write('\npattern:\n')
             res = next(iter(val_set))
             short_file.write(res.str_canonical())
+
 
 '''
     This function calls all engines and returns a Results object (see class below) 
@@ -89,6 +107,7 @@ def callAll(pathName):
     res.set_v8_results(outerr)
 
     return res
+
 
 '''
     This function makes the system call to the JS engine binary
@@ -124,25 +143,30 @@ def callV8(pathName):
     cmd_line = constants.v8 + " " + pathName
     return callJSEngine(cmd_line)
 
-'''
-    An object of this class encapsulates the results of multiple 
-    calls to JS engines. It is used, for example, to check if 
-    there is observed discrepancies across calls.
-'''
 class Results:
-    def __init__(self, path_name):
+    """
+        An object of this class encapsulates the results of multiple
+        calls to JS engines. It is used, for example, to check if
+        there is observed discrepancies across calls.
+    """
+
+    def __init__(self, path_name, validation_error=None):
         self.path_name = path_name
+        self.validation_error = validation_error
 
     def __str__(self):
-        return ("***  " + self.path_name + "\n" 
-        "-------------JavaScriptCore\n" + 
-        self.jsc_outerr + "\n" +
-        "-------------Chakra\n" + 
-        self.chakra_outerr + "\n" +
-        "-------------SpiderMonkey\n" + 
-        self.spiderm_outerr + "\n" +
-        "-------------v8\n" + 
-        self.v8_outerr + "\n")
+        if self.validation_error:
+            return "***  {path}\n    validation error: {error}\n".format(path=self.path_name,error=self.validation_error)
+        else:
+            return ("***  " + self.path_name + "\n" 
+            "-------------JavaScriptCore\n" +
+            self.jsc_outerr + "\n" +
+            "-------------Chakra\n" +
+            self.chakra_outerr + "\n" +
+            "-------------SpiderMonkey\n" +
+            self.spiderm_outerr + "\n" +
+            "-------------v8\n" +
+            self.v8_outerr + "\n")
 
     '''
         This string function abstract the parts of error messages 
@@ -150,28 +174,31 @@ class Results:
         important to identify duplicate errors.
     '''
     def str_canonical(self):
-        return (
-        "-------------JavaScriptCore\n" + 
-        self.abstract(self.jsc_outerr) + "\n" +
-        "-------------Chakra\n" + 
-        self.abstract(self.chakra_outerr) + "\n" +
-        "-------------SpiderMonkey\n" + 
-        self.abstract(self.spiderm_outerr) + "\n" +
-        "-------------v8\n" + 
-        self.abstract(self.v8_outerr) + "\n")
+        if self.validation_error:
+            return self.validation_error
+        else:
+            return (
+            "-------------JavaScriptCore\n" +
+            self.abstract(self.jsc_outerr) + "\n" +
+            "-------------Chakra\n" +
+            self.abstract(self.chakra_outerr) + "\n" +
+            "-------------SpiderMonkey\n" +
+            self.abstract(self.spiderm_outerr) + "\n" +
+            "-------------v8\n" +
+            self.abstract(self.v8_outerr) + "\n")
 
     def abstract(self, str):
         for line in str.splitlines():
             if 'Error' in line:
                 ind = str.index('Error')
                 return line[ind:] # shows what comes after Error
-        return ''                
+        return ''
 
     def hash(self):
         bytes = self.str_canonical().encode()
         hash_object = hashlib.md5(bytes)
         return hash_object.hexdigest()
-    
+
     # def update_counters(self, counters):
     #     output = 'output_and_error: '
     #     output += 'N' if not self.jsc_outerr else "Y"
@@ -179,23 +206,36 @@ class Results:
     #     output += 'N' if not self.spiderm_outerr else "Y"
     #     output += 'N' if not self.v8_outerr else "Y"
     #     counters[output] = counters.get(output, 0) + 1
-        
+
     def is_interesting(self):
-        atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
-        all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
-        return atleastone and not all
+        try:
+            atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
+            all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
+            return atleastone and not all
+        except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
+            return False
+
+    def is_invalid(self):
+        return self.validation_error
+
+    # TODO generalize this stuff with a dict
 
     def set_jsc_results(self, outerr):
+        assert not self.validation_error
         self.jsc_outerr = outerr
 
     def set_chakra_results(self, outerr):
+        assert not self.validation_error
         self.chakra_outerr = outerr
 
     def set_spiderm_results(self, outerr):
+        assert not self.validation_error
         self.spiderm_outerr = outerr
 
     def set_v8_results(self, outerr):
+        assert not self.validation_error
         self.v8_outerr = outerr
+
 
 if __name__ == "__main__":
     # example
