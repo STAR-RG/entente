@@ -17,10 +17,13 @@ class Multicalls:
         self.long_file = long_file
         self.short_file = short_file
 
-    # This function will be called multiple times. Statistics will 
-    # be collected for these calls.
     def notify(self, res):
+        ''' 
+            This function will be called multiple times. Statistics will 
+            be collected for these calls.
+        ''' 
         self.numfiles += 1
+        is_interesting_and_distinct = False
         if res.is_interesting(): # interesting if we find diverging responses
             self.numwarnings += 1
             hashcode = res.hash()
@@ -28,26 +31,29 @@ class Multicalls:
                 self.hits += 1
                 tests = self.hashmap[hashcode]
             else:
+                is_interesting_and_distinct = True
                 self.hashmap[hashcode] = tests = set()
             tests.add(res)
             self.long_file.write(str(res))
         elif res.is_invalid():
             self.numskipped += 1
+        return is_interesting_and_distinct
 
     def save_summary(self):
         # generating log
         self.short_file.write('number of files processed: {}\n'.format(self.numfiles))
-        self.short_file.write('number of warnings observed: {}\n'.format(self.numwarnings))
+        self.short_file.write('number of warnings (interesting cases) observed: {}\n'.format(self.numwarnings))
+        self.short_file.write('number of invalid cases observed: {}\n'.format(self.numskipped))
         self.short_file.write('number of cache hits: {}\n'.format(self.hits))
         self.short_file.write('number of buckets: {}\n'.format(len(self.hashmap)))
         # show contents associated with each bucket        
         bucket_num = 0
-        #pylint: disable=W0612
         for key, val_set in self.hashmap.items():
             bucket_num += 1
-            self.short_file.write('\n>>>>> files in bucket #{}:\n'.format(bucket_num))
+            self.short_file.write('\n>>>>>\n files in bucket #{}:\n'.format(bucket_num))
             for res in val_set:
                 self.short_file.write(' ' + res.path_name + "\n" )
+            self.short_file.write('\nhash: {}\n'.format(key))
             self.short_file.write('\npattern:\n')
             res = next(iter(val_set))
             self.short_file.write(res.str_canonical())
@@ -74,6 +80,7 @@ def multicall_directories(path_name, should_fuzz, validator=None):
         for file_name in os.listdir(path_name):
             file_path = os.path.join(path_name, file_name)
 
+            #TODO: Please check. consider removing this code. I think this only makes sense to be called insider fuzzers, which is done already. -Marcelo
             if validator is not None:
                 validation_error = validator(file_path)
                 if validation_error:
@@ -82,7 +89,7 @@ def multicall_directories(path_name, should_fuzz, validator=None):
                     continue # skip this file
 
             if should_fuzz:
-                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls)
+                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator)
             else:
                 res = callAll(file_path)
                 mcalls.notify(res)
@@ -90,11 +97,11 @@ def multicall_directories(path_name, should_fuzz, validator=None):
         mcalls.save_summary()
 
 
-'''
-    This function calls all engines and returns a Results object (see class below) 
-    encapsulating the output and error streams of corresponding calls
-'''
 def callAll(pathName):
+    '''
+        This function calls all engines and returns a Results object (see class below) 
+        encapsulating the output and error streams of corresponding calls
+    '''
     res = Results(pathName)
     # JavaScriptCore
     outerr = callJavaScriptCore(pathName)
@@ -112,15 +119,15 @@ def callAll(pathName):
     return res
 
 
-'''
-    This function makes the system call to the JS engine binary
-'''
 def callJSEngine(cmd_line):
+    '''
+        This function makes the system call to the JS engine binary
+    '''
     cmd = shlex.split(cmd_line)
     #pylint: disable=W0612
     try:
         # Using Python3 API because of the timeout, which appears to be 
-        # essential as I found a case of hang
+        # essential. I found a case of hang
         msg = check_output(cmd, stderr=STDOUT, timeout=1).decode('utf-8')
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
@@ -206,7 +213,7 @@ class Results:
         try:
             atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
             all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
-            return atleastone and not all
+            return self.validation_error is None and atleastone and not all
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
             return False
 
