@@ -2,6 +2,13 @@ import esprima
 
 
 def validate(file_path):
+    '''
+        Returns None if file is valid and returns an error message otherwise.
+        A file is valid if 
+         (1) it contains only unicode text
+         (2) it is parseable (i.e., it is structurally well-formed)
+         (3) it does not contain engine-specific functions
+    '''
     with open(file_path) as source:
         
         try:
