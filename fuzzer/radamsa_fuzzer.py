@@ -1,14 +1,15 @@
-import tempfile, os, shutil, shlex, subprocess, progressbar, ntpath
+import tempfile, os, shutil, shlex, subprocess, ntpath
 from utils import constants, multicall
+from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 
-'''
-    Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
-    the input file (file_path) for a number of times (num_iterations). Each 
-    time it makes a multicall on different engines. 
-'''
+
 def fuzz_file(num_iterations, file_path, mcalls):
-    bar = progressbar.ProgressBar()
-    bar.start()
+    '''
+        Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
+        the input file (file_path) for a number of times (num_iterations). Each 
+        time it makes a multicall on different engines. 
+    '''    
+    bar = ProgressBar(widgets=['fuzzing ' + file_path + ' ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' '])
     #pylint: disable=W0612
     for num_it in bar(range(1, num_iterations+1)):
         # copy original file to temporary directory
@@ -27,12 +28,12 @@ def fuzz_file(num_iterations, file_path, mcalls):
         try:
             res = multicall.callAll(fuzzed_file)
             mcalls.notify(res)
-            bar.update()
         except UnicodeDecodeError as exc:
             # TODO: It is silly but we can't handle properly non-unicode outputs 
             # just because the .decode('utf-8') to convert bytes into strings 
             # raises this exception when the non-unicode char is mapped.
             continue
+    bar.finish()
 
 if __name__ == "__main__":
     dir_path = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6')
