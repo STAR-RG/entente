@@ -1,15 +1,11 @@
-from regression_tests import *
-from utils.multicall import multicall_directories
-from utils import constants
+from regression_tests import * #pylint: disable=W0614 
+from utils import constants, multicall
 from fuzzer.validator import validate
-import pytest
-
 
 # @pytest.mark.skip(reason="temporarilly disabling")
 def test_ec6():
     path_name = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6')
-    multicall_directories(path_name, False, validator=validate)
-
+    multicall.multicall_directories(path_name, False, validator=validate)
 
 def test_validator():
     path_name = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6/Promise_basic_functionality.js')

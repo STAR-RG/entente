@@ -1,6 +1,4 @@
-#from regression_tests import *
-import os
-from utils import multicall, constants
+from regression_tests import *  #pylint: disable=W0614
 
 def test_max():
     pathName = os.path.join(constants.seeds_dir, 'max.js')

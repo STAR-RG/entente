@@ -8,13 +8,14 @@ from fuzzer import radamsa_fuzzer
 '''
 class Multicalls:
 
-    def __init__(self, long_file):
+    def __init__(self, long_file, short_file):
         self.numskipped = 0
         self.hashmap = {}
         self.hits = 0
         self.numfiles = 0
         self.numwarnings = 0
         self.long_file = long_file
+        self.short_file = short_file
 
     # This function will be called multiple times. Statistics will 
     # be collected for these calls.
@@ -33,6 +34,24 @@ class Multicalls:
         elif res.is_invalid():
             self.numskipped += 1
 
+    def save_summary(self):
+        # generating log
+        self.short_file.write('number of files processed: {}\n'.format(self.numfiles))
+        self.short_file.write('number of warnings observed: {}\n'.format(self.numwarnings))
+        self.short_file.write('number of cache hits: {}\n'.format(self.hits))
+        self.short_file.write('number of buckets: {}\n'.format(len(self.hashmap)))
+        # show contents associated with each bucket        
+        bucket_num = 0
+        #pylint: disable=W0612
+        for key, val_set in self.hashmap.items():
+            bucket_num += 1
+            self.short_file.write('\n>>>>> files in bucket #{}:\n'.format(bucket_num))
+            for res in val_set:
+                self.short_file.write(' ' + res.path_name + "\n" )
+            self.short_file.write('\npattern:\n')
+            res = next(iter(val_set))
+            self.short_file.write(res.str_canonical())
+
 
 def multicall_directories(path_name, should_fuzz, validator=None):
     """
@@ -44,10 +63,12 @@ def multicall_directories(path_name, should_fuzz, validator=None):
     """
     name = ntpath.basename(path_name)
 
-    with open(os.path.join(constants.logs_dir, 'short_diff_report'+name+'.txt'), 'w') as short_file, \
-        open(os.path.join(constants.logs_dir, 'long_diff_report'+name+'.txt'), 'w') as long_file:
+    log_name_suffix = ('fuzz' if should_fuzz else '') + '_diff_report' + name + '.txt'
+    
+    with open(os.path.join(constants.logs_dir, 'short' + log_name_suffix), 'w') as short_file, \
+        open(os.path.join(constants.logs_dir, 'long'+ log_name_suffix), 'w') as long_file:
 
-        mcalls = Multicalls(long_file)
+        mcalls = Multicalls(long_file, short_file) 
 
         # multicall JS engines on each file
         for file_name in os.listdir(path_name):
@@ -61,30 +82,12 @@ def multicall_directories(path_name, should_fuzz, validator=None):
                     continue # skip this file
 
             if should_fuzz:
-                radamsa_fuzzer.fuzz_file(10, file_path, mcalls)
+                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls)
             else:
                 res = callAll(file_path)
                 mcalls.notify(res)
 
-        # TODO: consider moving this to notify method -Marcelo
-        # generating log
-        short_file.write('number of files processed: {}\n'.format(mcalls.numfiles))
-        short_file.write('number of skipped files: {}\n'.format(mcalls.numskipped))
-        short_file.write('number of warnings observed: {}\n'.format(mcalls.numwarnings))
-        short_file.write('number of cache hits: {}\n'.format(mcalls.hits))
-        short_file.write('number of buckets: {}\n'.format(len(mcalls.hashmap)))
-
-        # show contents associated with each bucket
-        #pylint: disable=W0612
-        bucket_num = 0
-        for key, val_set in mcalls.hashmap.items():
-            bucket_num += 1
-            short_file.write('\n>>>>> files in bucket #{}:\n'.format(bucket_num))
-            for res in val_set:
-                short_file.write(' ' + res.path_name + "\n" )
-            short_file.write('\npattern:\n')
-            res = next(iter(val_set))
-            short_file.write(res.str_canonical())
+        mcalls.save_summary()
 
 
 '''
@@ -198,14 +201,6 @@ class Results:
         bytes = self.str_canonical().encode()
         hash_object = hashlib.md5(bytes)
         return hash_object.hexdigest()
-
-    # def update_counters(self, counters):
-    #     output = 'output_and_error: '
-    #     output += 'N' if not self.jsc_outerr else "Y"
-    #     output += 'N' if not self.chakra_outerr else "Y"
-    #     output += 'N' if not self.spiderm_outerr else "Y"
-    #     output += 'N' if not self.v8_outerr else "Y"
-    #     counters[output] = counters.get(output, 0) + 1
 
     def is_interesting(self):
         try:
