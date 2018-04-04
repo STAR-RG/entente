@@ -69,11 +69,15 @@ def multicall_directories(path_name, should_fuzz, validator=None):
     """
     name = ntpath.basename(path_name)
 
-    log_name_suffix = ('fuzz' if should_fuzz else '') + '_diff_report' + name + '.txt'
-    
-    with open(os.path.join(constants.logs_dir, 'short' + log_name_suffix), 'w') as short_file, \
-        open(os.path.join(constants.logs_dir, 'long'+ log_name_suffix), 'w') as long_file:
+    log_name_suffix = ('fuzz' if should_fuzz else '') + '_diff_report_' + name + '.txt'
 
+    if not os.path.isdir(constants.logs_dir):
+        os.mkdir(constants.logs_dir)
+
+    short_log_path = os.path.join(constants.logs_dir, 'short' + log_name_suffix)
+    long_log_path = os.path.join(constants.logs_dir, 'long' + log_name_suffix)
+    
+    with open(short_log_path, 'w') as short_file, open(long_log_path, 'w') as long_file:
         mcalls = Multicalls(long_file, short_file) 
 
         # multicall JS engines on each file

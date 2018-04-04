@@ -15,9 +15,16 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
 
         # fuzz the file with radamsa
         fuzzed_file_path = os.path.join(tempfile.gettempdir(), 'temp_filefuzzed')
-        args = shlex.split("radamsa " + "--output " + fuzzed_file_path + " " + file_path)
-        p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.communicate()
+        cmd = "radamsa --output {} {}".format(fuzzed_file_path, file_path)
+        args = shlex.split(cmd)
+        try:
+            p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p.communicate()
+        except FileNotFoundError as error:
+            if 'radamsa' in str(error):
+                raise Exception('Please check if radamsa is installed on your environment (see README.md file).')
+        except Exception as error:
+            raise Exception('Error:', error)
 
         # check if file is valid
         if validator is not None:
