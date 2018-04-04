@@ -1,20 +1,25 @@
 import esprima
+from utils.linter import run_linter
 
 
 def validate(file_path):
-    '''
+    """
         Returns None if file is valid and returns an error message otherwise.
-        A file is valid if 
+        A file is valid if
          (1) it contains only unicode text
-         (2) it is parseable (i.e., it is structurally well-formed)
-         (3) it does not contain engine-specific functions
-    '''
+         (2) the linter doesn't report any errors (see .eslintrc.js
+         (3) it is parseable (i.e., it is structurally well-formed)
+         (4) it does not contain engine-specific functions
+    """
     with open(file_path) as source:
-        
         try:
             contents = '\n'.join(source.readlines())
         except UnicodeDecodeError as e: # fuzzer can add really crazy characters
             return str(e)
+
+        linter_report = run_linter(file_path)
+        if linter_report:
+            return linter_report
         
         # TODO see if enabling tolerant mode (parser will continue after encountering errors) is useful
         # for now, just return the error as a string
@@ -35,13 +40,13 @@ def validate(file_path):
     return None
 
 
-def check_nonstandard_methods(ast):
-    visitor = MethodCollectorVisitor()
-    visitor.visit(ast)
-
-    if "drainMicrotasks" in visitor.calls and "drainMicrotasks" not in visitor.declarations:
-        return "drainMicroTasks is non-standard!"
-    return None
+# def check_nonstandard_methods(ast):
+#     visitor = MethodCollectorVisitor()
+#     visitor.visit(ast)
+#
+#     if "drainMicrotasks" in visitor.calls and "drainMicrotasks" not in visitor.declarations:
+#         return "drainMicroTasks is non-standard!"
+#     return None
 
 
 class MethodCollectorVisitor(esprima.NodeVisitor):
