@@ -1,6 +1,4 @@
 import esprima
-from utils.linter import run_linter
-
 
 def validate(file_path):
     """
@@ -17,10 +15,6 @@ def validate(file_path):
         except UnicodeDecodeError as e: # fuzzer can add really crazy characters
             return str(e)
 
-        linter_report = run_linter(file_path)
-        if linter_report:
-            return linter_report
-        
         # TODO see if enabling tolerant mode (parser will continue after encountering errors) is useful
         # for now, just return the error as a string
         try:
@@ -38,7 +32,6 @@ def validate(file_path):
                 return result
                 
     return None
-
 
 # def check_nonstandard_methods(ast):
 #     visitor = MethodCollectorVisitor()
