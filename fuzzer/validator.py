@@ -30,22 +30,33 @@ def validate(file_path):
             result = v(ast)
             if result:
                 return result
-                
+        
     return None
 
-# def check_nonstandard_methods(ast):
-#     visitor = MethodCollectorVisitor()
-#     visitor.visit(ast)
-#
-#     if "drainMicrotasks" in visitor.calls and "drainMicrotasks" not in visitor.declarations:
-#         return "drainMicroTasks is non-standard!"
-#     return None
+def check_nonstandard_methods(ast):
+    visitor = MethodCollectorVisitor()
+    visitor.visit(ast)
 
+    if "drainMicrotasks" in visitor.calls and "drainMicrotasks" not in visitor.declarations:
+        return "drainMicroTasks is non-standard!"
+    return None
+
+def check_bad_error(ast):
+    """
+    handle reports that throws exception messages through string comparison
+    """
+    visitor = MethodCollectorVisitor()
+    visitor.visit(ast)
+    if 'SyntaxError' in str(visitor.literals) and 'bad error:' in str(visitor.template_elements):
+        return "handle string comparison with 'bad error: SyntaxError'"
+    return None
 
 class MethodCollectorVisitor(esprima.NodeVisitor):
     def __init__(self):
         self.declarations = set()
         self.calls = set()
+        self.literals = set()
+        self.template_elements = set()
 
     # noinspection PyPep8Naming
     def visit_FunctionDeclaration(self, node):
@@ -56,4 +67,12 @@ class MethodCollectorVisitor(esprima.NodeVisitor):
     # noinspection PyPep8Naming
     def visit_CallExpression(self, node):
         self.calls.add(node.callee.name)
+        self.generic_visit(node)
+
+    def visit_Literal(self, node):
+        self.literals.add(node.raw)
+        self.generic_visit(node)
+
+    def visit_TemplateElement(self, node):
+        self.template_elements.add(node.value.raw)
         self.generic_visit(node)

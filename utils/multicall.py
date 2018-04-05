@@ -101,12 +101,13 @@ def multicall_directories(path_name, should_fuzz, validator=None):
         mcalls.save_summary()
 
 
-def callAll(pathName):
+def callAll(pathName, validator=None):
     '''
         This function calls all engines and returns a Results object (see class below) 
         encapsulating the output and error streams of corresponding calls
     '''
-    res = Results(pathName)
+    res = Results(pathName) if not validator else Results(pathName, validator(pathName))
+
     # JavaScriptCore
     outerr = callJavaScriptCore(pathName)
     res.set_jsc_results(outerr)
@@ -227,20 +228,16 @@ class Results:
     # TODO generalize this stuff with a dict
 
     def set_jsc_results(self, outerr):
-        assert not self.validation_error
-        self.jsc_outerr = outerr
+        self.jsc_outerr = outerr if not self.validation_error else None
 
     def set_chakra_results(self, outerr):
-        assert not self.validation_error
-        self.chakra_outerr = outerr
+        self.chakra_outerr = outerr if not self.validation_error else None
 
     def set_spiderm_results(self, outerr):
-        assert not self.validation_error
-        self.spiderm_outerr = outerr
+        self.spiderm_outerr = outerr if not self.validation_error else None
 
     def set_v8_results(self, outerr):
-        assert not self.validation_error
-        self.v8_outerr = outerr
+        self.v8_outerr = outerr if not self.validation_error else None
 
 
 if __name__ == "__main__":
