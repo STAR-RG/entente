@@ -215,15 +215,29 @@ class Results:
         return hash_object.hexdigest()
 
     def is_interesting(self):
+        '''
+            This is the function that decides whether or not this result is 
+            interesting and should be reported.
+        '''
         try:
             atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
             all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
-            return self.validation_error is None and atleastone and not all
+            is_fundamentally_interesting = self.is_valid() and atleastone and not all
+            if not (is_fundamentally_interesting): ## necessary condition to be interesting
+                return False
+            ## Chakra validation 
+            # #TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
+            if ([word for word in ['undefined', 'is not defined','cannot be a RegExp', 'not a RegExp object'] if word in self.chakra_outerr]):
+                return False
+            return True
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
             return False
 
     def is_invalid(self):
         return self.validation_error
+
+    def is_valid(self):
+        return self.validation_error is None
 
     # TODO generalize this stuff with a dict
 
