@@ -220,24 +220,61 @@ class Results:
             interesting and should be reported.
         '''
         try:
-            atleastone = self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr
-            all = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
-            is_fundamentally_interesting = self.is_valid() and atleastone and not all
+            self.remove_spurious()
+            all_engines = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
+            is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines
             if not (is_fundamentally_interesting): ## necessary condition to be interesting
-                return False
-            ## Chakra validation 
-            # #TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
-            if ([word for word in ['undefined', 'is not defined','cannot be a RegExp', 'not a RegExp object'] if word in self.chakra_outerr]):
-                return False
+                return False    
             return True
+        
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
             return False
+
+    def remove_spurious(self):
+        """
+        Remove spurious reports based on keywords/strings
+            TODO: updating strings in keywords list
+        """
+        ## TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
+        ## Chakra is a new engine, some features are not inplemented yet
+        keywords = [
+            'undefined', 'is not defined',
+            'cannot be a RegExp', 'not a RegExp object',
+            'support this action', 'is not a function',
+            'Invalid or unexpected token', 'illegal character',
+            'Invalid character', 'Object expected'
+        ]
+
+        # 'Test failed' appears if the engine miss a feature/function 
+        # Example: the default value of an object on JScore is true and chakra/v8/spider is undefined
+        # The message just show 'Test failed' without more informations.
+        # to handle these cases, we ignore if 'Test failed' in output message
+        # we dont use this approach for JSCore yet
+        # TODO: check better solution
+        self.chakra_outerr = '' if 'Test failed' in self.chakra_outerr else self.chakra_outerr
+        self.v8_outerr = '' if 'Test failed' in self.v8_outerr else self.v8_outerr
+        self.spiderm_outerr = '' if 'Test failed' in self.spiderm_outerr else self.spiderm_outerr
+        
+        for keyword in keywords:
+            if keyword in self.jsc_outerr:
+                self.jsc_outerr = ''
+            if keyword in self.chakra_outerr:
+                self.chakra_outerr = ''
+            if keyword in self.v8_outerr:
+                self.v8_outerr = ''
+            if keyword in self.spiderm_outerr:
+                self.spiderm_outerr = ''
+        
+        return self.is_atleastone() is not None
 
     def is_invalid(self):
         return self.validation_error
 
     def is_valid(self):
         return self.validation_error is None
+
+    def is_atleastone(self):
+        return (self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr)
 
     # TODO generalize this stuff with a dict
 
@@ -252,7 +289,7 @@ class Results:
 
     def set_v8_results(self, outerr):
         self.v8_outerr = outerr if not self.validation_error else None
-
+    
 
 if __name__ == "__main__":
     # example

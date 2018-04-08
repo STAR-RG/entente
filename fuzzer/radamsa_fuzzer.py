@@ -25,7 +25,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
                 raise Exception('Please check if radamsa is installed on your environment (see README.md file).')
         except Exception as error:
             raise Exception('Error:', error)
-
+            
         # check if file is valid
         if validator is not None:
             validation_error = validator(fuzzed_file_path)

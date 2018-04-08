@@ -14,6 +14,10 @@ def validate(file_path):
         except UnicodeDecodeError as e: # fuzzer can add really crazy characters
             return str(e)
 
+        # in case of empty file
+        if not contents:
+            return "File is empty"
+
         # TODO see if enabling tolerant mode (parser will continue after encountering errors) is useful
         # for now, just return the error as a string
         try:
