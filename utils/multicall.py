@@ -2,6 +2,7 @@ import shlex, os, hashlib, ntpath
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired
 from utils import constants
 from fuzzer import radamsa_fuzzer
+from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
 
 '''
     Class that saves state across several multicalls
@@ -107,9 +108,9 @@ def callAll(pathName, validator=None):
         encapsulating the output and error streams of corresponding calls
     '''
     res = Results(pathName) if not validator else Results(pathName, validator(pathName))
-
+    
     # JavaScriptCore
-    outerr = callJavaScriptCore(pathName)
+    outerr = callJavaScriptCore(pathName)    
     res.set_jsc_results(outerr)
     # Chakra
     outerr = callChakra(pathName)
@@ -137,26 +138,52 @@ def callJSEngine(cmd_line):
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
     except TimeoutExpired as timeoutExc:
-        msg = 'TIMEOUT'
+        msg = 'Error: TIMEOUT'
 
     return msg
 
 def callJavaScriptCore(pathName):
+    if is_file_invalid('jscore', pathName):
+        return 'file with feature not implemented yet'
     cmd_line = constants.javascriptcore + " " + pathName
     #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
     return callJSEngine(cmd_line)
 
 def callChakra(pathName):
+    if is_file_invalid('chakra', pathName):
+        return 'file with feature not implemented yet'
+
     cmd_line = constants.chakra + " " + pathName
     return callJSEngine(cmd_line)
 
 def callSpiderMonkey(pathName):
+    if is_file_invalid('spidermonkey', pathName):
+        return 'file with feature not implemented yet'
     cmd_line = constants.spidermonkey + " " + pathName
     return callJSEngine(cmd_line)
 
 def callV8(pathName):
+    if is_file_invalid('v8', pathName):
+        return 'file with feature not implemented yet'
     cmd_line = constants.v8 + " " + pathName
     return callJSEngine(cmd_line)
+
+def is_file_invalid(engine, pathName):
+    """
+    Return True if file contains invalid code otherwise False
+    """
+    if engine not in ENGINES_KEYWORDS.keys():
+        raise Exception('Engine not found. Only supported: {}'.format(ENGINES_KEYWORDS.keys()))
+    
+    if not ENGINES_KEYWORDS[engine]:
+        return False
+
+    with open(pathName) as js_file:
+        file_raw = js_file.read()
+        for keyword in ENGINES_KEYWORDS[engine]:
+            if keyword in file_raw:
+                return True
+    return False
 
 class Results:
     """
@@ -202,12 +229,13 @@ class Results:
             "-------------v8\n" +
             self.abstract(self.v8_outerr) + "\n")
 
-    def abstract(self, str):
-        for line in str.splitlines():
+    def abstract(self, string):
+        for line in string.splitlines():
             if 'Error' in line:
-                ind = str.index('Error')
-                return line[ind:] # shows what comes after Error
-        return ''
+                ind = string.index('Error')
+                error_message = line[ind:] if 'Error' in line[ind:] else line
+                return error_message # shows what comes after Error
+        return ''     
 
     def hash(self):
         bytes = self.str_canonical().encode()
@@ -221,10 +249,11 @@ class Results:
         '''
         try:
             self.remove_spurious()
-            all_engines = self.jsc_outerr and self.chakra_outerr and self.spiderm_outerr and self.v8_outerr
+            all_engines = (self.jsc_outerr and self.chakra_outerr and self.v8_outerr and self.spiderm_outerr)
             is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines
+
             if not (is_fundamentally_interesting): ## necessary condition to be interesting
-                return False    
+                return False            
             return True
         
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
@@ -233,29 +262,13 @@ class Results:
     def remove_spurious(self):
         """
         Remove spurious reports based on keywords/strings
-            TODO: updating strings in keywords list
+        TODO: updating strings in keywords list
         """
         ## TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
-        ## Chakra is a new engine, some features are not inplemented yet
-        keywords = [
-            'undefined', 'is not defined',
-            'cannot be a RegExp', 'not a RegExp object',
-            'support this action', 'is not a function',
-            'Invalid or unexpected token', 'illegal character',
-            'Invalid character', 'Object expected'
-        ]
-
-        # 'Test failed' appears if the engine miss a feature/function 
-        # Example: the default value of an object on JScore is true and chakra/v8/spider is undefined
-        # The message just show 'Test failed' without more informations.
-        # to handle these cases, we ignore if 'Test failed' in output message
-        # we dont use this approach for JSCore yet
+        ## Chakra is a new engine, some features are not implemented yet
+       
         # TODO: check better solution
-        self.chakra_outerr = '' if 'Test failed' in self.chakra_outerr else self.chakra_outerr
-        self.v8_outerr = '' if 'Test failed' in self.v8_outerr else self.v8_outerr
-        self.spiderm_outerr = '' if 'Test failed' in self.spiderm_outerr else self.spiderm_outerr
-        
-        for keyword in keywords:
+        for keyword in INVALID_STRINGS:
             if keyword in self.jsc_outerr:
                 self.jsc_outerr = ''
             if keyword in self.chakra_outerr:
@@ -264,8 +277,6 @@ class Results:
                 self.v8_outerr = ''
             if keyword in self.spiderm_outerr:
                 self.spiderm_outerr = ''
-        
-        return self.is_atleastone() is not None
 
     def is_invalid(self):
         return self.validation_error
@@ -274,7 +285,11 @@ class Results:
         return self.validation_error is None
 
     def is_atleastone(self):
-        return (self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr)
+        for output in [self.jsc_outerr, self.chakra_outerr, self.spiderm_outerr, self.v8_outerr]:
+            if output not in ['', None]:
+                return True
+        return False
+        # return (self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr)
 
     # TODO generalize this stuff with a dict
 
