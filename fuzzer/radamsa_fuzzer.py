@@ -37,9 +37,10 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
         # check discrepancy
         try:
             res = multicall.callAll(fuzzed_file_path)
+            res.path_name = os.path.join(constants.logs_dir, 'fuzzed_' + ntpath.basename(file_path))
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
                 ## get first name of file...
-                shutil.copy(fuzzed_file_path, os.path.join(constants.logs_dir, 'fuzzed_' + ntpath.basename(file_path)))
+                shutil.copy(fuzzed_file_path, res.path_name)
         except UnicodeDecodeError as exc:
             # TODO: It is silly but we can't handle properly non-unicode outputs 
             # just because the .decode('utf-8') to convert bytes into strings 

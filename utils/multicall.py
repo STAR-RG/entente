@@ -82,7 +82,9 @@ def multicall_directories(path_name, should_fuzz, validator=None):
         mcalls = Multicalls(long_file, short_file) 
 
         # multicall JS engines on each file
-        for file_name in os.listdir(path_name):
+        files = os.listdir(path_name)
+        files.sort()
+        for file_name in files:
             file_path = os.path.join(path_name, file_name)
 
             #TODO: Please check. consider removing this code. I think this only makes sense to be called insider fuzzers, which is done already. -Marcelo

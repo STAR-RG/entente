@@ -3,7 +3,8 @@
 INVALID_STRINGS = [
     "file with feature not implemented yet",
     "is not a function",
-    "is undefined",
+    "is not defined",
+    "undefined",
     "support this action",
     "support property",
     "test is not a function",
