@@ -255,7 +255,8 @@ class Results:
             is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines
 
             if not (is_fundamentally_interesting): ## necessary condition to be interesting
-                return False            
+                return False      
+            self.remove_spurious()      
             return True
         
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
@@ -291,7 +292,6 @@ class Results:
             if output not in ['', None]:
                 return True
         return False
-        # return (self.jsc_outerr or self.chakra_outerr or self.spiderm_outerr or self.v8_outerr)
 
     # TODO generalize this stuff with a dict
 
