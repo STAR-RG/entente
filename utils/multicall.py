@@ -232,12 +232,23 @@ class Results:
             self.abstract(self.v8_outerr) + "\n")
 
     def abstract(self, string):
+        error_message = ''
         for line in string.splitlines():
             if 'Error' in line:
                 ind = string.index('Error')
                 error_message = line[ind:] if 'Error' in line[ind:] else line
-                return error_message # shows what comes after Error
-        return ''     
+                break
+            
+            elif 'Fatal' in line:
+                ind = string.index('Fatal')
+                error_message = string[ind:]
+                break
+
+            elif 'core dumps' in line:
+                error_message = line
+                break
+            
+        return error_message
 
     def hash(self):
         bytes = self.str_canonical().encode()
@@ -271,13 +282,14 @@ class Results:
        
         # TODO: check better solution
         for keyword in INVALID_STRINGS:
-            if keyword in self.jsc_outerr:
+            keyword = keyword.lower()
+            if keyword in self.jsc_outerr.lower():
                 self.jsc_outerr = ''
-            if keyword in self.chakra_outerr:
+            if keyword in self.chakra_outerr.lower():
                 self.chakra_outerr = ''
-            if keyword in self.v8_outerr:
+            if keyword in self.v8_outerr.lower():
                 self.v8_outerr = ''
-            if keyword in self.spiderm_outerr:
+            if keyword in self.spiderm_outerr.lower():
                 self.spiderm_outerr = ''
 
     def is_invalid(self):
