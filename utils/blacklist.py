@@ -1,5 +1,6 @@
 # TODO: keep updating...
 
+# this list contains invalid message output
 INVALID_STRINGS = [
     "file with feature not implemented yet",
     "is not a function",
