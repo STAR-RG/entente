@@ -26,6 +26,8 @@ def validate(file_path):
             return str(e)
         except RecursionError as e:
             return str(e)
+        except Exception as e:
+            return str(e)
 
         # user-defined validators
         validators = [v for k, v in globals().items() if k.startswith("check_")]
