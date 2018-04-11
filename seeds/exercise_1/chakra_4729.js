@@ -7,5 +7,6 @@ function Foo() {}
 // Proxy from target 'Foo' 
 class Bar extends new Proxy(Foo, {}) { foobar() { return "foobar"; } }
 
-// Log should not print 'undefined', but the func 'foobar'.
-console.log(new Bar().foobar);
+if(new Bar().foobar == 'undefined'){
+    throw new Error("Should be foobar, but is 'undefined'");
+}
