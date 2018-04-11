@@ -1,0 +1,106 @@
+﻿========
+BUG #4
+
+Date reported: April 11, 2018
+
+URLs:
+
+**********URL da issue submetida (mais de uma se mais de uma engine afetada)
+
+Original:
+
+**********caminho para o arquivo original
+
+Fuzzed:
+
+********* (1) vazio caso nao venha de fuzzing
+********* (2) mostre TODO o teste. nao faca modificacoes aqui. esta OK
+********* simplificar no momento de criar issue
+
+var def = [];
+var p = new Proxy({foo:1, bar:2}, { defineProperty: function(o, v, desc) { def.push(v);
+Object.defineProperty(o, v, desc); return true; }});
+p.foo = 2; p.bar = 4;
+p.foo = 2; p.bar = 4;
+p.foo = 2; p.bar = 4;
+return def + '' === "foo,bar";
+
+Pattern:
+
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
+
+Explanation:
+
+JSCore should record all calls to setters "foo" and "bar" (6 in
+total), whose effect is to to store the string
+"foo,bar,foo,bar,foo,bar" in variable def. Therefore, the test should
+fail under JSCore as it fails in other engines. However, JSCore only
+stores the first two calls to the setters and the test (incorrectly)
+passes.
+
+========
+BUG #3
+
+Bugs by runtime
+============================
+print(!({ __proto__ } instanceof Array));
+pattern:
+-------------JavaScriptCore
+Error: undefined is not an object (evaluating '} instanc')
+============================
+
+Bugs by violation of pre-condition
+============================
+function test() {
+	"use strict";
+	return (function f(n){
+		if (n <= 0) {
+			return "foo";
+		}
+	return f(n - 1);
+}(1e6)) === "foo";}
+
+pattern:
+-------------JavaScriptCore
+-------------Chakra                * chakra dumps core (segmentation fault)
+-------------SpiderMonkey
+Error: too much recursion
+-------------v8
+Error: Maximum call stack size exceeded
+============================
+
+
+========
+BUG #2
+
+"foo".repeat(657604378) === "foofoofoo"
+pattern:
+-------------JavaScriptCore
+Error: TIMEOUT
+-------------Chakra             * pass without message
+-------------SpiderMonkey
+Error: repeat count must be less than infinity and not overflow maximum string size
+-------------v8
+Error: Invalid string length
+
+
+========
+BUG #1
+var buffer = new ArrayBuffer(64);
+var view = new DataView(buffer);
+view.setInt8 (0, 0x80);
+print(view.getInt8(-1770523502845470856862803727694) === -0x80);
+pattern:
+-------------JavaScriptCore
+Error: byteOffset cannot be negative
+-------------Chakra
+-------------SpiderMonkey
+Error: invalid or out-of-range index
+-------------v8
+Error: Offset is outside the bounds of the DataView
