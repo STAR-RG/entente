@@ -1,0 +1,210 @@
+﻿======
+BUG #5
+
+Date reported: April 11, 2018
+
+Type: Inconsistent assertions violated in test case
+
+URLs:
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_defineProperty_calls_[[Set]].js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_Proxy_internal_defineProperty_calls_[[Set]].js
+
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_defineProperty_calls_[[Set]].js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_Proxy_internal_defineProperty_calls_[[Set]].js
+@@ -4,10 +4,267 @@
+ var def = [];
+ var p = new Proxy({foo:1, bar:2}, { defineProperty: function(o, v, desc) { def.push(v); Object.defineProperty(o, v, desc); return true; }});
+ p.foo = 2; p.bar = 4;
++p.foo = 2; p.bar = 4;
++p.foo = 2; p.bar = 4;
+ return def + '' === "foo,bar";
+       
+ }
+ 
+Pattern:
+
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
+
+Explanation:
+
+JSCore should record all calls to setters "foo" and "bar" (6 in
+total), whose effect is to to store the string
+"foo,bar,foo,bar,foo,bar" in variable def. Therefore, the test should
+fail under JSCore as it fails in other engines. However, JSCore only
+stores the first two calls to the setters and the test (incorrectly)
+passes.
+
+======
+BUG #4
+
+Date reported: April 11, 2018
+
+Type: Invalid Object
+
+URLs:
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/___proto___in_object_literals_not_a_shorthand_property.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed___proto___in_object_literals_not_a_shorthand_property.js
+
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/__proto___in_object_literals_not_a_shorthand_property.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed___proto___in_object_literals_not_a_shorthand_property.js
+@@ -1,10 +1,6 @@
+ function test() {
+ 
+-if (!({ __proto__ : [] } instanceof Array)) {
+-  return false;
+-}
+-var __proto__ = [];
+-return !({ __proto__ } instanceof Array);
++  return !({ __proto__ } instanceof Array);
+       
+ }
+ 
+Pattern:
+-------------JavaScriptCore
+Error: undefined is not an object (evaluating '} instanc')
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+JavaScriptCore is not recognizing {__proto__} as a object.
+V8, SpiderMonkey and Chakra recognize __proto__ as a Window and 
+{__proto__} as an empty object {}.
+
+======
+BUG #3
+
+Date reported: April 11, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs:
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/proper_tail_calls_tail_call_optimisation_direct_recursion.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_proper_tail_calls_tail_call_optimisation_direct_recursion.js
+
+Patch:
+--- jsfuzz/seeds/WebKit.JSTests.es6/proper_tail_calls_tail_call_optimisation_direct_recursion.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_proper_tail_calls_tail_call_optimisation_direct_recursion.js
+@@ -6,6 +6,8 @@
+     return  "foo";
+   }
+   return f(n - 1);
++  return f(n - 1);
++  return f(n - 1);
+ }(1e6)) === "foo";
+       
+ }
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+-------------SpiderMonkey
+Error: too much recursion
+-------------v8
+Error: Maximum call stack size exceeded
+
+Explanation:
+Chakra should raise a recursion error when try to run a recursion with 
+a long number. In this case, a segmentation fault occurs (core dumps).
+
+======
+BUG #2
+
+Date reported: April 11, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs:
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.repeat.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_String.prototype_methods_String.prototype.repeat.js
+
+Patch:
+--- jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.repeat.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_String.prototype_methods_String.prototype.repeat.js
+@@ -1,7 +1,7 @@
+ function test() {
+ 
+ return typeof String.prototype.repeat === 'function'
+-  && "foo".repeat(3) === "foofoofoo";
++  && "foo".repeat(657604378) === "foofoofoo";
+       
+ }
+ 
+Pattern:
+-------------JavaScriptCore
+Error: TIMEOUT
+-------------Chakra
+-------------SpiderMonkey
+Error: repeat count must be less than infinity and not overflow maximum string size
+-------------v8
+Error: Invalid string length
+
+Explanation:
+
+Chakra should raise an exception when try to concat
+strings with a long number in repeat function. In this case, 
+a segmentation fault occurs (core dumps).
+
+======
+BUG #1
+
+Date reported: April 11, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs:
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/typed_arrays_DataView_Int8.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_typed_arrays_DataView_Int8.js
+
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/typed_arrays_DataView_Int8.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_typed_arrays_DataView_Int8.js
+@@ -3,7 +3,7 @@
+ var buffer = new ArrayBuffer(64);
+ var view = new DataView(buffer);
+ view.setInt8 (0, 0x80);
+-return view.getInt8(0) === -0x80;
++return view.getInt8(-1770523502845470856862803727694) === -0x80;
+       
+ }
+ 
+Pattern:
+-------------JavaScriptCore
+Error: byteOffset cannot be negative
+-------------Chakra
+-------------SpiderMonkey
+Error: invalid or out-of-range index
+-------------v8
+Error: Offset is outside the bounds of the DataView
+
+Explanation:
+Chakra pass on this testcase. Getting the getInt8 bytes with this long number negative, 
+Chakra returns -128 that corresponds to the same decimal value for -0x80.
