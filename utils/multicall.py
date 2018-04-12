@@ -3,6 +3,7 @@ from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutEx
 from utils import constants
 from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
+from difflib import SequenceMatcher
 
 '''
     Class that saves state across several multicalls
@@ -52,11 +53,16 @@ class Multicalls:
         for key, val_set in self.hashmap.items():
             bucket_num += 1
             self.short_file.write('\n>>>>>\n files in bucket #{}:\n'.format(bucket_num))
+            files = []
             for res in val_set:
+                if not os.path.isfile(res.path_name) or res.path_name in files:
+                    continue
                 self.short_file.write(' ' + res.path_name + "\n" )
+                files.append(res.path_name)
             self.short_file.write('\nhash: {}\n'.format(key))
-            self.short_file.write('\npattern:\n')
             res = next(iter(val_set))
+            self.short_file.write('\npriority: {}\n'.format(res.priority()))
+            self.short_file.write('\npattern:\n')
             self.short_file.write(res.str_canonical())
 
 
@@ -141,6 +147,13 @@ def callJSEngine(cmd_line):
         msg = errorExc.output.decode('utf-8')
     except TimeoutExpired as timeoutExc:
         msg = 'Error: TIMEOUT'
+    
+    # TODO: Check a way to capture Segmentation fault in Python
+    # Segmentation fault isn't exactly an exception that you can catch. It
+    # usually means something has gone horribly wrong, like dereferencing
+    # invalid pointer, trying to access memory out of process's range. Since
+    # if you run out of memory Python simply raises MemoryError exception,
+    # which you can catch. So that is not the case for segmentation fault.
 
     return msg
 
@@ -243,17 +256,44 @@ class Results:
                 ind = string.index('Fatal')
                 error_message = string[ind:]
                 break
-
-            elif 'core dumps' in line:
-                error_message = line
-                break
-            
+           
         return error_message
 
     def hash(self):
         bytes = self.str_canonical().encode()
         hash_object = hashlib.md5(bytes)
         return hash_object.hexdigest()
+
+    def priority(self):
+        """
+        Define priority based on engine output
+        """
+        priority, is_test_failed = None, False
+        
+        # set high priority if occurs at least one test failed
+        # fuzzer can alter the string message, using ratio of equivalence
+        # fuzzer can add sequence of 'a' character, for example: "Test aaaaaaaaa....failed"
+        for output in self.get_all_outerr():
+            seq = SequenceMatcher(None,'Error: Test failed', output)
+            if (seq.ratio() >= 0.7) or \
+                ('Test failed' in output) or \
+                ('Fatal' in output) or \
+                ('aaaaaaaaaa' in output and ('Test' in output or 'failed' in output)):
+                is_test_failed = True
+                break
+
+        # set low priority if only chakra reports an error
+        at_least = any([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
+        is_only_chakra = self.chakra_outerr and not at_least
+
+        if is_test_failed:
+            priority = '[HIGH]'
+        elif is_only_chakra and not is_test_failed:
+            priority = '[LOW]'
+        else:
+            priority = '[MEDIUM]'
+        
+        return priority
 
     def is_interesting(self):
         '''
@@ -262,7 +302,7 @@ class Results:
         '''
         try:
             self.remove_spurious()
-            all_engines = (self.jsc_outerr and self.chakra_outerr and self.v8_outerr and self.spiderm_outerr)
+            all_engines = all(self.get_all_outerr())
             is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines
 
             if not (is_fundamentally_interesting): ## necessary condition to be interesting
@@ -299,10 +339,22 @@ class Results:
         return self.validation_error is None
 
     def is_atleastone(self):
-        for output in [self.jsc_outerr, self.chakra_outerr, self.spiderm_outerr, self.v8_outerr]:
-            if output not in ['', None]:
-                return True
-        return False
+        """
+        Return True if at least one engine reports an error message
+        """
+        return any(self.get_all_outerr())
+    
+    def get_all_outerr(self):
+        """
+        Return a list of all engines output errors
+        """
+        return [
+            self.abstract(self.jsc_outerr),
+            self.abstract(self.chakra_outerr),
+            self.abstract(self.spiderm_outerr),
+            self.abstract(self.v8_outerr)
+        ]
+
 
     # TODO generalize this stuff with a dict
 
