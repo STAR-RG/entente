@@ -1,5 +1,5 @@
 ﻿======
-BUG #5
+BUG #4
 
 Date reported: April 11, 2018
 
@@ -46,7 +46,7 @@ stores the first two calls to the setters and the test (incorrectly)
 passes.
 
 ======
-BUG #4
+BUG #3
 
 Date reported: April 11, 2018
 
@@ -88,53 +88,13 @@ V8, SpiderMonkey and Chakra recognize __proto__ as a Window and
 {__proto__} as an empty object {}.
 
 ======
-BUG #3
-
-Date reported: April 11, 2018
-
-Type: Incosistent treatment/check of pre-conditions
-
-URLs:
-
-Original:
-./jsfuzz/seeds/WebKit.JSTests.es6/proper_tail_calls_tail_call_optimisation_direct_recursion.js
-
-Fuzzed:
-./jsfuzz/bugs/fuzzed_files/fuzzed_proper_tail_calls_tail_call_optimisation_direct_recursion.js
-
-Patch:
---- jsfuzz/seeds/WebKit.JSTests.es6/proper_tail_calls_tail_call_optimisation_direct_recursion.js
-+++ jsfuzz/bugs/fuzzed_files/fuzzed_proper_tail_calls_tail_call_optimisation_direct_recursion.js
-@@ -6,6 +6,8 @@
-     return  "foo";
-   }
-   return f(n - 1);
-+  return f(n - 1);
-+  return f(n - 1);
- }(1e6)) === "foo";
-       
- }
-
-Pattern:
--------------JavaScriptCore
--------------Chakra
--------------SpiderMonkey
-Error: too much recursion
--------------v8
-Error: Maximum call stack size exceeded
-
-Explanation:
-Chakra should raise a recursion error when try to run a recursion with 
-a long number. In this case, a segmentation fault occurs (core dumps).
-
-======
 BUG #2
 
-Date reported: April 11, 2018
+Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
 
-URLs:
+URLs: https://github.com/Microsoft/ChakraCore/issues/4979
 
 Original:
 ./jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.repeat.js
@@ -172,11 +132,11 @@ a segmentation fault occurs (core dumps).
 ======
 BUG #1
 
-Date reported: April 11, 2018
+Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
 
-URLs:
+URLs: https://github.com/Microsoft/ChakraCore/issues/4978
 
 Original:
 ./jsfuzz/seeds/WebKit.JSTests.es6/typed_arrays_DataView_Int8.js
