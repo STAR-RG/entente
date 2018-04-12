@@ -38,12 +38,12 @@ Error: Test failed
 
 Explanation:
 
-JSCore should record all calls to setters "foo" and "bar" (6 in
-total), whose effect is to to store the string
-"foo,bar,foo,bar,foo,bar" in variable def. Therefore, the test should
-fail under JSCore as it fails in other engines. However, JSCore only
-stores the first two calls to the setters and the test (incorrectly)
-passes.
+JSCore should record all calls to setters "foo" and "bar" (six in
+total), whose expected effect is to to store the string
+"foo,bar,foo,bar,foo,bar" on variable "def". Therefore, the test
+should fail under JSCore as it fails in other engines--return value
+should be true as per test assertion. However, JSCore only stores the
+first two calls to the setters and the test (incorrectly) passes.
 
 ======
 BUG #3
@@ -83,8 +83,9 @@ Error: undefined is not an object (evaluating '} instanc')
 -------------v8
 
 Explanation:
-JavaScriptCore is not recognizing {__proto__} as a object.
-V8, SpiderMonkey and Chakra recognize __proto__ as a Window and 
+
+JavaScriptCore does not recognize {__proto__} as a object.  V8,
+SpiderMonkey and Chakra recognize __proto__ as a Window and
 {__proto__} as an empty object {}.
 
 ======
@@ -125,9 +126,8 @@ Error: Invalid string length
 
 Explanation:
 
-Chakra should raise an exception when try to concat
-strings with a long number in repeat function. In this case, 
-a segmentation fault occurs (core dumps).
+Chakra should raise an exception when passing a long number to the
+string function repeat. Instead, it crashes with a segmentation fault.
 
 ======
 BUG #1
@@ -166,5 +166,7 @@ Error: invalid or out-of-range index
 Error: Offset is outside the bounds of the DataView
 
 Explanation:
-Chakra pass on this testcase. Getting the getInt8 bytes with this long number negative, 
-Chakra returns -128 that corresponds to the same decimal value for -0x80.
+
+This test passes on Chakra but it should fail. Chakra always returns
+-128 when calling view.getInt8 with a long negative number. Note that
+-128 corresponds to the hexadecimal -0x80.
