@@ -1,5 +1,5 @@
 import shlex, os, hashlib, ntpath
-from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired
+from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, Popen
 from utils import constants
 from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
@@ -138,11 +138,15 @@ def callJSEngine(cmd_line):
         This function makes the system call to the JS engine binary
     '''
     cmd = shlex.split(cmd_line)
+    # print(cmd)
     #pylint: disable=W0612
     try:
         # Using Python3 API because of the timeout, which appears to be 
         # essential. I found a case of hang
         msg = check_output(cmd, stderr=STDOUT, timeout=1).decode('utf-8')
+        # proc = Popen(cmd_line, stdout=PIPE, stderr=PIPE)
+        # msg, err = proc.communicate()
+        # msg = msg.decode('utf-8')
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
     except TimeoutExpired as timeoutExc:
@@ -282,13 +286,15 @@ class Results:
                 is_test_failed = True
                 break
 
-        # set low priority if only chakra reports an error
+        # set low priority if only chakra reports/not reports an error
         at_least = any([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
-        is_only_chakra = self.chakra_outerr and not at_least
+        only_chakra_reports = self.chakra_outerr and not at_least
+        only_chakra_not_reports = not self.chakra_outerr and all([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
+        is_low_priority = (only_chakra_reports or only_chakra_not_reports)
 
         if is_test_failed:
             priority = '[HIGH]'
-        elif is_only_chakra and not is_test_failed:
+        elif is_low_priority and not is_test_failed:
             priority = '[LOW]'
         else:
             priority = '[MEDIUM]'
@@ -301,18 +307,17 @@ class Results:
             interesting and should be reported.
         '''
         try:
-            self.remove_spurious()
             all_engines = all(self.get_all_outerr())
             is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines
-
             if not (is_fundamentally_interesting): ## necessary condition to be interesting
                 return False
-            return True
+            
+            return not self.is_spurious()
         
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
             return False
 
-    def remove_spurious(self):
+    def is_spurious(self):
         """
         Remove spurious reports based on keywords/strings
         TODO: updating strings in keywords list
@@ -320,17 +325,18 @@ class Results:
         ## TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
         ## Chakra is a new engine, some features are not implemented yet
        
+        all_outputs = self.get_all_outerr()
+        for engine_output in all_outputs:
+            if 'Fatal' in engine_output or 'core dumps' in engine_output:
+                return False
+
         # TODO: check better solution
-        for keyword in INVALID_STRINGS:
-            keyword = keyword.lower()
-            if keyword in self.jsc_outerr.lower():
-                self.jsc_outerr = ''
-            if keyword in self.chakra_outerr.lower():
-                self.chakra_outerr = ''
-            if keyword in self.v8_outerr.lower():
-                self.v8_outerr = ''
-            if keyword in self.spiderm_outerr.lower():
-                self.spiderm_outerr = ''
+        for engine_output in all_outputs:
+            for keyword in INVALID_STRINGS:
+                keyword = keyword.lower()
+                if keyword in engine_output.lower():
+                    return True
+        return False
 
     def is_invalid(self):
         return self.validation_error
