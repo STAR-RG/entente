@@ -130,7 +130,7 @@ Chakra should raise an exception when passing a long number to the
 string function repeat. Instead, it crashes with a segmentation fault.
 
 ======
-BUG #1
+BUG #1 (CONFIRMED)
 
 Date reported: April 12, 2018
 

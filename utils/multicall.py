@@ -137,15 +137,16 @@ def callJSEngine(cmd_line):
     '''
         This function makes the system call to the JS engine binary
     '''
+    timeout_limit = 5
     cmd = shlex.split(cmd_line)
-    # print(cmd)
+    msg, err = None, None
     #pylint: disable=W0612
     try:
         # Using Python3 API because of the timeout, which appears to be 
         # essential. I found a case of hang
-        msg = check_output(cmd, stderr=STDOUT, timeout=1).decode('utf-8')
-        # proc = Popen(cmd_line, stdout=PIPE, stderr=PIPE)
-        # msg, err = proc.communicate()
+        msg = check_output(cmd, stderr=STDOUT, timeout=timeout_limit).decode('utf-8')
+        # proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        # msg, err = proc.communicate(timeout=timeout_limit)
         # msg = msg.decode('utf-8')
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
@@ -158,8 +159,7 @@ def callJSEngine(cmd_line):
     # invalid pointer, trying to access memory out of process's range. Since
     # if you run out of memory Python simply raises MemoryError exception,
     # which you can catch. So that is not the case for segmentation fault.
-
-    return msg
+    return msg if not err else err
 
 def callJavaScriptCore(pathName):
     if is_file_invalid('jscore', pathName):

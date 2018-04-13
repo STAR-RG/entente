@@ -2,7 +2,7 @@
 
 # this list contains invalid message output
 INVALID_STRINGS = [
-    "file with feature not implemented yet",
+    # "file with feature not implemented yet",
     "is not a function",
     "is not defined",
     "is not an Object",
@@ -21,16 +21,16 @@ INVALID_STRINGS = [
     "Invalid operand",
     "Object expected",
     # "TIMEOUT",
-    "Invalid string length",
-    "be less than infinity",
+    # "Invalid string length",
+    # "be less than infinity",
     # "Out of stack space",
     # "Out of memory",
-    "too much recursion",
-    "stack size exceeded",
+    # "too much recursion",
+    # "stack size exceeded",
     "requires more than",
     "should be an Object",
-    "must be a",
-    "must be an",
+    "must be a", 
+    "must be an", 
     # "must be an object",
     # "must be a function",
     # "must be an ArrayBuffer",
@@ -39,8 +39,8 @@ INVALID_STRINGS = [
     "can only be called",
     "called on non-object",
     "requires the first argument",
-    "invalid regular expression",
-    "error in regular expression",
+    # "invalid regular expression",
+    # "error in regular expression",
     "Cannot read property",
     "Cannot use",
     "is null",
@@ -66,10 +66,10 @@ INVALID_STRINGS = [
     "literal not terminated",
     "Cannot convert",
     "can't convert",
-    "Error: true",
-    "cannot be a RegExp",
-    "be a Regular Expression",
-    "cannot be a RegExp",
+    # "Error: true",
+    # "cannot be a RegExp",
+    # "be a Regular Expression",
+    # "cannot be a RegExp",
     "super() is only valid",
     "got '...'",
     "... operator",
@@ -87,10 +87,6 @@ INVALID_STRINGS = [
 
 # these lists contains invalid code in JS file
 
-OPERATORS = [
-    "-=="
-]
-
 # features not implemented on chakra
 CHAKRA_KEYWORDS = [
     "Symbol.split",
@@ -103,20 +99,20 @@ CHAKRA_KEYWORDS = [
     "RegExp.prototype.test",
     "RegExp.prototype.toString.call",
     "(E.prototype) === '[object Object]'"
-] + OPERATORS
+]
 
 # features not implemented on v8
 V8_KEYWORDS = [
     "Array.prototype.values"
-] + OPERATORS
+]
 
 # features not implemented on jscore
-JSCORE_KEYWORDS = [] + OPERATORS
+JSCORE_KEYWORDS = []
 
 # features not implemented on spidermonkey
 SPIDERMONKEY_KEYWORDS = [
     "dotAll"
-] + OPERATORS
+]
 
 
 ENGINES_KEYWORDS = {
