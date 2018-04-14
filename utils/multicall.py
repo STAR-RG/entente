@@ -1,5 +1,5 @@
 import shlex, os, hashlib, ntpath
-from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, Popen
+from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, Popen, getstatusoutput
 from utils import constants
 from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
@@ -139,27 +139,20 @@ def callJSEngine(cmd_line):
     '''
     timeout_limit = 5
     cmd = shlex.split(cmd_line)
-    msg, err = None, None
     #pylint: disable=W0612
     try:
         # Using Python3 API because of the timeout, which appears to be 
         # essential. I found a case of hang
         msg = check_output(cmd, stderr=STDOUT, timeout=timeout_limit).decode('utf-8')
-        # proc = Popen(cmd, stdout=PIPE, stderr=PIPE)
-        # msg, err = proc.communicate(timeout=timeout_limit)
-        # msg = msg.decode('utf-8')
+        if not msg:
+            status, error = getstatusoutput(cmd_line)
+            msg = 'Error: engine has stopped working [CHECK_MANUALLY]' if error else ''
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
     except TimeoutExpired as timeoutExc:
         msg = 'Error: TIMEOUT'
     
-    # TODO: Check a way to capture Segmentation fault in Python
-    # Segmentation fault isn't exactly an exception that you can catch. It
-    # usually means something has gone horribly wrong, like dereferencing
-    # invalid pointer, trying to access memory out of process's range. Since
-    # if you run out of memory Python simply raises MemoryError exception,
-    # which you can catch. So that is not the case for segmentation fault.
-    return msg if not err else err
+    return msg
 
 def callJavaScriptCore(pathName):
     if is_file_invalid('jscore', pathName):
@@ -327,7 +320,7 @@ class Results:
        
         all_outputs = self.get_all_outerr()
         for engine_output in all_outputs:
-            if 'Fatal' in engine_output or 'core dumps' in engine_output:
+            if 'Fatal' in engine_output or '[CHECK_MANUALLY]' in engine_output:
                 return False
 
         # TODO: check better solution
