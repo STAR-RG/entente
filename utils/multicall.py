@@ -70,6 +70,8 @@ def multicall_directories(path_name, should_fuzz, validator=None):
     """
         Process files in a directory, running multicall on each file.
 
+        TODO: describe other params (if you decide to explain validator) -Marcelo
+
         :param callable validator: Function used to exclude files (e.g. parsing error). Calling the function on a valid
         file should return None/empty string; otherwise the reason for the error should be returned as a string.
 
@@ -91,12 +93,12 @@ def multicall_directories(path_name, should_fuzz, validator=None):
         for file_path in [os.path.join(dp, f) for dp, dn, fn in os.walk(path_name) for f in sorted(fn) if f.endswith(".js")]:
 
             #TODO: Please check. consider removing this code. I think this only makes sense to be called insider fuzzers, which is done already. -Marcelo
-            if validator is not None:
-                validation_error = validator(file_path)
-                if validation_error:
-                    res = Results(file_path, validation_error)
-                    mcalls.notify(res)
-                    continue # skip this file
+            # if validator is not None:
+            #     validation_error = validator(file_path)
+            #     if validation_error:
+            #         res = Results(file_path, validation_error)
+            #         mcalls.notify(res)
+            #         continue # skip this file
 
             if should_fuzz:
                 radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator)

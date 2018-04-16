@@ -11,7 +11,9 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
     bar = ProgressBar(widgets=['fuzzing ' + file_path + ' ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' '])
     #pylint: disable=W0612
     num_it = 1
+
     while num_it <= num_iterations:
+
 
         # fuzz the file with radamsa
         fuzzed_file_path = os.path.join(tempfile.gettempdir(), 'temp_filefuzzed')
@@ -25,7 +27,8 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
                 raise Exception('Please check if radamsa is installed on your environment (see README.md file).')
         except Exception as error:
             raise Exception('Error:', error)
-            
+
+        # TODO: consider optimizing! This is taking a LOT of time (both parsing and validating). - Marcelo
         # check if file is valid
         if validator is not None:
             validation_error = validator(fuzzed_file_path)

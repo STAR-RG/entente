@@ -9,6 +9,8 @@ def validate(file_path):
          (3) it does not contain engine-specific functions
     """
     with open(file_path) as source:
+
+        #TODO: why \n is relevant for parsing? -Marcelo
         try:
             contents = '\n'.join(source.readlines())
         except UnicodeDecodeError as e: # fuzzer can add really crazy characters

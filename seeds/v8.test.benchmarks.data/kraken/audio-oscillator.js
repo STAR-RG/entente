@@ -38,7 +38,7 @@ new Array(-0.5137231945991516,-0.49000853300094604,-0.5113903284072876,-0.488100
 
 function runTest(test, iterations) {
  for (var i = 0; i < iterations; i++) {
-   test();
+     test(); 
  }
 }
 
@@ -1932,7 +1932,7 @@ var calcOsc = function() {
   sine.generate();
   harmonic = new Oscillator(Oscillator.Sine, frequency*nthHarmonic, 1/nthHarmonic, bufferSize, sampleRate);
   harmonic.generate();
-  sine.add(harmonic);
+  sine.add(harmonic); 
 };
 
 runTest(calcOsc, iterations);

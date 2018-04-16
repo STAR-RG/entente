@@ -10,7 +10,7 @@ if not os.path.exists(os.path.join(base_dir, 'js_engines')):
 js_dir = os.path.join(base_dir, 'js_engines/bin')
 
 # fuzzing constants
-num_iterations = 10
+num_iterations = 50
 
 ''' 
     This function looks for a file (file_name param) within a directory (path)
