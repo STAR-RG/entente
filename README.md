@@ -3,7 +3,6 @@
 - Linux
 - Python3.6
 - [tox virtualenv](https://tox.readthedocs.io/en/latest/)
-- [eslint](https://eslint.org/)
 
 ### Installation
 1. Clone this repository
