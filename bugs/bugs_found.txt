@@ -89,7 +89,7 @@ SpiderMonkey and Chakra recognize __proto__ as a Window and
 {__proto__} as an empty object {}.
 
 ======
-BUG #2
+BUG #2 (NOT CONFIRMED)
 
 Date reported: April 12, 2018
 
@@ -119,6 +119,7 @@ Pattern:
 -------------JavaScriptCore
 Error: TIMEOUT
 -------------Chakra
+Error: Core Dump
 -------------SpiderMonkey
 Error: repeat count must be less than infinity and not overflow maximum string size
 -------------v8

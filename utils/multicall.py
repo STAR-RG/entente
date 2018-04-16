@@ -87,11 +87,8 @@ def multicall_directories(path_name, should_fuzz, validator=None):
     with open(short_log_path, 'w') as short_file, open(long_log_path, 'w') as long_file:
         mcalls = Multicalls(long_file, short_file) 
 
-        # multicall JS engines on each file
-        files = os.listdir(path_name)
-        files.sort()
-        for file_name in files:
-            file_path = os.path.join(path_name, file_name)
+        # recursive search
+        for file_path in [os.path.join(dp, f) for dp, dn, fn in os.walk(path_name) for f in sorted(fn) if f.endswith(".js")]:
 
             #TODO: Please check. consider removing this code. I think this only makes sense to be called insider fuzzers, which is done already. -Marcelo
             if validator is not None:

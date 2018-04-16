@@ -8,6 +8,7 @@ def test_regexp_prototype():
     # https://github.com/Microsoft/ChakraCore/issues/578
     path_name = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6/Proxy_internal_get_calls_RegExp.prototype.test.js')
     res = multicall.callAll(path_name)
+    #TODO: general advice: don't add print messages in tests. use assertions. - Marcelo
     print(res)
 
 @pytest.mark.skip(reason="temporarilly disabling... checking issue")
