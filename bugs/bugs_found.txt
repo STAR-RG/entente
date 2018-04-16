@@ -1,11 +1,11 @@
 ﻿======
-BUG #4
+BUG #3
 
 Date reported: April 11, 2018
 
 Type: Inconsistent assertions violated in test case
 
-URLs:
+URLs: https://bugs.webkit.org/show_bug.cgi?id=184629
 
 Original:
 ./jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_defineProperty_calls_[[Set]].js
@@ -46,50 +46,7 @@ should be true as per test assertion. However, JSCore only stores the
 first two calls to the setters and the test (incorrectly) passes.
 
 ======
-BUG #3
-
-Date reported: April 11, 2018
-
-Type: Invalid Object
-
-URLs:
-
-Original:
-./jsfuzz/seeds/WebKit.JSTests.es6/___proto___in_object_literals_not_a_shorthand_property.js
-
-Fuzzed:
-./jsfuzz/bugs/fuzzed_files/fuzzed___proto___in_object_literals_not_a_shorthand_property.js
-
-Patch:
---- ./jsfuzz/seeds/WebKit.JSTests.es6/__proto___in_object_literals_not_a_shorthand_property.js
-+++ ./jsfuzz/bugs/fuzzed_files/fuzzed___proto___in_object_literals_not_a_shorthand_property.js
-@@ -1,10 +1,6 @@
- function test() {
- 
--if (!({ __proto__ : [] } instanceof Array)) {
--  return false;
--}
--var __proto__ = [];
--return !({ __proto__ } instanceof Array);
-+  return !({ __proto__ } instanceof Array);
-       
- }
- 
-Pattern:
--------------JavaScriptCore
-Error: undefined is not an object (evaluating '} instanc')
--------------Chakra
--------------SpiderMonkey
--------------v8
-
-Explanation:
-
-JavaScriptCore does not recognize {__proto__} as a object.  V8,
-SpiderMonkey and Chakra recognize __proto__ as a Window and
-{__proto__} as an empty object {}.
-
-======
-BUG #2 (NOT CONFIRMED)
+BUG #2
 
 Date reported: April 12, 2018
 

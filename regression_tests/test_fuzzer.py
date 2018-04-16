@@ -9,8 +9,6 @@ def test_fuzz_invalid(): # expect no raised exception
         mcalls = multicall.Multicalls(long_file, short_file) 
         file_path = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6/well-known_symbols_Symbol.replace.js')
         radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validate)
-        #print(short_file.name)        
-        #print(long_file.name)
         mcalls.save_summary()
 
 @pytest.mark.skip(reason="temporarilly disabling")
