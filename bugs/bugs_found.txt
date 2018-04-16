@@ -46,7 +46,7 @@ should be true as per test assertion. However, JSCore only stores the
 first two calls to the setters and the test (incorrectly) passes.
 
 ======
-BUG #2
+BUG #2 (REJECTED - expected behavior)
 
 Date reported: April 12, 2018
 
