@@ -17,10 +17,17 @@ def test_fuzz_webkit():
     multicall.multicall_directories(path_name, True, validator=validate)
 
 #@pytest.mark.skip(reason="temporarilly disabling")
-def test_fuzz_v8():
+def test_fuzz_v8_kraken():
     path_name = os.path.join(constants.seeds_dir, 'v8.test.benchmarks.data/kraken')
     multicall.multicall_directories(path_name, True, validator=validate)
+
 #@pytest.mark.skip(reason="temporarilly disabling")
 def test_jerryjs():
     path_name = os.path.join(constants.seeds_dir, 'JerryJS.jerryjs.ecma')
     multicall.multicall_directories(path_name, True, validator=validate)
+
+@pytest.mark.skip(reason="temporarilly disabling")
+def test_fuzz_v8_sunspider():
+    path_name = os.path.join(constants.seeds_dir, 'v8.test.benchmarks.data/sunspider')
+    multicall.multicall_directories(path_name, True, validator=validate)    
+

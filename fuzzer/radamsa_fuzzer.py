@@ -28,9 +28,11 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
         except Exception as error:
             raise Exception('Error:', error)
 
-        # TODO: consider optimizing! This is taking a LOT of time (both parsing and validating). - Marcelo
-        # check if file is valid
-        if validator is not None:
+        # TODO: consider optimizing. This is taking a LOT of time, both parsing and validating. - Marcelo
+        '''
+            Check if file is valid and should be considered
+        '''
+        if validator is not None: 
             validation_error = validator(fuzzed_file_path)
             if validation_error:
                 res = multicall.Results(fuzzed_file_path, validation_error)
@@ -50,6 +52,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
             # raises this exception when the non-unicode char is mapped.
             continue
 
+        #FIXME: this is not incrementing the counter correctly. it goes like 1, 2, 3, and then 100%. 
         bar.update(num_it)
         num_it += 1  
     bar.finish()
