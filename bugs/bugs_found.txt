@@ -1,7 +1,7 @@
 ﻿======
 BUG #3
 
-Date reported: April 11, 2018
+Date reported: April 14, 2018
 
 Type: Inconsistent assertions violated in test case
 
