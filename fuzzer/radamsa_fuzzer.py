@@ -7,8 +7,9 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
         Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
         the input file (file_path) for a number of times (num_iterations). Each 
         time it makes a multicall on different engines. 
-    '''    
-    bar = ProgressBar(widgets=['fuzzing ' + file_path + ' ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' '])
+    '''
+    widgets = ['fuzzing ' + file_path + ' ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' ']
+    bar = ProgressBar(widgets=widgets, max_value=num_iterations)
     #pylint: disable=W0612
     num_it = 1
 
@@ -52,9 +53,8 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
             # raises this exception when the non-unicode char is mapped.
             continue
 
-        #FIXME: this is not incrementing the counter correctly. it goes like 1, 2, 3, and then 100%. 
         bar.update(num_it)
-        num_it += 1  
+        num_it += 1
     bar.finish()
 
 if __name__ == "__main__":
