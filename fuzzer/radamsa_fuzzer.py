@@ -2,7 +2,7 @@ import tempfile, os, shutil, shlex, subprocess, ntpath
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 
-def fuzz_file(num_iterations, file_path, mcalls, validator=None):
+def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
     '''
         Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
         the input file (file_path) for a number of times (num_iterations). Each 
@@ -42,7 +42,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
 
         # check discrepancy
         try:
-            res = multicall.callAll(fuzzed_file_path)
+            res = multicall.callAll(fuzzed_file_path, libs=libs)
             res.path_name = os.path.join(constants.logs_dir, 'fuzzed_' + ntpath.basename(file_path))
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
                 ## get first name of file...

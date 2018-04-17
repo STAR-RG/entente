@@ -1,4 +1,6 @@
 import esprima
+import os
+
 
 def validate(file_path):
     """
@@ -40,6 +42,22 @@ def validate(file_path):
         
     return None
 
+
+MOZILLA_RESERVED_NAMES = ["shell.js", "template.js", "user.js", "js-test-driver-begin.js", "js-test-driver-end.js"]
+
+
+def validate_mozilla(file_path):
+    """
+    Same as validate(), but also check if the filename is reserved (see seeds/mozilla/README.txt)
+    :param file_path:
+    :return:
+    """
+    if os.path.basename(file_path) in MOZILLA_RESERVED_NAMES:
+        return "Invalid filename for mozilla suite!"
+    else:
+        return validate(file_path)
+
+
 def check_nonstandard_methods(ast):
     visitor = MethodCollectorVisitor()
     visitor.visit(ast)
@@ -47,6 +65,7 @@ def check_nonstandard_methods(ast):
     if "drainMicrotasks" in visitor.calls and "drainMicrotasks" not in visitor.declarations:
         return "drainMicroTasks is non-standard!"
     return None
+
 
 def check_bad_error(ast):
     """
@@ -57,6 +76,7 @@ def check_bad_error(ast):
     if 'SyntaxError' in str(visitor.literals) and 'bad error:' in str(visitor.template_elements):
         return "handle string comparison with 'bad error: SyntaxError'"
     return None
+
 
 class MethodCollectorVisitor(esprima.NodeVisitor):
     def __init__(self):

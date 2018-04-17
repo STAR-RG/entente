@@ -66,7 +66,7 @@ class Multicalls:
             self.short_file.write(res.str_canonical())
 
 
-def multicall_directories(path_name, should_fuzz, validator=None):
+def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_libfiles=[]):
     """
         Process files in a directory, running multicall on each file.
 
@@ -90,8 +90,7 @@ def multicall_directories(path_name, should_fuzz, validator=None):
         mcalls = Multicalls(long_file, short_file) 
 
         # recursive search
-        for file_path in [os.path.join(dp, f) for dp, dn, fn in os.walk(path_name) for f in sorted(fn) if f.endswith(".js")]:
-
+        for basename, file_path in [(f, os.path.join(dp, f)) for dp, dn, fn in os.walk(path_name) for f in sorted(fn) if f.endswith(".js")]:
             #TODO: Please check. consider removing this code. I think this only makes sense to be called insider fuzzers, which is done already. -Marcelo
             # if validator is not None:
             #     validation_error = validator(file_path)
@@ -100,16 +99,27 @@ def multicall_directories(path_name, should_fuzz, validator=None):
             #         mcalls.notify(res)
             #         continue # skip this file
 
+            if basename in search_libfiles:  # library - skip it
+                continue
+
+            test_specific_libs = []
+            if search_libfiles:
+                current_dir = os.path.dirname(file_path)
+                while current_dir.startswith(path_name):
+                    local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
+                    test_specific_libs.extend(local_libs)
+                    current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+
             if should_fuzz:
-                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator)
+                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
             else:
-                res = callAll(file_path)
+                res = callAll(file_path, libs = (libs + test_specific_libs))
                 mcalls.notify(res)
 
         mcalls.save_summary()
 
 
-def callAll(pathName, validator=None):
+def callAll(pathName, validator=None, libs=None):
     '''
         This function calls all engines and returns a Results object (see class below) 
         encapsulating the output and error streams of corresponding calls
@@ -117,16 +127,16 @@ def callAll(pathName, validator=None):
     res = Results(pathName) if not validator else Results(pathName, validator(pathName))
     
     # JavaScriptCore
-    outerr = callJavaScriptCore(pathName)    
+    outerr = callJavaScriptCore(pathName, libs)    
     res.set_jsc_results(outerr)
     # Chakra
-    outerr = callChakra(pathName)
+    outerr = callChakra(pathName, libs)
     res.set_chakra_results(outerr)
     # SpiderMonkey
-    outerr = callSpiderMonkey(pathName)
+    outerr = callSpiderMonkey(pathName, libs)
     res.set_spiderm_results(outerr)
     # v8
-    outerr = callV8(pathName)
+    outerr = callV8(pathName, libs)
     res.set_v8_results(outerr)
 
     return res
@@ -153,30 +163,30 @@ def callJSEngine(cmd_line):
     
     return msg
 
-def callJavaScriptCore(pathName):
+def callJavaScriptCore(pathName, libs=[]):
     if is_file_invalid('jscore', pathName):
         return 'file with feature not implemented yet'
-    cmd_line = constants.javascriptcore + " " + pathName
+    cmd_line = constants.javascriptcore + " " + " ".join(libs) + " " + pathName
     #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
     return callJSEngine(cmd_line)
 
-def callChakra(pathName):
+def callChakra(pathName, libs=[]):
     if is_file_invalid('chakra', pathName):
         return 'file with feature not implemented yet'
 
-    cmd_line = constants.chakra + " " + pathName
+    cmd_line = constants.chakra + " " + " ".join(libs) + " " + pathName
     return callJSEngine(cmd_line)
 
-def callSpiderMonkey(pathName):
+def callSpiderMonkey(pathName, libs=[]):
     if is_file_invalid('spidermonkey', pathName):
         return 'file with feature not implemented yet'
-    cmd_line = constants.spidermonkey + " " + pathName
+    cmd_line = constants.spidermonkey + " " + " ".join(libs) + " " + pathName
     return callJSEngine(cmd_line)
 
-def callV8(pathName):
+def callV8(pathName, libs=[]):
     if is_file_invalid('v8', pathName):
         return 'file with feature not implemented yet'
-    cmd_line = constants.v8 + " " + pathName
+    cmd_line = constants.v8 + " " + " ".join(libs) + " " + pathName
     return callJSEngine(cmd_line)
 
 def is_file_invalid(engine, pathName):
