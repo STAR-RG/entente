@@ -1,5 +1,48 @@
 ﻿======
-BUG #3
+BUG #4 (NEW)
+
+Date reported: April 18, 2018
+
+Type: Access invalid position 
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=184749
+
+Original:
+./jsfuzz/seeds/JerryJS/JerryJS/jerryjs.ecma/22.02.01-009.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_bafe5_22.02.01-009.js
+
+Patch:
+--- /home/igor/jsfuzz/seeds/JerryJS/jerryjs.ecma/22.02.01-009.js
++++ /home/igor/jsfuzz/bugs/fuzzed_files/fuzzed_bafe5_22.02.01-009.js
+@@ -10,6 +10,9 @@
+  * distributed under the License is distributed on an "AS IS" BASIS
+  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  * See the License for the specific language governing permissions and
++ * limitations under the License is distributed on an "AS IS" BASIS
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
+  * limitations under the License.
+  */
+ 
+ 
+Pattern:
+
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+JSCore should returns "undefined" when try to access an item
+in position bigger then array size. The others engines 
+has passed on this testcase.
+
+======
+BUG #3 (NEW)
 
 Date reported: April 14, 2018
 

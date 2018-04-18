@@ -106,4 +106,5 @@ ENV/
 .vscode
 javascript/.*
 diff_report_test_ec6.txt
-logs
+logs*
+js_engines/radamsa
