@@ -14,8 +14,8 @@ Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_bafe5_22.02.01-009.js
 
 Patch:
---- /home/igor/jsfuzz/seeds/JerryJS/jerryjs.ecma/22.02.01-009.js
-+++ /home/igor/jsfuzz/bugs/fuzzed_files/fuzzed_bafe5_22.02.01-009.js
+--- ./jsfuzz/seeds/JerryJS/jerryjs.ecma/22.02.01-009.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_bafe5_22.02.01-009.js
 @@ -10,6 +10,9 @@
   * distributed under the License is distributed on an "AS IS" BASIS
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
