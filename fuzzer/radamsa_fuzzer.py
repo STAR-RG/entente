@@ -1,4 +1,4 @@
-import tempfile, os, shutil, shlex, subprocess, ntpath
+import tempfile, os, shutil, shlex, subprocess, ntpath, time, hashlib
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 
@@ -43,7 +43,9 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None):
         # check discrepancy
         try:
             res = multicall.callAll(fuzzed_file_path)
-            res.path_name = os.path.join(constants.logs_dir, 'fuzzed_' + ntpath.basename(file_path))
+            hash_object = hashlib.md5(str(time.time()).encode()).hexdigest()[:5]
+            name = 'fuzzed_' + hash_object + '_' + ntpath.basename(file_path)
+            res.path_name = os.path.join(constants.logs_dir, name)
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
                 ## get first name of file...
                 shutil.copy(fuzzed_file_path, res.path_name)

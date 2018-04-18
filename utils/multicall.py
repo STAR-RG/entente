@@ -1,5 +1,5 @@
 import shlex, os, hashlib, ntpath
-from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, Popen, getstatusoutput
+from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
 from utils import constants
 from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
@@ -53,12 +53,8 @@ class Multicalls:
         for key, val_set in self.hashmap.items():
             bucket_num += 1
             self.short_file.write('\n>>>>>\n files in bucket #{}:\n'.format(bucket_num))
-            files = []
             for res in val_set:
-                if not os.path.isfile(res.path_name) or res.path_name in files:
-                    continue
                 self.short_file.write(' ' + res.path_name + "\n" )
-                files.append(res.path_name)
             self.short_file.write('\nhash: {}\n'.format(key))
             res = next(iter(val_set))
             self.short_file.write('\npriority: {}\n'.format(res.priority()))
@@ -138,18 +134,22 @@ def callJSEngine(cmd_line):
     '''
     timeout_limit = 5
     cmd = shlex.split(cmd_line)
+    msg = ''
     #pylint: disable=W0612
     try:
         # Using Python3 API because of the timeout, which appears to be 
         # essential. I found a case of hang
         msg = check_output(cmd, stderr=STDOUT, timeout=timeout_limit).decode('utf-8')
-        if not msg:
-            status, error = getstatusoutput(cmd_line)
-            msg = 'Error: engine has stopped working [CHECK_MANUALLY]' if error else ''
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
     except TimeoutExpired as timeoutExc:
         msg = 'Error: TIMEOUT'
+
+    if not msg:
+        # double check to get unexpected behaviour
+        status, error = getstatusoutput(cmd_line)
+        if error:
+            msg = 'Error: {} [CHECK_MANUALLY]'.format(error)
     
     return msg
 
