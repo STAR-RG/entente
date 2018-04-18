@@ -2,7 +2,7 @@ import tempfile, os, shutil, shlex, subprocess, ntpath, time, hashlib
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 
-def fuzz_file(num_iterations, file_path, mcalls, validator=None):
+def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
     '''
         Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
         the input file (file_path) for a number of times (num_iterations). Each 
