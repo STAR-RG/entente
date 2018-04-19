@@ -42,7 +42,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
 
         # check discrepancy
         try:
-            res = multicall.callAll(fuzzed_file_path)
+            res = multicall.callAll(fuzzed_file_path, libs=libs)
             hash_object = hashlib.md5(str(time.time()).encode()).hexdigest()[:5]
             name = 'fuzzed_' + hash_object + '_' + ntpath.basename(file_path)
             res.path_name = os.path.join(constants.logs_dir, name)
