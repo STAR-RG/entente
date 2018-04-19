@@ -63,7 +63,7 @@ class Multicalls:
             self.short_file.write(res.str_canonical())
 
 
-def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=None):
+def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=[]):
     """
         Process files in a directory, running multicall on each file.
 
