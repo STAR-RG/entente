@@ -109,13 +109,14 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
                 libs = []
 
             test_specific_libs = []
-            search_root = os.path.abspath(search_root) #remove any '..' or '.'
-            if search_libfiles and search_root:
-                current_dir = os.path.abspath(os.path.dirname(file_path))
-                while current_dir.startswith(search_root):
-                    local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
-                    test_specific_libs = local_libs + test_specific_libs # not efficient, but not gonna use a deque here for now
-                    current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+            if search_root:
+                search_root = os.path.abspath(search_root) #remove any '..' or '.'
+                if search_libfiles:
+                    current_dir = os.path.abspath(os.path.dirname(file_path))
+                    while current_dir.startswith(search_root):
+                        local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
+                        test_specific_libs = local_libs + test_specific_libs # not efficient, but not gonna use a deque here for now
+                        current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
             if should_fuzz:
                 radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
