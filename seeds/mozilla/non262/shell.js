@@ -145,6 +145,8 @@
     throw new Error(fullmsg);
   };
 
+  global.uneval = (function(){throw Error("JSFUZZ ERROR: Unsupported function (uneval)")}); 
+
   global.assertDeepEq = (function(){
     var call = Function.prototype.call,
       Array_isArray = Array.isArray,
@@ -161,7 +163,7 @@
       Object_getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor,
       Object_isExtensible = Object.isExtensible,
       Object_getOwnPropertyNames = Object.getOwnPropertyNames,
-      uneval_ = uneval;
+      uneval_ = (function(){throw Error("JSFUZZ ERROR: Unsupported function (uneval)")}); //uneval;
 
     // Return true iff ES6 Type(v) isn't Object.
     // Note that `typeof document.all === "undefined"`.

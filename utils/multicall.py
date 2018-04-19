@@ -4,6 +4,7 @@ from utils import constants
 from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
 from difflib import SequenceMatcher
+from tempfile import mkstemp
 
 '''
     Class that saves state across several multicalls
@@ -62,12 +63,16 @@ class Multicalls:
             self.short_file.write(res.str_canonical())
 
 
-def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_libfiles=[]):
+def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=None):
     """
         Process files in a directory, running multicall on each file.
 
         TODO: describe other params (if you decide to explain validator) -Marcelo
 
+        :param search_libfiles: Names of library files that should be included if found in the folders between path_name
+               and search_root.
+        :param search_root: Topmost folder that should be searched for files listed in search_libfiles.
+        :param libs: List with path to files that should be included
         :param callable validator: Function used to exclude files (e.g. parsing error). Calling the function on a valid
         file should return None/empty string; otherwise the reason for the error should be returned as a string.
 
@@ -95,15 +100,19 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
             #         mcalls.notify(res)
             #         continue # skip this file
 
-            if basename in search_libfiles:  # library - skip it
+            if basename in search_libfiles or basename in ignored_files:
                 continue
 
+            if libs is None:
+                libs = []
+
             test_specific_libs = []
-            if search_libfiles:
-                current_dir = os.path.dirname(file_path)
-                while current_dir.startswith(path_name):
+            search_root = os.path.abspath(search_root) #remove any '..' or '.'
+            if search_libfiles and search_root:
+                current_dir = os.path.abspath(os.path.dirname(file_path))
+                while current_dir.startswith(search_root):
                     local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
-                    test_specific_libs.extend(local_libs)
+                    test_specific_libs = local_libs + test_specific_libs # not efficient, but not gonna use a deque here for now
                     current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
             if should_fuzz:
@@ -170,17 +179,31 @@ def callJavaScriptCore(pathName, libs=[]):
     #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
     return callJSEngine(cmd_line)
 
-def callChakra(pathName, libs=[]):
-    if is_file_invalid('chakra', pathName):
+
+# seems chakra only supports a single source file as input
+def callChakra(path_name, libs=[]):
+    if is_file_invalid('chakra', path_name):
         return 'file with feature not implemented yet'
 
-    cmd_line = constants.chakra + " " + " ".join(libs) + " " + pathName
+    if len(libs) > 0:
+        fd, tmp_path = mkstemp(prefix="chakrafuzz", text=True)
+        all_files = []
+        all_files.extend(libs)
+        all_files.append(path_name)
+        with open(fd, 'w') as outfile:
+            for filename in all_files:
+                with open(filename) as infile:
+                    outfile.write(infile.read())
+                    outfile.write("\n\n")
+        path_name = tmp_path
+
+    cmd_line = constants.chakra + " " + path_name
     return callJSEngine(cmd_line)
 
 def callSpiderMonkey(pathName, libs=[]):
     if is_file_invalid('spidermonkey', pathName):
         return 'file with feature not implemented yet'
-    cmd_line = constants.spidermonkey + " " + " ".join(libs) + " " + pathName
+    cmd_line = constants.spidermonkey + " -f " + " -f ".join(libs) + " " + pathName
     return callJSEngine(cmd_line)
 
 def callV8(pathName, libs=[]):
