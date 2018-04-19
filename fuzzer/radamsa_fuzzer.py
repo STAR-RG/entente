@@ -1,6 +1,13 @@
-import tempfile, os, shutil, shlex, subprocess, ntpath, time, hashlib
+import tempfile, os, shutil, shlex, subprocess, ntpath, time, hashlib, timeout_decorator
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
+
+
+@timeout_decorator.timeout(30) # change this value if you want to wait more or less time to run this method
+def get_validation_error(validator, fuzzed_file_path):
+    ''' try to validate the fuzzed file for 2 minutes otherwise raises TimeoutError '''
+    validation_error = validator(fuzzed_file_path)
+    return validation_error
 
 def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
     '''
@@ -33,12 +40,17 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         '''
             Check if file is valid and should be considered
         '''
-        if validator is not None: 
-            validation_error = validator(fuzzed_file_path)
-            if validation_error:
-                res = multicall.Results(fuzzed_file_path, validation_error)
-                mcalls.notify(res)
-                continue # skip this file
+        if validator is not None:
+            try:
+                validation_error = get_validation_error(validator, fuzzed_file_path)
+                if validation_error:
+                    res = multicall.Results(fuzzed_file_path, validation_error)
+                    mcalls.notify(res)
+                    continue # skip this file
+            except TimeoutError as e:
+                # if file validation function spent more than 2m, we ignore this fuzzed file and
+                # try to fuzz it again
+                continue
 
         # check discrepancy
         try:
