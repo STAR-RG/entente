@@ -1,4 +1,4 @@
-import tempfile, os, shutil, shlex, subprocess, ntpath, time, hashlib, timeout_decorator
+import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 
@@ -50,13 +50,15 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             except TimeoutError as e:
                 # if file validation function spent more than 2m, we ignore this fuzzed file and
                 # try to fuzz it again
+                print("time to run validator was reach! Trying again...")
                 continue
 
         # check discrepancy
         try:
             res = multicall.callAll(fuzzed_file_path, libs=libs)
-            hash_object = hashlib.md5(str(time.time()).encode()).hexdigest()[:5]
-            name = 'fuzzed_' + hash_object + '_' + ntpath.basename(file_path)
+            path_list = file_path.split('/')
+            index = path_list.index('seeds') + 1
+            name = 'fuzzed_' + '_'.join(path_list[index:])
             res.path_name = os.path.join(constants.logs_dir, name)
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
                 ## get first name of file...

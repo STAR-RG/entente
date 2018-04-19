@@ -77,7 +77,9 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
         file should return None/empty string; otherwise the reason for the error should be returned as a string.
 
     """
-    name = ntpath.basename(path_name)
+    path_list = path_name.split('/')
+    index = path_list.index('seeds') + 1
+    name = 'fuzzed_' + '_'.join(path_list[index:])
 
     log_name_suffix = ('fuzz' if should_fuzz else '') + '_diff_report_' + name + '.txt'
 
