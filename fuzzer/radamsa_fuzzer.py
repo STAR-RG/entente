@@ -1,12 +1,7 @@
 import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
-
-
-def get_validation_error(validator, fuzzed_file_path):
-    ''' try to validate the fuzzed file for 2 minutes otherwise raises TimeoutError '''
-    validation_error = validator(fuzzed_file_path)
-    return validation_error
+import logging
 
 @timeout_decorator.timeout(20) # change this value if you want to wait more or less time to run this method
 def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
@@ -15,14 +10,20 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         the input file (file_path) for a number of times (num_iterations). Each 
         time it makes a multicall on different engines. 
     '''
+    
     widgets = ['fuzzing ' + file_path + ' ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' ']
-    bar = ProgressBar(widgets=widgets, max_value=num_iterations)
-    #pylint: disable=W0612
-    num_successful_iterations = 1
-    num_unsuccessful_iterations = 0
-    while num_successful_iterations <= num_iterations:
+    bar = ProgressBar(widgets=widgets, maxval=num_iterations).start()
+    logging.debug('fuzzing %s', file_path)
 
-        if num_unsuccessful_iterations > 100 * num_iterations:
+    #pylint: disable=W0612
+    num_successful_iterations = 0
+    num_unsuccessful_iterations = 0
+    while num_successful_iterations < num_iterations:
+        
+        logging.debug('num_successful_iterations %s', str(num_successful_iterations))
+        logging.debug('num_unsuccessful_iterations %s', str(num_unsuccessful_iterations))
+        
+        if num_unsuccessful_iterations > 100:
             print ('   hit max number of unsuccessful iterations')
             break # quit this file
 
@@ -44,7 +45,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             Check if file is valid and should be considered
         '''
         if validator is not None:
-            validation_error = get_validation_error(validator, fuzzed_file_path)
+            validation_error = validator(fuzzed_file_path)
             if validation_error:
                 res = multicall.Results(fuzzed_file_path, validation_error)
                 mcalls.notify(res)
@@ -68,9 +69,11 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             num_unsuccessful_iterations += 1
             continue
 
-        bar.update(num_successful_iterations)
         num_successful_iterations += 1
+        bar.update(num_successful_iterations) 
+        
     bar.finish()
+    logging.debug('done fuzzing %s', file_path)
 
 if __name__ == "__main__":
     dir_path = os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6')

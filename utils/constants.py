@@ -1,4 +1,5 @@
 import os, fnmatch, datetime
+import logging
 
 date = datetime.datetime.now().strftime("%y-%m-%d-%H:%M")
 
@@ -12,7 +13,11 @@ if not os.path.exists(os.path.join(base_dir, 'js_engines')):
 js_dir = os.path.join(base_dir, 'js_engines/bin')
 
 # fuzzing constants
-num_iterations = 1
+num_iterations = 10
+
+# loggers
+logging.basicConfig(level=logging.DEBUG, filename='/tmp/debug.log', filemode='w')
+logging.disable(logging.DEBUG) ## disable debugging
 
 ''' 
     This function looks for a file (file_name param) within a directory (path)

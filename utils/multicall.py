@@ -5,6 +5,7 @@ from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
 from difflib import SequenceMatcher
 from tempfile import mkstemp
+import logging
 
 '''
     Class that saves state across several multicalls
@@ -92,19 +93,14 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
     with open(short_log_path, 'w') as short_file, open(long_log_path, 'w') as long_file:
         mcalls = Multicalls(long_file, short_file) 
 
-        # recursive search
+        # search for js files recursively in directory path name
         for basename, file_path in [(f, os.path.join(dp, f)) for dp, dn, fn in os.walk(path_name) for f in sorted(fn) if f.endswith(".js")]:
-            #TODO: Please check. consider removing this code. I think this only makes sense to be called insider fuzzers, which is done already. -Marcelo
-            # if validator is not None:
-            #     validation_error = validator(file_path)
-            #     if validation_error:
-            #         res = Results(file_path, validation_error)
-            #         mcalls.notify(res)
-            #         continue # skip this file
 
+            # skip library files and files that we declare to ignore
             if basename in search_libfiles or basename in ignored_files:
                 continue
 
+            # look for libraries necessary to spawn 
             if libs is None:
                 libs = []
 
@@ -119,9 +115,11 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
                         current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
             if should_fuzz:
+                #pylint: disable=W0612
                 try:
                     radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
                 except Exception as e: # error raised by timeout decorator
+                    logging.error('Error while fuzzing file %s - %s', file_path, e)
                     continue
             else:
                 res = callAll(file_path, libs = (libs + test_specific_libs))

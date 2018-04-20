@@ -1,6 +1,7 @@
 import os
 from utils import constants, multicall
 from fuzzer.validator import validate_mozilla
+from regression_tests import *  #pylint: disable=W0614
 
 # changes done on support libs:
 #  - made uneval() throw an error (non262/shell.js)
@@ -14,7 +15,6 @@ from fuzzer.validator import validate_mozilla
 # ignored for now
 # non262/extensions (lots of mozilla-specific stuff)
 IGNORED_FILES = {"browser.js", "shell.js", "template.js", "user.js", "js-test-driver-begin.js", "js-test-driver-end.js"}
-
 
 def test_fuzz_mozilla_non262_Array():
     path_name = os.path.join(constants.seeds_dir, 'mozilla/non262/Array/')
