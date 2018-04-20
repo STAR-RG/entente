@@ -11,10 +11,13 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
     widgets = ['fuzzing ' + file_path + ' ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' ']
     bar = ProgressBar(widgets=widgets, max_value=num_iterations)
     #pylint: disable=W0612
-    num_it = 1
+    num_successful_iterations = 1
+    num_unsuccessful_iterations = 0
+    while num_successful_iterations <= num_iterations:
 
-    while num_it <= num_iterations:
-
+        if num_unsuccessful_iterations > 100 * num_iterations:
+            print ('   hit max number of unsuccessful iterations')
+            break # quit this file
 
         # fuzz the file with radamsa
         fuzzed_file_path = os.path.join(tempfile.gettempdir(), 'temp_filefuzzed')
@@ -38,6 +41,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             if validation_error:
                 res = multicall.Results(fuzzed_file_path, validation_error)
                 mcalls.notify(res)
+                num_unsuccessful_iterations += 1
                 continue # skip this file
 
         # check discrepancy
@@ -53,10 +57,11 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             # TODO: It is silly but we can't handle properly non-unicode outputs 
             # just because the .decode('utf-8') to convert bytes into strings 
             # raises this exception when the non-unicode char is mapped.
+            num_unsuccessful_iterations += 1
             continue
 
-        bar.update(num_it)
-        num_it += 1
+        bar.update(num_successful_iterations)
+        num_successful_iterations += 1
     bar.finish()
 
 if __name__ == "__main__":
