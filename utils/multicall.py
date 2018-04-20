@@ -119,7 +119,10 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
                         current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
             if should_fuzz:
-                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
+                try:
+                    radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
+                except AssertionError as e: # error raised by timeout decorator
+                    continue
             else:
                 res = callAll(file_path, libs = (libs + test_specific_libs))
                 mcalls.notify(res)
