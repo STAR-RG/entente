@@ -1,10 +1,12 @@
-import os, fnmatch
+import os, fnmatch, datetime
+
+date = datetime.datetime.now().strftime("%y-%m-%d-%H:%M")
 
 ## file constants
 this_dir = os.path.dirname(os.path.realpath(__file__))
 base_dir = os.path.join(this_dir, '../')
 seeds_dir = os.path.join(base_dir, 'seeds/')
-logs_dir = os.path.join(base_dir, 'logs/')
+logs_dir = os.path.join(base_dir, 'logs_{}/'.format(date))
 if not os.path.exists(os.path.join(base_dir, 'js_engines')):
     raise NameError("please load this module from the base directory (or generalize this code)")
 js_dir = os.path.join(base_dir, 'js_engines/bin')

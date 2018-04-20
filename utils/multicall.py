@@ -63,7 +63,7 @@ class Multicalls:
             self.short_file.write(res.str_canonical())
 
 
-def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=None):
+def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=[]):
     """
         Process files in a directory, running multicall on each file.
 
@@ -77,7 +77,9 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
         file should return None/empty string; otherwise the reason for the error should be returned as a string.
 
     """
-    name = ntpath.basename(path_name)
+    path_list = path_name.split('/')
+    index = path_list.index('seeds') + 1
+    name = 'fuzzed_' + '_'.join(path_list[index:])
 
     log_name_suffix = ('fuzz' if should_fuzz else '') + '_diff_report_' + name + '.txt'
 
@@ -107,16 +109,20 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
                 libs = []
 
             test_specific_libs = []
-            search_root = os.path.abspath(search_root) #remove any '..' or '.'
-            if search_libfiles and search_root:
-                current_dir = os.path.abspath(os.path.dirname(file_path))
-                while current_dir.startswith(search_root):
-                    local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
-                    test_specific_libs = local_libs + test_specific_libs # not efficient, but not gonna use a deque here for now
-                    current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
+            if search_root:
+                search_root = os.path.abspath(search_root) #remove any '..' or '.'
+                if search_libfiles:
+                    current_dir = os.path.abspath(os.path.dirname(file_path))
+                    while current_dir.startswith(search_root):
+                        local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
+                        test_specific_libs = local_libs + test_specific_libs # not efficient, but not gonna use a deque here for now
+                        current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 
             if should_fuzz:
-                radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
+                try:
+                    radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
+                except Exception as e: # error raised by timeout decorator
+                    continue
             else:
                 res = callAll(file_path, libs = (libs + test_specific_libs))
                 mcalls.notify(res)

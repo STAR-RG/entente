@@ -1,7 +1,14 @@
-import tempfile, os, shutil, shlex, subprocess, ntpath, time, hashlib
+import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 
+
+def get_validation_error(validator, fuzzed_file_path):
+    ''' try to validate the fuzzed file for 2 minutes otherwise raises TimeoutError '''
+    validation_error = validator(fuzzed_file_path)
+    return validation_error
+
+@timeout_decorator.timeout(20) # change this value if you want to wait more or less time to run this method
 def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
     '''
         Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
@@ -36,8 +43,8 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         '''
             Check if file is valid and should be considered
         '''
-        if validator is not None: 
-            validation_error = validator(fuzzed_file_path)
+        if validator is not None:
+            validation_error = get_validation_error(validator, fuzzed_file_path)
             if validation_error:
                 res = multicall.Results(fuzzed_file_path, validation_error)
                 mcalls.notify(res)
@@ -47,8 +54,9 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         # check discrepancy
         try:
             res = multicall.callAll(fuzzed_file_path, libs=libs)
-            hash_object = hashlib.md5(str(time.time()).encode()).hexdigest()[:5]
-            name = 'fuzzed_' + hash_object + '_' + ntpath.basename(file_path)
+            path_list = file_path.split('/')
+            index = path_list.index('seeds') + 1
+            name = 'fuzzed_' + '_'.join(path_list[index:])
             res.path_name = os.path.join(constants.logs_dir, name)
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
                 ## get first name of file...
