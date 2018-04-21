@@ -45,5 +45,3 @@ spidermonkey = find('spidermonkey', js_dir)
 v8 = find('v8', js_dir)
 # radamsa
 radamsa = find('radamsa', js_dir)
-
-eslint_config = os.path.join(base_dir, ".eslintrc.js")
