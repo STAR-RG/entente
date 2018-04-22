@@ -55,8 +55,12 @@ class Multicalls:
         for key, val_set in self.hashmap.items():
             bucket_num += 1
             self.short_file.write('\n>>>>>\n files in bucket #{}:\n'.format(bucket_num))
+            bucket_files = []
             for res in val_set:
+                if res.path_name in bucket_files:
+                    continue
                 self.short_file.write(' ' + res.path_name + "\n" )
+                bucket_files.append(res.path_name)
             self.short_file.write('\nhash: {}\n'.format(key))
             res = next(iter(val_set))
             self.short_file.write('\npriority: {}\n'.format(res.priority()))
