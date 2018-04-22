@@ -1,7 +1,7 @@
 import os, fnmatch, datetime
 import logging
 
-date = datetime.datetime.now().strftime("%y-%m-%d-%H:%M")
+date = datetime.datetime.now().strftime("%d-%m-%y-%H:%M")
 
 ## file constants
 this_dir = os.path.dirname(os.path.realpath(__file__))
