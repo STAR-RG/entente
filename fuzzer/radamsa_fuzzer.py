@@ -8,7 +8,11 @@ import datetime
 def validate_wrapper(validator, fuzzed_file_path):
     return validator(fuzzed_file_path)
 
-@timeout_decorator.timeout(10) # change this value if you want to wait more or less time to run this method
+@timeout_decorator.timeout(2)
+def call_engines(fuzzed_file_path, libs):
+    return multicall.callAll(fuzzed_file_path, libs=libs)
+
+# @timeout_decorator.timeout(10) # change this value if you want to wait more or less time to run this method
 def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
     '''
         Call an external fuzzer (hardcoded with radamsa, for now) to fuzz/mutate 
@@ -28,9 +32,9 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         
         logging.debug('num_successful_iterations %s', str(num_it))
         logging.debug('num_unsuccessful_iterations %s', str(num_unsuccessful_iterations))
-        
-        if num_unsuccessful_iterations > 100 or num_consecutive_unsuccessful_iterations == 10:
-            print ('   hit max number of unsuccessful iterations or max number of consecutive unsuccessful iterations')
+
+        if num_unsuccessful_iterations > (2 * num_iterations) or num_consecutive_unsuccessful_iterations == 10:
+            logging.debug('   hit max number of unsuccessful iterations or max number of consecutive unsuccessful iterations (%s,%s,%s,%s)', num_iterations, num_consecutive_unsuccessful_iterations, num_unsuccessful_iterations, num_it)
             break # quit this file
 
         # fuzz the file with radamsa
@@ -38,13 +42,13 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         cmd = "radamsa --output {} {}".format(fuzzed_file_path, file_path)
         args = shlex.split(cmd)
         try:
-            logging.debug('starting radamsa')
+            logging.debug('starting radamsa %s', datetime.datetime.now().isoformat())
             p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             p.communicate()
         except Exception as error:
             raise Exception('Error:', error)
         finally:
-            logging.debug('done radamsa')
+            logging.debug('done radamsa %s', datetime.datetime.now().isoformat())
         
         '''
             Check if file is valid and should be considered
@@ -62,7 +66,8 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
                         num_unsuccessful_iterations += 1
                         num_consecutive_unsuccessful_iterations += 1
                         continue # skip this file
-                except Exception as e: # error raised by timeout decorator
+                except timeout_decorator.TimeoutError as e: # error raised by timeout decorator
+                    logging.debug('timeout while validating.. %s', str(e))
                     num_unsuccessful_iterations += 1
                     num_consecutive_unsuccessful_iterations += 1
                     continue
@@ -72,8 +77,8 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
 
         # check discrepancy
         try:
-            logging.debug('start checking')
-            res = multicall.callAll(fuzzed_file_path, libs=libs)
+            logging.debug('start calling engines %s', datetime.datetime.now().isoformat())
+            res = call_engines(fuzzed_file_path, libs=libs)
             path_list = file_path.split('/')
             index = path_list.index('seeds') + 1
             name = 'fuzzed_' + '_'.join(path_list[index:])
@@ -97,8 +102,13 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             num_unsuccessful_iterations += 1
             num_consecutive_unsuccessful_iterations += 1
             continue
+        except timeout_decorator.TimeoutError as e: # error raised by timeout decorator
+            logging.debug('timeout while calling engines.. %s', str(e))
+            num_unsuccessful_iterations += 1
+            num_consecutive_unsuccessful_iterations += 1
+            continue
         finally:
-            logging.debug('done checking')
+            logging.debug('done calling engines %s', datetime.datetime.now().isoformat())
 
         # successful iteration
         num_it += 1 

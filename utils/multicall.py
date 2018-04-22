@@ -124,7 +124,7 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
                 try:
                     radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
                 except Exception as e: # error raised by timeout decorator
-                    logging.error('Error while fuzzing file %s - %s', file_path, e)
+                    logging.error('UNEXPECTED')
                     continue
             else:
                 res = callAll(file_path, libs = (libs + test_specific_libs))
