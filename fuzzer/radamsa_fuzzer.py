@@ -41,9 +41,6 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             logging.debug('starting radamsa')
             p = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             p.communicate()
-        except FileNotFoundError as error:
-            if 'radamsa' in str(error):
-                raise Exception('Please check if radamsa is installed on your environment (see README.md file).')
         except Exception as error:
             raise Exception('Error:', error)
         finally:
