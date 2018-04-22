@@ -418,11 +418,11 @@
    * Print a non-failure message.
    */
   function printStatus(msg) {
-    msg = String(msg);
-    var lines = StringSplit(msg, "\n");
-
-    for (var i = 0; i < lines.length; i++)
-      print("STATUS: " + lines[i]);
+    // *** AVOID UNNECESSARY PRINTS ***
+    // msg = String(msg);
+    // var lines = StringSplit(msg, "\n");
+    // for (var i = 0; i < lines.length; i++)
+    //   print("STATUS: " + lines[i]);
   }
   global.printStatus = printStatus;
 
@@ -430,7 +430,7 @@
   * Print a bugnumber message.
   */
   function printBugNumber(num) {
-    print('BUGNUMBER: ' + num);
+    // print('BUGNUMBER: ' + num); *** AVOID UNNECESSARY PRINTS ***
   }
   global.printBugNumber = printBugNumber;
 
@@ -513,20 +513,21 @@
   }
   global.compareSource = compareSource;
 
-  function test() {
-    var testCases = getTestCases();
-    for (var i = 0; i < testCases.length; i++) {
-      var testCase = testCases[i];
-      testCase.reason += testCase.passed ? "" : "wrong value ";
+  // ***** NEED TO COMMENT THIS FUNCTION TO RUN CORRECTLY ON CHAKRA ENGINE *****
+  // function test() {
+  //   var testCases = getTestCases();
+  //   for (var i = 0; i < testCases.length; i++) {
+  //     var testCase = testCases[i];
+  //     testCase.reason += testCase.passed ? "" : "wrong value ";
 
-      // if running under reftest, let it handle result reporting.
-      if (!runningInBrowser) {
-        var message = `${testCase.description} = ${testCase.actual} expected: ${testCase.expect}`;
-        print((testCase.passed ? PASSED : FAILED) + message);
-      }
-    }
-  }
-  global.test = test;
+  //     // if running under reftest, let it handle result reporting.
+  //     if (!runningInBrowser) {
+  //       var message = `${testCase.description} = ${testCase.actual} expected: ${testCase.expect}`;
+  //       print((testCase.passed ? PASSED : FAILED) + message);
+  //     }
+  //   }
+  // }
+  // global.test = test;
 
   // This function uses the shell's print function. When running tests in the
   // browser, browser.js overrides this function to write to the page.

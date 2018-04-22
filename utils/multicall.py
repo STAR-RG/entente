@@ -172,7 +172,7 @@ def callJSEngine(cmd_line):
         # double check to get unexpected behaviour
         status, error = getstatusoutput(cmd_line)
         if error:
-            msg = 'Error: {} [CHECK_MANUALLY]'.format(error)
+            msg = '[CHECK_MANUALLY] {}'.format(error)
     
     return msg
 
@@ -283,6 +283,8 @@ class Results:
     def abstract(self, string):
         error_message = ''
         for line in string.splitlines():
+            if 'PASSED!' in line:
+                break
             if 'Error' in line:
                 ind = string.index('Error')
                 error_message = line[ind:] if 'Error' in line[ind:] else line
@@ -292,7 +294,7 @@ class Results:
                 ind = string.index('Fatal')
                 error_message = string[ind:]
                 break
-           
+
         return error_message
 
     def hash(self):
@@ -352,7 +354,7 @@ class Results:
     def is_spurious(self):
         """
         Remove spurious reports based on keywords/strings
-        TODO: updating strings in keywords list
+        TODO: updating strings in blacklist file
         """
         ## TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
         ## Chakra is a new engine, some features are not implemented yet
