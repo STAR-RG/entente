@@ -100,20 +100,28 @@ CHAKRA_KEYWORDS = [
     "Array.prototype.values",
     "RegExp.prototype.test",
     "RegExp.prototype.toString.call",
-    "(E.prototype) === '[object Object]'"
+    "(E.prototype) === '[object Object]'",
+    "IsHTMLDDA"
 ]
 
 # features not implemented on v8
 V8_KEYWORDS = [
-    "Array.prototype.values"
+    "Array.prototype.values",
+    "IsHTMLDDA"
 ]
 
 # features not implemented on jscore
-JSCORE_KEYWORDS = []
+JSCORE_KEYWORDS = [
+    "IsHTMLDDA"
+]
 
 # features not implemented on spidermonkey
 SPIDERMONKEY_KEYWORDS = [
     "dotAll"
+]
+
+REPORT_PASS_KEYWORDS =[
+    "PASSED!"
 ]
 
 

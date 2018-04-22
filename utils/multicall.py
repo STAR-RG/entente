@@ -2,7 +2,7 @@ import shlex, os, hashlib, ntpath
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
 from utils import constants
 from fuzzer import radamsa_fuzzer
-from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS
+from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS
 from difflib import SequenceMatcher
 from tempfile import mkstemp
 import logging
@@ -288,7 +288,7 @@ class Results:
     def abstract(self, string):
         error_message = ''
         for line in string.splitlines():
-            if 'PASSED!' in line:
+            if [invalid for invalid in REPORT_PASS_KEYWORDS if invalid in line]:
                 break
             if 'Error' in line:
                 ind = string.index('Error')
