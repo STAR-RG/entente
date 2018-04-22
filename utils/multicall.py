@@ -59,7 +59,8 @@ class Multicalls:
             for res in val_set:
                 if res.path_name in bucket_files:
                     continue
-                self.short_file.write(' ' + res.path_name + "\n" )
+                cp_file = ' (copied)' if os.path.isfile(res.path_name) else ''
+                self.short_file.write(' {}{}\n'.format(res.path_name, cp_file))
                 bucket_files.append(res.path_name)
             self.short_file.write('\nhash: {}\n'.format(key))
             res = next(iter(val_set))
