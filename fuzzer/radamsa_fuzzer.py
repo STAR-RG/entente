@@ -1,4 +1,4 @@
-import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator
+import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator, re
 from utils import constants, multicall
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
 import logging
@@ -82,7 +82,16 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             name = 'fuzzed_' + '_'.join(path_list[index:])
             res.path_name = os.path.join(constants.logs_dir, name)
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
-                ## get first name of file...
+                
+                # one file can be involved in more than one bucket
+                # we can update the name of file with a new flag "_1_.js, _2_.js..."
+                if os.path.isfile(res.path_name):
+                    filename = res.path_name.split()[-1]
+                    pattern = "\_\d{1,2}\_.+js" # check files which endswith pattern '_Integer_.js'
+                    jsfiles = [jsfile for jsfile in os.listdir(constants.logs_dir) if re.sub(pattern,'.js', jsfile) == filename]
+                    count = len(jsfiles) + 1
+                    res.path_name = res.path_name.replace('.js', '_{}_.js'.format(count))
+                
                 shutil.copy(fuzzed_file_path, res.path_name)
         except UnicodeDecodeError as exc:
             # TODO: It is silly but we can't handle properly non-unicode outputs 
