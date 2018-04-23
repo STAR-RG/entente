@@ -127,3 +127,8 @@ ENGINES_KEYWORDS = {
     "spidermonkey": SPIDERMONKEY_KEYWORDS,
     "v8": V8_KEYWORDS
 }
+
+# add here hash code that we already obtained on previously executions
+GLOBAL_HASH = [
+
+]

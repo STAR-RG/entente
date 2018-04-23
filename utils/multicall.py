@@ -2,7 +2,7 @@ import shlex, os, hashlib, ntpath
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
 from utils import constants
 from fuzzer import radamsa_fuzzer
-from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS
+from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
 from difflib import SequenceMatcher
 from tempfile import mkstemp
 import logging
@@ -10,6 +10,8 @@ import logging
 '''
     Class that saves state across several multicalls
 '''
+
+
 class Multicalls:
 
     def __init__(self, long_file, short_file):
@@ -62,7 +64,13 @@ class Multicalls:
                 cp_file = ' (copied)' if os.path.isfile(res.path_name) else ''
                 self.short_file.write(' {}{}\n'.format(res.path_name, cp_file))
                 bucket_files.append(res.path_name)
-            self.short_file.write('\nhash: {}\n'.format(key))
+
+            if key not in GLOBAL_HASH:
+                GLOBAL_HASH.append(key)
+                self.short_file.write('\nhash: {}\n'.format(key))
+            else:
+                self.short_file.write('\nhash: {} (cached)\n'.format(key))
+
             res = next(iter(val_set))
             self.short_file.write('\npriority: {}\n'.format(res.priority()))
             self.short_file.write('\npattern:\n')
