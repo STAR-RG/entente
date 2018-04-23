@@ -1,5 +1,5 @@
 """
-    This file checks if project is configurated
+    This file check if project is configured
 """
 from subprocess import call, PIPE
 from utils.constants import chakra, v8, javascriptcore, spidermonkey
