@@ -191,7 +191,7 @@ def callJSEngine(cmd_line):
 
 def callJavaScriptCore(pathName, libs=[]):
     if is_file_invalid('jscore', pathName):
-        return 'file with feature not implemented yet'
+        return 'FeatureError: File with feature not implemented yet'
     libcmd = " ".join(libs) if libs else ""
     cmd_line = constants.javascriptcore + " " + libcmd + " " + pathName
     #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
@@ -201,7 +201,7 @@ def callJavaScriptCore(pathName, libs=[]):
 # seems chakra only supports a single source file as input
 def callChakra(path_name, libs=[]):
     if is_file_invalid('chakra', path_name):
-        return 'file with feature not implemented yet'
+        return 'FeatureError: File with feature not implemented yet'
 
     if libs and len(libs) > 0:
         fd, tmp_path = mkstemp(prefix="chakrafuzz", text=True)
@@ -220,14 +220,14 @@ def callChakra(path_name, libs=[]):
 
 def callSpiderMonkey(pathName, libs=[]):
     if is_file_invalid('spidermonkey', pathName):
-        return 'file with feature not implemented yet'
+        return 'FeatureError: File with feature not implemented yet'
     libcmd = (" -f " + " -f ".join(libs)) if libs else ""
     cmd_line = constants.spidermonkey + libcmd + " " + pathName
     return callJSEngine(cmd_line)
 
 def callV8(pathName, libs=[]):
     if is_file_invalid('v8', pathName):
-        return 'file with feature not implemented yet'
+        return 'FeatureError: File with feature not implemented yet'
     libcmd = " ".join(libs) if libs else ""
     cmd_line = constants.v8 + " " + libcmd + " " + pathName
     return callJSEngine(cmd_line)
