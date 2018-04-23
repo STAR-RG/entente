@@ -290,7 +290,10 @@ class Results:
         for line in string.splitlines():
             if [invalid for invalid in REPORT_PASS_KEYWORDS if invalid in line]:
                 break
-            if 'Error' in line:
+            elif [invalid for invalid in ENGINES_KEYWORDS.values() if invalid in line]:
+                error_message = 'file with feature not implemented yet'
+                break
+            elif 'Error' in line:
                 ind = string.index('Error')
                 error_message = line[ind:] if 'Error' in line[ind:] else line
                 break

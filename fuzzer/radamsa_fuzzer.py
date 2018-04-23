@@ -84,7 +84,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
                 # we can update the name of file with a new flag "_1_.js, _2_.js..."
                 if os.path.isfile(res.path_name):
                     filename = res.path_name.split()[-1]
-                    pattern = "\_\d{1,2}\_.+js" # check files which endswith pattern '_Integer_.js'
+                    pattern = r"\_\d{1,2}\_.+js" # check files which endswith pattern '_Integer_.js'
                     jsfiles = [jsfile for jsfile in os.listdir(constants.logs_dir) if re.sub(pattern,'.js', jsfile) == filename]
                     count = len(jsfiles) + 1
                     res.path_name = res.path_name.replace('.js', '_{}_.js'.format(count))

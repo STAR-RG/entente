@@ -1,8 +1,9 @@
 """
     This file checks if project is configurated
 """
-from subprocess import call
+from subprocess import call, PIPE
 from utils.constants import chakra, v8, javascriptcore, spidermonkey
+
 
 ERROR_MSG = """\n########## ENVIRONMENT ERROR ##########\n Error: {}\n##########"""
 
@@ -16,7 +17,7 @@ def is_engines_installed():
 
 def is_radamsa_installed():
     try:
-        call(["radamsa", "-h"])
+        call(["radamsa", "--version"], stdout=PIPE, stderr=PIPE)
     except OSError:
         raise Exception(
             ERROR_MSG.format(
