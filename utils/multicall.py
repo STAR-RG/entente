@@ -300,7 +300,7 @@ class Results:
                 break
             
             elif 'Error' in line:
-                ind = string.index('Error')
+                ind = line.index('Error')
                 error_message = line[ind:] if 'Error' in line[ind:] else line
                 break
             
@@ -322,18 +322,17 @@ class Results:
         """
         priority, is_test_failed = None, False
         
+        strings_high = ['Test failed', 'Fatal', 'Assertion failed', 'Failed!']
+
         # set high priority if occurs at least one test failed
         # fuzzer can alter the string message, using ratio of equivalence
-        # fuzzer can add sequence of 'a' character, for example: "Test aaaaaaaaa....failed"
         for output in self.get_all_outerr():
             seq = SequenceMatcher(None,'Error: Test failed', output)
             if (seq.ratio() >= 0.7) or \
-                ('Test failed' in output) or \
-                ('Fatal' in output) or \
-                ('aaaaaaaaaa' in output and ('Test' in output or 'failed' in output)):
+                [string for string in strings_high if string in output]:
                 is_test_failed = True
                 break
-
+        
         # set low priority if only chakra reports/not reports an error
         at_least = any([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
         only_chakra_reports = self.chakra_outerr and not at_least
