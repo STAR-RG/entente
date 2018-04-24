@@ -33,7 +33,7 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
         logging.debug('num_successful_iterations %s', str(num_it))
         logging.debug('num_unsuccessful_iterations %s', str(num_unsuccessful_iterations))
 
-        if num_unsuccessful_iterations > (2 * num_iterations) or num_consecutive_unsuccessful_iterations == 10:
+        if num_unsuccessful_iterations > (2 * num_iterations) or num_consecutive_unsuccessful_iterations == constants.limit_num_consecutive_unsuccessful_iterations:
             logging.debug('   hit max number of unsuccessful iterations or max number of consecutive unsuccessful iterations (%s,%s,%s,%s)', num_iterations, num_consecutive_unsuccessful_iterations, num_unsuccessful_iterations, num_it)
             break # quit this file
 

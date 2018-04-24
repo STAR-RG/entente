@@ -14,6 +14,8 @@ js_dir = os.path.join(base_dir, 'js_engines/bin')
 
 # fuzzing constants
 num_iterations = 20
+limit_num_consecutive_unsuccessful_iterations = 10
+timeout_JS_engine = 2
 
 # loggers
 logging.basicConfig(level=logging.DEBUG, filename='/tmp/debug.log', filemode='w')

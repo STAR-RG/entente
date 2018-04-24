@@ -1,11 +1,10 @@
-import shlex, os, hashlib, ntpath
+import shlex, os, hashlib, ntpath, logging
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
 from utils import constants
 from fuzzer import radamsa_fuzzer
 from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
 from difflib import SequenceMatcher
 from tempfile import mkstemp
-import logging
 
 '''
     Class that saves state across several multicalls
@@ -163,18 +162,16 @@ def callAll(pathName, validator=None, libs=None):
 
     return res
 
-
+#TODO: see issue #16
 def callJSEngine(cmd_line):
     '''
         This function makes the system call to the JS engine binary
     '''
-    timeout_limit = 5
+    timeout_limit = constants.timeout_JS_engine
     cmd = shlex.split(cmd_line)
     msg = ''
     #pylint: disable=W0612
     try:
-        # Using Python3 API because of the timeout, which appears to be 
-        # essential. I found a case of hang
         msg = check_output(cmd, stderr=STDOUT, timeout=timeout_limit).decode('utf-8')
     except CalledProcessError as errorExc:
         msg = errorExc.output.decode('utf-8')
