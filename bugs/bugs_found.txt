@@ -1,4 +1,78 @@
 ﻿======
+BUG #7 (NEW)
+
+Date reported: April 25, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5038
+
+Original:
+./jsfuzz/seeds/JerryJS/jerryjs.ecma/11.04.06-028.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_11.04.06-028.js
+
+Patch:
+--- ./jsfuzz/seeds/JerryJS/jerryjs.ecma/11.04.06-028.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_11.04.06-028.js
+@@ -1,7 +1,7 @@
+ assert = function(is_true){if (!(is_true)) {throw new Error("Test failed")}} 
+ // Copyright JS Foundation and other contributors, http://js.foundation
+ //
+-// Licensed under the Apache License, Version 2.0 (the "License");
++// Licensed under the Apache License, Version 2.1 (the "License");
+ // you may not use this file except in compliance with the License.
+ // You may obtain a copy of the License at
+ //
+@@ -15,7 +15,7 @@
+ 
+ var a = {
+   valueOf: function () {
+-    return ""
++    return "\x00"
+   }
+ }
+ 
+
+Pattern:
+
+Explanation:
+
+According to documentation, when we try to evaluate a 
+invalid strings using Unary plus, the return should be NaN.
+
+======
+BUG #6 (COMPATIBILITY)
+
+Date reported: April 23, 2018
+
+Type: Should throw TypeError 
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5033
+
+Original:
+./jsfuzz/seeds/mozilla/non262/Array/length-truncate-nonconfigurable-sparse.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Array_length-truncate-nonconfigurable-sparse.js
+
+Patch: None 
+ 
+Pattern:
+
+-------------JavaScriptCore
+-------------Chakra
+Error: non-configurable property should trigger TypeError operty should trigger TypeError, got Error: didn't throw?!
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+When we try to fill an array with an object that contains a getter-only property we can't 
+set this object property. Chakra should raise a TypeError.
+
+======
 BUG #5 (NEW)
 
 Date reported: April 23, 2018
@@ -41,7 +115,7 @@ Original:
 ./jsfuzz/seeds/JerryJS/JerryJS/jerryjs.ecma/22.02.01-009.js
 
 Fuzzed:
-./jsfuzz/bugs/fuzzed_files/fuzzed_bafe5_22.02.01-009.js
+./jsfuzz/bugs/fuzzed_files/fuzzed_jerryjs_ecma_22.02.01-009.js
 
 Patch: None 
  
