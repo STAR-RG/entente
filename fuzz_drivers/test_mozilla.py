@@ -1,7 +1,9 @@
 import os
-from utils import constants, multicall
-from fuzzer.validator import validate_mozilla
-from regression_tests import *  #pylint: disable=W0614
+
+from fuzz_drivers import *  #pylint: disable=W0614
+
+from jsfuzz.fuzzer.validator import validate_mozilla
+from jsfuzz.utils import constants, multicall
 
 # changes done on support libs:
 #  - made uneval() throw an error (non262/shell.js)

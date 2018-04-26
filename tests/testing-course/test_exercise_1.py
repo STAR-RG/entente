@@ -1,6 +1,6 @@
-from regression_tests import *
-from utils import constants, multicall
-from fuzzer.validator import validate
+from tests import *
+from jsfuzz.utils import constants, multicall
+from jsfuzz.fuzzer.validator import validate
 
 @pytest.mark.skip(reason="")
 def test_exercise_1():

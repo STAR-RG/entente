@@ -2,7 +2,7 @@
     This file check if project is configured
 """
 from subprocess import call, PIPE
-from utils.constants import chakra, v8, javascriptcore, spidermonkey
+from jsfuzz.utils.constants import chakra, v8, javascriptcore, spidermonkey
 
 
 ERROR_MSG = """\n########## ENVIRONMENT ERROR ##########\n Error: {}\n##########"""

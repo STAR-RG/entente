@@ -1,6 +1,7 @@
-from regression_tests import * #pylint: disable=W0614 
-from utils import constants, multicall
-from fuzzer.validator import validate
+from fuzz_drivers import * #pylint: disable=W0614 
+
+from jsfuzz.fuzzer.validator import validate
+from jsfuzz.utils import constants, multicall
 
 @pytest.mark.skip(reason="temporarilly disabling... checking issue")
 def test_regexp_prototype():

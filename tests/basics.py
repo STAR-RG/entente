@@ -1,6 +1,7 @@
-from regression_tests import * #pylint: disable=W0614 
-from utils import constants, multicall
-from fuzzer.validator import validate
+from tests import * #pylint: disable=W0614 
+
+from jsfuzz.utils import constants, multicall
+from jsfuzz.fuzzer.validator import validate
 
 def test_max():
     pathName = os.path.join(constants.seeds_dir, 'max.js')

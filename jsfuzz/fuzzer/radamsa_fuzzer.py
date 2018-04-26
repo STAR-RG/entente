@@ -1,8 +1,7 @@
-import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator, re
-from utils import constants, multicall
+import tempfile, os, shutil, shlex, subprocess, ntpath, timeout_decorator, re, logging, datetime
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
-import logging
-import datetime
+
+from jsfuzz.utils import constants, multicall
 
 @timeout_decorator.timeout(1)
 def validate_wrapper(validator, fuzzed_file_path):

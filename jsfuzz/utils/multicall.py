@@ -1,10 +1,11 @@
 import shlex, os, hashlib, ntpath, logging
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
-from utils import constants
-from fuzzer import radamsa_fuzzer
-from utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
 from difflib import SequenceMatcher
 from tempfile import mkstemp
+
+from jsfuzz.utils import constants
+from jsfuzz.fuzzer import radamsa_fuzzer
+from jsfuzz.utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
 
 '''
     Class that saves state across several multicalls

@@ -1,3 +1,5 @@
+# TODO: explain what you do when those strings are found. -Marcelo
+
 # TODO: keep updating...
 
 # this list contains invalid message output

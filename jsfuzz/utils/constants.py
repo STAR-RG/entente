@@ -5,11 +5,11 @@ date = datetime.datetime.now().strftime("%d-%m-%y-%H:%M")
 
 ## file constants
 this_dir = os.path.dirname(os.path.realpath(__file__))
-base_dir = os.path.join(this_dir, '../')
+base_dir = os.path.join(this_dir, '../../')
 seeds_dir = os.path.join(base_dir, 'seeds/')
 logs_dir = os.path.join(base_dir, 'logs_{}/'.format(date))
 if not os.path.exists(os.path.join(base_dir, 'js_engines')):
-    raise NameError("please load this module from the base directory (or generalize this code)")
+    raise NameError("Could not find js_engines directory. Please check" + os.path.join(base_dir, 'js_engines'))
 js_dir = os.path.join(base_dir, 'js_engines/bin')
 
 # fuzzing constants

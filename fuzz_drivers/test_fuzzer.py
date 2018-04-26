@@ -1,8 +1,10 @@
-from regression_tests import *  #pylint: disable=W0614
-from fuzzer.validator import validate
 from tempfile import NamedTemporaryFile
-from utils import multicall
-from fuzzer import radamsa_fuzzer
+
+from fuzz_drivers import *  #pylint: disable=W0614
+
+from jsfuzz.fuzzer.validator import validate
+from jsfuzz.utils import multicall
+from jsfuzz.fuzzer import radamsa_fuzzer
 
 @pytest.mark.skip(reason="temporarilly disabling")
 def test_fuzz_invalid(): # expect no raised exception
