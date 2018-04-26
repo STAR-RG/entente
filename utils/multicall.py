@@ -40,6 +40,10 @@ class Multicalls:
                 self.hashmap[hashcode] = tests = set()
             tests.add(res)
             self.long_file.write(str(res))
+            
+            # all files with high priority is interesting
+            if (res.priority() == '[HIGH]'):
+                is_interesting_and_distinct = True
         elif res.is_invalid():
             self.numskipped += 1
         return is_interesting_and_distinct
@@ -90,6 +94,9 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
         file should return None/empty string; otherwise the reason for the error should be returned as a string.
 
     """
+    if not os.path.exists(path_name):
+        raise Exception('Cannot search *.js files in {}. Path does not exists.'.format(path_name))
+    
     path_list = path_name.split('/')
     index = path_list.index('seeds') + 1
     name = 'fuzzed_' + '_'.join(path_list[index:])
