@@ -1,0 +1,5 @@
+* how to run it
+
+ - Concatenate all the files described in files-to-link.txt into everything.js
+ - Run everything.js with your favorite interpreter
+   
