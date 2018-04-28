@@ -379,12 +379,18 @@ $ERROR = function $ERROR(message) {
     var hasMailbox = typeof setSharedArrayBuffer == "function" && typeof getSharedArrayBuffer == "function";
     var hasEvalInWorker = typeof evalInWorker == "function";
 
-    if (!hasCreateIsHTMLDDA && !("document" in global && "all" in global.document))
-        throw new Error("no [[IsHTMLDDA]] object available for testing");
-
-    var IsHTMLDDA = hasCreateIsHTMLDDA
+	//MATEUS: mock IsHTMLDDA following the approach of https://github.com/bterlson/eshost
+	// wtf is IsHTMLDDA: https://tc39.github.io/ecma262/#sec-IsHTMLDDA-internal-slot
+	
+    if (!hasCreateIsHTMLDDA && !("document" in global && "all" in global.document)) {
+		// throw new Error("no [[IsHTMLDDA]] object available for testing");
+		var IsHTMLDDA = {};
+	} else {
+		var IsHTMLDDA = hasCreateIsHTMLDDA
                     ? global.createIsHTMLDDA()
                     : global.document.all;
+	}
+
 
 
 
