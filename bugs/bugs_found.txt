@@ -1,0 +1,256 @@
+﻿======
+BUG #7 (NEW)
+
+Date reported: April 25, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5038
+
+Original:
+./jsfuzz/seeds/JerryJS/jerryjs.ecma/11.04.06-028.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_11.04.06-028.js
+
+Patch:
+--- ./jsfuzz/seeds/JerryJS/jerryjs.ecma/11.04.06-028.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_11.04.06-028.js
+@@ -15,7 +15,7 @@
+ 
+ var a = {
+   valueOf: function () {
+-    return ""
++    return "\x00"
+   }
+ }
+ 
+
+Pattern:
+
+Explanation:
+
+According to documentation, when we try to evaluate a 
+invalid strings using Unary plus, the return should be NaN.
+
+======
+BUG #6 (COMPATIBILITY)
+
+Date reported: April 23, 2018
+
+Type: Should throw TypeError 
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5033
+
+Original:
+./jsfuzz/seeds/mozilla/non262/Array/length-truncate-nonconfigurable-sparse.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Array_length-truncate-nonconfigurable-sparse.js
+
+Patch: None 
+ 
+Pattern:
+
+-------------JavaScriptCore
+-------------Chakra
+Error: non-configurable property should trigger TypeError operty should trigger TypeError, got Error: didn't throw?!
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+When we try to fill an array with an object that contains a getter-only property we can't 
+set this object property. Chakra should raise a TypeError, but it does not do anything.
+
+======
+BUG #5 (NEW)
+
+Date reported: April 23, 2018
+
+Type: Should throw TypeError 
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5033
+
+Original:
+./jsfuzz/seeds/mozilla/non262/Array/length-truncate-nonconfigurable-sparse.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Array_length-truncate-nonconfigurable-sparse.js
+
+Patch: None 
+ 
+Pattern:
+
+-------------JavaScriptCore
+-------------Chakra
+Error: non-configurable property should trigger TypeError operty should trigger TypeError, got Error: didn't throw?!
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+When we try to fill an array with an object that contains a getter-only property we can't 
+set this object property. Chakra should raise a TypeError.
+
+====== 
+BUG #4 (NEW)
+
+Date reported: April 18, 2018
+
+Type: Access invalid position 
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=184749
+
+Original:
+./jsfuzz/seeds/JerryJS/JerryJS/jerryjs.ecma/22.02.01-009.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_jerryjs_ecma_22.02.01-009.js
+
+Patch: None 
+ 
+Pattern:
+
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+JSCore should returns "undefined" when try to access an item
+in position bigger then array size. The others engines 
+has passed on this testcase.
+
+======
+BUG #3 (NEW)
+
+Date reported: April 14, 2018
+
+Type: Inconsistent assertions violated in test case
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=184629
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_defineProperty_calls_[[Set]].js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_Proxy_internal_defineProperty_calls_[[Set]].js
+
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/Proxy_internal_defineProperty_calls_[[Set]].js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_Proxy_internal_defineProperty_calls_[[Set]].js
+@@ -4,10 +4,267 @@
+ var def = [];
+ var p = new Proxy({foo:1, bar:2}, { defineProperty: function(o, v, desc) { def.push(v); Object.defineProperty(o, v, desc); return true; }});
+ p.foo = 2; p.bar = 4;
++p.foo = 2; p.bar = 4;
++p.foo = 2; p.bar = 4;
+ return def + '' === "foo,bar";
+       
+ }
+ 
+Pattern:
+
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
+
+Explanation:
+
+JSCore should record all calls to setters "foo" and "bar" (six in
+total), whose expected effect is to to store the string
+"foo,bar,foo,bar,foo,bar" on variable "def". Therefore, the test
+should fail under JSCore as it fails in other engines--return value
+should be true as per test assertion. However, JSCore only stores the
+first two calls to the setters and the test (incorrectly) passes.
+
+======
+BUG #2 (REJECTED - expected behavior)
+
+Date reported: April 12, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/4979
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.repeat.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_String.prototype_methods_String.prototype.repeat.js
+
+Patch:
+--- jsfuzz/seeds/WebKit.JSTests.es6/String.prototype_methods_String.prototype.repeat.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_String.prototype_methods_String.prototype.repeat.js
+@@ -1,7 +1,7 @@
+ function test() {
+ 
+ return typeof String.prototype.repeat === 'function'
+-  && "foo".repeat(3) === "foofoofoo";
++  && "foo".repeat(657604378) === "foofoofoo";
+       
+ }
+ 
+Pattern:
+-------------JavaScriptCore
+Error: TIMEOUT
+-------------Chakra
+Error: Core Dump
+-------------SpiderMonkey
+Error: repeat count must be less than infinity and not overflow maximum string size
+-------------v8
+Error: Invalid string length
+
+Explanation:
+
+Chakra should raise an exception when passing a long number to the
+string function repeat. Instead, it crashes with a segmentation fault.
+
+======
+BUG #1 (CONFIRMED/FIXED)
+
+Date reported: April 12, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/4978
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/typed_arrays_DataView_Int8.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_typed_arrays_DataView_Int8.js
+
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/typed_arrays_DataView_Int8.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_typed_arrays_DataView_Int8.js
+@@ -3,7 +3,7 @@
+ var buffer = new ArrayBuffer(64);
+ var view = new DataView(buffer);
+ view.setInt8 (0, 0x80);
+-return view.getInt8(0) === -0x80;
++return view.getInt8(-1770523502845470856862803727694) === -0x80;
+       
+ }
+ 
+Pattern:
+-------------JavaScriptCore
+Error: byteOffset cannot be negative
+-------------Chakra
+-------------SpiderMonkey
+Error: invalid or out-of-range index
+-------------v8
+Error: Offset is outside the bounds of the DataView
+
+Explanation:
+
+This test passes on Chakra but it should fail. Chakra always returns
+-128 when calling view.getInt8 with a long negative number. Note that
+-128 corresponds to the hexadecimal -0x80.

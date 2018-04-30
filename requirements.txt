@@ -1,5 +1,6 @@
 pytest
 tox
 progressbar2
+timeout-decorator
 #json
 #ntpath
