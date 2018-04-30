@@ -9,12 +9,12 @@ URL Chakra: https://github.com/Microsoft/ChakraCore/issues/5067
 URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185130
 
 Original:
-./jsfuzz/seeds/mozilla/non262/lexical-environment
+./jsfuzz/seeds/mozilla/non262/lexical-environment/block-scoped-functions-annex-b-with.js
 
 Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_lexical-environment_block-scoped-functions-annex-b-with.js
 
-Patch: 
+Patch: None
 
 Pattern:
 -------------JavaScriptCore
@@ -46,7 +46,7 @@ Original:
 Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Error_constructor-proto.js
 
-Patch: 
+Patch: None
 
 Pattern:
 -------------JavaScriptCore
@@ -64,7 +64,7 @@ According to documentation, Reflect.getPrototypeOf(TypeError) should return the 
 Actual Result: TypeError: Assertion failed: got "function() {[native code]}", expected "function Error() { [native code] }"
 Expected Result: pass without failures
 
-﻿======
+======
 BUG #7 (NEW)
 
 Date reported: April 25, 2018
@@ -93,6 +93,13 @@ Patch:
  
 
 Pattern:
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
 
 Explanation:
 
