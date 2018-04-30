@@ -1,3 +1,69 @@
+======
+BUG #9 (NEW)
+
+Date reported: April 29, 2018
+
+Type: Assertion failure
+
+URL Chakra: https://github.com/Microsoft/ChakraCore/issues/5067
+URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185130
+
+Original:
+./jsfuzz/seeds/mozilla/non262/lexical-environment
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_lexical-environment_block-scoped-functions-annex-b-with.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+Error: Assertion failed: got "function f() {
+-------------Chakra
+Error: Assertion failed: got "function f() {
+-------------SpiderMonkey
+
+-------------v8
+
+Explanation:
+Inconsistence when we try to access an property inside the "with" scope.
+
+Actual result: TypeError: Assertion failed: got "function f() {return "fun-f";}", expected "undefined"
+Expected result: pass without failures
+
+======
+BUG #8 (NEW)
+
+Date reported: April 29, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5065
+
+Original:
+./jsfuzz/seeds/mozilla/non262/Error/constructor-proto.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Error_constructor-proto.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+Error: Assertion failed: got "function() {
+-------------SpiderMonkey
+
+-------------v8
+
+Explanation:
+
+According to documentation, Reflect.getPrototypeOf(TypeError) should return the Error prototype.
+
+Actual Result: TypeError: Assertion failed: got "function() {[native code]}", expected "function Error() { [native code] }"
+Expected Result: pass without failures
+
 ﻿======
 BUG #7 (NEW)
 
