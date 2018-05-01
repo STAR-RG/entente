@@ -24,7 +24,6 @@ Patch:
 
 Pattern:
   -------------JavaScriptCore
-
   -------------Chakra
   Error: Test failed
   -------------SpiderMonkey
@@ -93,11 +92,9 @@ Patch: None
 
 Pattern:
 -------------JavaScriptCore
-
 -------------Chakra
 Error: Assertion failed: got "function() {
 -------------SpiderMonkey
-
 -------------v8
 
 Explanation:
@@ -108,7 +105,7 @@ Actual Result: TypeError: Assertion failed: got "function() {[native code]}", ex
 Expected Result: pass without failures
 
 ======
-BUG #7 (NEW)
+BUG #7 (CONFIRMED/FIXED)
 
 Date reported: April 25, 2018
 
@@ -180,7 +177,7 @@ When we try to fill an array with an object that contains a getter-only property
 set this object property. Chakra should raise a TypeError, but it does not do anything.
 
 ======
-BUG #5 (NEW)
+BUG #5 (REJECTED - expected behavior)
 
 Date reported: April 23, 2018
 
