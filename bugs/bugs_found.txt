@@ -1,4 +1,37 @@
 ======
+BUG #11 (NEW)
+
+Date reported: April 30, 2018
+
+Type: Test failure
+
+URLs
+JSCore: https://bugs.webkit.org/show_bug.cgi?id=185156
+Chakra: https://github.com/Microsoft/ChakraCore/issues/5076
+
+Original:
+  ./jsfuzz/seeds/Tiny-js.tests/test039.js
+
+Fuzzed:
+  ./jsfuzz/bugs/fuzzed_files/fuzzed_Tiny-js.tests_test039.js
+
+
+Patch:
+
+Pattern:
+  -------------JavaScriptCore
+
+  -------------Chakra
+
+  -------------SpiderMonkey
+  Error: redeclaration of var a
+  -------------v8
+  Error: Identifier 'a' has already been declared
+
+Explanation:
+  There is an inconsistency when a variable is declared twice as "var" and "let" inside the "with" scope. JScore and Chakra should raise a SyntaxError.
+
+======
 BUG #10 (NEW)
 
 Date reported: April 29, 2018
