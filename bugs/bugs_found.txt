@@ -1,5 +1,5 @@
 ======
-BUG #11 (NEW)
+BUG #11 (DUPLICATE)
 
 Date reported: April 30, 2018
 
@@ -15,14 +15,21 @@ Original:
 Fuzzed:
   ./jsfuzz/bugs/fuzzed_files/fuzzed_Tiny-js.tests_test039.js
 
-
 Patch:
+--- jsfuzz/seeds/Tiny-js.tests/test039.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_Tiny-js.tests_test039.js
+@@ -8,6 +8,7 @@
+ var b = { get_member : function() { return this.member;}, member:41 };
+ 
+ with(b) {
++var a;
+   let a = get_member(); //<--- a is local for this block
+   var c = a+1;
+ }
 
 Pattern:
   -------------JavaScriptCore
-
   -------------Chakra
-
   -------------SpiderMonkey
   Error: redeclaration of var a
   -------------v8
@@ -47,8 +54,8 @@ Fuzzed:
   ./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_24.01.04-006.js
 
 Patch:
-  --- a/seeds/JerryJS/jerryjs.ecma/24.01.04-006.js
-  +++ b/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_24.01.04-006.js
+  --- jsfuzz/seeds/JerryJS/jerryjs.ecma/24.01.04-006.js
+  +++ jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_24.01.04-006.js
   
   var a = new ArrayBuffer(5);
   -var b = a.slice (3, 2);
