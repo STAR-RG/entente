@@ -1,6 +1,6 @@
 import shlex, os, hashlib, ntpath, logging
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
-from difflib import SequenceMatcher
+from difflib import SequenceMatcher as matcher
 from tempfile import mkstemp
 
 from jsfuzz.utils import constants
@@ -325,33 +325,43 @@ class Results:
         """
         Define priority based on engine output
         """
-        priority, is_test_failed = None, False
-        
-        strings_high = ['Test failed', 'Fatal', 'Assertion failed', 'Failed!']
-
-        # set high priority if occurs at least one test failed
-        # fuzzer can alter the string message, using ratio of equivalence
-        for output in self.get_all_outerr():
-            seq = SequenceMatcher(None,'Error: Test failed', output)
-            if (seq.ratio() >= 0.7) or \
-                [string for string in strings_high if string in output]:
-                is_test_failed = True
-                break
-        
+        priority = None
+                
         # set low priority if only chakra reports/not reports an error
         at_least = any([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
         only_chakra_reports = self.chakra_outerr and not at_least
         only_chakra_not_reports = not self.chakra_outerr and all([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
         is_low_priority = (only_chakra_reports or only_chakra_not_reports)
 
-        if is_test_failed:
+        if self.is_high_priority():
             priority = '[HIGH]'
-        elif is_low_priority and not is_test_failed:
+        elif is_low_priority:
             priority = '[LOW]'
         else:
             priority = '[MEDIUM]'
         
         return priority
+
+    def is_high_priority(self):
+        '''
+            Check if a string is a warning with HIGH priority.
+            We based on pattern on textual reports
+        '''
+        # TODO: update textual patterns that is considered high priority
+        patterns = [
+            'test failed', 'fatal', 'assertion failed', 'failed!',
+            'attempting to', 'do not match expectation', 'requires',
+            'jsfuzz error', 'bad result', 'Type error'
+        ]
+
+        for output in self.get_all_outerr():
+            out = output.lower()
+            for pattern in patterns:
+                # using ratio of equivalence because fuzzer can alter N chars in a string
+                if (pattern in out) or \
+                    (matcher(None, pattern, out).ratio() >= 0.6):
+                    return True
+        return False
 
     def is_interesting(self):
         '''
