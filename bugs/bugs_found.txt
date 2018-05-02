@@ -1,4 +1,37 @@
 ======
+BUG #12
+
+Date reported: May 02, 2018
+
+Type: Test failure
+
+URLs
+JSCore: https://bugs.webkit.org/show_bug.cgi?id=185197
+
+Original:
+./jsfuzz/seeds/mozilla/non262/TypedArray/keys.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_keys.js
+
+Patch:
+
+ 
+Pattern:
+-------------JavaScriptCore
+Error: expected {"value": 0, "done": false}, got {"done": false, "value": 0}
+-------------Chakra
+
+-------------SpiderMonkey
+
+-------------v8
+
+
+Explanation:
+
+According to ES6 specification, the Iterator of a TypedArray.keys() or an Array.keys() should return an object on this order {value: Integer, done: Boolean}.
+
+======
 BUG #11 (NEW)
 
 Date reported: April 30, 2018
