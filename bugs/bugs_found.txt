@@ -1,5 +1,5 @@
 ======
-BUG #11 (DUPLICATE)
+BUG #11 (NEW)
 
 Date reported: April 30, 2018
 
