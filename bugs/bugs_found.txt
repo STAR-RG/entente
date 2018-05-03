@@ -13,16 +13,13 @@ Original:
 Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_constructor-iterable-undefined-or-null.js
 
-Patch:
+Patch: None
 
- 
 pattern:
 -------------JavaScriptCore
 Error: Type error
 -------------Chakra
-
 -------------SpiderMonkey
-
 -------------v8
 
 Explanation:
@@ -30,7 +27,7 @@ Explanation:
 According to GetMethod (object, @@iterator) ES6 specification, if the iterator value is either "undefined" or "null", the method should return "undefined", but JSCore does not support this property as "null".
 
 ======
-BUG #12
+BUG #12 (NEW)
 
 Date reported: May 02, 2018
 
@@ -46,24 +43,32 @@ Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_keys.js
 
 Patch:
+--- jsfuzz/seeds/mozilla/non262/TypedArray/keys.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_keys.js
+@@ -23,7 +23,7 @@
+     }
+ 
+     // Throws if `this` isn't a TypedArray.
+-    var invalidReceivers = [undefined, null, 1, false, "", Symbol(), [], {}, /./,
++    var invalidReceivers = [undefined, null, 0, false, "", Symbol(), [], {}, /./,
+                             new Proxy(new constructor(), {})];
+     invalidReceivers.forEach(invalidReceiver => {
+         assertThrowsInstanceOf(() => {
 
  
 Pattern:
 -------------JavaScriptCore
-Error: expected {"value": 0, "done": false}, got {"done": false, "value": 0}
+Exception: Error: JSFUZZ ERROR: Unsupported function (uneval)
 -------------Chakra
-
 -------------SpiderMonkey
-
 -------------v8
-
 
 Explanation:
 
 According to ES6 specification, the Iterator of a TypedArray.keys() or an Array.keys() should return an object on this order {value: Integer, done: Boolean}.
 
 ======
-BUG #11 (NEW)
+BUG #11 (CONFIRMED)
 
 Date reported: April 30, 2018
 
@@ -145,7 +150,7 @@ Actual results:
   Pass without failures
 
 ======
-BUG #9 (NEW)
+BUG #9 (CONFIRMED)
 
 Date reported: April 29, 2018
 
@@ -178,7 +183,7 @@ Actual result: TypeError: Assertion failed: got "function f() {return "fun-f";}"
 Expected result: pass without failures
 
 ======
-BUG #8 (NEW)
+BUG #8 (CONFIRMED)
 
 Date reported: April 29, 2018
 
