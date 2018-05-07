@@ -1,0 +1,595 @@
+\documentclass[11pt]{article}
+%\documentclass[dvips,11pt]{article}
+
+% \usepackage{natbib}
+% \setlength{\bibsep}{0pt plus 0.3ex}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{0.3\baselineskip}{0.3\baselineskip}
+%,nohead,nofoot
+%\usepackage[margin=1n,left=1cm,top=1cm,right=1.75cm,bottom=1.5cm]{geometry}
+\usepackage[margin=1in,includeheadfoot,left=1cm,top=0.5cm,right=1.5cm,bottom=0.5cm]{geometry}
+%\usepackage[margin=1in,includeheadfoot]{geometry}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{lipsum}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+% ADD THE FOLLOWING COUPLE LINES INTO YOUR PREAMBLE
+\let\OLDthebibliography\thebibliography
+\renewcommand\thebibliography[1]{
+  \OLDthebibliography{#1}
+  \setlength{\parskip}{0pt}
+  \setlength{\itemsep}{0pt plus 0.3ex}
+}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{url}
+\usepackage{color}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+%% macros
+\newcommand{\splat}{SPLat}
+\newcommand{\ie}{i.e.}
+\newcommand{\eg}{e.g.}
+\newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
+\newcommand{\Comment}[1]{}
+
+%% \setlength{\oddsidemargin}{0.25in}
+%% \setlength{\textwidth}{6.5in}
+%% \setlength{\topmargin}{0in}
+%% \setlength{\textheight}{8.5in}
+
+%\renewcommand\Affilfont{\fontsize{9}{10.8}\itshape}
+% These force using more of the margins that is the default style
+
+\begin{document}
+
+%\title{Debugging I/O Anomalies in Distributed Configurable Systems}
+\title{\LARGE{}Testing for Configuration Errors in Distributed Systems}
+\author{}
+\date{}
+
+% You can leave out "date" and it will be added automatically for today
+% You can change the "\today" date to any text you like
+
+\makeatletter
+\def\maketitle{%
+  \par{\centering\large\textbf{\@title}\normalsize\par}\vspace{3ex}%
+  \par{\@author}%
+  \par}
+\makeatother
+
+\maketitle
+
+\vspace{-2ex}
+\small
+\begin{table}[h!]
+  \centering%% Centro de Inform\'atica - CIn \\
+  \begin{tabular*}{.85\linewidth}{@{\extracolsep{\fill}}ll}
+    PI: Marcelo d'Amorim (\url{damorim@cin.ufpe.br}) & Universidade Federal de Pernambuco \\
+    Phone: +55 (81) 98800-2010 [mobile]  & Av. Jornalista Anibal Fernandes, S/N \\
+    \phantom{x}\hspace{7ex}+55 (81) 2126-8430, ext. 4379 [work] & Cidade Universit\'aria, PE, Brazil, 50.740-560\\
+    \multicolumn{2}{l}{\noindent\textbf{Contact}: Wei Jin
+      (\url{superbobo@google.com})~~--~~\textbf{Sponsor}: Sai Zhang (\url{saizhang@google.com})}\\
+  \end{tabular*}
+\end{table}
+\normalsize
+
+\vspace{-2ex}
+\begin{abstract}
+This proposal focuses on the important problem of testing for
+configuration errors in distributed systems. The goal is to increase
+system's reliability by preventing these errors to escape to
+production.
+%% The input of our approach is a configurable distributed
+%% program and the output is a set of constraints denoting what
+%% configurations are likely valid for use.
+\end{abstract}
+
+%% Diagnosing those errors
+%% can be very challenging.
+%% The overall goal is to improve developer's productivity in fixing
+%% those errors.  The input to our proposed approach is a set of
+%% distributed traces and the output is a likely explanation of failure
+%% that developers can relate.  
+
+\section{Problem}
+
+\Comment{Configurability enables developers to adapt
+system's behavior to different circumstances.  by selecting or
+  adjusting options. These systems are \emph{prevalent}. The
+  Firefox web browser~\cite{firefox-web}, the Linux
+  kernel~\cite{linux-kernel-web}, the GCC compiler
+  infrastructure~\cite{gcc-web}, and the deals-recommendation web
+  service Groupon~\cite{groupon-web} are some well-known examples of
+  configurable systems. }
+
+Configurable systems are those that can be adapted from a set of input
+options, reflected in code in the form of variations. Configurable
+systems are
+prevalent\Comment{~\cite{yin-etal-sosp2011,weiss-etal-ase2017}} and,
+unfortunately, configuration-related errors are difficult to
+detect~\cite{kim-etal-fse2013,souto-etal-splc2015,souto-etal-icse2017,souto-damorim-jss2017}
+and diagnose~\cite{zhang-ernst-icse2013,zhang-ernst-icse2014}.
+Testing and debugging becomes even worse when the system being
+configured is a distributed system~\cite{matt-welsh-blog}. Detecting
+these errors with testing, before they escape, is therefore important
+as it is hard to troubleshoot error manifestations in complex
+production
+environments~\cite{jin-orso-icse2012}. Configuration-related errors in
+distributed systems are unfortunately \emph{not rare}. Some of these
+errors have been widely publicized in the media given the volume of
+users or data they affected~\cite{azure-error,facebook-error,
+  dns-misconfiguration}.
+
+%% Troubleshooting distributed systems is known to be
+%% challenging~\cite{BeschastnikhWBE2016}\Comment{ as reconstructing the
+%%   global state of the system after failure observations is difficult
+%%   or even impossible~\cite{mattern-virtual-time89}}.
+%% Distributed systems are prevalent. Examples of distributed
+%% applications include the Google Spanner distributed
+%% database~\cite{corbett-etal-osdi2012} and IoT
+%% deployments~\cite{android-things-one}.
+
+%% Configuration is an orthogonal aspect to distribution but one that
+%% makes testing and debugging even more
+%% challenging~\cite{matt-welsh-blog}.
+
+
+
+
+\vspace{-1ex}
+\begin{center}
+\fbox{
+  %  \begin{minipage}{18.75cm}
+  \begin{minipage}{11.75cm}
+    \centering
+    \textit{The goal of this project is to improve reliability in
+      distributed systems\\ by finding configuration errors during
+      testing.}
+  \end{minipage}
+}
+\end{center}
+\vspace{-1ex}
+
+%% These errors emerge from the inability of developers to anticipate the
+%% impact of local changes in dependent
+%% features~\cite{ribeiro-etal-icse2014}.
+%% Configuration errors are even
+%% more problematic when they manifest in distributed
+%% systems.
+%% Fighting configuration errors
+%% is also
+%% challenging~\cite{kenner-etal-fosd-2010,spllift,brabrand-2012,kim-etal-fse2013,ribeiro-etal-icse2014,behrang-etal-fse2015}.
+
+
+%% Preventing developers from
+%% making these
+%% errors~\cite{kenner-etal-fosd-2010,spllift,brabrand-2012,ribeiro-etal-icse2014,behrang-etal-fse2015},
+%% testing for these errors~\cite{cohen-etal-icse2003,cohen:issta07,cohen-shmuelur-icse2010,emine-etal-issta2011,medeiros-etal-icse2016}
+%% and diagnosing those
+%% errors~\cite{zhang-ernst-icse2013,zhang-ernst-icse2014} are
+%% challenging activities.
+%% At Google, configuration errors are also a
+%% problem.
+%% Understanding these errors in complex distributed system is an
+%% essential time-consuming activitiy~\cite{matt-welsh-blog}.
+
+
+%\section{Related Work}
+
+\vspace{1ex} \textbf{Related Work.}~Literature on distributed
+debugging is vast~\cite{BeschastnikhWBE2016}. Record and replay
+solutions, such as Friday~\cite{geels-usenix2007} and
+D3S~\cite{d3s-debugging-deployed-distributed-systems}, capture
+nondeterministic events during execution to replay them a posteriori.
+Tracing solutions~\cite{sambasian-etal-techreport2014}, such as Pivot
+Tracing~\cite{mace-etal-usenix2016}, instrument the application to
+forward tracing metadata to a distributed database for offline
+analysis. In principle, these solutions could be adapted to track
+configuration data but they are either heavyweight or intrusive
+(\ie{}, they require modification in software).  These issues limit
+the applicability of Record and Replay and Tracing in practice. Log
+Analysis does not suffer from these limitations as it mines anomalies
+from the logs that the system already produces~\cite{xu-etal-slam10}.
+However, Log Analysis needs to cope with the potential for missing
+relevant data and also to handle massive amounts of data.
+%%
+Considering the configuration dimension, testing and debugging for
+distributed systems has not been studied in
+depth~\cite{matt-welsh-blog}, in contrast to what has been observed in
+non-distributed
+systems~\cite{yin-etal-sosp2011,zhang-ernst-icse2013,zhang-ernst-icse2014,behrang-etal-fse2015,weiss-etal-ase2017}.
+Most testing in distributed systems is done manually and after the
+fact (\ie{} after failures are observed) to augment regression test
+suites~\cite{beschastnikh-etal-icse2014}. Model checking distributed
+systems (,which is essentially systematic testing) has been
+proposed~\cite{killian-etal-nsdi07,yang-etal-nsdi09} but these
+existing approaches do not take configurations into account.
+
+%% \section{Goal}
+%% Our general goal is to improve system's reliability\Comment{ in distributed
+%%   systems}.  Our specific goal is to find configuration errors in
+%% distributed systems.
+
+%% They are hard to diagnose, especially in distributed systems.
+%% Furthermore, these errors gain importance when they relate to data
+%% from large organizations or a large number of users.
+%% Defects that escape to production still need to be handled and,
+%% certainly, these are the cases that require more immediate
+%% diagnosis.
+
+%% ``In-production'' errors are inevitable; they originate from the
+%% inherent inability of ``in-house'' testing to find all possible
+%% bugs~\cite{jin-orso-icse2012}.  These errors are pressing given the
+%% imminent impact on users.
+
+%% We refer to this problem, prevalent in configuration error diagnosis,
+%% as (configuration) error classification.
+
+
+
+
+
+%% A common problem in
+%% this context is to decide whether a failure was manifested because of
+%% a misconfiguration, because of invalid inputs\Comment{Undocumented
+%%   preconditions in code can delay observation of failures.}, or
+%% because of software
+%% bugs~\cite{zhang-ernst-icse2013,zhang-ernst-icse2014,sabrina-etal-splc15}.
+
+
+
+\section{Approach\Comment{Solution Design (Error Classification from
+    Distributed Traces)}}
+
+We propose an approach that uses automated test generation to find
+configuration errors in distributed systems.  Our approach exercises
+the system observing anomalies in behavior due to configuration
+changes. Testing configurable software is a topic on which the group
+of the PI has focused in the recent
+past~\cite{kim-etal-fse2013,souto-etal-splc2015,souto-etal-icse2017,souto-damorim-jss2017}.
+Our approach is similar in spirit to MoDist~\cite{yang-etal-nsdi09}, a
+black-box model checker that runs the system modifying certain aspects
+during execution such as processor speed and message sequencing, but
+it takes configuration options into account.
+
+\vspace{1ex}\noindent\textbf{Input/Output.}~The input of our technique
+is a configurable distributed system and the output is one of more
+failing tests and error reports.
+
+%% The input to our
+%% problem is a set of distributed traces (\eg{}
+%% using Dapper~\cite{dapper-google-tr2010}, Pivot tracing~\cite{mace-etal-usenix2016}), which collectively
+%% indicate a failure manifestation.  The output is a high-level report
+%% explaining the potential cause of failure.  For example, ``service Y
+
+
+\vspace{1ex}\noindent\textbf{Requirements.}~The technique should be
+simple to use and highly automated. It should produce high-level
+reports that enable developers to promptly understand and fix the
+problems identified. It should run efficiently.
+
+%%   It should
+%% leverage available data\Comment{~--~produced with widely-used
+%%   tools~--~} as opposed to relying on additional data that could be
+%% produced with new tools.
+
+
+%% \begin{itemize}
+%%    \setlength\itemsep{0.01em}    
+%% \end{itemize}
+
+%% As for (1), large distributed systems often provide monitoring
+%% solutions to assist with bug triage.  This work will use the
+%% distributed traces produced by Dapper~\cite{dapper-google-tr2010}, the
+%% distributed tracing infrastructure at Google.
+
+\newcommand{\taskvirtualization}{1}
+\newcommand{\taskteststrategies}{2}
+%\newcommand{\idinteractions}{3}
+\newcommand{\idminimization}{3}
+
+\vspace{1ex}\noindent\textbf{Tasks}.~\taskvirtualization{}) Define
+containerization strategy. \taskteststrategies{}) Define test
+strategy. \idminimization{}) Minimize test sequences.
+
+%% \idinteractions{}) Identify interactions between configured
+%% services. 
+
+%% \begin{enumerate}
+%%   \setlength\itemsep{0.01em}
+%% \item\label{task-virtualization} Define containerization strategy.
+%% \item\label{task-test-strategies} Define test strategy.
+%% \item\label{id-interactions} Identify interactions between configured services.
+%% \item\label{id-minimization} Minimize test sequences.
+%% %\item Create benchmark of configuration errors in distributed systems
+%% \end{enumerate}
+
+%\vspace{1ex}\noindent\textbf{Approach}.
+
+\vspace{1ex} Considering task~\taskvirtualization{}, it is important
+to start a distributed system quickly and to run the system in an
+isolated environment. We plan to use Docker images~\cite{docker} to
+jump start the individual nodes of a distributed system. Considering
+task~\taskteststrategies{}, our approach is to use lighter weight test
+methods first and then assess effectiveness and cost of heavier weight
+testing strategies.  More specifically, initially, we plan to use
+existing test cases~\cite{maddox-2015-acmqueue} and select
+configurations to run those tests using black-box techniques, such as
+Combinatorial Interaction Testing
+(CIT)~\cite{nie-leung-acm-surveys2011}.  It is worth noting that
+centralized configuration servers such as
+ZooKeeper's~\cite{apache-zookeeper} and Spring Cloud
+Config~\cite{spring-cloud-config} are becoming popular to manage
+configurations in distributed systems and should facilitate this task.
+We also plan to explore gray-box techniques for selecting
+configurations~---~we will investigate the effectiveness of mining
+network interactions to decide what configurations to test
+next. Existing log analysis tools can help on
+that~\cite{mace-etal-usenix2016}. For example, our analysis may
+discover that a datum in a message triggers a different decision in a
+node, as observed from execution logs, and that that datum is related
+to a configuration option. We conjecture that selecting configurations
+that triggers different interactions increases the ability of testing
+to find faults. Finally, automated test generation can create
+arbitrarily long test sequences which hinders reproducibility and
+fault diagnosis.  Task~\idminimization{} is concerned with the
+minimization of fault-revealing tests to facilitate debugging.
+
+%% messages on the network, similarly to
+%% MoDist~\cite{yang-etal-nsdi09}\Comment{ and
+%%   Basset~\cite{lauterburg-etal-fse2010},}, but also by modifying
+%% configurations.
+
+We will build tools that implement and support our approach.  The
+output of our approach is a failing test, which could reveal a bug or
+a misconfiguration. In case the developer finds out that the failure
+corresponds to a bug, the code needs to be fixed.  In case of
+misconfigurations, our approach could be used to prevent errors
+provided that the developer adds checks to (in)validate certain
+configurations from being triggered.  Alternatively, the approach
+could be used to diagnose errors as logs reporting error
+manifestations could be saved and then used for comparison with
+production runs.
+
+%% Our first course of action to
+%% diagnosing configuration errors is to search for unexpected
+%% \emph{feature interactions}~\cite{pamela-zave-feature-interaction}.  A
+%% feature interaction happens, for example, when a service reads from
+%% the state that another service writes. The hypothesis is that the
+%% failure was caused by an interaction across distributed services
+%% manifested through a configuration that has not been extensively
+%% tested, resulting in a failure.\Comment{ Consequently, the defect was
+%%   enabled in production only at the point in time the error was
+%%   manifested.}  As it is challenging to detect those interactions
+%% without sacrificing system's performance (\eg{}, adding monitoring probes), we plan to use existing
+%% execution logs to estimate them. To fix the problem, a developer needs
+%% to either fix a bug in code related to that configuration or prevent
+%% the use of that configuration, as it could be illegal.  In case no
+%% discrepancy has been found in the patterns of configuration
+%% interaction, our approach would look for anomalies in the use of input
+%% data involving those configurations. Potential activities associated
+%% to this project include:
+
+%% \begin{itemize}
+%%   \setlength\itemsep{0.01em}  
+%%   \item Identify interaction between configured services.  This task
+%%     is responsible to find what services interact
+%%     and through which configurations they interact.  Existing log
+%%     analysis tools can help assist this
+%%     activity~\cite{beschastnikh-etal-icse2014,BeschastnikhWBE2016,shiviz-web}.
+%%   \item Investigate techniques to precisely and efficiently identify
+%%     anomalies in usage of input data, modulo service interaction and
+%%     their configurations.  Potential solutions include the use of
+%%     invariant detectors (e.g.,
+%%     Daikon~\cite{daikon-2016,BeschastnikhWBE2016}) and anomaly
+%%     detectors based on regression and neural network
+%%     models~\cite{Alpaydin:2010:IML:1734076}, for instance.
+%%   \item Create a benchmark of distributed systems with configuration
+%%     errors.\Fix{elaborate...}
+%%   \item 
+%% \end{itemize}
+
+%% This proposal addresses the problem of debugging large-scale
+%% configurable distributed systems.  The hypothesis is that system's
+%% configuration errors are often manifested through anomalies in I/O
+%% usage.
+
+%\subsection*{Details}
+
+%% For the sake of presentation, we use the term ``test case'' to refer
+%% to a scenario of execution that manifests a problem.  A test case can
+%% be materialized through an executable test artifact (in-house) or
+%% through an execution log (in-production).  Handling in-house and
+%% in-production bugs are in the scope of this project.
+
+%% Our debugging approach is summarized as follows: (1) Augment test
+%% cases with differential test oracles, (2) Explore configurations from
+%% the test, and (3) Look for correlations between configuration options
+%% and failures.  We detail below each of these parts.
+
+%% \textbf{Oracles (1).} We assume that an important class of errors in
+%% distributed systems are due to
+%% misconfigurations~\cite{matt-welsh-blog}.  Furthermore, we conjecture
+%% that an important class of these errors manifest I/O anomalies (e.g.,
+%% excessive use of memory or time).  We plan to apply differential
+%% testing in this context to discover these problems.  More
+%% specifically, we want to detect anomalies in the profile of resource
+%% usage (memory/network) across multiple executions induced by a
+%% selection of configurations over a given test.
+
+%% \textbf{Configuration selection (2).} Testing is an essential part of
+%% the debugging process. Test case diversity is generally considered
+%% beneficial to identify root causes of
+%% failure~\cite{campos-etal-ase2016}.  Diversity of configurations, in
+%% particular, plays an important role in the context of this project.
+%% We plan to use existing configuration selection
+%% techniques~\cite{medeiros-etal-icse2016,kim-etal-fse2013,sabrina-etal-splc15,souto-damorim-jss-2016},
+%% including ours, to explore the space of configurations reachable from
+%% existing test cases.
+
+%% \textbf{Fault localization and explanation (3).} Statistical-based Fault
+%% Localization (SFL) is a lightweight method to identify suspicious
+%% components in a computational system from a set of passing and failing
+%% executions~\Fix{cite}.  We plan to apply SFL and look for abstractions
+%% of error explanation that can be given to users to help identify the
+%% culprit.
+
+%% It is important to note that if executable test cases can be
+%% obtained diagnosis can be performed at source-level.
+
+%% \subsection*{Debugging in production}
+
+%% In principle, the approach presented above could be used to identify
+%% inconsistencies in existing integration tests, by exploring more
+%% rigorously reachable configurations from tests.  However, defects that
+%% escape to production still need to be handled and, certainly, these
+%% are the cases that require more immediate diagnosis.  To this end, one
+%% important challenge is to reconstruct, from production logs, the steps
+%% that approximately characterize the original error-manifesting
+%% execution.  Two alternatives for that will be investigated: (1) to
+%% reconstruct executable integration tests that partially reflect the
+%% observed behavior in logs.  This assumes that an infrastructure for
+%% isolated re-execution of tests exists, which may not be realistic. (2)
+%% to elaborate abstract behavior models for resource consumption which
+%% \emph{are aware of configuration options used}.  Each approach is
+%% challenging.
+
+%% \Fix{...talk about surrogate regression + neural network models...}
+
+%% Ideally, we would like even to generate new execution scenarios
+%% from observations...
+
+%% \subsection*{Future}
+%% One potentially promising direction to expand this project is to use
+%% historical data (both short and long-term) to prune the search space.
+%% Lightweight change impact analysis can help finding hot spots for
+%% analysis and code stability analysis can help finding cold spots.
+%% Other directions for further investigation include plugin validation
+%% for user-configurable applications (such as web browsers) and lifting
+%% dataflow analysis for configuration awareness, a problem that has been
+%% recently investigated but is restricted to simple
+%% analysis~\cite{spllift}.  Recent advances of Datalog
+%% solvers~\cite{ceri-etal-ieee-tkde-1989} should enable
+%% declarative/flexible, yet efficient, specifications.
+
+%% \subsection*{Plan}
+%% The first activity in this project is to better understand the context
+%% of application (e.g., nature of errors in the software under analysis)
+%% as it will certainly drive important decisions in the solution design.
+%% Validating our techniques (directly or not) on Google software is
+%% ideal.
+
+%% \section{Related Work}
+%% \Fix{...general comments...}\Fix{...highlight Wei's BugRedux and Brum's Perfume.}
+
+%% Because of the combinatorial blowup caused by the increasing number of
+%% options in a large codebase, exhaustively testing all possible
+%% configurations is prohibitive.
+
+\section{Case Studies}
+
+%% https://github.com/ibm-cloud-architecture/refarch-cloudnative-netflix
+%% https://github.com/fernandoabcampos/spring-netflix-oss-microservices
+%% https://github.com/jbossdemocentral/coolstore-microservice
+%% https://github.com/robhinds/microservices
+%% https://github.com/spencergibb/oscon2015
+%% https://github.com/jduranmaster/MicroServices-Architecture-POC-Engine-SpringBoot-NetflixOSS
+%% https://github.com/szokebarnabas/twitterminer
+
+We plan to evaluate our approach in some of the following scenarios:
+
+\begin{itemize}
+  \setlength\itemsep{0.01em}
+\item \textbf{Software-Defined Networking (SDN).} SDN is a network
+  architecture that enables network administrators to programmatically
+  control the network behavior through well-defined interfaces such as
+  OpenFlow~\cite{open-networking}. Humans can make mistakes in an SDN
+  as in any other configurable software.  For example, it is possible
+  that ``one of the switches is sending packets to the wrong
+  destination network''~\cite{scott-etal-nsdi2015}.
+\item \textbf{Internet of Things (IoT).} IoT deployments are highly
+  configurable and typically depend on services distributed on the
+  network. This is the case for both cloud and non-cloud based IoT
+  setups. Considering the scenario of a smart home, for example, the
+  number of sensors and the configuration options on each sensor can
+  vary (e.g., the max amount of smoke
+  acceptable\footnote{~https://diyhacking.com/iot-smoke-alarm-arduino-esp8266-gas-sensor/}
+  before signaling an alarm or sending a message to the apartment
+  owner).  To note that the PI is involved in a Brazil-US cooperation
+  project\footnote{~Funded by RNP, in Brazil, and NSF, in the
+    US:~\url{https://www.nsf.gov/pubs/2017/nsf17024/nsf17024.jsp}}
+  related to testing IoT infrastructures and this could create
+  synergies that will help the project to succeed.
+  
+\item \textbf{Microservices.} Microservices is an increasingly-popular
+  approach to organize applications (typically, web apps). It promotes
+  the breakdown of code in small service units\Comment{ that
+    communicate through lightweight protocols}. Consider, for example,
+  the scenario where a monolithic application is refactored to use
+  microservices. Refactorings can be buggy and the new channels
+  created for communication (among microservices) can be vulnerable to
+  attacks. 
+  %http://mp.binaervarianz.de/pldi2017.pdf
+%%  \item \textbf{Collaborative Apps}
+\end{itemize}
+
+%% \Comment{We consider using Open Source
+%%     Software (OSS) that uses popular frameworks (e.g., Spring
+%%     Cloud~\cite{spring-cloud}).}
+%% to enable continuous delivery and deployment of
+%%   applications.  Microservices promote
+
+We are also eager to evaluate the techniques we develop in scenarios
+within Google
+
+\section{Data Policy}
+
+The results produced with this research will be made available to the
+public and to the research community.  All tools and data sets
+developed will be available online, and the software will be released
+under an open source license.
+
+\section{Budget}
+
+The project will support one PhD student for one year.  The total
+budget for this period is 25,800 USD.
+
+\begin{itemize}
+  \setlength\itemsep{0.05em}  
+\item Student salaries: 22,800 (=1,900*12)
+\item Conference travel: 3,000
+\end{itemize}
+
+%% \begin{thebibliography}{99}
+%% \bibitem{gonzalez2012} Jonay I. Gonz\'{a}lez Hern\'{a}ndez, 
+%% Pilar Ruiz-Lapuente,	
+%% Hugo M. Tabernero,	
+%% David Montes,	
+%% Ramon Canal,	
+%% Javier M\'{e}ndez	
+%% and Luigi R. Bedin,
+%% {No surviving evolved companions of the progenitor of SN1006},
+%% Nature, {\bf 489}, 533-536 (2012).
+%% \end{thebibliography}
+
+%\scriptsize
+\footnotesize
+\bibliographystyle{plain}
+\bibliography{tmp}
+
+\end{document}
+
+%%  LocalWords:  d'Amorim Universidade de Pernambuco UFPE Centro CIn
+%%  LocalWords:  atica Jornalista Fernandes Cidade Universit Sai GCC
+%%  LocalWords:  Zhang Configurability Groupon combinatorial codebase
+%%  LocalWords:  tmp misconfigurations SFL dataflow Datalog BugRedux
+%%  LocalWords:  Brum's misconfiguration Daikon IoT nondeterministic
+%%  LocalWords:  posteriori metadata MoDist postmorten virtualization
+%%  LocalWords:  pre USD startup ZooKeeper's Config SDN SDNs OpenFlow
+%%  LocalWords:  programmatically Microservices Refactoring OSS Jin
+%%  LocalWords:  reproducibility RNP refactored microservices
+%%  LocalWords:  Refactorings
