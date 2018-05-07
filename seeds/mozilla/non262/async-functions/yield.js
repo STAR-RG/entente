@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "yield handling in async function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function testPassArgsBody(argsbody) {
     Reflect.parse(`async function a${argsbody}`);

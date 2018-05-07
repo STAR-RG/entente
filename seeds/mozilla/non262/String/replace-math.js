@@ -6,7 +6,7 @@
 var BUGNUMBER = 805121;
 var summary = "Be more careful with string math to avoid wrong results";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /******************************************************************************/
 

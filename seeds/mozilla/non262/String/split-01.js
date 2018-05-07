@@ -6,7 +6,7 @@
 var BUGNUMBER = 614608;
 var summary = "String.prototype.split tests";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

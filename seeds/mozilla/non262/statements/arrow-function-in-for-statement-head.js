@@ -8,7 +8,7 @@ var summary =
   "|for (x => 0 in 1;;) break;| must be a syntax error per ES6, not an " +
   "elaborate nop";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

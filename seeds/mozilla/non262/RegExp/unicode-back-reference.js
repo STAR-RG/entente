@@ -1,7 +1,7 @@
 var BUGNUMBER = 1135377;
 var summary = "Implement RegExp unicode flag -- back reference should not match lead surrogate that has corresponding trail surrogate.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // The last character of back reference is not a surrogate.
 assertEqArray(/foo(.+)bar\1/u.exec("fooAbarA\uDC00"),

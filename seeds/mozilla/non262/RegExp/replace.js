@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "Implement RegExp.prototype[@@replace].";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(RegExp.prototype[Symbol.replace].name, "[Symbol.replace]");
 assertEq(RegExp.prototype[Symbol.replace].length, 2);

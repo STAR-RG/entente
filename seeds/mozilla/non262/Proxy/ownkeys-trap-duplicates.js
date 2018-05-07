@@ -11,7 +11,7 @@ var summary =
   "non-extensible or has non-configurable properties." +
   "Revised (bug 1389752): Throw TypeError for duplicate properties.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

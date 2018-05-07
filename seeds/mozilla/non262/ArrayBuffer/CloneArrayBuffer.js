@@ -1,7 +1,7 @@
 var BUGNUMBER = 1264941;
 var summary = 'CloneArrayBuffer should be called with byteLength of source typedArray';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(ctor, byteLength) {
   var abuf = new ctor(byteLength);

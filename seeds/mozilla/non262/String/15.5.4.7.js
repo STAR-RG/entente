@@ -6,7 +6,7 @@
 var BUGNUMBER = 612838;
 var summary = "String.prototype.indexOf with empty searchString";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq("123".indexOf("", -1), 0);
 assertEq("123".indexOf("", 0), 0);

@@ -6,7 +6,7 @@ var gTestfile = 'toJSON-01.js';
 var BUGNUMBER = 584811;
 var summary = "Date.prototype.toJSON isn't to spec";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -5,7 +5,7 @@
 var BUGNUMBER = 601307;
 var summary = "with (...) eval(...) is a direct eval";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

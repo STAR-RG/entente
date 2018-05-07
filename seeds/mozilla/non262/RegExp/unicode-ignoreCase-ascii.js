@@ -1,7 +1,7 @@
 var BUGNUMBER = 1135377;
 var summary = "Implement RegExp unicode flag -- ignoreCase flag with non-ascii to ascii map.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // LATIN CAPITAL LETTER Y WITH DIAERESIS
 assertEqArray(/\u0178/iu.exec("\u00FF"),

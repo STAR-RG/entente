@@ -7,7 +7,7 @@
 var BUGNUMBER = 1282047;
 var summary = 'Infinite recursion via Array.isArray on a proxy';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

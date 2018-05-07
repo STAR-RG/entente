@@ -8,7 +8,7 @@ var BUGNUMBER = 1257779;
 var summary =
   "Scripted proxies' [[OwnPropertyKeys]] should have linear complexity";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

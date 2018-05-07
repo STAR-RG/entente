@@ -6,7 +6,7 @@
 var BUGNUMBER = 1073446;
 var summary = "Object.preventExtensions() should return its argument with no conversion when the argument is a primitive value";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 assertEq(Object.preventExtensions(), undefined);
 assertEq(Object.preventExtensions(undefined), undefined);
 assertEq(Object.preventExtensions(null), null);

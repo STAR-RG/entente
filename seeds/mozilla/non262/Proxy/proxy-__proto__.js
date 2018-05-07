@@ -7,7 +7,7 @@ var gTestfile = 'proxy-__proto__.js';
 var BUGNUMBER = 950407;
 var summary = "Behavior of __proto__ on ES6 proxies";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -5,7 +5,7 @@
 var BUGNUMBER = 732669;
 var summary = "Primitive values don't box correctly";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

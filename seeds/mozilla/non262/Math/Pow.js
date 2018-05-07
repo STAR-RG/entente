@@ -7,7 +7,7 @@
 var BUGNUMBER = 1135708;
 var summary = "Implement the exponentiation operator";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Constant folding
 assertEq(2 ** 2 ** 3, 256);

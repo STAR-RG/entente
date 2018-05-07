@@ -3,7 +3,7 @@
 var BUGNUMBER = 1180306;
 var summary = 'Promise.{all,race} should close iterator on error';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(ctor, props, { nextVal=undefined,
                              nextThrowVal=undefined,

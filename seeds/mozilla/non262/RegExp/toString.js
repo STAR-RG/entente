@@ -1,7 +1,7 @@
 var BUGNUMBER = 1079919;
 var summary = "Make RegExp.prototype.toString to be a generic function.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(RegExp.prototype.toString(), "/(?:)/");
 assertEq(/foo/.toString(), "/foo/");

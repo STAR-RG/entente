@@ -8,7 +8,7 @@ var summary =
   "String.prototype.match must define matches on the returned array, not set " +
   "them";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

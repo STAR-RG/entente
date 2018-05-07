@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "Call RegExp.prototype[@@match] from String.prototype.match.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var called = 0;
 var myRegExp = {

@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "String.prototype.replace should do nothing if lastIndex is invalid for sticky RegExp";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var re = /a/y;
 re.lastIndex = -1;

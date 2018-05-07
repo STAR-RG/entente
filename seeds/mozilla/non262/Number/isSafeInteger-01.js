@@ -5,7 +5,7 @@
 var BUGNUMBER = 1003764;
 var summary = "ES6 (draft Draft May 22, 2014) ES6 20.1.2.5 Number.isSafeInteger(number)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(Number.isSafeInteger.length, 1);
 

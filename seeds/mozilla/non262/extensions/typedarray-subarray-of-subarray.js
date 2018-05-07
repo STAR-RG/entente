@@ -6,7 +6,7 @@ var BUGNUMBER = 637643;
 var summary =
   "new Int8Array([1, 2, 3]).subarray(1).subarray(1)[0] === 3";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@
 var BUGNUMBER = 722260;
 var summary = 'All NaNs must be treated as identical keys for Map';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -8,7 +8,7 @@ var BUGNUMBER = 630770;
 var summary =
   'Correctly warn about duplicate parameters when the strict option is enabled';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var summary =
   'Parenthesized "destructuring patterns" are not usable as destructuring ' +
   'patterns';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

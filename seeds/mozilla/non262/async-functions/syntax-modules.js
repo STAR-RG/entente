@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async/await syntax in module";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 if (typeof parseModule === "function") {
     parseModule("async function f() { await 3; }");

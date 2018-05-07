@@ -1,7 +1,7 @@
 var BUGNUMBER = 1280046;
 var summary = "ignoreCase match should perform Canonicalize both on input and pattern.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Each element [code1, upper, code2] satisfies the following condition:
 //   ToUpperCase(code1) == upper

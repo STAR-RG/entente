@@ -7,7 +7,7 @@ var summary =
   "__proto__ in object literals in non-__proto__:v contexts doesn't modify " +
   "[[Prototype]]";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

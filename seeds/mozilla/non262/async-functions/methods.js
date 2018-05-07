@@ -2,7 +2,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async methods semantics";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 class X {
   constructor() {

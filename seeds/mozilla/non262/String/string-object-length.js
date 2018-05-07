@@ -7,7 +7,7 @@
 var BUGNUMBER = 650621;
 var summary = 'String object length test';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -11,7 +11,7 @@ var BUGNUMBER = 575522;
 var summary = '({}).toString.call(null) == "[object Null]", ' +
               '({}).toString.call(undefined) == "[object Undefined]", ';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

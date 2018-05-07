@@ -7,7 +7,7 @@ var gTestfile = "for-in-with-destructuring-assignments.js";
 var BUGNUMBER = 1164741;
 var summary = "|for (var <pat> = ... in ...)| is invalid syntax";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

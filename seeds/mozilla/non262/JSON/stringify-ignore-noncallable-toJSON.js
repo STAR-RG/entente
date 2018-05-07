@@ -6,7 +6,7 @@ var gTestfile = 'stringify-ignore-noncallable-toJSON.js';
 var BUGNUMBER = 584909;
 var summary = "If the toJSON property isn't callable, don't try to call it";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

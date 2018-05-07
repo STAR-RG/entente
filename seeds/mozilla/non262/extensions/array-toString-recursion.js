@@ -7,7 +7,7 @@
 var BUGNUMBER = 635389;
 var summary = 'Infinite recursion via [].{toString,toLocaleString,join}';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -9,7 +9,7 @@ var summary =
   "Syntax errors at the end of |for| statement header parts shouldn't cause " +
   "crashes";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

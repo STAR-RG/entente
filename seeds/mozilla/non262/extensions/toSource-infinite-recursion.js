@@ -7,7 +7,7 @@
 var BUGNUMBER = 650574;
 var summary = 'Check for too-deep stack when converting a value to source';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@
 var BUGNUMBER = 653789;
 var summary = 'Check for too-deep stack when calling toLocaleString';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

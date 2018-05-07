@@ -10,7 +10,7 @@ var summary =
   "Using a name referring to a { get: undefined, set: undefined } descriptor " +
   "shouldn't assert";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

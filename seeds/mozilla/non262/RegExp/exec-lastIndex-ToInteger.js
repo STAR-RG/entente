@@ -10,7 +10,7 @@ var summary =
   "RegExp.prototype.exec doesn't get the lastIndex and ToInteger() it for " +
   "non-global regular expressions when it should";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

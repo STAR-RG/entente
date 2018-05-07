@@ -7,7 +7,7 @@ var summary =
   'Do not assert: !(attrs & (JSPROP_GETTER | JSPROP_SETTER)) with ' +
   'Object.defineProperty';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

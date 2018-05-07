@@ -1,7 +1,7 @@
 var BUGNUMBER = 1184922;
 var summary = "iterator.next() should not be called when after iterator completes";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var log;
 function reset() {

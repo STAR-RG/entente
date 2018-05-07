@@ -1,7 +1,7 @@
 var BUGNUMBER = 1315815;
 var summary = "async/await containing escapes";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Using "eval" as the argument name is fugly, but it means evals below are
 // *direct* evals, and so their effects in the unescaped case won't extend

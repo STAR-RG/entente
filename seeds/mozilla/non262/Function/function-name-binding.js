@@ -1,7 +1,7 @@
 var BUGNUMBER = 883377;
 var summary = "Anonymous function name should be set based on binding pattern";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var exprs = [
     ["function() {}", false],

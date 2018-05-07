@@ -1,7 +1,7 @@
 var BUGNUMBER = 1317400;
 var summary = "Function string representation in Object.prototype.toSource";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Methods.
 

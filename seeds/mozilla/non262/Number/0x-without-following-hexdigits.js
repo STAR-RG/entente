@@ -5,7 +5,7 @@
 var BUGNUMBER = 582643;
 var summary = "'0x' not followed by hex digits should be a syntax error";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -9,7 +9,7 @@
 var BUGNUMBER = 901351;
 var summary = "Behavior when the JSON.parse reviver mutates the holder array";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

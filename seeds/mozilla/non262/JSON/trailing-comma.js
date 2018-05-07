@@ -6,7 +6,7 @@ var gTestfile = 'trailing-comma.js';
 var BUGNUMBER = 564621;
 var summary = 'JSON.parse should reject {"a" : "b",} or [1,]';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

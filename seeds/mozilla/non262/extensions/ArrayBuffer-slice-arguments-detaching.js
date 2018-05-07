@@ -10,7 +10,7 @@ var summary =
   "ArrayBuffer.prototype.slice shouldn't misbehave horribly if " +
   "index-argument conversion detaches the ArrayBuffer being sliced";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

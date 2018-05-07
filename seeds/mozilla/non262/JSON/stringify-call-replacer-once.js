@@ -6,7 +6,7 @@ var gTestfile = 'stringify-call-replacer-once.js';
 var BUGNUMBER = 584909;
 var summary = "Call replacer function exactly once per value";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

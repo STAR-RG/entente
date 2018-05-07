@@ -9,7 +9,7 @@ var summary =
   'Array.prototype.splice should define, not set, the elements of the array ' +
   'it returns';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

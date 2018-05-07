@@ -6,7 +6,7 @@ var gTestfile = 'stringify-large-replacer-array.js';
 var BUGNUMBER = 816033;
 var summary = "JSON.stringify with a large replacer array";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

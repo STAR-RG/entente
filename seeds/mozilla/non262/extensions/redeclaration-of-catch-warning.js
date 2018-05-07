@@ -8,7 +8,7 @@ var BUGNUMBER = 622646;
 var summary = "Shadowing an exception identifier in a catch block with a " +
               "|const| or |let| declaration should throw an error";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

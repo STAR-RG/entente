@@ -4,7 +4,7 @@
 var BUGNUMBER = 1253847;
 var summary = 'Line numbers should be updated correctly when a template literal contains CRLF sequences.';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // lineNumber after template literal.
 var base, x, lineno;

@@ -7,7 +7,7 @@ var BUGNUMBER = 795745;
 var summary =
   "Number.prototype.to* should throw a RangeError when passed a bad precision";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

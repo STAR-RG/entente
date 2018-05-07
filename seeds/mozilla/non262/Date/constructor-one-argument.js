@@ -8,7 +8,7 @@ var summary =
   "new Date(value) should call ToPrimitive on value before testing for " +
   "string-ness";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

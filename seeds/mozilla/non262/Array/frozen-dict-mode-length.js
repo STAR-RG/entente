@@ -6,7 +6,7 @@
 var BUGNUMBER = 1312948;
 var summary = "Freezing a dictionary mode object with a length property should make Object.isFrozen report true";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /* Convert to dictionary mode */
 delete Array.prototype.slice;

@@ -8,7 +8,7 @@
 var BUGNUMBER = 577325;
 var summary = 'Implement the ES5 algorithm for processing function statements';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async function constructor and prototype";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var f1 = async function() {};
 

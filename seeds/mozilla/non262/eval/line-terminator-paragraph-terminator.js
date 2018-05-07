@@ -5,7 +5,7 @@
 var BUGNUMBER = 657367;
 var summary = "eval must not parse strings containing U+2028 or U+2029";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

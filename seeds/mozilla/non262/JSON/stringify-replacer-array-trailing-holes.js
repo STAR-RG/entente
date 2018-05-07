@@ -8,7 +8,7 @@ var summary =
   "Better/more correct handling for replacer arrays with trailing holes " +
   "through which inherited elements might appear";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

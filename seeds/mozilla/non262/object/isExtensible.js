@@ -6,7 +6,7 @@
 var BUGNUMBER = 1060873;
 var summary = "Object.isExtensible() should return false when given primitive values as input";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 assertEq(Object.isExtensible(), false);
 assertEq(Object.isExtensible(undefined), false);
 assertEq(Object.isExtensible(null), false);

@@ -10,7 +10,7 @@ var BUGNUMBER = 518663;
 var summary =
   'Object.getOwnPropertyNames should play nicely with enumerator caching';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

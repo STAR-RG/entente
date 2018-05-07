@@ -6,7 +6,7 @@
 var BUGNUMBER = 1075294;
 var summary = "Object.seal() should return its argument with no conversion when the argument is a primitive value";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 assertEq(Object.seal(), undefined);
 assertEq(Object.seal(undefined), undefined);
 assertEq(Object.seal(null), null);

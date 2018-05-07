@@ -2,7 +2,7 @@ var BUGNUMBER = 1332881;
 var summary =
   "Leaving for-in and try should handle stack value in correct order";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var called = 0;
 function reset() {

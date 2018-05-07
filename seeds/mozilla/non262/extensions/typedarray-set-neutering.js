@@ -6,7 +6,7 @@ var BUGNUMBER = 983344;
 var summary =
   "Uint8Array.prototype.set issues when this array changes during setting";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

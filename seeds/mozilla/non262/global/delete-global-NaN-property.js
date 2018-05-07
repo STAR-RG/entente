@@ -6,7 +6,7 @@
 var BUGNUMBER = 649570;
 var summary = "|delete window.NaN| should throw a TypeError";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

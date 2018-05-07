@@ -1,7 +1,7 @@
 var BUGNUMBER = 1352429;
 var summary = 'Error message should provide enough infomation for use of in operator';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function checkErr(substr, str, messageSubstr, messageStr) {
     var caught = false;

@@ -7,7 +7,7 @@ var summary =
   "Deletion of a && or || expression that constant-folds to a name must not " +
   "attempt to delete the name";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

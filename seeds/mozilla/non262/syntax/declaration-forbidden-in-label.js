@@ -9,7 +9,7 @@ var summary =
   "Properly implement the spec's distinctions between StatementListItem and " +
   "Statement grammar productions and their uses";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

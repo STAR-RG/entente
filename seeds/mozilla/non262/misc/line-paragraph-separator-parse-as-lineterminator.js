@@ -9,7 +9,7 @@ var summary =
   "U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR must match the " +
   "LineTerminator production when parsing code";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

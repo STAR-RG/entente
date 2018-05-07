@@ -7,7 +7,7 @@ var gTestfile = "for-inof-loop-const-declaration.js";
 var BUGNUMBER = 1278150;
 var summary = "Support const declarations in for-of loop heads";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

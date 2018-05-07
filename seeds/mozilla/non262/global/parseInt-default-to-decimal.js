@@ -7,7 +7,7 @@ var summary =
   "parseInt should treat leading-zero inputs (with radix unspecified) as " +
   "decimal, not octal (this changed in bug 786135)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@
 var BUGNUMBER = 614070;
 var summary = 'Array.prototype.unshift without args';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var summary =
   "fun.caller should throw if that value corresponds to a strict mode " +
   "function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

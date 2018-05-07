@@ -9,7 +9,7 @@
 var BUGNUMBER = 866580;
 var summary = "Assertion redefining length property of a frozen array";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

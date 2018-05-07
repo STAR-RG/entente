@@ -7,7 +7,7 @@ var summary =
   "Convert computed property name expressions to property key before " +
   "evaluating the property's value";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

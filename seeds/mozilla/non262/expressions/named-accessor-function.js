@@ -7,7 +7,7 @@
 var BUGNUMBER = 999999;
 var summary = '{ get x y() { } } is not valid getter syntax';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var BAD_CODE = ["({ get x y() { } })", "({ set x y(v) { } })"];
 

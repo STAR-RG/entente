@@ -6,7 +6,7 @@
 var BUGNUMBER = 465199;
 var summary = "RegExp lastIndex property set should not coerce type to number";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

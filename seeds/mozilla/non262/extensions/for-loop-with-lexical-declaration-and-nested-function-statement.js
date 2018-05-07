@@ -12,7 +12,7 @@ var summary =
   "contains a lexical declaration, where the loop body might add more " +
   "bindings at runtime";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var BUGNUMBER = 852563;
 var summary =
   "IdValuePair::value should be initialized to avoid GC sequence-point issues";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 print("Note: You must run this test under valgrind to be certain it passes");
 

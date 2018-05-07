@@ -6,7 +6,7 @@ var BUGNUMBER = 886949;
 var summary = "ES6 (draft May 2013) 15.7.3.9 Number.parseInt(string, radix)." +
 			  " Verify that Number.parseInt defaults to decimal.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -10,7 +10,7 @@ var summary =
   "Don't assert trying to construct a bound function whose bound-target " +
   "construct operation passes more than ARGS_LENGTH_MAX arguments";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var summary =
   "A string literal containing an octal escape before a strict mode " +
   "directive should be a syntax error";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

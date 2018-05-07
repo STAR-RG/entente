@@ -7,7 +7,7 @@ var summary =
   "Don't let constant-folding in the MemberExpression part of a tagged " +
   "template cause an incorrect |this| be passed to the callee";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

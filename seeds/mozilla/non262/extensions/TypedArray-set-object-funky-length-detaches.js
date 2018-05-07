@@ -11,7 +11,7 @@ var summary =
   "shouldn't misbehave if the funky length property detaches this typed " +
   "array's buffer";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

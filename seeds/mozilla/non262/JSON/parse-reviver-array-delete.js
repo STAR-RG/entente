@@ -6,7 +6,7 @@ var gTestfile = 'parse-reviver-array-delete.js';
 var BUGNUMBER = 999999;
 var summary = "JSON.parse with a reviver which elides array elements";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

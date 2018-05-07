@@ -7,7 +7,7 @@ var gTestfile = "for-of-var-with-initializer.js";
 var BUGNUMBER = 1164741;
 var summary = "Don't assert parsing |for (var x = 3 of 42);|";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

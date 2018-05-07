@@ -12,7 +12,7 @@ var summary =
   "memory, and properly copy them into the target without overflow (of " +
   "either source *or* target) when finished";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

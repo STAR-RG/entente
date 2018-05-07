@@ -8,7 +8,7 @@ var summary =
   "Number.prototype.toString should use ToInteger on the radix and should " +
   "throw a RangeError if the radix is bad";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

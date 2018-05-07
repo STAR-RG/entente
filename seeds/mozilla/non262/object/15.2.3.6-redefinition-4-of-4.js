@@ -10,7 +10,7 @@ var summary =
   'ES5 Object.defineProperty(O, P, Attributes): redefinition ' +
   PART + ' of ' + PARTS;
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 loadRelativeToScript("defineProperty-setup.js");
 

@@ -1,7 +1,7 @@
 var BUGNUMBER = 1135377;
 var summary = "Implement RegExp unicode flag -- disallow range with CharacterClassEscape.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertThrowsInstanceOf(() => eval(`/[\\w-\\uFFFF]/u`), SyntaxError);
 assertThrowsInstanceOf(() => eval(`/[\\W-\\uFFFF]/u`), SyntaxError);

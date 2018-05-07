@@ -7,7 +7,7 @@ var summary =
   "decodeURI{,Component} should return the specified character for " +
   "'%EF%BF%BE' and '%EF%BF%BF', not return U+FFFD";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

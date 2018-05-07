@@ -6,7 +6,7 @@
 var BUGNUMBER = 671947;
 var summary = "Unqualified function invocation uses the global object of the called property as |this|";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var gTestfile = '__proto__.js';
 var BUGNUMBER = 770344;
 var summary = "__proto__ as accessor";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 924688;
 var summary = 'Computed Property Names';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Function definitions.
 function syntaxError (script) {

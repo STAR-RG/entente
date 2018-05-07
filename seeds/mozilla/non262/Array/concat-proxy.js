@@ -1,7 +1,7 @@
 var BUGNUMBER = 1287520;
 var summary = 'Array.prototype.concat should check HasProperty everytime for non-dense array';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var a = [1, 2, 3];
 a.constructor = {

@@ -6,7 +6,7 @@
 var BUGNUMBER = 1071464;
 var summary = "Object.isFrozen() should return true when given primitive values as input";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 assertEq(Object.isFrozen(), true);
 assertEq(Object.isFrozen(undefined), true);
 assertEq(Object.isFrozen(null), true);

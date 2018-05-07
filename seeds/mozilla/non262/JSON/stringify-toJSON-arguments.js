@@ -6,7 +6,7 @@ var gTestfile = 'stringify-toJSON-arguments.js';
 var BUGNUMBER = 584909;
 var summary = "Arguments when an object's toJSON method is called";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

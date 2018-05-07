@@ -7,7 +7,7 @@
 var BUGNUMBER = 885553;
 var summary = 'Array.prototype.find and Array.prototype.findIndex';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

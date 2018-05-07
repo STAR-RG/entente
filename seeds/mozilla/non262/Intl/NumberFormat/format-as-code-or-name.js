@@ -10,7 +10,7 @@ var summary =
   "currencyDisplay: 'name' or 'code' }) should have behavior other than " +
   "throwing";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 //-----------------------------------------------------------------------------
 

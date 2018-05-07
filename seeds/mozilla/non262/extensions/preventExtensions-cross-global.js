@@ -13,7 +13,7 @@ var summary =
   "Object.preventExtensions and Object.isExtensible should work correctly " +
   "across globals";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

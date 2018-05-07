@@ -8,7 +8,7 @@ if (typeof assertEq === "undefined") {
   };
 }
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 let logs = [];
 function log(x) {

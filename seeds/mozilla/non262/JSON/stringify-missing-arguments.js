@@ -6,7 +6,7 @@ var gTestfile = 'stringify-missing-arguments.js';
 var BUGNUMBER = 648471;
 var summary = "JSON.stringify with no arguments";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

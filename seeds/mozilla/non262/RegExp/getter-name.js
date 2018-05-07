@@ -1,7 +1,7 @@
 var BUGNUMBER = 1180290;
 var summary = 'RegExp getters should have get prefix';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(Object.getOwnPropertyDescriptor(RegExp, Symbol.species).get.name, "get [Symbol.species]");
 assertEq(Object.getOwnPropertyDescriptor(RegExp.prototype, "flags").get.name, "get flags");

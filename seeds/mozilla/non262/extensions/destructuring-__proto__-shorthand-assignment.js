@@ -7,7 +7,7 @@ var gTestfile = 'destructuring-__proto__-shorthand-assignment.js';
 var BUGNUMBER = 963641;
 var summary = "{ __proto__ } should work as a destructuring assignment pattern";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

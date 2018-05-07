@@ -7,7 +7,7 @@
 var BUGNUMBER = 837630;
 var summary ='__proto__ should show up with O.getOwnPropertyNames(O.prototype)';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

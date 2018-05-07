@@ -8,7 +8,7 @@ var BUGNUMBER = 537863;
 var summary =
   'undefined, Infinity, and NaN global properties should not be writable';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

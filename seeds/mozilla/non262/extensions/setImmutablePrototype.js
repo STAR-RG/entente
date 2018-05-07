@@ -10,7 +10,7 @@ var summary =
   "Implement JSAPI and a shell function to prevent modifying an extensible " +
   "object's [[Prototype]]";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

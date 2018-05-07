@@ -5,7 +5,7 @@ var summary = "Implement RegExp unicode flag -- ignoreCase flag with character c
 // https://github.com/tc39/ecma262/pull/525
 // (bug 1281739)
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // LATIN SMALL LETTER LONG S
 

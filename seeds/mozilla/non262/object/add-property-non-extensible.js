@@ -12,7 +12,7 @@ var summary =
   'Properly method-compile attempted addition of properties to ' +
   'non-extensible objects';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

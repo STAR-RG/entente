@@ -1,7 +1,7 @@
 var BUGNUMBER = 1130860;
 var summary = "RegExp constructor shouldn't invoke source/flags getters on argument RegExp instance.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // same-compartment
 var a = /foo/;

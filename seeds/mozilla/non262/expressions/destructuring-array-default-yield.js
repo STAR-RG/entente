@@ -1,7 +1,7 @@
 var BUGNUMBER = 1184922;
 var summary = "Array destructuring with various default values in various context - yield expression";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var opt = {
     no_plain: true,

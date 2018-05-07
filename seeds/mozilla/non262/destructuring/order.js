@@ -1,7 +1,7 @@
 var BUGNUMBER = 1204028;
 var summary = "Destructuring should evaluate lhs reference before rhs";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 let storage = {
   clear() {

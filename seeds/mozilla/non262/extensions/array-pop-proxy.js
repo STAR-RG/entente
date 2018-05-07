@@ -7,7 +7,7 @@ var gTestfile = 'array-pop-proxy.js';
 var BUGNUMBER = 858381;
 var summary = "Behavior of [].pop on proxies";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

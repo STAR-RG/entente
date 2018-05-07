@@ -9,7 +9,7 @@
 var BUGNUMBER = 518663;
 var summary = 'Object.getOwnPropertyNames: array objects';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

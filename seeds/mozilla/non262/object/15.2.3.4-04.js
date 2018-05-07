@@ -9,7 +9,7 @@
 var BUGNUMBER = 518663;
 var summary = 'Object.getOwnPropertyNames: regular expression objects';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

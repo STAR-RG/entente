@@ -5,7 +5,7 @@
 var BUGNUMBER = 613492;
 var summary = "ES5 15.1.2.3 parseFloat(string)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(parseFloat("Infinity"), Infinity);
 assertEq(parseFloat("+Infinity"), Infinity);

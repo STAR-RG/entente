@@ -9,7 +9,7 @@ var summary =
   "Assigning to a function expression's name within that function should " +
   "throw a TypeError in strict mode code";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

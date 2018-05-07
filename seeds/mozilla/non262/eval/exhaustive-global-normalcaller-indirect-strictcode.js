@@ -5,7 +5,7 @@
 var BUGNUMBER = 514568;
 var summary = "eval in all its myriad flavors";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -6,7 +6,7 @@ var gTestfile = 'parse-arguments.js';
 var BUGNUMBER = 653847;
 var summary = "JSON.parse handling of omitted arguments";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

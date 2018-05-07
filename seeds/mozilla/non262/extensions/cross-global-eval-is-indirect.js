@@ -10,7 +10,7 @@ var summary =
   '|var eval = otherWindow.eval; eval(...)| should behave like indirectly ' +
   'calling that eval from a script in that other window';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -8,7 +8,7 @@ var BUGNUMBER = 514563;
 var summary = "arguments.caller and arguments.callee are poison pills in ES5, " +
               "later changed in ES2017 to only poison pill arguments.callee.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

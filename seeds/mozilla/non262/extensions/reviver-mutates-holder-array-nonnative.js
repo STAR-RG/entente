@@ -9,7 +9,7 @@
 var BUGNUMBER = 901380;
 var summary = "Behavior when JSON.parse walks over a non-native object";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

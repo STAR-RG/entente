@@ -7,7 +7,7 @@ var BUGNUMBER = 512266;
 var summary =
   "JSON.stringify of \\b\\f\\n\\r\\t should use one-character escapes, not hex";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

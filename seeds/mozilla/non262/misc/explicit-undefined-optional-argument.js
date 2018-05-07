@@ -6,7 +6,7 @@ var summary =
   'Properly handle explicitly-undefined optional arguments to a bunch of ' +
   'functions';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 //-----------------------------------------------------------------------------
 

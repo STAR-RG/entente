@@ -8,7 +8,7 @@ var summary =
   "String.prototype.match behavior with zero-length matches involving " +
   "forward lookahead";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

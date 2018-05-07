@@ -10,7 +10,7 @@ var gTestfile = 'preventExtensions-idempotent.js';
 var BUGNUMBER = 599459;
 var summary = 'Object.preventExtensions should be idempotent';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

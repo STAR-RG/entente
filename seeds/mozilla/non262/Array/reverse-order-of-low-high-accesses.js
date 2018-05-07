@@ -9,7 +9,7 @@ var summary =
   "[].reverse should swap elements low to high using accesses to low " +
   "elements, then accesses to high elements";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

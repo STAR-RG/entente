@@ -8,7 +8,7 @@ var summary =
   "String.prototype.match should throw when called with a global RegExp " +
   "whose .lastIndex is non-writable";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

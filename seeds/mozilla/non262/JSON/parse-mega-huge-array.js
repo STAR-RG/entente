@@ -6,7 +6,7 @@ var gTestfile = 'parse-mega-huge-array.js';
 var BUGNUMBER = 667527;
 var summary = "JSON.parse should parse arrays of essentially unlimited size";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

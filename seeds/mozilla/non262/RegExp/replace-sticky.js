@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "String.prototype.replace should use and update lastIndex if sticky flag is set";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var input = "abcdeabcdeabcdefghij";
 var re = new RegExp("abcde", "y");

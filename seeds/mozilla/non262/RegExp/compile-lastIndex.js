@@ -9,7 +9,7 @@ var summary =
   ".lastIndex, then throw, when provided a RegExp whose .lastIndex has been " +
   "made non-writable";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

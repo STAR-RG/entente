@@ -12,7 +12,7 @@ var summary =
   "Misplaced directives (e.g. 'use strict') should trigger warnings if they " +
   "contradict the actually-used semantics";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

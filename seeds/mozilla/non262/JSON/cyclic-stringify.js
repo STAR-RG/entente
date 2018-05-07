@@ -7,7 +7,7 @@ var summary =
   "ES5: Properly detect cycles in JSON.stringify (throw TypeError, check for " +
   "cycles rather than imprecisely rely on recursion limits)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

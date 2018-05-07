@@ -1,7 +1,7 @@
 var BUGNUMBER = 924672;
 var summary = 'Method Definitions'
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Function definitions.
 function syntaxError (script) {

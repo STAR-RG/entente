@@ -10,7 +10,7 @@ var BUGNUMBER = 721322;
 var summary =
   'f.arguments must trigger an arguments object in non-strict mode functions';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

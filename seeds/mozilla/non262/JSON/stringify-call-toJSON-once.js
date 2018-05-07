@@ -6,7 +6,7 @@ var gTestfile = 'stringify-call-toJSON-once.js';
 var BUGNUMBER = 584909;
 var summary = "Stringification of Boolean/String/Number objects";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

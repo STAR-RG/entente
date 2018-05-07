@@ -2,7 +2,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async functions semantics";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 async function empty() {
 }

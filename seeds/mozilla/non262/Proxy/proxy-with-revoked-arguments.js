@@ -1,7 +1,7 @@
 var BUGNUMBER = 1151149;
 var summary = "Proxy constructor should throw if either the target or handler is a revoked proxy.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var p = new Proxy({}, {});
 

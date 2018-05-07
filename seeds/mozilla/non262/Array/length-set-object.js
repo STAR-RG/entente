@@ -9,7 +9,7 @@
 var BUGNUMBER = 657298;
 var summary = 'Various quirks of setting array length properties to objects';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

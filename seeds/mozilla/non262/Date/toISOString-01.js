@@ -5,7 +5,7 @@
 var BUGNUMBER = 730831;
 var summary = 'Date.prototype.toISOString returns an invalid ISO-8601 string';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function iso(t) {
   return new Date(t).toISOString();

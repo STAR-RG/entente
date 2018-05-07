@@ -1,7 +1,7 @@
 var BUGNUMBER = 1120169;
 var summary = "Implement RegExp.prototype.source";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(RegExp.prototype.source, "(?:)");
 assertEq(/foo/.source, "foo");

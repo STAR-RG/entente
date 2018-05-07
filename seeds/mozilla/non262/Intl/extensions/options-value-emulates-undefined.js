@@ -8,7 +8,7 @@ var summary =
   "Use of an object that emulates |undefined| as the sole option must " +
   "preclude imputing default values";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

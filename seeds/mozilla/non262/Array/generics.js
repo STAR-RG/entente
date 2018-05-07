@@ -1,7 +1,7 @@
 var BUGNUMBER = 1263558;
 var summary = "Self-host all Array generics.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var arr, arrLike, tmp, f;
 

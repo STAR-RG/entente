@@ -5,7 +5,7 @@
 
 var BUGNUMBER = 1079188;
 var summary = "Coerce the argument passed to Object.getOwnPropertyDescriptor using ToObject";
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertThrowsInstanceOf(() => Object.getOwnPropertyDescriptor(), TypeError);
 assertThrowsInstanceOf(() => Object.getOwnPropertyDescriptor(undefined), TypeError);

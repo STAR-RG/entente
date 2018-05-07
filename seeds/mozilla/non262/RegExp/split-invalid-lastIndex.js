@@ -1,7 +1,7 @@
 var BUGNUMBER = 1263851;
 var summary = "RegExp.prototype[@@split] should handle if lastIndex is out of bound.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var myRegExp = {
     get constructor() {

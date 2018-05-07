@@ -9,7 +9,7 @@ var summary =
   "The [[Prototype]] of an object whose prototype chain contains an array " +
   "isn't that array's [[Prototype]]";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

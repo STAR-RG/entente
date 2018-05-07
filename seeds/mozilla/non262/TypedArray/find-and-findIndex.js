@@ -5,7 +5,7 @@
 
 var BUGNUMBER = 1078975;
 var summary = "Implement %TypedArray%.prototype.{find, findIndex}";
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 const methods = ["find", "findIndex"];
 

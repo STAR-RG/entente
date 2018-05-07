@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 var BUGNUMBER = 575535;
 var summary = 'Function.prototype.call';
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@
 var BUGNUMBER = 822041;
 var summary = "Live generators should not cache Gecko Profiler state";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function* gen() {
   var x = yield turnoff();

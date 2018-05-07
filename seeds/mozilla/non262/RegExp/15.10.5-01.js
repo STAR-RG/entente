@@ -6,7 +6,7 @@
 var BUGNUMBER = 614603;
 var summary = "RegExp.length";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -3,7 +3,7 @@
 var BUGNUMBER = 1331009;
 var summary = "Newline is allowed between await and operand";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var expr = async function foo() {
     return await

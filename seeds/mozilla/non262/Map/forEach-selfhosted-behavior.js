@@ -7,7 +7,7 @@
 var BUGNUMBER = 987243;
 var summary = "Don't use .call(...) in the self-hosted Map.prototype.forEach";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

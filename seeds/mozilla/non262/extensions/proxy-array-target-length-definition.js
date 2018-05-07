@@ -9,7 +9,7 @@ var summary =
   "Redefining an array's |length| property when redefining the |length| " +
   "property on a proxy with an array as target";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

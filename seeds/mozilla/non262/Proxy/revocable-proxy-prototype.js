@@ -7,7 +7,7 @@ var gTestfile = 'revocable-proxy-prototype.js';
 var BUGNUMBER = 1052139;
 var summary = "Accessing a revocable proxy's [[Prototype]] shouldn't crash";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *
