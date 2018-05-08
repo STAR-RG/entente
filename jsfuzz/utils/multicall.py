@@ -1,7 +1,6 @@
 import shlex, os, hashlib, ntpath, logging
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
 from tempfile import mkstemp
-
 from jsfuzz.utils import constants
 from jsfuzz.fuzzer import radamsa_fuzzer
 from jsfuzz.utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
@@ -405,16 +404,16 @@ class Results:
             return
         
         self.jsc_outerr = results['jsc']
-        res.stack_traces['jsc'] = results['jsc']
+        self.stack_traces['jsc'] = results['jsc']
 
         self.v8_outerr = results['v8']
-        res.stack_traces['v8'] = results['v8']
+        self.stack_traces['v8'] = results['v8']
 
         self.chakra_outerr = results['chakra']
-        res.stack_traces['chakra'] = results['chakra']
+        self.stack_traces['chakra'] = results['chakra']
 
         self.spiderm_outerr = results['spidermonkey']
-        res.stack_traces['spidermonkey'] = results['spidermonkey']
+        self.stack_traces['spidermonkey'] = results['spidermonkey']
 
 if __name__ == "__main__":
     # example
