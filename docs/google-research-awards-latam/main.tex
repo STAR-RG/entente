@@ -108,7 +108,23 @@
 \end{center}
 \vspace{-1ex}
 
-\vspace{1ex} \textbf{Related Work.}~\Fix{...}~\cite{maddox-2015-acmqueue}
+\vspace{1ex} \textbf{Related Work.}
+~According Maddox \cite{maddox-2015-acmqueue}, is very complex to testing 
+distributed system that have multiple components due lack of configurations, 
+data-flow between nodes and asynchronous behaviour. (wip)
+
+Fuzzing is a very common technique used in software engineering for
+generate code mutations from existing test sample to improve the black-box testing method.
+In Yang et al. \cite{yang-2011-finding}, it was designed the 
+CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
+based on C language to generate invalid entries and found bugs in several C compilers.
+Similar fuzzers involving grammar and rules are found in Holler et al. \cite{holler-2012-fuzzing} 
+that exposes the LangFuzz to generate entries based in code fragments 
+(language grammar, sample code, test suite) and the tool Mozilla 
+Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
+that implements a fuzzer based on JavaScript language to improve the 
+testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
+\Fix{...}
 
 
 \section{Design}
