@@ -30,10 +30,10 @@
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkblue}{rgb}{0,0,0.5}
 %% macros
-\newcommand{\splat}{SPLat}
 \newcommand{\ie}{i.e.}
 \newcommand{\eg}{e.g.}
 \newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
+\newcommand{\Mar}[1]{\textbf{[[}{\color{blue} #1}\textbf{]]}}
 \newcommand{\Comment}[1]{}
 
 %% \setlength{\oddsidemargin}{0.25in}
@@ -92,33 +92,64 @@
 ...
 \end{abstract}
 
+\section{Problem Space}
 
-\section{Problem}
+JavaScript is one of the most popular programming languages of
+today~\cite{business-insider,stackify}. Although the languagre is used
+in several application domains, its niche is front-end and back-end
+web development\Comment{, supported several frameworks and runtimes
+  (\eg{}, Express.js and Node.js)}.
 
-\Fix{...}
+Demands for new features occur in JavaScript as in other popular
+programming languages. Recently, the JavaScript specification went
+through a more severe change, called by the name ECMAScript6
+(ES6)~\cite{es6-features}. Compliance with the new standard is
+important for every engine implementation (\eg{}, Google's
+V8\Fix{cite}, Mozilla's SpiderMonkey\Fix{cite}, and Microsoft's
+Chakra\Fix{cite}) because of
+portability~\cite{kangax}.
 
-\vspace{-1ex}
+%\vspace{-1ex}
 \begin{center}
 \fbox{
   \begin{minipage}{11.75cm}
-    \centering
-    \textit{...}
+    \centering \textit{The goal of this project is to find bugs in
+      implementations of JavaScript engines by leveraging the diversity
+      across implementations.}
   \end{minipage}
 }
 \end{center}
-\vspace{-1ex}
+%\vspace{-1ex}
 
-\vspace{1ex} \textbf{Related Work.}
-~According Maddox \cite{maddox-2015-acmqueue}, is very complex to testing 
-distributed system that have multiple components due lack of configurations, 
-data-flow between nodes and asynchronous behaviour. (wip)
+Changes in the language specification often demand sensible changes in
+implementations that can result in regressions. Several of these
+regression have been reported, some of which were reported by our team
+(confirmed by engine developers) using a prototype of our solution
+(see Section~\ref{sec:results}).
 
-Fuzzing is a very common technique used in software engineering for
-generate code mutations from existing test sample to improve the black-box testing method.
-In Yang et al. \cite{yang-2011-finding}, it was designed the 
-CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
-based on C language to generate invalid entries and found bugs in several C compilers.
-Similar fuzzers involving grammar and rules are found in Holler et al. \cite{holler-2012-fuzzing} 
+\section{Design Space}
+
+Fuzzing is a popular technique to generate new test inputs from
+existing inputs\Fix{cite} with the typical goal of finding
+crashes. Several fuzzing methods have been proposed in the past,
+varying with respect to how new inputs are generated (\eg{},
+mutation\Fix{cite}, grammar\Fix{cite}, and random\Fix{cite}) and
+whether or not coverage information is taken into account in the
+fuzzing process.\Fix{elaborate...}
+
+
+\section{Related Work}
+
+\Mar{rule of thumb: explain the
+  contribution/novelty, then results achieved, and then how it relates
+with our proposal.}
+\Mar{this is not clear$\rightarrow$}Yang et al. \cite{yang-2011-finding} proposed CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
+of C programs to generate invalid entries\Fix{the goal of a
+  fuzzer is to generate valid inputs/entries. this is strange} and
+find bugs in several C compilers\Fix{it is strange that you don't mention differential
+  testing, which is central in CSmith, and the use of LLVM and GCC as
+  oracles.}.\Mar{this is just listing fuzzers. don't do this. try to
+  follow rule of thumb above.}Similar fuzzers involving grammar and rules are found in Holler et al. \cite{holler-2012-fuzzing} 
 that exposes the LangFuzz to generate entries based in code fragments 
 (language grammar, sample code, test suite) and the tool Mozilla 
 Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
@@ -127,13 +158,11 @@ testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
 \Fix{...}
 
 
-\section{Design}
-
-...
 
 \vspace{1ex}\noindent\textbf{Input/Output.}~...
 
 \section{Current Results}
+\label{sec:results}
 
 \Fix{list/describe/explain some of the bugs we found here}
 
