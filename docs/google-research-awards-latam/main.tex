@@ -95,47 +95,56 @@
 \section{Problem Space}
 
 JavaScript is one of the most popular programming languages of
-today~\cite{business-insider,stackify}. Although the languagre is used
-in several application domains, its niche is front-end and back-end
-web development\Comment{, supported several frameworks and runtimes
-  (\eg{}, Express.js and Node.js)}.
+today~\cite{business-insider,stackify}. Its niche is front-end and
+back-end web development\Comment{, supported several frameworks and
+  runtimes (\eg{}, Express.js and Node.js)}, although the languagre
+has been used in other contexts.
 
-Demands for new features occur in JavaScript as in other popular
-programming languages. Recently, the JavaScript specification went
-through a more severe change, called by the name ECMAScript6
-(ES6)~\cite{es6-features}. Compliance with the new standard is
+Recently, the JavaScript specification went through a bigger change
+compared to prior releases\footnote{Called by the name of ECMAScript6
+  (ES6)~\cite{es6-features}}. This is natural as requests for new
+features are common in popular programming languages. Because of
+portability~\cite{kangax}, compliance with the new standard is
 important for every engine implementation (\eg{}, Google's
 V8\Fix{cite}, Mozilla's SpiderMonkey\Fix{cite}, and Microsoft's
-Chakra\Fix{cite}) because of
-portability~\cite{kangax}.
+Chakra\Fix{cite}).
 
 %\vspace{-1ex}
 \begin{center}
 \fbox{
   \begin{minipage}{11.75cm}
     \centering \textit{The goal of this project is to find bugs in
-      implementations of JavaScript engines by leveraging the diversity
+      implementations of JavaScript engines by leveraging diversity
       across implementations.}
   \end{minipage}
 }
 \end{center}
 %\vspace{-1ex}
 
-Changes in the language specification often demand sensible changes in
-implementations that can result in regressions. Several of these
-regression have been reported, some of which were reported by our team
-(confirmed by engine developers) using a prototype of our solution
-(see Section~\ref{sec:results}).
+As in any piece of software, changes in the specification often demand
+sensible changes in implementations that could lead to regressions. In
+fact, several of these regressions have been reported, some of which
+were reported by our team (confirmed by engine developers; see
+Section~\ref{sec:results}) using a prototype of our solution (see
+Section~\ref{sec:design}).
 
 \section{Design Space}
+\label{sec:design}
 
 Fuzzing is a popular technique to generate new test inputs from
 existing inputs\Fix{cite} with the typical goal of finding
 crashes. Several fuzzing methods have been proposed in the past,
 varying with respect to how new inputs are generated (\eg{},
-mutation\Fix{cite}, grammar\Fix{cite}, and random\Fix{cite}) and
-whether or not coverage information is taken into account in the
-fuzzing process.\Fix{elaborate...}
+mutation-based\Fix{cite}, grammar-based\Fix{cite}, and
+random-based\Fix{cite}) and whether or not coverage information is
+taken into account in the fuzzing process.\Fix{elaborate...}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[trim=0 350 200 0,clip,width=0.5\textwidth]{google-awards-workflow}
+  \label{fig:workflow}
+  \caption{Workflow of Infrastructure.}
+\end{figure}
 
 
 \section{Related Work}
