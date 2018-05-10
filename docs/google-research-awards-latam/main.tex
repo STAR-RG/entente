@@ -94,20 +94,34 @@
 
 \section{Problem Space}
 
-JavaScript is one of the most popular programming languages of
+JavaScript (JS) is one of the most popular programming languages of
 today~\cite{business-insider,stackify}. Its niche is front-end and
 back-end web development\Comment{, supported several frameworks and
-  runtimes (\eg{}, Express.js and Node.js)}, although the languagre
-has been used in other contexts.
+  runtimes (\eg{}, Express.js and Node.js)}. 
 
-Recently, the JavaScript specification went through a bigger change
-compared to prior releases\footnote{Called by the name of ECMAScript6
-  (ES6)~\cite{es6-features}}. This is natural as requests for new
-features are common in popular programming languages. Because of
-portability~\cite{kangax}, compliance with the new standard is
-important for every engine implementation (\eg{}, Google's
-V8\Fix{cite}, Mozilla's SpiderMonkey\Fix{cite}, and Microsoft's
-Chakra\Fix{cite}).
+Engine implementations (\eg{}, Google's V8\Fix{cite}, Mozilla's
+SpiderMonkey\Fix{cite}, and Microsoft's Chakra\Fix{cite}) need to
+follow the constant changes in the language
+specification~\cite{kangax}. In fact, recently, the JavaScript
+specification went through a bigger change compared to prior
+releases\footnote{Called by the name of ECMAScript6
+  (ES6)~\cite{es6-features}}. As in any piece of software, changes in
+the specification often demand sensible changes in implementations
+that could lead to errors, including regressions. In fact, bugs in JS
+implementations are often reported by the general public, some of
+which were reported by our team.
+
+%% (confirmed by engine developers; see
+%% Section~\ref{sec:results}) using a prototype of our solution (see
+%% Section~\ref{sec:design}).
+
+The lack of executable specifications that could be used as oracles is
+an important obstacle for test generation--it prevents detection of
+errors which are not explicit, like a crash.  The novelty of our
+approach is the use of multiple engine implementations to assess input
+validity and output correctness. \emph{Differential testing}\Fix{cite}
+has been applied in a variety of contexts\Fix{cite cite}, but it has
+not been used to find functional bugs in JS engines.
 
 %\vspace{-1ex}
 \begin{center}
@@ -121,13 +135,6 @@ Chakra\Fix{cite}).
 \end{center}
 %\vspace{-1ex}
 
-As in any piece of software, changes in the specification often demand
-sensible changes in implementations that could lead to regressions. In
-fact, several of these regressions have been reported, some of which
-were reported by our team (confirmed by engine developers; see
-Section~\ref{sec:results}) using a prototype of our solution (see
-Section~\ref{sec:design}).
-
 \section{Design Space}
 \label{sec:design}
 
@@ -137,7 +144,8 @@ crashes. Several fuzzing methods have been proposed in the past,
 varying with respect to how new inputs are generated (\eg{},
 mutation-based\Fix{cite}, grammar-based\Fix{cite}, and
 random-based\Fix{cite}) and whether or not coverage information is
-taken into account in the fuzzing process.\Fix{elaborate...}
+taken into account in the fuzzing process.
+
 
 \begin{figure}[htbp]
   \centering
