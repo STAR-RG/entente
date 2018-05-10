@@ -1,3 +1,30 @@
+======
+BUG #14 (NEW)
+
+Date reported: May 10, 2018
+
+Type: Test failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5128
+
+Original:
+./jsfuzz/seeds/JerryJS/regression/for-parse.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_regression_for-parse.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra should throw an Exception when we try to ran a "for" without a statement.
+======
 BUG #13 (NEW)
 
 Date reported: May 02, 2018
