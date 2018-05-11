@@ -1,0 +1,53 @@
+\lstdefinelanguage{JavaScript}{
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  sensitive=true
+}
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.4}
+        \centering
+        \scriptsize
+        \lstset{
+            language=JavaScript,
+            keywords={function, return},
+            escapeinside={@}{@},
+            numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+            basicstyle=\ttfamily\scriptsize, boxpos=c,
+            numberstyle=\tiny,
+            linewidth=6cm
+        }
+\begin{lstlisting} 
+var a = {
+    valueOf: function () {
+-    return ""
++    return "\x00"
+    }
+}
+assert(+a === 0)
+\end{lstlisting}
+        \normalsize
+        \caption{
+            \label{fig:bug-chakra}Fuzzed file shows an unexpected behaviour on ChakraCore
+        }        
+    \end{subfigure}
+    \begin{subfigure}[b]{0.4}
+\begin{lstlisting}[basicstyle=\ttfamily]
+Priority: HIGH
+Pattern:
+-----JavaScriptCore
+Error: Test failed
+-----Chakra
+-----SpiderMonkey
+Error: Test failed
+-----v8
+Error: Test failed
+\end{lstlisting}
+\caption{\label{fig:pattern}\Fix{JSFuzz} output log}
+\end{subfigure}
+\end{figure}
+  
