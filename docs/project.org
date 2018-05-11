@@ -1,0 +1,42 @@
+* Problems
+** How to store information about partial executions?
+ - avoid starting from scratch every time
+ - important for mutation-based fuzzers
+
+** How to output valid js from esprima's AST?
+ - use an external generator
+
+** DONE why does esprima.parse raises an error when executed from an interactive prompt?
+ - TypeError: %b requires bytes, or an object that implements __bytes__, not 'str'
+ - maybe it is a bug on objects.__repr__? https://stackoverflow.com/questions/1436703/difference-between-str-and-repr-in-python 
+ - yep, see this pull request: https://github.com/Kronuz/esprima-python/pull/7/files
+   Apply the patch to your local copy and everything should work fine
+
+** TODO Implementation-specific behaviour in tests
+*** TODO mozilla suite
+**** General
+ - list of skipped/ignored tests for v8: https://chromium.googlesource.com/v8/v8.git/+/6.8.40/test/mozilla/mozilla.status
+ - maybe add a blacklist based on the file above?
+**** uneval
+ - mozilla-specific function, mostly used for assertion messages
+ - solution: make the uneval function fail fast (throw an error)
+
+
+* Ideas
+** TODO Filter implementation-specific behavior before calling fuzzers
+*** behavior list
+ - [X] drainMicroTasks in JavascriptCore
+   - https://groups.google.com/forum/#!topic/v8-users/fCkwCNTsN8M
+   - https://github.com/WebKit/webkit/blob/master/Source/JavaScriptCore/jsc.cpp#L1895
+ - [ ] v8 runtime functions (%foo())
+   - Needs a flag at startup anyway; maybe we don't need to worry. https://stackoverflow.com/a/14863721
+   - haven't seen it yet at the current suite
+   
+** TODO Blacklist uninteresting failures from short logs
+*** List 
+? 
+
+* Smaller tasks
+* Snippets
+** dumping esprima's AST
+ - python -m esprima your-js-file

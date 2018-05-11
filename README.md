@@ -3,7 +3,6 @@
 - Linux
 - Python3.6
 - [tox virtualenv](https://tox.readthedocs.io/en/latest/)
-- [eslint](https://eslint.org/)
 
 ### Installation
 1. Clone this repository
@@ -12,3 +11,10 @@
 
 ### Running
 - Open a terminal window, go to project folder and run: `$> tox`
+
+
+### Docker
+1. Download and extract the js engines (see js_engines/README files)
+2. Build the image (`docker build -t jsfuzz .`)
+3. Run the container (`docker run -t --rm -v /path/to/jsfuzz/repo:/jsfuzz jsfuzz`
+4. See the output + logs
