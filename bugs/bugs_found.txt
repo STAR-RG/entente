@@ -1,5 +1,5 @@
 ======
-BUG #14 (NEW)
+BUG #13 (NEW)
 
 Date reported: May 10, 2018
 
@@ -25,7 +25,7 @@ Error: Test failed
 Explanation:
 Chakra should throw an Exception when we try to ran a "for" without a statement.
 ======
-BUG #13 (NEW)
+BUG #12 (NEW)
 
 Date reported: May 02, 2018
 
@@ -54,7 +54,7 @@ Explanation:
 According to GetMethod (object, @@iterator) ES6 specification, if the iterator value is either "undefined" or "null", the method should return "undefined", but JSCore does not support this property as "null".
 
 ======
-BUG #12 (NEW)
+BUG #11 (NEW)
 
 Date reported: May 02, 2018
 
@@ -95,7 +95,7 @@ Explanation:
 According to ES6 specification, the Iterator of a TypedArray.keys() or an Array.keys() should return an object on this order {value: Integer, done: Boolean}.
 
 ======
-BUG #11 (CONFIRMED)
+BUG #10 (CONFIRMED)
 
 Date reported: April 30, 2018
 
@@ -135,7 +135,7 @@ Explanation:
   There is an inconsistency when a variable is declared twice as "var" and "let" inside the "with" scope. JScore and Chakra should raise a SyntaxError.
 
 ======
-BUG #10 (NEW)
+BUG #9 (NEW)
 
 Date reported: April 29, 2018
 
@@ -177,7 +177,7 @@ Actual results:
   Pass without failures
 
 ======
-BUG #9 (CONFIRMED)
+BUG #8 (CONFIRMED)
 
 Date reported: April 29, 2018
 
@@ -210,7 +210,7 @@ Actual result: TypeError: Assertion failed: got "function f() {return "fun-f";}"
 Expected result: pass without failures
 
 ======
-BUG #8 (CONFIRMED)
+BUG #7 (CONFIRMED)
 
 Date reported: April 29, 2018
 
@@ -241,7 +241,7 @@ Actual Result: TypeError: Assertion failed: got "function() {[native code]}", ex
 Expected Result: pass without failures
 
 ======
-BUG #7 (CONFIRMED/FIXED)
+BUG #6 (CONFIRMED/FIXED)
 
 Date reported: April 25, 2018
 
@@ -283,7 +283,7 @@ According to documentation, when we try to evaluate a
 invalid strings using Unary plus, the return should be NaN.
 
 ======
-BUG #6 (COMPATIBILITY)
+BUG #5 (CONFIRMED)
 
 Date reported: April 23, 2018
 
@@ -311,36 +311,6 @@ Explanation:
 
 When we try to fill an array with an object that contains a getter-only property we can't 
 set this object property. Chakra should raise a TypeError, but it does not do anything.
-
-======
-BUG #5 (REJECTED - expected behavior)
-
-Date reported: April 23, 2018
-
-Type: Should throw TypeError 
-
-URLs: https://github.com/Microsoft/ChakraCore/issues/5033
-
-Original:
-./jsfuzz/seeds/mozilla/non262/Array/length-truncate-nonconfigurable-sparse.js
-
-Fuzzed:
-./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Array_length-truncate-nonconfigurable-sparse.js
-
-Patch: None 
- 
-Pattern:
-
--------------JavaScriptCore
--------------Chakra
-Error: non-configurable property should trigger TypeError operty should trigger TypeError, got Error: didn't throw?!
--------------SpiderMonkey
--------------v8
-
-Explanation:
-
-When we try to fill an array with an object that contains a getter-only property we can't 
-set this object property. Chakra should raise a TypeError.
 
 ====== 
 BUG #4 (NEW)
