@@ -14,6 +14,7 @@
 \usepackage{lipsum}
 \usepackage{booktabs}
 \usepackage{tabularx}
+\usepackage{wrapfig}
 
 % ADD THE FOLLOWING COUPLE LINES INTO YOUR PREAMBLE
 \let\OLDthebibliography\thebibliography
@@ -94,39 +95,32 @@
 
 \section{Problem Space}
 
-JavaScript (JS) is one of the most popular programming languages of
-today~\cite{business-insider,stackify}. Its niche is front-end and
-back-end web development\Comment{, supported several frameworks and
-  runtimes (\eg{}, Express.js and Node.js)}. 
+%% Its niche is front-end and
+%% back-end web development\Comment{, supported several frameworks and
+%%   runtimes (\eg{}, Express.js and Node.js)}.
 
-Engine implementations (\eg{}, Google's V8\Fix{cite}, Mozilla's
-SpiderMonkey\Fix{cite}, and Microsoft's Chakra\Fix{cite}) need to
-follow the constant changes in the language
-specification~\cite{kangax}. Recently, the JavaScript
-specification went through a bigger change compared to prior
-releases\footnote{Called by the name of ECMAScript6
-  (ES6)~\cite{es6-features}}. As in any piece of software, changes in
-the specification often demand sensible changes in implementations
-that could lead to errors, including regressions. In fact, bugs in JS
-implementations are often reported by the general public, some of
-which were reported by our team.
-
+%% In fact, bugs in JS implementations are often reported by
+%% the general public, some of which were reported by our team.
 %% (confirmed by engine developers; see
 %% Section~\ref{sec:results}) using a prototype of our solution (see
 %% Section~\ref{sec:design}).
 
-The lack of executable specifications that could be used as oracles is
-an important obstacle for test generation--it prevents detection of
-errors which are not explicit, like a crash.  The novelty of our
-approach is the use of multiple engine implementations to assess input
-validity and output correctness. \emph{Differential testing}\Fix{cite}
-has been applied in a variety of contexts\Fix{cite cite}, but it has
-not been used to find functional bugs in JS engines.
+JavaScript (JS) is one of the most popular programming languages of
+today~\cite{business-insider,stackify} largely because of its
+widespread use on the web. As common in software, the JS specification
+changes regularly\footnote{Recently, the specification went through a
+  bigger change compared to prior releases, called by the name of
+  ECMAScript6 (ES6)~\cite{es6-features}} to accomodate pressing
+demands~\cite{kangax} and these changes often entail sensible changes
+in engine implementations that could lead to errors, including
+regressions.  Test generation can help reduce the cost of testing, but
+the lack of executable specifications is an important obstacle for
+finding functional errors.  
 
 %\vspace{-1ex}
 \begin{center}
 \fbox{
-  \begin{minipage}{11.75cm}
+  \begin{minipage}{13.5cm}
     \centering \textit{The goal of this project is to find bugs in
       implementations of JavaScript engines by leveraging diversity
       across implementations.}
@@ -135,25 +129,36 @@ not been used to find functional bugs in JS engines.
 \end{center}
 %\vspace{-1ex}
 
+The novelty of our proposal is the use of multiple engine
+implementations (\eg{}, Google's V8, Microsoft's Chakra, etc.) to
+assess input validity and to check output
+correctness. \emph{Differential testing}\Fix{cite} has been applied in
+a variety of contexts\Fix{cite cite}, but it has not been used to find
+functional bugs in JS engines.
+
 \section{Design Space}
 \label{sec:design}
 
+\begin{wrapfigure}[13]{r}[0pt]{0.45\textwidth}
+\vspace{-5ex}
+%\begin{figure}[htbp]
+  \centering
+  \includegraphics[trim=0 350 200 0,clip,width=0.5\textwidth]{google-awards-workflow}
+  \label{fig:workflow}
+  \caption{Workflow of Infrastructure.}
+%\end{figure}
+\end{wrapfigure}
 Fuzzing is a popular technique to generate new test inputs from
 existing inputs\Fix{cite} with the typical goal of finding
 crashes. Several fuzzing methods have been proposed in the past,
 varying with respect to how new inputs are generated (\eg{},
 mutation-based\Fix{cite}, grammar-based\Fix{cite}, and
 random-based\Fix{cite}) and whether or not coverage information is
-taken into account in the fuzzing process.
-
-
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[trim=0 350 200 0,clip,width=0.5\textwidth]{google-awards-workflow}
-  \label{fig:workflow}
-  \caption{Workflow of Infrastructure.}
-\end{figure}
-
+taken into account in the fuzzing process. Figure~\ref{fig:workflow}
+shows a generic pipeline of a fuzzer. JS files are provided as seeded
+inputs to bootstrap the process. These files can originate from the
+test suites of the engine codebases or from the bug reports in their
+issue trackers. \Fix{elaborate}
 
 \section{Related Work}
 
@@ -173,10 +178,6 @@ Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
 that implements a fuzzer based on JavaScript language to improve the 
 testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
 \Fix{...}
-
-
-
-\vspace{1ex}\noindent\textbf{Input/Output.}~...
 
 \section{Current Results}
 \label{sec:results}
