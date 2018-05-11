@@ -36,8 +36,8 @@
 \newcommand{\ie}{i.e.}
 \newcommand{\eg}{e.g.}
 \newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
-\newcommand{\Mar}[1]{\textbf{[[}{\color{blue} #1}\textbf{]]}}
-\newcommand{\MAB}[1]{\textbf{[[}{\color{darkgreen} #1}\textbf{]]}}
+\newcommand{\Mar}[1]{\textbf{[[Marcelo:~}{\color{blue} #1}\textbf{]]}}
+\newcommand{\MAB}[1]{\textbf{[[Mateus:~}{\color{darkgreen} #1}\textbf{]]}}
 \newcommand{\Comment}[1]{}
 
 %% \setlength{\oddsidemargin}{0.25in}
@@ -114,11 +114,11 @@ widespread use on the web. As common in software, the JS specification
 changes regularly\footnote{Recently, the specification went through a
   bigger change compared to prior releases, called by the name of
   ECMAScript6 (ES6)~\cite{es6-features}} to accomodate pressing
-demands~\cite{kangax} and these changes often entail sensible changes
-in engine implementations that could lead to errors, including
-regressions.  Test generation can help reduce the cost of testing, but
-the lack of executable specifications is an important obstacle for
-finding functional errors.  
+demands of the community and these changes often entail sensible
+changes in engine implementations~\cite{kangax} that could lead to
+errors, including regressions.  Test generation can help reduce the
+cost of testing, but the lack of executable specifications is an
+important obstacle for finding functional errors.
 
 %\vspace{-1ex}
 \begin{center}
@@ -134,23 +134,30 @@ finding functional errors.
 
 The novelty of our proposal is the use of multiple engine
 implementations (\eg{}, Google's V8, Microsoft's Chakra, etc.) to
-assess input validity and to check output
-correctness. \emph{Differential testing}\Fix{cite} has been applied in
-a variety of contexts\Fix{cite cite}, but it has not been used to find
-functional bugs in JS engines \MAB{That's wrong - it has been used at
-  least two times: \cite{patra2016learning} and in jsfunfuzz (with a
-  smaller scope - most likely regressions)}
+assess input validity and to check output correctness. Differential
+testing\cite{McKeeman98differentialtesting} has been applied in a
+variety of
+contexts\cite{Brumley-etal-ss07,Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17},
+but it has not been thoroughly explored to find functional bugs in JS
+engines. Patra and Pradel ran a small study, published in 2016 as
+a tech report~\cite{patra2016learning}, where they found
+discrepancies\Fix{confirm if they reported bugs}. The Mozilla
+jsfunfuzz\Fix{elaborate a bit}.\Mar{Mateus, check if this sounds
+  correct/fair to you and try to elaborate the jsfunfuzz part.}
+
+\Fix{finalize}
+
 
 \section{Design Space}
 \label{sec:design}
 
-\begin{wrapfigure}[13]{r}[0pt]{0.45\textwidth}
+\begin{wrapfigure}[12]{r}[0pt]{0.45\textwidth}
 \vspace{-5ex}
 %\begin{figure}[htbp]
   \centering
-  \includegraphics[trim=0 350 200 0,clip,width=0.5\textwidth]{google-awards-workflow}
+  \includegraphics[trim=20 350 200 0,clip,width=0.45\textwidth]{google-awards-workflow}
   \label{fig:workflow}
-  \caption{Workflow of Infrastructure.}
+  \caption{Fuzzing Infrastructure.}
 %\end{figure}
 \end{wrapfigure}
 Fuzzing is a popular technique to generate new test inputs from
@@ -160,31 +167,46 @@ varying with respect to how new inputs are generated (\eg{},
 mutation-based\Fix{cite}, grammar-based\Fix{cite}, and
 random-based\Fix{cite}) and whether or not coverage information is
 taken into account in the fuzzing process. Figure~\ref{fig:workflow}
-shows a generic pipeline of a fuzzer. JS files are provided as seeded
-inputs to bootstrap the process. These files can originate from the
-test suites of the engine codebases or from the bug reports in their
-issue trackers. \Fix{elaborate}
+shows a generic pipeline of a fuzzer, instantiated to our problem. In
+our case, JS files are provided as seeded inputs to bootstrap the
+process. These files can originate from the test suites of the engine
+codebases or from the bug reports in their issue trackers. The fuzzing
+infrastrucutre selects randomly one of the inputs to fuzz with a given
+tool, say the black-box fuzzer Radamsa~\cite{radamsa}. Each fuzzing
+iteration produces a new file. For grammar-agnostic fuzzers, like
+Radamsa, the infrastructure needs to detect and discard syntactically
+invalid inputs. Semantically invalid inputs are detected dynamically
+or with linters. Once the input is found to be valid, the
+infrastructure invokes the oracle to check correctness. In case either
+all engines consider the test output consistent (\ie{}, all pass or
+all fail), the infrastructure discards the given input. Otherwise, it
+considers that input as potentially fault-revaling and
+interesting. Currently, we classify those alarms in two groups: HI and
+LO. The HI group includes those warnings that manifest execution
+errors spawned directly by the test (or its close neighborhood)
+whereas the LO group includes the rest of the warnings. We found
+empirically that \Fix{XX\%} of the warnings analyzed in the HI group
+were confirmed (see Section~\ref{sec:results})
 
-\section{Related Work}
-
-\Mar{rule of thumb: explain the
-  contribution/novelty, then results achieved, and then how it relates
-with our proposal.}
-\Mar{this is not clear$\rightarrow$}Yang et al. \cite{yang-2011-finding} proposed CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
-of C programs to generate invalid entries\Fix{the goal of a
-   fuzzer is to generate valid inputs/entries. this is strange}\MAB{the
-  goal is to generate valid programs without undefined behavior to
-  facilitate differential testing} and
-find bugs in several C compilers\Fix{it is strange that you don't mention differential
-  testing, which is central in CSmith, and the use of LLVM and GCC as
-  oracles.}.\Mar{this is just listing fuzzers. don't do this. try to
-  follow rule of thumb above.}Similar fuzzers involving grammar and rules are found in Holler et al. \cite{holler-2012-fuzzing} 
-that exposes the LangFuzz to generate entries based in code fragments 
-(language grammar, sample code, test suite) and the tool Mozilla 
-Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
-that implements a fuzzer based on JavaScript language to improve the 
-testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
-\Fix{...}
+%% \section{Related Work}
+%% \Mar{rule of thumb: explain the
+%%   contribution/novelty, then results achieved, and then how it relates
+%% with our proposal.}
+%% \Mar{this is not clear$\rightarrow$}Yang et al. \cite{yang-2011-finding} proposed CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
+%% of C programs to generate invalid entries\Fix{the goal of a
+%%    fuzzer is to generate valid inputs/entries. this is strange}\MAB{the
+%%   goal is to generate valid programs without undefined behavior to
+%%   facilitate differential testing} and
+%% find bugs in several C compilers\Fix{it is strange that you don't mention differential
+%%   testing, which is central in CSmith, and the use of LLVM and GCC as
+%%   oracles.}.\Mar{this is just listing fuzzers. don't do this. try to
+%%   follow rule of thumb above.}Similar fuzzers involving grammar and rules are found in Holler et al. \cite{holler-2012-fuzzing} 
+%% that exposes the LangFuzz to generate entries based in code fragments 
+%% (language grammar, sample code, test suite) and the tool Mozilla 
+%% Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
+%% that implements a fuzzer based on JavaScript language to improve the 
+%% testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
+%% \Fix{...}
 
 \MAB{Unfortunately the low-hanging fruit for this project was already
   picked \cite{patra2016learning}, so I believe you should focus on
