@@ -15,6 +15,8 @@
 \usepackage{booktabs}
 \usepackage{tabularx}
 \usepackage{wrapfig}
+\usepackage{microtype}
+\usepackage{hyperref}
 
 % ADD THE FOLLOWING COUPLE LINES INTO YOUR PREAMBLE
 \let\OLDthebibliography\thebibliography
@@ -35,6 +37,7 @@
 \newcommand{\eg}{e.g.}
 \newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
 \newcommand{\Mar}[1]{\textbf{[[}{\color{blue} #1}\textbf{]]}}
+\newcommand{\MAB}[1]{\textbf{[[}{\color{darkgreen} #1}\textbf{]]}}
 \newcommand{\Comment}[1]{}
 
 %% \setlength{\oddsidemargin}{0.25in}
@@ -134,7 +137,9 @@ implementations (\eg{}, Google's V8, Microsoft's Chakra, etc.) to
 assess input validity and to check output
 correctness. \emph{Differential testing}\Fix{cite} has been applied in
 a variety of contexts\Fix{cite cite}, but it has not been used to find
-functional bugs in JS engines.
+functional bugs in JS engines \MAB{That's wrong - it has been used at
+  least two times: \cite{patra2016learning} and in jsfunfuzz (with a
+  smaller scope - most likely regressions)}
 
 \section{Design Space}
 \label{sec:design}
@@ -167,7 +172,9 @@ issue trackers. \Fix{elaborate}
 with our proposal.}
 \Mar{this is not clear$\rightarrow$}Yang et al. \cite{yang-2011-finding} proposed CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
 of C programs to generate invalid entries\Fix{the goal of a
-  fuzzer is to generate valid inputs/entries. this is strange} and
+   fuzzer is to generate valid inputs/entries. this is strange}\MAB{the
+  goal is to generate valid programs without undefined behavior to
+  facilitate differential testing} and
 find bugs in several C compilers\Fix{it is strange that you don't mention differential
   testing, which is central in CSmith, and the use of LLVM and GCC as
   oracles.}.\Mar{this is just listing fuzzers. don't do this. try to
@@ -178,6 +185,17 @@ Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
 that implements a fuzzer based on JavaScript language to improve the 
 testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
 \Fix{...}
+
+\MAB{Unfortunately the low-hanging fruit for this project was already
+  picked \cite{patra2016learning}, so I believe you should focus on
+  taming implementation-specific behavior and/or the testing
+  infrastructure (i.e. how to organize all those fuzzers and make them
+  work together). You might also want to mention the possibility of
+  fuzzing
+  \href{https://developer.mozilla.org/en-US/docs/WebAssembly}{WebAssembly}
+  directly: LLVM already has (some) support for targeting WebAssembly,
+  which means that we'll be able to run, in the near future, pretty
+  much every language with an LLVM-backed compiler in a browser.}
 
 \section{Current Results}
 \label{sec:results}
