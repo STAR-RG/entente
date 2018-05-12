@@ -3,6 +3,7 @@
 
 % \usepackage{natbib}
 % \setlength{\bibsep}{0pt plus 0.3ex}
+\usepackage[margin=1cm]{caption}
 \usepackage{titlesec}
 \titlespacing*{\section}{0pt}{0.3\baselineskip}{0.3\baselineskip}
 %,nohead,nofoot
@@ -31,6 +32,7 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{url}
 \usepackage{color}
+\usepackage{xcolor}
 \definecolor{darkred}{rgb}{0.5,0,0}
 \definecolor{darkgreen}{rgb}{0,0.5,0}
 \definecolor{darkblue}{rgb}{0,0,0.5}
@@ -43,6 +45,7 @@
 \newcommand{\MAB}[1]{\textbf{[[}{\color{darkgreen} #1}\textbf{]]}}
 \newcommand{\Igor}[1]{\textbf{[[}{\color{darkaquamarine} #1}\textbf{]]}}
 \newcommand{\Comment}[1]{}
+\newcommand{\CodeIn}[1]{{\small\texttt{#1}}}
 
 %% \setlength{\oddsidemargin}{0.25in}
 %% \setlength{\textwidth}{6.5in}
@@ -120,9 +123,9 @@ changes regularly\footnote{Recently, the specification went through a
   ECMAScript6 (ES6)~\cite{es6-features}} to accommodate the pressing
 demands of the community and these changes often entail sensible
 changes in engine implementations~\cite{kangax} that could lead to
-errors, including regressions.  Test generation can help reduce the
+errors, including regressions. Automated test generation can help reduce the
 cost of testing, but the lack of executable specifications is an
-important obstacle for finding functional errors.
+important obstacle. In particular, it is an obstable to find functional errors.
 
 %\vspace{-1ex}
 \begin{center}
@@ -153,14 +156,12 @@ waste/cost) and output correctness (as to reduce false positives).
 \section{Design Space}
 \label{sec:design}
 
-\begin{wrapfigure}[12]{r}[0pt]{0.45\textwidth}
-\vspace{-5ex}
-%\begin{figure}[htbp]
+\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
+  \vspace{-5ex}
   \centering
   \includegraphics[trim=20 350 200 0,clip,width=0.45\textwidth]{google-awards-workflow}
-  \label{fig:workflow}
-  \caption{Fuzzing Infrastructure.}
-%\end{figure}
+  \caption{\label{fig:workflow}Fuzzing Infrastructure.}
+  \vspace{-5ex}  
 \end{wrapfigure}
 Fuzzing is a popular technique to generate new test inputs from
 existing inputs~\cite{fuzz-testing-history} with the typical goal of
@@ -171,7 +172,8 @@ grammar-based~\cite{grammarinator,jsfunfuzz}, and
 random-based~\cite{radamsa}) and whether or not coverage information
 is taken into account in the fuzzing
 process. Figure~\ref{fig:workflow} shows a generic pipeline of a
-fuzzer, instantiated to our problem. In our case, JS files are
+fuzzer, instantiated to our problem. Arrows indicate data flow; lines
+with no arrow denote encapsulation. In our case, JS files are
 provided as seeded inputs to bootstrap the process. These files can
 originate from the test suites of the engine codebases or from the bug
 reports in their issue trackers. The fuzzing infrastructure selects
@@ -181,11 +183,11 @@ produces a new file. For grammar-agnostic fuzzers, like Radamsa, the
 infrastructure needs to detect and discard syntactically invalid
 inputs. Semantically invalid inputs are detected dynamically or with
 linters. Once the input is found to be valid, the infrastructure
-invokes the oracle to check correctness. In case either all engines
+invokes the oracle to check correctness. In case all engines
 consider the test output consistent (\ie{}, all pass or all fail), the
-infrastructure discards the given input. Otherwise, it considers that
+infrastructure discards the corresponding input. Otherwise, it considers that
 input as potentially fault-revealing and interesting. Currently, we
-classify those alarms in two groups: HI and LO. The HI group includes
+classify alarms in two groups: HI and LO. The HI group includes
 those warnings that manifest execution errors spawned directly by the
 test (or its close neighborhood) whereas the LO group includes the
 rest of the warnings. We found empirically that \Fix{XX\%} of the
@@ -215,11 +217,28 @@ Section~\ref{sec:results})
 \section{Current Results}
 \label{sec:results}
 
+Although there are many features yet to implement in our
+infrastructure, the basic workflow described in
+Section~\ref{sec:design} is functional. This section shows preliminary
+results providing some evidence that finding bugs in runtime engines is
+promising. Table~\ref{tab:bugs} shows the list of bugs we reported on
+issue trackers of different engines in the period of a month. For
+example, bug \# 6 was manifested by the JS code \CodeIn{var a =
+  \{valueOf:~function()\{return ``\textbackslash{}x00''\}\} assert(+a
+  === 0)\}}\footnote{This is a Lithium-minimized~\cite{lithium}
+  version of the fuzzed code.}. In the original version of this code the \CodeIn{valueOf} function returned
+the empty string, whose integer representation according to the spec
+should be zero\Fix{check part of spec to link}. The modified
+code returns a string representation of an invalid hexadecimal
+value. The engines should not be able to evaluate that string at
+the assertion expression\Fix{explain why}. MS Chakra, however, is able to parse it
+returning a null object. In addition, the test passes as it converts
+null to zero. 
+
 \newcommand{\checkm}{Y}
 \newcommand{\crossmark}{N}
-
 \begin{wraptable}[16]{tr}[0pt]{0.5\textwidth}
-  \vspace{-6ex}
+  \vspace{-4ex}
   \scriptsize
   \centering
   \caption{List of bug reports issued by our team from April 12 to May
@@ -257,18 +276,11 @@ Section~\ref{sec:results})
    \bottomrule     
   \end{tabular}
 \end{wraptable}
-
-
-Although there are many features yet to implement in our
-infrastructure, the basic workflow described in
-Section~\ref{sec:design} is already functional. Table~\ref{tab:bugs}
-shows the list of bugs we reported on issue trackers of different
-engines in the period of a month. So far, six of the bugs we reported
+So far, six of the bugs we reported
 were confirmed, two of which were fixed. One bug report we
 submitted was rejected on the basis that the offending JS file
 manifested an expected incompatibility across engine
 implementations.
-
 Note from the table that, with the exception of one case, all bug
 reports still waiting for confirmation are associated with the
 JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
@@ -321,12 +333,15 @@ The list below shows future tasks for this project.
   often produce complex but invalid inputs) for fuzzing.
 
 \item Explore different strategies to reduce the number of false
-  positives. For example, mining issue trackers for similar bug
-  reports.
+  positives as to facilitate the inspection process. For example,
+  mining issue trackers for similar bug reports is a candidate alternative.
 
 \item Use our infrastructure to find bugs on
   WebAssembly~\cite{webassembly}, a new binary format already
-  supported by major browsers. 
+  supported by major browsers. In principle, our infrastructure is
+  agnostic to the runtime engine used. We are eager to explore other
+  sources of bugs, especially in very new engines. 
+
 \end{itemize}  
 
 %% \MAB{Unfortunately the low-hanging fruit for this project was already
