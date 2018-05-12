@@ -11,6 +11,7 @@
 %\usepackage[margin=1in,includeheadfoot]{geometry}
 \usepackage{url}
 \usepackage{cite}
+\usepackage{multirow}
 \usepackage{lipsum}
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -96,7 +97,7 @@
 
 \vspace{-2ex}
 \begin{abstract}
-...
+  \Fix{...}
 \end{abstract}
 
 \section{Problem Space}
@@ -116,7 +117,7 @@ today~\cite{business-insider,stackify} largely because of its
 widespread use on the web. As common in software, the JS specification
 changes regularly\footnote{Recently, the specification went through a
   bigger change compared to prior releases, called by the name of
-  ECMAScript6 (ES6)~\cite{es6-features}} to accomodate pressing
+  ECMAScript6 (ES6)~\cite{es6-features}} to accommodate the pressing
 demands of the community and these changes often entail sensible
 changes in engine implementations~\cite{kangax} that could lead to
 errors, including regressions.  Test generation can help reduce the
@@ -135,20 +136,18 @@ important obstacle for finding functional errors.
 \end{center}
 %\vspace{-1ex}
 
-The novelty of our proposal is the use of multiple engine
-implementations (\eg{}, Google's V8, Microsoft's Chakra, etc.) to
-assess input validity and to check output correctness. Differential
-testing\cite{McKeeman98differentialtesting} has been applied in a
-variety of
+Differential testing\cite{McKeeman98differentialtesting} has been
+applied in a variety of
 contexts\cite{Brumley-etal-ss07,Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17},
 but it has not been thoroughly explored to find functional bugs in JS
-engines. Patra and Pradel ran a small study, published in 2016 as
-a tech report~\cite{patra2016learning}, where they found
-discrepancies\Fix{confirm if they reported bugs}. The Mozilla
-jsfunfuzz\Fix{elaborate a bit}.\Mar{Mateus, check if this sounds
-  correct/fair to you and try to elaborate the jsfunfuzz part.}
-
-\Fix{finalize}
+engines. The closest work was done by Patra and
+Pradel~\cite{patra2016learning}, where they evaluated their proposed
+language-agnostic fuzzer to find cross-browser HTML+JS
+discrepancies. This project aims to provide an adaptable
+infrastructure for differential testing of runtime engines, such as
+the JS engine or WebAssembly's. The sensible parts of the
+infrastructure are the checks of input validity (as to reduce
+waste/cost) and output correctness (as to reduce false positives).
 
 
 \section{Design Space}
@@ -164,32 +163,34 @@ jsfunfuzz\Fix{elaborate a bit}.\Mar{Mateus, check if this sounds
 %\end{figure}
 \end{wrapfigure}
 Fuzzing is a popular technique to generate new test inputs from
-existing inputs\Fix{cite} with the typical goal of finding
-crashes. Several fuzzing methods have been proposed in the past,
-varying with respect to how new inputs are generated (\eg{},
-mutation-based\Fix{cite}, grammar-based\Fix{cite}, and
-random-based\Fix{cite}) and whether or not coverage information is
-taken into account in the fuzzing process. Figure~\ref{fig:workflow}
-shows a generic pipeline of a fuzzer, instantiated to our problem. In
-our case, JS files are provided as seeded inputs to bootstrap the
-process. These files can originate from the test suites of the engine
-codebases or from the bug reports in their issue trackers. The fuzzing
-infrastrucutre selects randomly one of the inputs to fuzz with a given
-tool, say the black-box fuzzer Radamsa~\cite{radamsa}. Each fuzzing
-iteration produces a new file. For grammar-agnostic fuzzers, like
-Radamsa, the infrastructure needs to detect and discard syntactically
-invalid inputs. Semantically invalid inputs are detected dynamically
-or with linters. Once the input is found to be valid, the
-infrastructure invokes the oracle to check correctness. In case either
-all engines consider the test output consistent (\ie{}, all pass or
-all fail), the infrastructure discards the given input. Otherwise, it
-considers that input as potentially fault-revaling and
-interesting. Currently, we classify those alarms in two groups: HI and
-LO. The HI group includes those warnings that manifest execution
-errors spawned directly by the test (or its close neighborhood)
-whereas the LO group includes the rest of the warnings. We found
-empirically that \Fix{XX\%} of the warnings analyzed in the HI group
-were confirmed (see Section~\ref{sec:results})
+existing inputs~\cite{fuzz-testing-history} with the typical goal of
+finding crashes. Several fuzzing methods have been proposed in the
+past, varying with respect to how new inputs are generated (\eg{},
+coverage-based~\cite{afl,honggfuzz},
+grammar-based~\cite{grammarinator,jsfunfuzz}, and
+random-based~\cite{radamsa}) and whether or not coverage information
+is taken into account in the fuzzing
+process. Figure~\ref{fig:workflow} shows a generic pipeline of a
+fuzzer, instantiated to our problem. In our case, JS files are
+provided as seeded inputs to bootstrap the process. These files can
+originate from the test suites of the engine codebases or from the bug
+reports in their issue trackers. The fuzzing infrastructure selects
+randomly one of the inputs to fuzz with a given tool, say the
+black-box fuzzer Radamsa~\cite{radamsa}. Each fuzzing iteration
+produces a new file. For grammar-agnostic fuzzers, like Radamsa, the
+infrastructure needs to detect and discard syntactically invalid
+inputs. Semantically invalid inputs are detected dynamically or with
+linters. Once the input is found to be valid, the infrastructure
+invokes the oracle to check correctness. In case either all engines
+consider the test output consistent (\ie{}, all pass or all fail), the
+infrastructure discards the given input. Otherwise, it considers that
+input as potentially fault-revealing and interesting. Currently, we
+classify those alarms in two groups: HI and LO. The HI group includes
+those warnings that manifest execution errors spawned directly by the
+test (or its close neighborhood) whereas the LO group includes the
+rest of the warnings. We found empirically that \Fix{XX\%} of the
+warnings analyzed in the HI group were confirmed (see
+Section~\ref{sec:results})
 
 %% \section{Related Work}
 %% \Mar{rule of thumb: explain the
@@ -211,46 +212,133 @@ were confirmed (see Section~\ref{sec:results})
 %% testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
 %% \Fix{...}
 
-\MAB{Unfortunately the low-hanging fruit for this project was already
-  picked \cite{patra2016learning}, so I believe you should focus on
-  taming implementation-specific behavior and/or the testing
-  infrastructure (i.e. how to organize all those fuzzers and make them
-  work together). You might also want to mention the possibility of
-  fuzzing
-  \href{https://developer.mozilla.org/en-US/docs/WebAssembly}{WebAssembly}
-  directly: LLVM already has (some) support for targeting WebAssembly,
-  which means that we'll be able to run, in the near future, pretty
-  much every language with an LLVM-backed compiler in a browser.}
-
 \section{Current Results}
 \label{sec:results}
 
-\Igor{
-  Nowadays, we used six javascript engines suites with approximately 2K of javascript files 
-  that could be fuzzed. Currently, using our infrastructure we reported \Fix{13}
-  bugs so far. The Table~\ref{tab:bugs} exposes all bugs found and reported by our team.
-  At this moment, the status are: \Fix{6} issues was tagged as new, \Fix{4} was confirmed
-  and \Fix{2} of them was merged and closed. Unfortunally, \Fix{1} of them was rejected
-  due the engine does not follows the specification and dozens of others warnings already been
-  reported previously.
+\newcommand{\checkm}{Y}
+\newcommand{\crossmark}{N}
 
-  The Figure~\ref{fig:bug-chakra} exposes a fuzzed file generated by radamsa in our environment, it was observed
-  that the fuzzer replace the empty string at Line 3 and replace it with the hexadecimal value "\textbackslash x00".
-  The bug manifests in Line 7, according to ES6 specification on Mozilla dev website
-  \footnote{Unary Plus \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators}},
-  the unary plus converts the variable to an integer if it is a valid value
-  otherwise returns NaN. The Figure~\ref{fig:pattern} shows the log output from our infrastructure,
-  see that we set automatically this testcase as high priority because it is a failure by assertion.
-  The differential test across all engines, shows a unexpected behaviour of ChakraCore engine that passes in this test case.
-  It was necessary a manual inspection to check if it is a real bug, we observed that 
-  ChakraCore indentify "\textbackslash x00" as a null terminator instead of invalid parser object making
-  the unary plus converts null to 0.
-}
-\Fix{nao estou conseguindo mesclar dois listings com subfigure, por favor alguem tenta fazer isso por mim.}
-\Igor{Coloco outro caso de bug reportado?}
+\begin{wraptable}[16]{tr}[0pt]{0.5\textwidth}
+  \vspace{-6ex}
+  \scriptsize
+  \centering
+  \caption{List of bug reports issued by our team from April 12 to May
+    10, 2018.}
+  \label{tab:bugs}
+  \begin{tabular}{cccccc}
+    \toprule
+    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}   \\
+    \midrule    
+    1  & 4/12 & \checkm & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}      \\ 
+    2  & 4/12 & \checkm & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}      \\
+    3  & 4/14 & \checkm & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}        \\
+    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}        \\
+    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}       \\
+    6  & 4/25 & \checkm & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}      \\
+    7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
+    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}
+    \\
+    \midrule
+    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} \\
+                        & \checkm &                       &
+    JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}    \\
+    \midrule    
+    9  & 4/29 & \checkm & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}    \\
+    \midrule    
+    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{\checkm} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} \\    
+                        &                        &        &
+    JavascriptCore & New &
+    \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}
+    \\
+    \midrule    
+    11 & 5/02 & \checkm & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}\\
+    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}\\
+    13 & 5/10 & \crossmark & Chakra & New & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} \\
+   \bottomrule     
+  \end{tabular}
+\end{wraptable}
 
-\input{bugs}
-\input{bug_table}
+
+Although there are many features yet to implement in our
+infrastructure, the basic workflow described in
+Section~\ref{sec:design} is already functional. Table~\ref{tab:bugs}
+shows the list of bugs we reported on issue trackers of different
+engines in the period of a month. So far, six of the bugs we reported
+were confirmed, two of which were fixed. One bug report we
+submitted was rejected on the basis that the offending JS file
+manifested an expected incompatibility across engine
+implementations.
+
+Note from the table that, with the exception of one case, all bug
+reports still waiting for confirmation are associated with the
+JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
+showed that the triage process is very slow for that engine. As of
+now, we did not find any bug on SpiderMonkey and V8. Finally, it is
+worth noting that seven of the 13 JS files that manifested
+discrepancies were produced with fuzzing (column ``Fuzz''). This
+emphasizes the importance of continuously collecting test suites from
+multiple sources; today, we use test suites from six different open
+source engines, including a total of \Fix{38.9K} test files.
+
+%% \Igor{
+%%   Nowadays, we used six javascript engines suites with approximately 2K of javascript files 
+%%   that could be fuzzed. Currently, using our infrastructure we reported \Fix{13}
+%%   bugs so far. The Table~\ref{tab:bugs} exposes all bugs found and reported by our team.
+%%   At this moment, the status are: \Fix{6} issues was tagged as new, \Fix{4} was confirmed
+%%   and \Fix{2} of them was merged and closed. Unfortunally, \Fix{1} of them was rejected
+%%   due the engine does not follows the specification and dozens of others warnings already been
+%%   reported previously.
+
+%%   The Figure~\ref{fig:bug-chakra} exposes a fuzzed file generated by radamsa in our environment, it was observed
+%%   that the fuzzer replace the empty string at Line 3 and replace it with the hexadecimal value "\textbackslash x00".
+%%   The bug manifests in Line 7, according to ES6 specification on Mozilla dev website
+%%   \footnote{Unary Plus \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators}},
+%%   the unary plus converts the variable to an integer if it is a valid value
+%%   otherwise returns NaN. The Figure~\ref{fig:pattern} shows the log output from our infrastructure,
+%%   see that we set automatically this testcase as high priority because it is a failure by assertion.
+%%   The differential test across all engines, shows a unexpected behaviour of ChakraCore engine that passes in this test case.
+%%   It was necessary a manual inspection to check if it is a real bug, we observed that 
+%%   ChakraCore indentify "\textbackslash x00" as a null terminator instead of invalid parser object making
+%%   the unary plus converts null to 0.
+%% }
+%% \Fix{nao estou conseguindo mesclar dois listings com subfigure, por favor alguem tenta fazer isso por mim.}
+%% \Igor{Coloco outro caso de bug reportado?}
+
+%\input{bugs}
+%\input{bug_table}
+
+\section{Future Steps}
+
+The list below shows future tasks for this project.
+
+\begin{itemize}
+\item Integrate different fuzzers, including AFL~\cite{afl},
+  HonggFuzz~\cite{honggfuzz}, jsfunfuzz~\cite{jsfunfuzz}, and
+  Grammarinator~\cite{grammarinator}.
+
+\item Find balance between generational strategies (, which often
+  produce valid but simple inputs) and mutational strategies (, which
+  often produce complex but invalid inputs) for fuzzing.
+
+\item Explore different strategies to reduce the number of false
+  positives. For example, mining issue trackers for similar bug
+  reports.
+
+\item Use our infrastructure to find bugs on
+  WebAssembly~\cite{webassembly}, a new binary format already
+  supported by major browsers. 
+\end{itemize}  
+
+%% \MAB{Unfortunately the low-hanging fruit for this project was already
+%%   picked \cite{patra2016learning}, so I believe you should focus on
+%%   taming implementation-specific behavior and/or the testing
+%%   infrastructure (i.e. how to organize all those fuzzers and make them
+%%   work together). You might also want to mention the possibility of
+%%   fuzzing
+%%   \href{https://developer.mozilla.org/en-US/docs/WebAssembly}{WebAssembly}
+%%   directly: LLVM already has (some) support for targeting WebAssembly,
+%%   which means that we'll be able to run, in the near future, pretty
+%%   much every language with an LLVM-backed compiler in a browser.}
 
 \section{Data Policy}
 
@@ -266,3 +354,8 @@ under an open source license.
 
 \end{document}
 
+
+%%  LocalWords:  d'Amorim oes Jornalista Fernandes JS Patra Pradel
+%%  LocalWords:  fuzzer runtime WebAssembly's codebases Radamsa JSC
+%%  LocalWords:  fuzzers linters JavaScriptCore SpiderMonkey AFL
+%%  LocalWords:  HonggFuzz jsfunfuzz Grammarinator WebAssembly
