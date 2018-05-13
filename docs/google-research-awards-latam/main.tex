@@ -100,7 +100,12 @@
 
 \vspace{-2ex}
 \begin{abstract}
-  \Fix{...}
+JavaScript (JS) is a fundamental programming language for the
+web. Finding bugs in JavaScript engines is an important
+problem. Differential testing of JS engines is a promising approach to
+that end. This proposal describes our testing infrastructure, current
+results, and some upcoming features to improve the bug-finding
+process.
 \end{abstract}
 
 \section{Problem Space}
@@ -141,7 +146,8 @@ important obstacle. In particular, it is an obstable to find functional errors.
 
 Differential testing\cite{McKeeman98differentialtesting} has been
 applied in a variety of
-contexts\cite{Brumley-etal-ss07,Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17},
+contexts\cite{Brumley-etal-ss07,Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}
+to mitigate with the lack of oracles problem,
 but it has not been thoroughly explored to find functional bugs in JS
 engines. The closest work was done by Patra and
 Pradel~\cite{patra2016learning}, where they evaluated their proposed
@@ -172,7 +178,7 @@ grammar-based~\cite{grammarinator,jsfunfuzz}, and
 random-based~\cite{radamsa}) and whether or not coverage information
 is taken into account in the fuzzing
 process. Figure~\ref{fig:workflow} shows a generic pipeline of a
-fuzzer, instantiated to our problem. Arrows indicate data flow; lines
+fuzzer infrastructure, instantiated to our problem. Arrows indicate data flow; lines
 with no arrow denote encapsulation. In our case, JS files are
 provided as seeded inputs to bootstrap the process. These files can
 originate from the test suites of the engine codebases or from the bug
@@ -180,9 +186,10 @@ reports in their issue trackers. The fuzzing infrastructure selects
 randomly one of the inputs to fuzz with a given tool, say the
 black-box fuzzer Radamsa~\cite{radamsa}. Each fuzzing iteration
 produces a new file. For grammar-agnostic fuzzers, like Radamsa, the
-infrastructure needs to detect and discard syntactically invalid
-inputs. Semantically invalid inputs are detected dynamically or with
-linters. Once the input is found to be valid, the infrastructure
+infrastructure can discard syntactically invalid
+inputs using an external parser for the input language; semantically
+invalid inputs can be prevented with with linters. Once the input is
+found to be likely valid, the infrastructure
 invokes the oracle to check correctness. In case all engines
 consider the test output consistent (\ie{}, all pass or all fail), the
 infrastructure discards the corresponding input. Otherwise, it considers that
@@ -191,8 +198,7 @@ classify alarms in two groups: HI and LO. The HI group includes
 those warnings that manifest execution errors spawned directly by the
 test (or its close neighborhood) whereas the LO group includes the
 rest of the warnings. We found empirically that \Fix{XX\%} of the
-warnings analyzed in the HI group were confirmed (see
-Section~\ref{sec:results})
+warnings analyzed in the HI group were confirmed.
 
 %% \section{Related Work}
 %% \Mar{rule of thumb: explain the
@@ -217,28 +223,29 @@ Section~\ref{sec:results})
 \section{Current Results}
 \label{sec:results}
 
-Although there are many features yet to implement in our
-infrastructure, the basic workflow described in
-Section~\ref{sec:design} is functional. This section shows preliminary
-results providing some evidence that finding bugs in runtime engines is
+%% Although there are many features yet to implement in our
+%% infrastructure, 
+
+The basic workflow described in Section~\ref{sec:design} is functional. This section shows preliminary
+results obtained with our infrastructure providing some evidence that finding bugs in runtime engines is
 promising. Table~\ref{tab:bugs} shows the list of bugs we reported on
 issue trackers of different engines in the period of a month. For
 example, bug \# 6 was manifested by the JS code \CodeIn{var a =
   \{valueOf:~function()\{return ``\textbackslash{}x00''\}\} assert(+a
   === 0)\}}\footnote{This is a Lithium-minimized~\cite{lithium}
-  version of the fuzzed code.}. In the original version of this code the \CodeIn{valueOf} function returned
-the empty string, whose integer representation according to the spec
-should be zero\Fix{check part of spec to link}. The modified
+  version of the fuzzed code.}. In the original version of this code, the \CodeIn{valueOf} function returned
+the empty string, whose integer representation, according to the spec,
+should be zero\Fix{igor, please look for the part of spec and add link}. The modified
 code returns a string representation of an invalid hexadecimal
-value. The engines should not be able to evaluate that string at
-the assertion expression\Fix{explain why}. MS Chakra, however, is able to parse it
-returning a null object. In addition, the test passes as it converts
-null to zero. 
-
+value\Fix{igor, how do we know this is invalid?}. As such, the engines
+are not expected to evaluate that string at the assertion expression;
+hence test execution is expected to fail. Chakra,
+however, is able to parse the string as a number. It returns a null
+object, which is then converted to zero, making the test to pass.
 \newcommand{\checkm}{Y}
 \newcommand{\crossmark}{N}
-\begin{wraptable}[16]{tr}[0pt]{0.5\textwidth}
-  \vspace{-4ex}
+\begin{wraptable}[20]{tr}[0pt]{0.5\textwidth}
+  \vspace{-2ex}
   \scriptsize
   \centering
   \caption{List of bug reports issued by our team from April 12 to May
@@ -276,6 +283,7 @@ null to zero.
    \bottomrule     
   \end{tabular}
 \end{wraptable}
+
 So far, six of the bugs we reported
 were confirmed, two of which were fixed. One bug report we
 submitted was rejected on the basis that the offending JS file
@@ -286,9 +294,10 @@ reports still waiting for confirmation are associated with the
 JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
 showed that the triage process is very slow for that engine. As of
 now, we did not find any bug on SpiderMonkey and V8. Finally, it is
-worth noting that seven of the 13 JS files that manifested
-discrepancies were produced with fuzzing (column ``Fuzz''). This
-emphasizes the importance of continuously collecting test suites from
+worth noting that six of the 13 JS files that manifested
+discrepancies were \emph{not} produced with fuzzing (column
+``Fuzz''). These are test files from suites of different engines. This
+observation emphasizes the importance of continuously collecting test suites from
 multiple sources; today, we use test suites from six different open
 source engines, including a total of \Fix{38.9K} test files.
 
