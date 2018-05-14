@@ -191,7 +191,21 @@ whereas the LO group includes the rest of the warnings. We found
 empirically that \Fix{XX\%} of the warnings analyzed in the HI group
 were confirmed (see Section~\ref{sec:results})
 
-%% \section{Related Work}
+\section{Related Work}
+% Differential testing with fuzzing can improve the quality of programs
+% Yang et al. \cite{yang-2011-finding}
+
+In Patra and Pradel \cite{patra2016learning} was described a new black-box fuzzer tool 
+that uses generative and probabilistic models to generate the entries. To evaluate the fuzzer,
+Patra and Pradel uses JavaScript and HTML documents to improve the javascript engines
+in Firefox and Chrome
+
+
+Hodovan and Kiss \cite{hodovan-fuzzinator} exposes the Fuzzinator\footnote{https://github.com/renatahodovan/fuzzinator}
+a random testing framework that uses distincts fuzzers to generate and ran test cases one-by-one in different
+program components. Fuzzinator was evaluated on JerryScript\footnote{http://jerryscript.net} 
+engine
+
 %% \Mar{rule of thumb: explain the
 %%   contribution/novelty, then results achieved, and then how it relates
 %% with our proposal.}
