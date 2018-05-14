@@ -200,20 +200,9 @@ test (or its close neighborhood) whereas the LO group includes the
 rest of the warnings. We found empirically that \Fix{XX\%} of the
 warnings analyzed in the HI group were confirmed.
 
-\section{Related Work}
+% \section{Related Work}
 % Differential testing with fuzzing can improve the quality of programs
 % Yang et al. \cite{yang-2011-finding}
-
-In Patra and Pradel \cite{patra2016learning} was described a new black-box fuzzer tool 
-that uses generative and probabilistic models to generate the entries. To evaluate the fuzzer,
-Patra and Pradel uses JavaScript and HTML documents to improve the javascript engines
-in Firefox and Chrome
-
-
-Hodovan and Kiss \cite{hodovan-fuzzinator} exposes the Fuzzinator\footnote{https://github.com/renatahodovan/fuzzinator}
-a random testing framework that uses distincts fuzzers to generate and ran test cases one-by-one in different
-program components. Fuzzinator was evaluated on JerryScript\footnote{http://jerryscript.net} 
-engine
 
 %% \Mar{rule of thumb: explain the
 %%   contribution/novelty, then results achieved, and then how it relates
@@ -247,15 +236,18 @@ issue trackers of different engines in the period of a month. For
 example, bug \# 6 was manifested by the JS code \CodeIn{var a =
   \{valueOf:~function()\{return ``\textbackslash{}x00''\}\} assert(+a
   === 0)\}}\footnote{This is a Lithium-minimized~\cite{lithium}
-  version of the fuzzed code.}. In the original version of this code, the \CodeIn{valueOf} function returned
-the empty string, whose integer representation, according to the spec,
-should be zero\Fix{igor, please look for the part of spec and add link}. The modified
+  version of the fuzzed code.}. In the original version of this code 
+  \Igor{this code is the original fuzzed code, not the minimized version. we can use just (+``\textbackslash{}x00''===0)}, 
+  the \CodeIn{valueOf} function returned
+the empty string, whose integer representation, according to the spec of Unary Plus\cite{unary-plus},
+should be zero. The modified
 code returns a string representation of an invalid hexadecimal
-value\Fix{igor, how do we know this is invalid?}. As such, the engines
+value\Fix{igor, how do we know this is invalid?}\Igor{0x00 = NULL terminator \url{http://www.asciitable.com}, but is not a "null" keyword (+null is equal 0)}. As such, the engines
 are not expected to evaluate that string at the assertion expression;
 hence test execution is expected to fail. Chakra,
 however, is able to parse the string as a number. It returns a null
-object, which is then converted to zero, making the test to pass.
+object, which is then converted to zero, making the test to pass. \Igor{according the technical explanation:\\
+the function String::toDouble should check the length, instead of null terminator. \url{https://github.com/Microsoft/ChakraCore/commit/98fbc297e2b2781bc4d6ed3ff360dba8d18c1eda}}
 \newcommand{\checkm}{Y}
 \newcommand{\crossmark}{N}
 \begin{wraptable}[20]{tr}[0pt]{0.5\textwidth}
