@@ -235,19 +235,21 @@ promising. Table~\ref{tab:bugs} shows the list of bugs we reported on
 issue trackers of different engines in the period of a month. For
 example, bug \# 6 was manifested by the JS code \CodeIn{var a =
   \{valueOf:~function()\{return ``\textbackslash{}x00''\}\} assert(+a
-  === 0)\}}\footnote{This is a Lithium-minimized~\cite{lithium}
-  version of the fuzzed code.}. In the original version of this code 
-  \Igor{this code is the original fuzzed code, not the minimized version. we can use just (+``\textbackslash{}x00''===0)}, 
-  the \CodeIn{valueOf} function returned
-the empty string, whose integer representation, according to the spec of Unary Plus\cite{unary-plus},
-should be zero. The modified
-code returns a string representation of an invalid hexadecimal
-value\Fix{igor, how do we know this is invalid?}\Igor{0x00 = NULL terminator \url{http://www.asciitable.com}, but is not a "null" keyword (+null is equal 0)}. As such, the engines
-are not expected to evaluate that string at the assertion expression;
-hence test execution is expected to fail. Chakra,
-however, is able to parse the string as a number. It returns a null
-object, which is then converted to zero, making the test to pass. \Igor{according the technical explanation:\\
-the function String::toDouble should check the length, instead of null terminator. \url{https://github.com/Microsoft/ChakraCore/commit/98fbc297e2b2781bc4d6ed3ff360dba8d18c1eda}}
+  === 0)\}}. 
+\Igor{
+  The \CodeIn{valueOf} function is a primitive value of
+  a String object and in the original version of this code,
+  the \CodeIn{valueOf} function returns an empty string.
+  The modified code returns a string representation of an embedded null terminator
+  value. 
+  The unary plus\cite{unary-plus} ``\CodeIn{+a}" in this case is equivalent to 
+  \CodeIn{String.ToNumber(a.valueOf())} that
+  converts a variable to a number, but if 
+  the value cannot be converted, the return should be the value NaN (Not a Number).
+  As such, the engines evaluate that unary plus as a NaN value 
+  at the assertion expression; hence test execution is expected to fail. 
+  Chakra, however, is able to parse the string as a number zero, making the test to pass.
+}
 \newcommand{\checkm}{Y}
 \newcommand{\crossmark}{N}
 \begin{wraptable}[20]{tr}[0pt]{0.5\textwidth}
