@@ -237,15 +237,14 @@ example, bug \# 6 was manifested by the JS code \CodeIn{var a =
   \{valueOf:~function()\{return ``\textbackslash{}x00''\}\} assert(+a
   === 0)\}}. 
 \Igor{
-  The \CodeIn{valueOf} function is a primitive value of
-  a String object and in the original version of this code,
+  The \CodeIn{valueOf} is an object property that returns the primitive value
+  of the specific object\cite{valueof} and in the original version of this code,
   the \CodeIn{valueOf} function returns an empty string.
   The modified code returns a string representation of an embedded null terminator
   value. 
-  The unary plus\cite{unary-plus} ``\CodeIn{+a}" in this case is equivalent to 
-  \CodeIn{String.ToNumber(a.valueOf())} that
-  converts a variable to a number, but if 
-  the value cannot be converted, the return should be the value NaN (Not a Number).
+  The unary plus ``\CodeIn{+a}" is equivalent to \CodeIn{String.ToNumber(a.valueOf())} 
+  that converts a variable to a number, but if the value cannot be converted, 
+  the return should be the value NaN (Not a Number) \cite{unary-plus}.
   As such, the engines evaluate that unary plus as a NaN value 
   at the assertion expression; hence test execution is expected to fail. 
   Chakra, however, is able to parse the string as a number zero, making the test to pass.
