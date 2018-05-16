@@ -1,7 +1,7 @@
 """
     This file check if project is configured
 """
-from subprocess import call, PIPE
+from subprocess import call, PIPE, check_output
 from jsfuzz.utils.constants import chakra, v8, javascriptcore, spidermonkey
 
 
@@ -17,10 +17,10 @@ def download_binaries():
 
 def is_engines_installed():
     try:
-        call([javascriptcore, '-h'], stdin=PIPE, stdout=PIPE)
-        call([chakra, '-v'], stdin=PIPE, stdout=PIPE)
-        call([v8, '-v'], stdin=PIPE, stdout=PIPE)
-        call([spidermonkey, '-v'], stdin=PIPE, stdout=PIPE)
+        check_output([javascriptcore, '--help'])
+        check_output([chakra, '--help'])
+        check_output([v8, '--help'])
+        check_output([spidermonkey, '--help'])
     except OSError:
         raise Exception(ERROR_MSG.format("Engines not found, check README.md and see the instructions"))
 
