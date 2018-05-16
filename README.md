@@ -3,6 +3,7 @@
 - Linux
 - Python3.6
 - [tox virtualenv](https://tox.readthedocs.io/en/latest/)
+- [Git LFS](https://git-lfs.github.com)
 
 ### Installation
 1. Clone this repository
