@@ -1,4 +1,85 @@
 ======
+BUG #14 (NEW)
+
+Date reported: May 17, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5182
+
+Original:
+./jsfuzz/seeds/v8.test.benchmarks.data/sunspider/string-validate-input.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_v8.test.benchmarks.data_sunspider_string-validate-input.js
+
+Patch:
+--- ./jsfuzz/seeds/v8.test.benchmarks.data/sunspider/string-validate-input.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_v8.test.benchmarks.data_sunspider_string-validate-input.js
+@@ -1,6 +1,6 @@
+ letters = new Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+-numbers = new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26);
+-colors  = new Array("FF","CC","99","66","33","00");
++numbers = new Array(1,398300,253,4,5,6,7,8,65545,10,11,12,13,14,15,0,17,18,19,20,21,22,23,24,25,26);
++colors  = new Array("FF","CC","0","66","33","00");
+ 
+ var endResult;
+ 
+@@ -15,7 +15,7 @@
+       (k%2)?email=username+"@mac.com":email=username+"(at)mac.com";
+ 
+       // validate the email address
+-      var pattern = /^[a-zA-Z0-9\-\._]+@[a-zA-Z0-9\-_]+(\.?[a-zA-Z0-9\-_]*)\.[a-zA-Z]{2,3}$/;
++      var pattern = /^[a-zA-Z0-9\-\._]+@[a-zA-Z0-9\-_]+(\.?[a-zA-Z0-9\-_]*)\.[a-zA-Z]{2,2147483648}$/;
+ 
+       if(pattern.test(email))
+       {
+@@ -25,6 +25,30 @@
+       else
+       {
+          r = email + " does NOT appear to be a valid email address.";
++         addResult(r);
++      }
++   }
++
++   // make up ZIP codes
++   for (var s=0;s<4000;s++)
++   {
++      var zipGood = true;
++      var zip = makeNumber(4);
++      (s%2)?zip=zip+"xyz":zip=zip.concat("7");
++
++      // validate the zip code
++      for (var i = 0; i < zip.length; i++) {
++          var ch = zip.charAt(i);
++          if (ch < "0" || ch > "9") {
++              zipGood = false;
++              r = zip + " contains letters.";
++              addResult(r);
++          }
++      }
++      if (zipGood && zip.length>5)
++      {
++         zipGood = false;
++         r = zip + " is longer than five characters.";
+          addResult(r);
+       }
+    }
+
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Syntax error in regular expression
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra does not instate a RegExp object with a pattern that have 
+a long number on quantifier prefix. V8, SpiderMonkey and JavaScriptCore
+can instantiate and validate the pattern, Chakra throw a SyntaxError.
+
+======
 BUG #13 (NEW)
 
 Date reported: May 10, 2018
