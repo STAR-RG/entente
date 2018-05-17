@@ -1,4 +1,33 @@
 ======
+BUG #15 (NEW)
+
+Date reported: May 17, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5187
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.microbenchmarks/string-prototype-split-observable-side-effects4.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.microbenchmarks_string-prototype-split-observable-side-effects4_14_.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Property access󠀡es do not match expectation
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+According to ES6 documentation, RegExp.prototype.exec property 
+can be writable and configurable. All engines can override the property,
+Chakra does not support the redeclaration.
+
+======
 BUG #14 (NEW)
 
 Date reported: May 17, 2018
