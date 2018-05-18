@@ -1,23 +1,22 @@
 """
     This file check if project is configured
 """
+import os
 from subprocess import call, PIPE, check_output
 from jsfuzz.utils.constants import chakra, v8, javascriptcore, spidermonkey
 
-
 ERROR_MSG = """\n########## ENVIRONMENT ERROR ##########\n Error: {}\n##########"""
 
-def download_binaries():
-    try:
-        call(['git', 'lfs', 'install'], stdin=PIPE, stdout=PIPE)
-        call(['git', 'lfs', 'pull'], stdin=PIPE, stdout=PIPE)
-        call(['git', 'lfs', 'fetch'], stdin=PIPE, stdout=PIPE)
-    except OSError:
-        raise Exception('The "git-lfs" is not installed. Please, check https://git-lfs.github.com to install.')
+tar_path = 'js_engines/bin.tar.gz'
+bin_output = 'js_engines/bin/'
+
+def update_engines():
+    check_output(['mkdir', '-p', bin_output]) # create folder if not exists
+    check_output(['tar', '-xvzf', tar_path, '-C', bin_output]) # extract binaries to js_engines/bin folder
 
 def is_engines_installed():
     try:
-        check_output([javascriptcore, '--help'])
+        call([javascriptcore, '--help'])
         check_output([chakra, '--help'])
         check_output([v8, '--help'])
         check_output([spidermonkey, '--help'])
@@ -34,6 +33,5 @@ def is_radamsa_installed():
             )
         )
 
-download_binaries()
 is_engines_installed()
 is_radamsa_installed()

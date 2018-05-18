@@ -191,7 +191,7 @@ def callJSEngine(cmd_line):
         # double check to get unexpected behaviour
         status, error = getstatusoutput(cmd_line)
         if error:
-            msg = '[CHECK_MANUALLY] {}'.format(error)
+            msg = 'Error: [CHECK_MANUALLY] {}'.format(error)
 
     return msg
 
@@ -202,7 +202,7 @@ def callJavaScriptCore(pathName, libs=[]):
     return callJSEngine(cmd_line)
 
 # seems chakra only supports a single source file as input
-def callChakra(path_name, libs=[]):
+def callChakra(path_name, libs=[], flags=['-ES6Experimental']):
     if libs and len(libs) > 0:
         fd, tmp_path = mkstemp(prefix="chakrafuzz", text=True)
         all_files = []
@@ -215,7 +215,7 @@ def callChakra(path_name, libs=[]):
                     outfile.write("\n\n")
         path_name = tmp_path
 
-    cmd_line = constants.chakra + " " + path_name
+    cmd_line = constants.chakra + " " + " ".join(flags) + " " + path_name
     return callJSEngine(cmd_line)
 
 def callSpiderMonkey(pathName, libs=[]):
