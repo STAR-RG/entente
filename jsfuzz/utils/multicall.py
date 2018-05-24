@@ -292,6 +292,21 @@ class Results:
                 ind = string.index('Fatal')
                 error_message = string[ind:]
                 break
+            
+            elif 'Exception:' in line and 'Error' not in string:
+                ind = line.index('Exception:')
+                error_message = line[ind:] if 'Exception:' in line[ind:] else line
+                break
+            
+            elif 'throw' in line and 'Error' not in string:
+                ind = line.index('throw')
+                error_message = string[ind:]
+                break
+            
+            elif 'uncaught' in line and 'Error' not in string:
+                ind = line.index('uncaught')
+                error_message = string[ind:]
+                break
 
         return error_message
 
