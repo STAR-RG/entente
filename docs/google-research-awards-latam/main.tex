@@ -236,19 +236,18 @@ issue trackers of different engines in the period of a month. For
 example, bug \# 6 was manifested by the JS code \CodeIn{var a =
   \{valueOf:~function()\{return ``\textbackslash{}x00''\}\} assert(+a
   === 0)\}}. 
-\Igor{
   The \CodeIn{valueOf} is an object property that returns the primitive value
   of the specific object\cite{valueof} and in the original version of this code,
   the \CodeIn{valueOf} function returns an empty string.
   The modified code returns a string representation of an embedded null terminator
   value. 
-  The unary plus ``\CodeIn{+a}" is equivalent to \CodeIn{String.ToNumber(a.valueOf())} 
-  that converts a variable to a number, but if the value cannot be converted, 
-  the return should be the value NaN (Not a Number) \cite{unary-plus}.
+  The unary plus ``\CodeIn{+a}" is equivalent to \CodeIn{Object.ToNumber(a.valueOf())} 
+  that converts a variable to a number, otherwise the return should be the 
+  value NaN (Not a Number) \cite{unary-plus}.
   As such, the engines evaluate that unary plus as a NaN value 
   at the assertion expression; hence test execution is expected to fail. 
   Chakra, however, is able to parse the string as a number zero, making the test to pass.
-}
+
 \newcommand{\checkm}{Y}
 \newcommand{\crossmark}{N}
 \begin{wraptable}[20]{tr}[0pt]{0.5\textwidth}
@@ -256,7 +255,7 @@ example, bug \# 6 was manifested by the JS code \CodeIn{var a =
   \scriptsize
   \centering
   \caption{List of bug reports issued by our team from April 12 to May
-    10, 2018.}
+    24, 2018.}
   \label{tab:bugs}
   \begin{tabular}{cccccc}
     \toprule
@@ -273,7 +272,7 @@ example, bug \# 6 was manifested by the JS code \CodeIn{var a =
     \\
     \midrule
     \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} \\
-                        & \checkm &                       &
+                        &  &                       &
     JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}    \\
     \midrule    
     9  & 4/29 & \checkm & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}    \\
@@ -286,12 +285,16 @@ example, bug \# 6 was manifested by the JS code \CodeIn{var a =
     \midrule    
     11 & 5/02 & \checkm & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}\\
     12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}\\
-    13 & 5/10 & \crossmark & Chakra & New & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} \\
+    13 & 5/10 & \checkm & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} \\
+    14 & 5/17 & \checkm & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} \\
+    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} \\
+    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} \\
+    17 & 5/24 & \checkm & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}\\
    \bottomrule     
   \end{tabular}
 \end{wraptable}
 
-So far, six of the bugs we reported
+So far, eight of the bugs we reported
 were confirmed, two of which were fixed. One bug report we
 submitted was rejected on the basis that the offending JS file
 manifested an expected incompatibility across engine
@@ -341,7 +344,7 @@ The list below shows future tasks for this project.
 
 \begin{itemize}
 \item Integrate different fuzzers, including AFL~\cite{afl},
-  HonggFuzz~\cite{honggfuzz}, jsfunfuzz~\cite{jsfunfuzz}, and
+  HonggFuzz~\cite{honggfuzz}, LibFuzzer~\cite{libfuzzer}, jsfunfuzz~\cite{jsfunfuzz}, and
   Grammarinator~\cite{grammarinator}.
 
 \item Find balance between generational strategies (, which often
