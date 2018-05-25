@@ -1,4 +1,35 @@
 ======
+BUG #16 (NEW)
+
+Date reported: May 24, 2018
+
+Type: Assertion failure
+
+URL: https://bugs.webkit.org/show_bug.cgi?id=185943
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/destructuring_trailing_commas_in_iterable_patterns.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.es6_destructuring_trailing_commas_in_iterable_patterns.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+Error: Test fa󠁵iled
+-------------Chakra
+
+-------------SpiderMonkey
+
+-------------v8
+
+Explanation:
+JavascriptCore should return destructuring elements with trailing commas in iterable patterns. 
+It was observed that javascriptcore have unexpected behaviour when trying to return a destructuring 
+list inside a function.
+
+======
 BUG #15 (NEW)
 
 Date reported: May 17, 2018
