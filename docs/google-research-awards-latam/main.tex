@@ -194,8 +194,8 @@ input as potentially fault-revealing and interesting. Currently, we
 classify alarms in the HI and LO groups. The HI group includes
 those warnings that manifest execution errors spawned directly by the
 test (or its close neighborhood) whereas the LO group includes the
-rest of the warnings. \Igor{We found empirically that 88\% of the
-issues reported are included in the HI group and 58\% of them was confirmed}.
+rest of the warnings. We found that 88\% of the
+issues reported are from the HI group.
 
 % \section{Related Work}
 % Differential testing with fuzzing can improve the quality of programs
@@ -283,11 +283,10 @@ function that returns a primitive value identifying the target
 object~\cite{valueof}. That function returns an empty string in the
 original version of this code. The modified version of the code
 returns a string representation of a null character (called
-\CodeIn{NUL} in ascii).
-\Igor{The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
+\CodeIn{NUL} in ascii). The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
 is equivalent to the abstract operation \CodeIn{ToNumber(a.valueOf())}
 that converts a string to a number, otherwise the operation returns NaN 
-(Not a Number)\cite{unary-plus}}. For this case, \Igor{isto esta correto? $\rightarrow$ all engines but} Chakra evaluate the unary
+(Not a Number)\cite{unary-plus}. For this case, Chakra evaluates the unary
 plus to NaN as expected, as the null character cannot be converted. As result, the test fails as
 expected. Chakra, in contrast, incorrectly converts the string to zero, making the test to pass.
 
@@ -302,7 +301,7 @@ JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
 showed that the triage process is very slow for that engine. As of
 now, we did not find any new bug on SpiderMonkey and V8; the bugs we
 found were duplicates and were not reported. Finally, it is
-worth noting that \Igor{7 out of 17} JS files that manifested
+worth noting that 7 of the 17 JS files that manifested
 discrepancies were \emph{not} produced with fuzzing (column
 ``Fuzz''). These are test files from suites of different engines. This
 observation emphasizes the importance of continuously collecting test suites from
@@ -391,4 +390,4 @@ under an open source license.
 %%  LocalWords:  fuzzers linters JavaScriptCore SpiderMonkey AFL NUL
 %%  LocalWords:  HonggFuzz jsfunfuzz Grammarinator WebAssembly ascii
 %%  LocalWords:  valueOf unary NaN Chakra cccccc Url JavascriptCore
-%%  LocalWords:  cgi tmp
+%%  LocalWords:  cgi tmp Cidade ToNumber LibFuzzer
