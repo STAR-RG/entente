@@ -194,8 +194,8 @@ input as potentially fault-revealing and interesting. Currently, we
 classify alarms in the HI and LO groups. The HI group includes
 those warnings that manifest execution errors spawned directly by the
 test (or its close neighborhood) whereas the LO group includes the
-rest of the warnings. We found empirically that \Fix{XX\%} of the
-warnings analyzed in the HI group were confirmed.
+rest of the warnings. \Igor{We found empirically that 88\% of the
+issues reported are included in the HI group and 58\% of them was confirmed}.
 
 % \section{Related Work}
 % Differential testing with fuzzing can improve the quality of programs
@@ -284,15 +284,14 @@ object~\cite{valueof}. That function returns an empty string in the
 original version of this code. The modified version of the code
 returns a string representation of a null character (called
 \CodeIn{NUL} in ascii).
-The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
-is equivalent to the expression \CodeIn{String.ToNumber(a.valueOf())}
-that converts a string to a number, but if the string cannot be
-converted, the expression should evaluate to NaN (Not a Number)
-\cite{unary-plus}. For this case, all engines but Chakra evaluate the unary
+\Igor{The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
+is equivalent to the abstract operation \CodeIn{ToNumber(a.valueOf())}
+that converts a string to a number, otherwise the operation returns NaN 
+(Not a Number)\cite{unary-plus}}. For this case, \Igor{isto esta correto? $\rightarrow$ all engines but} Chakra evaluate the unary
 plus to NaN as expected, as the null character cannot be converted. As result, the test fails as
 expected. Chakra, in contrast, incorrectly converts the string to zero, making the test to pass.
 
-So far, eight of the bugs we reported
+So far, ten of the bugs we reported
 were confirmed, two of which were fixed. One bug report we
 submitted was rejected on the basis that the offending JS file
 manifested an expected incompatibility across engine
@@ -303,12 +302,12 @@ JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
 showed that the triage process is very slow for that engine. As of
 now, we did not find any new bug on SpiderMonkey and V8; the bugs we
 found were duplicates and were not reported. Finally, it is
-worth noting that\Fix{ six of the 13 JS files}\Mar{update this!} that manifested
+worth noting that \Igor{7 out of 17} JS files that manifested
 discrepancies were \emph{not} produced with fuzzing (column
 ``Fuzz''). These are test files from suites of different engines. This
 observation emphasizes the importance of continuously collecting test suites from
-multiple sources; today, we use test suites from six different open
-source engines, including a total of \Fix{38.9K} test files.
+multiple sources; today, we use test suites from seven different open
+source engines, including a total of 30K test files.
 
 %% \Igor{
 %%   Nowadays, we used six javascript engines suites with approximately 2K of javascript files 

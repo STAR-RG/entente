@@ -1,9 +1,11 @@
 ======
-BUG #16 (NEW)
+BUG #17 (NEW)
 
 Date reported: May 24, 2018
 
 Type: Assertion failure
+
+Priority: HIGH
 
 URL: https://bugs.webkit.org/show_bug.cgi?id=185943
 
@@ -13,15 +15,28 @@ Original:
 Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.es6_destructuring_trailing_commas_in_iterable_patterns.js
 
-Patch: None
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/destructuring_trailing_commas_in_iterable_patterns.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.es6_destructuring_trailing_commas_in_iterable_patterns.js
+@@ -1,10 +1,10 @@
+ function test() {
+ 
+ var [a,] = [1];
++return[a,] = [1];
+ return a === 1;
+       
+ }
+ 
+ if (!test())
+-    throw new Error("Test failed");
+-
++    throw new Error("Test fa󠁵iled");
 
 Pattern:
 -------------JavaScriptCore
 Error: Test fa󠁵iled
 -------------Chakra
-
 -------------SpiderMonkey
-
 -------------v8
 
 Explanation:
@@ -30,11 +45,43 @@ It was observed that javascriptcore have unexpected behaviour when trying to ret
 list inside a function.
 
 ======
+BUG #16 (NEW)
+
+Date reported: May 21, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+Priority: LOW
+
+URL: https://github.com/Microsoft/ChakraCore/issues/5203
+
+Original:
+./jsfuzz/seeds/mozzila/non262/statements/for-in-with-assignments.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_statements_for-in-with-assignments.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Syntax error
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra should not throw an Exception when use an empty "yield" expression 
+in "in" expression. Example "for(var x = yield in {})".
+
+======
 BUG #15 (NEW)
 
 Date reported: May 17, 2018
 
 Type: Assertion failure
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5187
 
@@ -64,6 +111,8 @@ BUG #14 (NEW)
 Date reported: May 17, 2018
 
 Type: Incosistent treatment/check of pre-conditions
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5182
 
@@ -146,6 +195,8 @@ Date reported: May 10, 2018
 
 Type: Test failure
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/5128
 
 Original:
@@ -171,6 +222,8 @@ BUG #12 (NEW)
 Date reported: May 02, 2018
 
 Type: Test failure
+
+Priority: HIGH
 
 URLs
 JSCore: https://bugs.webkit.org/show_bug.cgi?id=185208
@@ -200,6 +253,8 @@ BUG #11 (NEW)
 Date reported: May 02, 2018
 
 Type: Test failure
+
+Priority: LOW
 
 URLs
 JSCore: https://bugs.webkit.org/show_bug.cgi?id=185197
@@ -242,6 +297,8 @@ Date reported: April 30, 2018
 
 Type: Test failure
 
+Priority: HIGH
+
 URLs
 JSCore: https://bugs.webkit.org/show_bug.cgi?id=185156
 Chakra: https://github.com/Microsoft/ChakraCore/issues/5076
@@ -281,6 +338,8 @@ BUG #9 (NEW)
 Date reported: April 29, 2018
 
 Type: Test failure
+
+Priority: HIGH
 
 URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185127
 
@@ -324,6 +383,8 @@ Date reported: April 29, 2018
 
 Type: Assertion failure
 
+Priority: HIGH
+
 URL Chakra: https://github.com/Microsoft/ChakraCore/issues/5067
 URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185130
 
@@ -357,6 +418,8 @@ Date reported: April 29, 2018
 
 Type: Assertion failure
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/5065
 
 Original:
@@ -387,6 +450,8 @@ BUG #6 (CONFIRMED/FIXED)
 Date reported: April 25, 2018
 
 Type: Assertion failure
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5038
 
@@ -430,6 +495,8 @@ Date reported: April 23, 2018
 
 Type: Should throw TypeError 
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/5033
 
 Original:
@@ -459,6 +526,8 @@ BUG #4 (NEW)
 Date reported: April 18, 2018
 
 Type: Access invalid position 
+
+Priority: HIGH
 
 URLs: https://bugs.webkit.org/show_bug.cgi?id=184749
 
@@ -490,6 +559,8 @@ BUG #3 (NEW)
 Date reported: April 14, 2018
 
 Type: Inconsistent assertions violated in test case
+
+Priority: HIGH
 
 URLs: https://bugs.webkit.org/show_bug.cgi?id=184629
 
@@ -538,6 +609,8 @@ Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/4979
 
 Original:
@@ -579,6 +652,8 @@ BUG #1 (CONFIRMED/FIXED)
 Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/4978
 
