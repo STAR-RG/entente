@@ -41,7 +41,7 @@
 \newcommand{\ie}{i.e.}
 \newcommand{\eg}{e.g.}
 \newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
-\newcommand{\Mar}[1]{\textbf{[[}{\color{blue} #1}\textbf{]]}}
+\newcommand{\Mar}[1]{\textbf{[[Marcelo:~}{\color{blue} #1}\textbf{]]}}
 \newcommand{\MAB}[1]{\textbf{[[}{\color{darkgreen} #1}\textbf{]]}}
 \newcommand{\Igor}[1]{\textbf{[[}{\color{darkaquamarine} #1}\textbf{]]}}
 \newcommand{\Comment}[1]{}
@@ -104,7 +104,7 @@ JavaScript (JS) is a fundamental programming language for the
 web. Finding bugs in JavaScript engines is an important problem. This
 proposal describes our differential testing infrastructure for testing
 JS engines, our current results, and upcoming features to improve
-bug-finding of JS engines.
+bug-finding in JS engines.
 \end{abstract}
 
 \section{Problem Space}
@@ -125,7 +125,7 @@ widespread use on the web. As common in software, the JS specification
 changes regularly\footnote{Recently, the specification went through a
   bigger change compared to prior releases, called by the name of
   ECMAScript6 (ES6)~\cite{es6-features}} to accommodate the pressing
-demands of the community and these changes often entail sensible
+demands of the community. These changes often entail sensible
 changes in engine implementations~\cite{kangax} that could lead to
 errors, including regressions. Automated test generation can help reduce the
 cost of testing, but the lack of executable specifications is an
@@ -146,12 +146,12 @@ important obstacle. In particular, it is an obstacle to find functional errors.
 Differential testing\cite{McKeeman98differentialtesting} has been
 applied in a variety of
 contexts\cite{Brumley-etal-ss07,Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}
-to mitigate with the lack of oracles problem,
+to mitigate the oracle problem,
 but it has not been thoroughly explored to find functional bugs in JS
 engines. The closest work was done by Patra and
 Pradel~\cite{patra2016learning}, where they evaluated their proposed
 language-agnostic fuzzer to find cross-browser HTML+JS
-discrepancies. This project aims to provide an adaptable
+discrepancies. This project aims at building and evaluating an
 infrastructure for differential testing of runtime engines, such as
 the JS engine or WebAssembly's. The sensible parts of the
 infrastructure are the checks of input validity (as to reduce
@@ -174,12 +174,10 @@ finding crashes. Several fuzzing methods have been proposed in the
 past, varying with respect to how new inputs are generated (\eg{},
 coverage-based~\cite{afl,honggfuzz},
 grammar-based~\cite{grammarinator,jsfunfuzz}, and
-random-based~\cite{radamsa}) and whether or not coverage information
-is taken into account in the fuzzing
-process. Figure~\ref{fig:workflow} shows a generic pipeline of a
+random-based~\cite{radamsa}). Figure~\ref{fig:workflow} shows a generic pipeline of a
 fuzzer infrastructure, instantiated to our problem. Arrows indicate data flow; lines
 with no arrow denote encapsulation. In our case, JS files are
-provided as seeded inputs to bootstrap the process. These files can
+provided as seeds to bootstrap the process. These files can
 originate from the test suites of the engine codebases or from the bug
 reports in their issue trackers. The fuzzing infrastructure selects
 randomly one of the inputs to fuzz with a given tool, say the
@@ -193,7 +191,7 @@ invokes the oracle to check correctness. In case all engines
 consider the test output consistent (\ie{}, all pass or all fail), the
 infrastructure discards the corresponding input. Otherwise, it considers that
 input as potentially fault-revealing and interesting. Currently, we
-classify alarms in two groups: HI and LO. The HI group includes
+classify alarms in the HI and LO groups. The HI group includes
 those warnings that manifest execution errors spawned directly by the
 test (or its close neighborhood) whereas the LO group includes the
 rest of the warnings. We found empirically that \Fix{XX\%} of the
@@ -225,34 +223,10 @@ warnings analyzed in the HI group were confirmed.
 \section{Current Results}
 \label{sec:results}
 
-%% Although there are many features yet to implement in our
-%% infrastructure, 
-
-The workflow described in Section~\ref{sec:design} is currently
-functional. This section shows preliminary results obtained with our
-infrastructure providing some evidence that finding bugs in JS runtime
-engines with differential testing is promising. Table~\ref{tab:bugs} shows the list of bugs we
-reported on issue trackers of different engines in the period of a
-month. For example, bug \# 6 was manifested by the JS code \CodeIn{var
-  a = \{valueOf:~function()\{return ``\textbackslash{}x00''\}\}
-  assert(+a === 0)\}}.  The object property \CodeIn{valueOf} stores a
-function that returns a primitive value identifying the target
-object~\cite{valueof}. That function returns an empty string in the
-original version of this code. The modified version of the code
-returns a string representation of a null character (called
-\CodeIn{NUL} in ascii).
-The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
-is equivalent to the expression \CodeIn{String.ToNumber(a.valueOf())}
-that converts a string to a number, but if the string cannot be
-converted, the expression should evaluate to NaN (Not a Number)
-\cite{unary-plus}. For this case, all engines but Chakra evaluate the unary
-plus to NaN as expected, as the null character cannot be converted. As result, the test fails as
-expected. Chakra, in contrast, incorrectly converts the string to zero, making the test to pass.
-
 \newcommand{\checkm}{Y}
 \newcommand{\crossmark}{N}
-\begin{wraptable}[20]{tr}[0pt]{0.5\textwidth}
-  \vspace{-2ex}
+\begin{wraptable}[20]{t}[0pt]{0.5\textwidth}
+  \vspace{-3ex}
   \scriptsize
   \centering
   \caption{List of bug reports issued by our team from April 12 to May
@@ -295,17 +269,41 @@ expected. Chakra, in contrast, incorrectly converts the string to zero, making t
   \end{tabular}
 \end{wraptable}
 
+%% Although there are many features yet to implement in our
+%% infrastructure, 
+
+The workflow described in Section~\ref{sec:design} is currently
+functional. This section shows preliminary results obtained with our
+infrastructure providing some evidence that finding bugs in JS runtime
+engines with differential testing is promising. Table~\ref{tab:bugs} shows the list of bugs we
+reported on issue trackers of different engines in the period of 42 days. For example, bug \# 6 was manifested by the JS code \CodeIn{var
+  a = \{valueOf:~function()\{return ``\textbackslash{}x00''\}\}
+  assert(+a === 0)\}}.  The object property \CodeIn{valueOf} stores a
+function that returns a primitive value identifying the target
+object~\cite{valueof}. That function returns an empty string in the
+original version of this code. The modified version of the code
+returns a string representation of a null character (called
+\CodeIn{NUL} in ascii).
+The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
+is equivalent to the expression \CodeIn{String.ToNumber(a.valueOf())}
+that converts a string to a number, but if the string cannot be
+converted, the expression should evaluate to NaN (Not a Number)
+\cite{unary-plus}. For this case, all engines but Chakra evaluate the unary
+plus to NaN as expected, as the null character cannot be converted. As result, the test fails as
+expected. Chakra, in contrast, incorrectly converts the string to zero, making the test to pass.
+
 So far, eight of the bugs we reported
 were confirmed, two of which were fixed. One bug report we
 submitted was rejected on the basis that the offending JS file
 manifested an expected incompatibility across engine
 implementations.
-Note from the table that, with the exception of one case, all bug
+Note from the table that all bug
 reports still waiting for confirmation are associated with the
 JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
 showed that the triage process is very slow for that engine. As of
-now, we did not find any bug on SpiderMonkey and V8. Finally, it is
-worth noting that six of the 13 JS files that manifested
+now, we did not find any new bug on SpiderMonkey and V8; the bugs we
+found were duplicates and were not reported. Finally, it is
+worth noting that\Fix{ six of the 13 JS files}\Mar{update this!} that manifested
 discrepancies were \emph{not} produced with fuzzing (column
 ``Fuzz''). These are test files from suites of different engines. This
 observation emphasizes the importance of continuously collecting test suites from
@@ -356,8 +354,7 @@ The list below shows future tasks for this project.
   positives as to facilitate the inspection process. For example,
   mining issue trackers for similar bug reports is a candidate alternative.
 
-\item Use our infrastructure to find bugs on
-  WebAssembly~\cite{webassembly}, a new binary format already
+\item Look for bugs in WebAssembly~\cite{webassembly}, a new binary format already
   supported by major browsers. In principle, our infrastructure is
   agnostic to the runtime engine used. We are eager to explore other
   sources of bugs, especially in very new engines. 
