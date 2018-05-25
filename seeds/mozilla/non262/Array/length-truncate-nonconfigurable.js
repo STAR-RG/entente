@@ -10,7 +10,7 @@ var BUGNUMBER = 858381;
 var summary =
   "Array length redefinition behavior with non-configurable elements";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

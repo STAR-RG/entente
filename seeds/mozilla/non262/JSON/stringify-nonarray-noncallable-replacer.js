@@ -7,7 +7,7 @@ var BUGNUMBER = 653782;
 var summary =
   "Treat non-array, non-callable replacers as if none had been specified";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

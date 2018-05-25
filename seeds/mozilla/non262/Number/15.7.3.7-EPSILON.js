@@ -5,7 +5,7 @@
 var BUGNUMBER = 885798;
 var summary = "ES6 (draft May 2013) 15.7.3.7 Number.EPSILON";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

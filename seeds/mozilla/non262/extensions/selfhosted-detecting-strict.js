@@ -6,7 +6,7 @@ var BUGNUMBER = 843004;
 var summary =
   "Don't emit a strict warning for the undefined-property detection pattern in self-hosted code";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

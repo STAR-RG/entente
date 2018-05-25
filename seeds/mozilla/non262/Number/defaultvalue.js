@@ -7,7 +7,7 @@ var BUGNUMBER = 645464;
 var summary =
   "[[DefaultValue]] behavior wrong for Number with overridden valueOf/toString";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "Implement RegExp.prototype[@@split].";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(RegExp.prototype[Symbol.split].name, "[Symbol.split]");
 assertEq(RegExp.prototype[Symbol.split].length, 2);

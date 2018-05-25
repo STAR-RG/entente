@@ -6,7 +6,7 @@
 var BUGNUMBER = 1289882;
 var summary = "Implement Intl.NumberFormat.prototype.formatToParts";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 //-----------------------------------------------------------------------------
 

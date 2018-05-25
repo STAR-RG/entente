@@ -1,7 +1,7 @@
 var BUGNUMBER = 1335025;
 var summary = "(non-standard) async function toSource";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 async function f1(a, b, c) { await a; }
 

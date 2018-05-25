@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async arrow function syntax";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 if (typeof Reflect !== "undefined" && Reflect.parse) {
     // Parameters.

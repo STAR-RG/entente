@@ -1,7 +1,7 @@
 var BUGNUMBER = 883377;
 var summary = "Anonymous function name should be set based on method definition";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var fooSymbol = Symbol("foo");
 var emptySymbol = Symbol("");

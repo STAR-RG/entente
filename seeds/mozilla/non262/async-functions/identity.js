@@ -3,7 +3,7 @@
 var BUGNUMBER = 1185106;
 var summary = "Named async function expression should get wrapped function for the name inside it";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var expr = async function foo() {
   return foo;

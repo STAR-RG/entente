@@ -3,7 +3,7 @@
 var BUGNUMBER = 1185106;
 var summary = "arguments.callee in sloppy mode should return wrapped function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 async function decl1() {
   return arguments.callee;

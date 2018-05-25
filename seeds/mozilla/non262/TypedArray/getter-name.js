@@ -1,7 +1,7 @@
 var BUGNUMBER = 1180290;
 var summary = 'TypedArray getters should have get prefix';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 let TypedArray = Object.getPrototypeOf(Float32Array.prototype).constructor;
 

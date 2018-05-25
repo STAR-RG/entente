@@ -1,7 +1,7 @@
 var BUGNUMBER = 1180306;
 var summary = 'Array.from should close iterator on error';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(ctor, { mapVal=undefined,
                       nextVal=undefined,

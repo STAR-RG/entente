@@ -10,7 +10,7 @@ var BUGNUMBER = 880591;
 var summary =
   "Assertion redefining length property of a frozen dictionary-mode array";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

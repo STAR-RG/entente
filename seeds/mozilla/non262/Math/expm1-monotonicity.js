@@ -1,7 +1,7 @@
 var BUGNUMBER = 897634;
 var summary = "expm1 should be monotonically increasing";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(x, prev, next) {
     assertEq(Math.expm1(prev) <= Math.expm1(x), true);

@@ -7,7 +7,7 @@ var summary =
   "Calls to eval with same code + varying strict mode of script containing " +
   "eval == fail";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -10,7 +10,7 @@ var summary =
   "%TypedArray%.prototype.set must throw a RangeError when passed a negative " +
   "offset";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -8,7 +8,7 @@ var summary =
   "Date.UTC must convert *all* arguments to number, not return NaN early if " +
   "a non-finite argument is encountered";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

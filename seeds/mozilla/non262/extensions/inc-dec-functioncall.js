@@ -9,7 +9,7 @@ var summary =
   "Perform ToNumber on the result of the |fun()| in |fun()++| before " +
   "throwing";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

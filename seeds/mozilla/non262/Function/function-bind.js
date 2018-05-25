@@ -7,7 +7,7 @@ var gTestfile = 'function-bind.js';
 var BUGNUMBER = 429507;
 var summary = "ES5: Function.prototype.bind";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

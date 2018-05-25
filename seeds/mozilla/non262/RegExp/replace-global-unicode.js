@@ -1,7 +1,7 @@
 var BUGNUMBER = 1287524;
 var summary = 'RegExp.prototype[@@replace] should not use optimized path if RegExp.prototype.unicode is modified.';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 Object.defineProperty(RegExp.prototype, "unicode", {
   get() {

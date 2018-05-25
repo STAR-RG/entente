@@ -7,7 +7,7 @@
 var BUGNUMBER = 1288459;
 var summary = "let can't be used as a label in strict mode code";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

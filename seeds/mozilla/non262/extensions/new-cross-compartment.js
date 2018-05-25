@@ -6,7 +6,7 @@ var BUGNUMBER = 1178653;
 var summary =
   "|new| on a cross-compartment wrapper to a non-constructor shouldn't assert";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

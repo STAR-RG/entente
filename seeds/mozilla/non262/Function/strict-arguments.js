@@ -9,7 +9,7 @@ var summary =
   "ES5 strict mode: arguments objects of strict mode functions must copy " +
   "argument values";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

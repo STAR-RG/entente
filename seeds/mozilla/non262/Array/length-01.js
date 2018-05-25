@@ -10,7 +10,7 @@ var BUGNUMBER = 600392;
 var summary =
   'Object.preventExtensions([]).length = 0 should do nothing, not throw';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

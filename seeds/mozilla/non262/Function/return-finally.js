@@ -1,7 +1,7 @@
 var BUGNUMBER = 1202134;
 var summary = "Return value should not be overwritten by finally block with normal execution.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // ==== single ====
 

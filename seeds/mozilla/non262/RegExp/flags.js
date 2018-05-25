@@ -1,7 +1,7 @@
 var BUGNUMBER = 1108467;
 var summary = "Implement RegExp.prototype.flags";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(RegExp.prototype.flags, "");
 assertEq(/foo/iymg.flags, "gimy");

@@ -1,7 +1,7 @@
 var BUGNUMBER = 1016936;
 var summary = "IteratorNext should throw if the value returned by iterator.next() is not an object.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var nonobjs = [
     null,

@@ -6,7 +6,7 @@
 var BUGNUMBER = 771946;
 var summary = "Fractional days, months, years shouldn't trigger asserts";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

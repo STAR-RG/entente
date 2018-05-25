@@ -7,7 +7,7 @@ var gTestfile = "setPrototypeOf.js";
 var BUGNUMBER = 888969;
 var summary = "Scripted proxies' [[SetPrototypeOf]] behavior";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 918987;
 var summary = 'String.prototype.normalize - normalize rope string';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test() {
   /* JSRope test */

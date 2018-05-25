@@ -8,7 +8,7 @@ var summary =
   "String.prototype.relace should zero the .lastIndex when called with a " +
   "global RegExp";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

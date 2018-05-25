@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async/await syntax";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 if (typeof Reflect !== "undefined" && Reflect.parse) {
     assertEq(Reflect.parse("function a() {}").body[0].async, false);

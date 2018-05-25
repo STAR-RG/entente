@@ -8,7 +8,7 @@ var BUGNUMBER = 963641;
 var summary =
   "{ __proto__: target } should work as a destructuring assignment pattern";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 918987;
 var summary = 'String.prototype.normalize - normalize no String object';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test() {
   var myobj = {

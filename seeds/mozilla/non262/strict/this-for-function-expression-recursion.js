@@ -7,7 +7,7 @@ var gTestfile = 'this-for-function-expression-recursion.js';
 var BUGNUMBER = 611276;
 var summary = "JSOP_CALLEE should push undefined, not null, for this";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

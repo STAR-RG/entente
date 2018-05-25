@@ -1,7 +1,7 @@
 var BUGNUMBER = 1165052;
 var summary = 'Use ArraySpeciesCreate in Array.prototype.{concat,filter,map,slice,splice}.';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(funcName, args, expectedLength, expectedLogs) {
   // modified @@species

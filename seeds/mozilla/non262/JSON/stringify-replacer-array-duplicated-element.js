@@ -8,7 +8,7 @@ var summary =
   "Better/more correct handling for replacer arrays with getter array index " +
   "properties";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

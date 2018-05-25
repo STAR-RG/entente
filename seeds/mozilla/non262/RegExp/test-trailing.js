@@ -1,7 +1,7 @@
 var BUGNUMBER = 1304737;
 var summary = "Trailing .* should not be ignored on matchOnly match.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(r, lastIndexIsZero) {
     r.lastIndex = 0;

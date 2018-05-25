@@ -6,7 +6,7 @@
 var BUGNUMBER = 614608;
 var summary = "String.prototype.split with undefined separator";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -11,7 +11,7 @@ var summary =
   "Typed array element-setting should convert to target type using ToNumber "
   "followed by an element-type-specific truncation function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

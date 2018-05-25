@@ -5,7 +5,7 @@
 var BUGNUMBER = 577536;
 var summary = "ES5 15.1.2.2 parseInt(string, radix)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

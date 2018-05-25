@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "caller property of function inside async function should return wrapped async function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 (async function f() {
   var inner = (function g() {

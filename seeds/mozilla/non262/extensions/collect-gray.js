@@ -7,7 +7,7 @@ var BUGNUMBER = 1337209;
 var summary =
   "Test gray marking";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 if (typeof gczeal !== 'undefined')
     gczeal(0);

@@ -7,7 +7,7 @@
 var BUGNUMBER = 547087;
 var summary = 'JS_EnumerateStandardClasses uses wrong attributes for undefined';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

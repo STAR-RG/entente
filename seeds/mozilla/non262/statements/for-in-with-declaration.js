@@ -8,7 +8,7 @@ var summary =
   "Declarations in for-in loop heads must not contain |in|-expression " +
   "initializers";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

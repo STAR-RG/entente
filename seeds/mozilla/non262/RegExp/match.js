@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "Implement RegExp.prototype[@@match].";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(RegExp.prototype[Symbol.match].name, "[Symbol.match]");
 assertEq(RegExp.prototype[Symbol.match].length, 1);

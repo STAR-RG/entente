@@ -7,7 +7,7 @@ var BUGNUMBER = 536472;
 var summary =
   'ES5: { get x(v) { } } and { set x(v, v2) { } } should be syntax errors';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 //-----------------------------------------------------------------------------
 

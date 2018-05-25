@@ -7,7 +7,7 @@ var summary =
   "Error.prototype.toString called on function objects should work as on any " +
   "object";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

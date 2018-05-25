@@ -1,7 +1,7 @@
 var BUGNUMBER = 1263558;
 var summary = "Self-host all String generics.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var result;
 var str = "ABCde";

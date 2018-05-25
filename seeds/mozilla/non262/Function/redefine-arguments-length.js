@@ -10,7 +10,7 @@ var summary =
   "Object.defineProperty sets arguments.length without setting the " +
   "length-overridden bit";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

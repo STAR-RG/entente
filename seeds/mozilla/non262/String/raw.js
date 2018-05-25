@@ -1,7 +1,7 @@
 var BUGNUMBER = 1039774;
 var summary = 'String.raw';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertThrowsInstanceOf(function() { String.raw(); }, TypeError);
 

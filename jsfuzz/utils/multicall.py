@@ -1,8 +1,6 @@
 import shlex, os, hashlib, ntpath, logging
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
-from difflib import SequenceMatcher
 from tempfile import mkstemp
-
 from jsfuzz.utils import constants
 from jsfuzz.fuzzer import radamsa_fuzzer
 from jsfuzz.utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
@@ -156,17 +154,20 @@ def callAll(pathName, validator=None, libs=None):
     res = Results(pathName) if not validator else Results(pathName, validator(pathName))
     
     # JavaScriptCore
-    outerr = callJavaScriptCore(pathName, libs)    
-    res.set_jsc_results(outerr)
+    jsc_outerr = callJavaScriptCore(pathName, libs)
     # Chakra
-    outerr = callChakra(pathName, libs)
-    res.set_chakra_results(outerr)
+    chakra_outerr = callChakra(pathName, libs)
     # SpiderMonkey
-    outerr = callSpiderMonkey(pathName, libs)
-    res.set_spiderm_results(outerr)
+    spidermonkey_outerr = callSpiderMonkey(pathName, libs)
     # v8
-    outerr = callV8(pathName, libs)
-    res.set_v8_results(outerr)
+    v8_outerr = callV8(pathName, libs)
+
+    res.set_results({
+        "jsc": jsc_outerr,
+        "chakra": chakra_outerr,
+        "spidermonkey": spidermonkey_outerr,
+        "v8": v8_outerr
+    })
 
     return res
 
@@ -190,24 +191,18 @@ def callJSEngine(cmd_line):
         # double check to get unexpected behaviour
         status, error = getstatusoutput(cmd_line)
         if error:
-            msg = '[CHECK_MANUALLY] {}'.format(error)
-    
+            msg = 'Error: [CHECK_MANUALLY] {}'.format(error)
+
     return msg
 
 def callJavaScriptCore(pathName, libs=[]):
-    if is_file_invalid('jscore', pathName):
-        return 'FeatureError: File with feature not implemented yet'
     libcmd = " ".join(libs) if libs else ""
     cmd_line = constants.javascriptcore + " " + libcmd + " " + pathName
     #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
     return callJSEngine(cmd_line)
 
-
 # seems chakra only supports a single source file as input
-def callChakra(path_name, libs=[]):
-    if is_file_invalid('chakra', path_name):
-        return 'FeatureError: File with feature not implemented yet'
-
+def callChakra(path_name, libs=[], flags=['-ES6Experimental']):
     if libs and len(libs) > 0:
         fd, tmp_path = mkstemp(prefix="chakrafuzz", text=True)
         all_files = []
@@ -220,39 +215,18 @@ def callChakra(path_name, libs=[]):
                     outfile.write("\n\n")
         path_name = tmp_path
 
-    cmd_line = constants.chakra + " " + path_name
+    cmd_line = constants.chakra + " " + " ".join(flags) + " " + path_name
     return callJSEngine(cmd_line)
 
 def callSpiderMonkey(pathName, libs=[]):
-    if is_file_invalid('spidermonkey', pathName):
-        return 'FeatureError: File with feature not implemented yet'
     libcmd = (" -f " + " -f ".join(libs)) if libs else ""
     cmd_line = constants.spidermonkey + libcmd + " " + pathName
     return callJSEngine(cmd_line)
 
 def callV8(pathName, libs=[]):
-    if is_file_invalid('v8', pathName):
-        return 'FeatureError: File with feature not implemented yet'
     libcmd = " ".join(libs) if libs else ""
     cmd_line = constants.v8 + " " + libcmd + " " + pathName
     return callJSEngine(cmd_line)
-
-def is_file_invalid(engine, pathName):
-    """
-    Return True if file contains invalid code otherwise False
-    """
-    if engine not in ENGINES_KEYWORDS.keys():
-        raise Exception('Engine not found. Only supported: {}'.format(ENGINES_KEYWORDS.keys()))
-    
-    if not ENGINES_KEYWORDS[engine]:
-        return False
-
-    with open(pathName) as js_file:
-        file_raw = js_file.read()
-        for keyword in ENGINES_KEYWORDS[engine]:
-            if keyword in file_raw:
-                return True
-    return False
 
 class Results:
     """
@@ -264,6 +238,11 @@ class Results:
     def __init__(self, path_name, validation_error=None):
         self.path_name = path_name
         self.validation_error = validation_error
+        self.stack_traces = {'chakra': '', 'jsc': '', 'spidermonkey': '', 'v8': ''}
+        self.jsc_outerr = None
+        self.chakra_outerr = None
+        self.spiderm_outerr = None
+        self.v8_outerr = None
 
     def __str__(self):
         if self.validation_error:
@@ -313,6 +292,21 @@ class Results:
                 ind = string.index('Fatal')
                 error_message = string[ind:]
                 break
+            
+            elif 'Exception:' in line and 'Error' not in string:
+                ind = line.index('Exception:')
+                error_message = line[ind:] if 'Exception:' in line[ind:] else line
+                break
+            
+            elif 'throw' in line and 'Error' not in string:
+                ind = line.index('throw')
+                error_message = string[ind:]
+                break
+            
+            elif 'uncaught' in line and 'Error' not in string:
+                ind = line.index('uncaught')
+                error_message = string[ind:]
+                break
 
         return error_message
 
@@ -325,33 +319,34 @@ class Results:
         """
         Define priority based on engine output
         """
-        priority, is_test_failed = None, False
-        
-        strings_high = ['Test failed', 'Fatal', 'Assertion failed', 'Failed!']
-
-        # set high priority if occurs at least one test failed
-        # fuzzer can alter the string message, using ratio of equivalence
-        for output in self.get_all_outerr():
-            seq = SequenceMatcher(None,'Error: Test failed', output)
-            if (seq.ratio() >= 0.7) or \
-                [string for string in strings_high if string in output]:
-                is_test_failed = True
-                break
-        
-        # set low priority if only chakra reports/not reports an error
-        at_least = any([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
-        only_chakra_reports = self.chakra_outerr and not at_least
-        only_chakra_not_reports = not self.chakra_outerr and all([self.jsc_outerr, self.v8_outerr, self.spiderm_outerr])
-        is_low_priority = (only_chakra_reports or only_chakra_not_reports)
-
-        if is_test_failed:
+        if self.is_high_priority():
             priority = '[HIGH]'
-        elif is_low_priority and not is_test_failed:
-            priority = '[LOW]'
         else:
-            priority = '[MEDIUM]'
+            priority = '[LOW]'
         
         return priority
+
+    def is_high_priority(self):
+        '''
+            Check if a string is a warning with HIGH priority.
+            We based on pattern on textual reports
+        '''
+        filename = self.path_name.split('/')[-1]
+        file_patterns = [filename, 'tmp/temp_filefuzzed', 'tmp/chakrafuzz']
+
+        # check high priority by stack trace
+        for output in self.get_all_outerr(abstract=False):
+            if not output:
+                continue
+            lines = output.splitlines()
+            # check if filename pattern is in the first half of lines + 1 length
+            max_index = int(len(lines)/2) + 1
+            if max_index <= 2:
+                max_index = len(lines)
+            for pattern in file_patterns:
+                if pattern in str(lines[0:max_index]):
+                    return True
+        return False
 
     def is_interesting(self):
         '''
@@ -402,32 +397,38 @@ class Results:
         """
         return any(self.get_all_outerr())
     
-    def get_all_outerr(self):
+    def get_all_outerr(self, abstract=True):
         """
         Return a list of all engines output errors
         """
+        if abstract:
+            return [
+                self.abstract(self.jsc_outerr),
+                self.abstract(self.chakra_outerr),
+                self.abstract(self.spiderm_outerr),
+                self.abstract(self.v8_outerr)
+            ]
         return [
-            self.abstract(self.jsc_outerr),
-            self.abstract(self.chakra_outerr),
-            self.abstract(self.spiderm_outerr),
-            self.abstract(self.v8_outerr)
+            self.jsc_outerr, self.chakra_outerr, 
+            self.spiderm_outerr, self.v8_outerr
         ]
 
-
     # TODO generalize this stuff with a dict
+    def set_results(self, results):
+        if self.validation_error:
+            return
+        
+        self.jsc_outerr = results['jsc']
+        self.stack_traces['jsc'] = results['jsc']
 
-    def set_jsc_results(self, outerr):
-        self.jsc_outerr = outerr if not self.validation_error else None
+        self.v8_outerr = results['v8']
+        self.stack_traces['v8'] = results['v8']
 
-    def set_chakra_results(self, outerr):
-        self.chakra_outerr = outerr if not self.validation_error else None
+        self.chakra_outerr = results['chakra']
+        self.stack_traces['chakra'] = results['chakra']
 
-    def set_spiderm_results(self, outerr):
-        self.spiderm_outerr = outerr if not self.validation_error else None
-
-    def set_v8_results(self, outerr):
-        self.v8_outerr = outerr if not self.validation_error else None
-    
+        self.spiderm_outerr = results['spidermonkey']
+        self.stack_traces['spidermonkey'] = results['spidermonkey']
 
 if __name__ == "__main__":
     # example

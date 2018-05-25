@@ -8,7 +8,7 @@
 var BUGNUMBER = 770344;
 var summary = "Object.getPrototypeOf behavior across compartments";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

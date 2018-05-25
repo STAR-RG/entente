@@ -9,7 +9,7 @@ var summary =
   "Built-in functions defined in ECMAScript pick up arguments/caller " +
   "properties from Function.prototype";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

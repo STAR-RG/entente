@@ -7,7 +7,7 @@ var summary =
   "Convert all arguments passed to Function() to string before doing any " +
   "parsing of the to-be-created Function's parameters or body text";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -9,7 +9,7 @@
 var BUGNUMBER = 562446;
 var summary = 'ES5: Array.prototype.toString';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

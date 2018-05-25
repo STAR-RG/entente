@@ -7,7 +7,7 @@ var summary =
   "Don't use a shared-permanent inherited property to implement " +
   "[].length or (function(){}).length";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

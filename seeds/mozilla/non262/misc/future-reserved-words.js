@@ -7,7 +7,7 @@
 var BUGNUMBER = 497869;
 var summary = "Implement FutureReservedWords per-spec";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

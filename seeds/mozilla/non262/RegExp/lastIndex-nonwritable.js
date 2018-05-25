@@ -1,7 +1,7 @@
 var BUGNUMBER = 1168416;
 var summary = "Regexp.prototype.test/exec shouldn't change lastIndex if not writable.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var regex = /0/g;
 Object.freeze(regex);

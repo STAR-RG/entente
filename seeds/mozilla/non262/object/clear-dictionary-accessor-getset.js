@@ -9,7 +9,7 @@ var summary =
   "Properly handle GC of a dictionary accessor property whose [[Get]] or " +
   "[[Set]] has been changed to |undefined|";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

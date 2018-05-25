@@ -9,7 +9,7 @@ var summary =
   "Array.prototype.pop shouldn't touch elements greater than length on " +
   "non-arrays";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

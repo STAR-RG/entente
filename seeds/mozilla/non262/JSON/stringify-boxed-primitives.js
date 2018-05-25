@@ -6,7 +6,7 @@ var gTestfile = 'stringify-boxed-primitives.js';
 var BUGNUMBER = 584909;
 var summary = "Stringification of Boolean/String/Number objects";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

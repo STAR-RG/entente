@@ -26,7 +26,7 @@
 var BUGNUMBER = 614608;
 var summary = "String.prototype.split with regexp separator";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -3,7 +3,7 @@
 var BUGNUMBER = 918987;
 var summary = 'String.prototype.normalize - part1';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test() {
   loadRelativeToScript('normalize-generateddata-input.js');

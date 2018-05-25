@@ -6,7 +6,7 @@
 var BUGNUMBER = 1310744;
 var summary = "Dense array properties shouldn't be modified when they're frozen";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var a = Object.freeze([4, 5, 1]);
 

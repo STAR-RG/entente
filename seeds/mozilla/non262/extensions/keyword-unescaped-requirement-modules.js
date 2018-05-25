@@ -9,7 +9,7 @@ var summary =
   "Escape sequences aren't allowed in bolded grammar tokens (that is, in " +
   "keywords, possibly contextual keywords)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

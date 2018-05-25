@@ -7,7 +7,7 @@ var gTestfile = 'isPrototypeOf.js';
 var BUGNUMBER = 619283;
 var summary = "Object.prototype.isPrototypeOf";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

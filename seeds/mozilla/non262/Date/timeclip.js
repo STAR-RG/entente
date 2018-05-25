@@ -6,7 +6,7 @@
 var BUGNUMBER = 747197;
 var summary = "TimeClip behavior for very large numbers";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

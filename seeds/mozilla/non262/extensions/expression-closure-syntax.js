@@ -9,7 +9,7 @@ var summary =
   "entire AssignmentExpressions, not PrimaryExpressions that are themselves " +
   "components of larger binary expressions";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

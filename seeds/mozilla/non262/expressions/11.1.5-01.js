@@ -7,7 +7,7 @@ var summary =
   'Implement support for string literals as names for properties defined ' +
   'using ES5 get/set syntax';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 
 var o;

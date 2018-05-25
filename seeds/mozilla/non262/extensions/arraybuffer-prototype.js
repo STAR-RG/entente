@@ -5,7 +5,7 @@
 var BUGNUMBER = 665961;
 var summary =
   "ArrayBuffer cannot access properties defined on the prototype chain.";
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var BUGNUMBER = 584909;
 var summary =
   "Call the replacer function for array elements with stringified indexes";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

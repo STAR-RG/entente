@@ -5,7 +5,7 @@
 var BUGNUMBER = 430133;
 var summary = 'ES5 Object.defineProperty(O, P, Attributes)';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 1135377;
 var summary = "Implement RegExp unicode flag -- braced pattern in RegExpUnicodeEscapeSequence.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // ==== standalone ====
 

@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "async name token in property and object destructuring pattern";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 {
   let a = { async: 10 };

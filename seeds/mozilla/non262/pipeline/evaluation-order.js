@@ -1,7 +1,7 @@
 const BUGNUMBER = 1405943;
 const summary = "Implement pipeline operator (evaluation order)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 if (hasPipeline()) {
     eval(`

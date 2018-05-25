@@ -9,7 +9,7 @@
 var BUGNUMBER = 866700;
 var summary = "Assertion redefining non-writable length to a non-numeric value";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

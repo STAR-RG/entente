@@ -6,7 +6,7 @@ var gTestfile = 'small-codepoints.js';
 var BUGNUMBER = 554079;
 var summary = 'JSON.parse should reject U+0000 through U+001F';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var BUGNUMBER = 584909;
 var summary =
   "JSON.stringify(_1, _2, numberGreaterThanOne) produces wrong output";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

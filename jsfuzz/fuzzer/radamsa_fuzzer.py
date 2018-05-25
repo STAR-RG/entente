@@ -85,9 +85,9 @@ def fuzz_file(num_iterations, file_path, mcalls, validator=None, libs=None):
             if mcalls.notify(res): # true if it is interesting and distinct. in this case, save the file
                 
                 # one file can be involved in more than one bucket
-                # we can update the name of file with a new flag "_1_.js, _2_.js..."
+                # we can rename it with "_1_.js, _2_.js..."
                 if os.path.isfile(res.path_name):
-                    filename = res.path_name.split()[-1]
+                    filename = res.path_name.split('/')[-1]
                     pattern = r"\_\d{1,2}\_.+js" # check files which endswith pattern '_Integer_.js'
                     jsfiles = [jsfile for jsfile in os.listdir(constants.logs_dir) if re.sub(pattern,'.js', jsfile) == filename]
                     count = len(jsfiles) + 1

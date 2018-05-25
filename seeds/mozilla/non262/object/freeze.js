@@ -6,7 +6,7 @@
 var BUGNUMBER = 1076588;
 var summary = "Object.freeze() should return its argument with no conversion when the argument is a primitive value";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 assertEq(Object.freeze(), undefined);
 assertEq(Object.freeze(undefined), undefined);
 assertEq(Object.freeze(null), null);

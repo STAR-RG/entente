@@ -6,7 +6,7 @@
 var BUGNUMBER = 818617;
 var summary = "ECMAScript 2017 Draft ECMA-262 Section 20.1.3.5: Number.prototype.toPrecision";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

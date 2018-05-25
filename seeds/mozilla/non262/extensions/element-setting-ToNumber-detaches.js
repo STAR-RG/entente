@@ -11,7 +11,7 @@ var summary =
   "Don't assert assigning into memory detached while converting the value to " +
   "assign into a number";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

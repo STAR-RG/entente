@@ -1,7 +1,7 @@
 var BUGNUMBER = 992617;
 var summary = "Implement arguments[@@iterator].";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // MappedArgumentsObject
 let mapped = [

@@ -12,7 +12,7 @@ var summary =
   "Don't assert when, in |new RegExp(pat)|, stringifying |pat| creates " +
   "another RegExp and then performs a GC";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

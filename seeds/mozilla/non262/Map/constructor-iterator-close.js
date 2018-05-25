@@ -1,7 +1,7 @@
 var BUGNUMBER = 1180306;
 var summary = 'Map/Set/WeakMap/WeakSet constructor should close iterator on error';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(ctors, { nextVal=undefined,
                        nextThrowVal=undefined,

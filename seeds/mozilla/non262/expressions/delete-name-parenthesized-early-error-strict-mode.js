@@ -6,7 +6,7 @@ var BUGNUMBER = 1111101;
 var summary =
   "delete (foo), delete ((foo)), and so on are strict mode early errors";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

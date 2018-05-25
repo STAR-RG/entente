@@ -7,7 +7,7 @@ var summary =
   "Don't crash doing a direct eval when eval doesn't resolve to an object " +
   "(let alone the original eval function)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

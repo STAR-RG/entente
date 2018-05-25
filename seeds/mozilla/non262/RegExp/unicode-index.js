@@ -1,7 +1,7 @@
 var BUGNUMBER = 1135377;
 var summary = "Implement RegExp unicode flag -- Pattern match should start from lead surrogate when lastIndex points corresponding trail surrogate.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var r = /\uD83D\uDC38/ug;
 r.lastIndex = 1;

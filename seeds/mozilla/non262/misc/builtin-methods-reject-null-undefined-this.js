@@ -9,7 +9,7 @@ var summary =
   "ECMAScript built-in methods that immediately throw when |this| is " +
   "|undefined| or |null| (due to CheckObjectCoercible, ToObject, or ToString)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

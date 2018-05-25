@@ -5,7 +5,7 @@
 var BUGNUMBER = 894026;
 var summary = "Implement ES6 binary literals";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

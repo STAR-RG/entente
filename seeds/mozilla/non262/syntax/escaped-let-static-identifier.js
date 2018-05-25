@@ -10,7 +10,7 @@ var summary =
   "and it's permissible to use them as Identifier (with or without " +
   "containing escapes) in non-strict code";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

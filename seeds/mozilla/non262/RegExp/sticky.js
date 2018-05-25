@@ -1,7 +1,7 @@
 var BUGNUMBER = 773687;
 var summary = 'sticky flag should not break assertion behavior.';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(re, text, expectations) {
   // Sanity check for test data itself.

@@ -1,7 +1,7 @@
 var BUGNUMBER = 1147817;
 var summary = "RegExp constructor should check pattern.constructor.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var g = newGlobal();
 

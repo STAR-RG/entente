@@ -10,7 +10,7 @@ var summary =
   "Typed array prototypes/constructors should be largely empty, inheriting "
   "most functionality from %TypedArray% and %TypedArray%.prototype";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var gTestfile = "for-in-with-assignments.js";
 var BUGNUMBER = 1164741;
 var summary = "Parse |for (var ... = ... in ...)|."
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

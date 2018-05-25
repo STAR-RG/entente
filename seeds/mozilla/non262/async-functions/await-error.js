@@ -1,7 +1,7 @@
 var BUGNUMBER = 1317153;
 var summary = "await outside of async function should provide better error";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 let caught = false;
 try {

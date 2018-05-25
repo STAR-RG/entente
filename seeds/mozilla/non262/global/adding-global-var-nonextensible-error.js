@@ -9,7 +9,7 @@ var summary =
   "object isn't extensible, and an error is thrown while decompiling the " +
   "global, don't assert";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

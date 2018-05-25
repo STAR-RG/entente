@@ -8,7 +8,7 @@ var summary =
   "Represent /a/.{lastIndex,global,source,multiline,sticky,ignoreCase} with " +
   "plain old data properties";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

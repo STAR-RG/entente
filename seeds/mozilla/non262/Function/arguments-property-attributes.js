@@ -7,7 +7,7 @@ var gTestfile = 'arguments-property-attributes.js';
 var BUGNUMBER = 516255;
 var summary = "Attributes for properties of arguments objects";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

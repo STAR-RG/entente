@@ -9,7 +9,7 @@ var summary =
   "__proto__ should work in destructuring patterns as the targets of " +
   "for-in/for-of loops";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

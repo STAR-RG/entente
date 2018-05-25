@@ -10,7 +10,7 @@ var summary =
   "%TypedArray.prototype.copyWithin shouldn't misbehave horribly if " +
   "index-argument conversion detaches the underlying ArrayBuffer";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

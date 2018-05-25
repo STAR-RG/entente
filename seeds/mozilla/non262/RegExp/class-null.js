@@ -1,7 +1,7 @@
 var BUGNUMBER = 1279467;
 var summary = "Null in character class in RegExp with unicode flag.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var m = /([\0]+)/u.exec("\u0000");
 assertEq(m.length, 2);

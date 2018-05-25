@@ -7,7 +7,7 @@
 var BUGNUMBER = 858381;
 var summary = 'Object.freeze([]).pop() must throw a TypeError';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 887016;
 var summary = "Trace RegExp.prototype[@@search] behavior.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var n;
 var log;

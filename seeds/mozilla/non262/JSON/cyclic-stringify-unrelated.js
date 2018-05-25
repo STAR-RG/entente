@@ -5,7 +5,7 @@
 var BUGNUMBER = 1197097;
 var summary = "JSON.stringify shouldn't use context-wide cycle detection";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

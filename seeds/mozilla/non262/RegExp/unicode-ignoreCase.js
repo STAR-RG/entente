@@ -9,7 +9,7 @@
 var BUGNUMBER = 1135377;
 var summary = "Implement RegExp unicode flag -- ignoreCase flag.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(code, ...equivs) {
   var codeRe = new RegExp(String.fromCodePoint(code) + "+", "iu");

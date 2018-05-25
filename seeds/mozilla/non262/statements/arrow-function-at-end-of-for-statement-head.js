@@ -8,7 +8,7 @@ var summary =
   "Don't assert when an arrow function occurs at the end of a declaration " +
   "init-component of a for(;;) loop head";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

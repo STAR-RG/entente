@@ -10,7 +10,7 @@ var summary =
   "Don't crash compiling a non-body-level for-loop whose loop declaration is " +
   "a const";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,5 +1,357 @@
-﻿======
-BUG #7 (NEW)
+======
+BUG #15 (NEW)
+
+Date reported: May 17, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5187
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.microbenchmarks/string-prototype-split-observable-side-effects4.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.microbenchmarks_string-prototype-split-observable-side-effects4_14_.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Property access󠀡es do not match expectation
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+According to ES6 documentation, RegExp.prototype.exec property 
+can be writable and configurable. All engines can override the property,
+Chakra does not support the redeclaration.
+
+======
+BUG #14 (NEW)
+
+Date reported: May 17, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5182
+
+Original:
+./jsfuzz/seeds/v8.test.benchmarks.data/sunspider/string-validate-input.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_v8.test.benchmarks.data_sunspider_string-validate-input.js
+
+Patch:
+--- ./jsfuzz/seeds/v8.test.benchmarks.data/sunspider/string-validate-input.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_v8.test.benchmarks.data_sunspider_string-validate-input.js
+@@ -1,6 +1,6 @@
+ letters = new Array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z");
+-numbers = new Array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26);
+-colors  = new Array("FF","CC","99","66","33","00");
++numbers = new Array(1,398300,253,4,5,6,7,8,65545,10,11,12,13,14,15,0,17,18,19,20,21,22,23,24,25,26);
++colors  = new Array("FF","CC","0","66","33","00");
+ 
+ var endResult;
+ 
+@@ -15,7 +15,7 @@
+       (k%2)?email=username+"@mac.com":email=username+"(at)mac.com";
+ 
+       // validate the email address
+-      var pattern = /^[a-zA-Z0-9\-\._]+@[a-zA-Z0-9\-_]+(\.?[a-zA-Z0-9\-_]*)\.[a-zA-Z]{2,3}$/;
++      var pattern = /^[a-zA-Z0-9\-\._]+@[a-zA-Z0-9\-_]+(\.?[a-zA-Z0-9\-_]*)\.[a-zA-Z]{2,2147483648}$/;
+ 
+       if(pattern.test(email))
+       {
+@@ -25,6 +25,30 @@
+       else
+       {
+          r = email + " does NOT appear to be a valid email address.";
++         addResult(r);
++      }
++   }
++
++   // make up ZIP codes
++   for (var s=0;s<4000;s++)
++   {
++      var zipGood = true;
++      var zip = makeNumber(4);
++      (s%2)?zip=zip+"xyz":zip=zip.concat("7");
++
++      // validate the zip code
++      for (var i = 0; i < zip.length; i++) {
++          var ch = zip.charAt(i);
++          if (ch < "0" || ch > "9") {
++              zipGood = false;
++              r = zip + " contains letters.";
++              addResult(r);
++          }
++      }
++      if (zipGood && zip.length>5)
++      {
++         zipGood = false;
++         r = zip + " is longer than five characters.";
+          addResult(r);
+       }
+    }
+
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Syntax error in regular expression
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra does not instate a RegExp object with a pattern that have 
+a long number on quantifier prefix. V8, SpiderMonkey and JavaScriptCore
+can instantiate and validate the pattern, Chakra throw a SyntaxError.
+
+======
+BUG #13 (NEW)
+
+Date reported: May 10, 2018
+
+Type: Test failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5128
+
+Original:
+./jsfuzz/seeds/JerryJS/regression/for-parse.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_regression_for-parse.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra should throw an Exception when we try to ran a "for" without a statement.
+======
+BUG #12 (NEW)
+
+Date reported: May 02, 2018
+
+Type: Test failure
+
+URLs
+JSCore: https://bugs.webkit.org/show_bug.cgi?id=185208
+
+Original:
+./jsfuzz/seeds/mozilla/non262/TypedArray/constructor-iterable-undefined-or-null.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_constructor-iterable-undefined-or-null.js
+
+Patch: None
+
+pattern:
+-------------JavaScriptCore
+Error: Type error
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+According to GetMethod (object, @@iterator) ES6 specification, if the iterator value is either "undefined" or "null", the method should return "undefined", but JSCore does not support this property as "null".
+
+======
+BUG #11 (NEW)
+
+Date reported: May 02, 2018
+
+Type: Test failure
+
+URLs
+JSCore: https://bugs.webkit.org/show_bug.cgi?id=185197
+
+Original:
+./jsfuzz/seeds/mozilla/non262/TypedArray/keys.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_keys.js
+
+Patch:
+--- jsfuzz/seeds/mozilla/non262/TypedArray/keys.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_TypedArray_keys.js
+@@ -23,7 +23,7 @@
+     }
+ 
+     // Throws if `this` isn't a TypedArray.
+-    var invalidReceivers = [undefined, null, 1, false, "", Symbol(), [], {}, /./,
++    var invalidReceivers = [undefined, null, 0, false, "", Symbol(), [], {}, /./,
+                             new Proxy(new constructor(), {})];
+     invalidReceivers.forEach(invalidReceiver => {
+         assertThrowsInstanceOf(() => {
+
+ 
+Pattern:
+-------------JavaScriptCore
+Exception: Error: JSFUZZ ERROR: Unsupported function (uneval)
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+According to ES6 specification, the Iterator of a TypedArray.keys() or an Array.keys() should return an object on this order {value: Integer, done: Boolean}.
+
+======
+BUG #10 (CONFIRMED)
+
+Date reported: April 30, 2018
+
+Type: Test failure
+
+URLs
+JSCore: https://bugs.webkit.org/show_bug.cgi?id=185156
+Chakra: https://github.com/Microsoft/ChakraCore/issues/5076
+
+Original:
+  ./jsfuzz/seeds/Tiny-js.tests/test039.js
+
+Fuzzed:
+  ./jsfuzz/bugs/fuzzed_files/fuzzed_Tiny-js.tests_test039.js
+
+Patch:
+--- jsfuzz/seeds/Tiny-js.tests/test039.js
++++ jsfuzz/bugs/fuzzed_files/fuzzed_Tiny-js.tests_test039.js
+@@ -8,6 +8,7 @@
+ var b = { get_member : function() { return this.member;}, member:41 };
+ 
+ with(b) {
++var a;
+   let a = get_member(); //<--- a is local for this block
+   var c = a+1;
+ }
+
+Pattern:
+  -------------JavaScriptCore
+  -------------Chakra
+  -------------SpiderMonkey
+  Error: redeclaration of var a
+  -------------v8
+  Error: Identifier 'a' has already been declared
+
+Explanation:
+  There is an inconsistency when a variable is declared twice as "var" and "let" inside the "with" scope. JScore and Chakra should raise a SyntaxError.
+
+======
+BUG #9 (NEW)
+
+Date reported: April 29, 2018
+
+Type: Test failure
+
+URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185127
+
+Original:
+  ./jsfuzz/seeds/JerryJS/jerryjs.ecma/24.01.04-006.js
+
+Fuzzed:
+  ./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_24.01.04-006.js
+
+Patch:
+  --- jsfuzz/seeds/JerryJS/jerryjs.ecma/24.01.04-006.js
+  +++ jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_jerryjs.ecma_24.01.04-006.js
+  
+  var a = new ArrayBuffer(5);
+  -var b = a.slice (3, 2);
+  +var b = a.slice (3, 4294967297);
+  if(!(b.byteLength === 0)) throw new Error("Test failed");
+
+Pattern:
+  -------------JavaScriptCore
+  -------------Chakra
+  Error: Test failed
+  -------------SpiderMonkey
+  Error: Test failed
+  -------------v8
+  Error: Test failed
+
+Explanation:
+  Inconsistence when slicing an ArrayBuffer with a long number.
+
+Expected results: 
+  Error: Test failed
+
+Actual results:
+  Pass without failures
+
+======
+BUG #8 (CONFIRMED)
+
+Date reported: April 29, 2018
+
+Type: Assertion failure
+
+URL Chakra: https://github.com/Microsoft/ChakraCore/issues/5067
+URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185130
+
+Original:
+./jsfuzz/seeds/mozilla/non262/lexical-environment/block-scoped-functions-annex-b-with.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_lexical-environment_block-scoped-functions-annex-b-with.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+Error: Assertion failed: got "function f() {
+-------------Chakra
+Error: Assertion failed: got "function f() {
+-------------SpiderMonkey
+
+-------------v8
+
+Explanation:
+Inconsistence when we try to access an property inside the "with" scope.
+
+Actual result: TypeError: Assertion failed: got "function f() {return "fun-f";}", expected "undefined"
+Expected result: pass without failures
+
+======
+BUG #7 (CONFIRMED)
+
+Date reported: April 29, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5065
+
+Original:
+./jsfuzz/seeds/mozilla/non262/Error/constructor-proto.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Error_constructor-proto.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Assertion failed: got "function() {
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+
+According to documentation, Reflect.getPrototypeOf(TypeError) should return the Error prototype.
+
+Actual Result: TypeError: Assertion failed: got "function() {[native code]}", expected "function Error() { [native code] }"
+Expected Result: pass without failures
+
+======
+BUG #6 (CONFIRMED/FIXED)
 
 Date reported: April 25, 2018
 
@@ -27,6 +379,13 @@ Patch:
  
 
 Pattern:
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
 
 Explanation:
 
@@ -34,7 +393,7 @@ According to documentation, when we try to evaluate a
 invalid strings using Unary plus, the return should be NaN.
 
 ======
-BUG #6 (COMPATIBILITY)
+BUG #5 (CONFIRMED)
 
 Date reported: April 23, 2018
 
@@ -62,36 +421,6 @@ Explanation:
 
 When we try to fill an array with an object that contains a getter-only property we can't 
 set this object property. Chakra should raise a TypeError, but it does not do anything.
-
-======
-BUG #5 (NEW)
-
-Date reported: April 23, 2018
-
-Type: Should throw TypeError 
-
-URLs: https://github.com/Microsoft/ChakraCore/issues/5033
-
-Original:
-./jsfuzz/seeds/mozilla/non262/Array/length-truncate-nonconfigurable-sparse.js
-
-Fuzzed:
-./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_Array_length-truncate-nonconfigurable-sparse.js
-
-Patch: None 
- 
-Pattern:
-
--------------JavaScriptCore
--------------Chakra
-Error: non-configurable property should trigger TypeError operty should trigger TypeError, got Error: didn't throw?!
--------------SpiderMonkey
--------------v8
-
-Explanation:
-
-When we try to fill an array with an object that contains a getter-only property we can't 
-set this object property. Chakra should raise a TypeError.
 
 ====== 
 BUG #4 (NEW)

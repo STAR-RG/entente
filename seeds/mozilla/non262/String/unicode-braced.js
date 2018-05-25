@@ -1,7 +1,7 @@
 var BUGNUMBER = 320500;
 var summary = 'Add \\u{xxxxxx} string literals';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq("\u{0}", String.fromCodePoint(0x0));
 assertEq("\u{1}", String.fromCodePoint(0x1));

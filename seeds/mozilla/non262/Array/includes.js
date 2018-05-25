@@ -6,7 +6,7 @@
 var BUGNUMBER = 1069063;
 var summary = "Implement Array.prototype.includes";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 assertEq(typeof [].includes, "function");
 assertEq([].includes.length, 1);

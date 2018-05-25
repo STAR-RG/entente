@@ -1,7 +1,7 @@
 var BUGNUMBER = 1131043;
 var summary = "Implement @@species getter for builtin types";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var TypedArray = Object.getPrototypeOf(Int8Array);
 

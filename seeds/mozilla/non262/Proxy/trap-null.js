@@ -7,7 +7,7 @@ var gTestfile = 'trap-null.js';
 var BUGNUMBER = 1257102;
 var summary = "null as a trap value on a handler should operate on the target";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

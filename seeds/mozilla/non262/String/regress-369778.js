@@ -6,7 +6,7 @@ var summary =
   "RegExpStatics::makeMatch should make an undefined value when the last " +
   "match had an undefined capture.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

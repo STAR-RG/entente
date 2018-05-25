@@ -3,7 +3,7 @@
 var BUGNUMBER = 1343158;
 var summary = "Error.stack should provide meaningful stack trace in async function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 let COOKIE = "C0F5DBB89807";
 

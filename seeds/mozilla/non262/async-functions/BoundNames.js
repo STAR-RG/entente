@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "Bound names of async functions";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 async function test() {}
 assertEq(test.name, "test");

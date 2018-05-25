@@ -1,7 +1,7 @@
 var BUGNUMBER = 1185106;
 var summary = "EarlyErrors for async function";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function assertThrowsSE(code) {
   assertThrows(() => Reflect.parse(code), SyntaxError);

@@ -7,7 +7,7 @@
 var BUGNUMBER = 1288459;
 var summary = "|yield| is sometimes a valid identifier";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

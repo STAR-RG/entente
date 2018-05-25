@@ -6,7 +6,7 @@
 var BUGNUMBER = 872853;
 var summary = 'Various tests of ToNumber(string), particularly +"0x" being NaN';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

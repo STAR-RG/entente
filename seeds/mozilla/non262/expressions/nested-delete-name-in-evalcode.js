@@ -7,7 +7,7 @@ var summary =
   "|delete x| inside a function in eval code, where that eval code includes " +
   "|var x| at top level, actually does delete the binding for x";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -6,7 +6,7 @@ var gTestfile = 'stringify-replacer-array-boxed-elements.js';
 var BUGNUMBER = 648471;
 var summary = "Boxed-string/number objects in replacer arrays";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

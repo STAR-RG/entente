@@ -7,7 +7,7 @@ var gTestfile = 'propertyIsEnumerable.js';
 var BUGNUMBER = 619283;
 var summary = "Object.prototype.propertyIsEnumerable";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

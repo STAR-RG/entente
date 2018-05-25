@@ -1,7 +1,7 @@
 var BUGNUMBER = 0;
 var summary = "RegExp.prototype.split should reflect the change to Object.prototype.flags.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 Object.defineProperty(Object.prototype, "flags", Object.getOwnPropertyDescriptor(RegExp.prototype, "flags"));
 delete RegExp.prototype.flags;

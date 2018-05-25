@@ -8,7 +8,7 @@ var summary =
   "Don't crash constant-folding an |if| governed by a truthy constant, whose " +
   "alternative statement is another |if|";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

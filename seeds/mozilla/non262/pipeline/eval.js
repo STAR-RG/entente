@@ -1,7 +1,7 @@
 const BUGNUMBER = 1405943;
 const summary = "Implement pipeline operator (eval)";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 const testvalue = 10;
 

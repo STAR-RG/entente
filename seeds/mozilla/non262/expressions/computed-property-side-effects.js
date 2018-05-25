@@ -8,7 +8,7 @@ var summary =
   "the name expression isn't effectful, because calling ToPropertyKey on " +
   "some non-effectful expressions has user-modifiable behavior";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

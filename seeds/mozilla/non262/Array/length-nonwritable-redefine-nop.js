@@ -9,7 +9,7 @@
 var BUGNUMBER = 858381;
 var summary = "No-op array length redefinition";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

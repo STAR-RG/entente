@@ -6,7 +6,7 @@ var gTestfile = 'object-literal-accessor-property-name.js';
 var BUGNUMBER = 715682;
 var summary =
   "Permit numbers and strings containing numbers as accessor property names";
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 //-----------------------------------------------------------------------------
 

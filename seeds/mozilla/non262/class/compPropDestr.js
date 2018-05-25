@@ -1,7 +1,7 @@
 var BUGNUMBER = 924688;
 var summary = 'Computed Property Names';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var key = "z";
 var { [key]: foo } = { z: "bar" };

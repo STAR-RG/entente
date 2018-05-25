@@ -7,7 +7,7 @@ var summary =
   "\\u and \\x must be followed by the appropriate number of hex digits or " +
   "else it is a syntax error";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

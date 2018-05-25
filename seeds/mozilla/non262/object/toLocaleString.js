@@ -7,7 +7,7 @@ var gTestfile = 'toLocaleString.js';
 var BUGNUMBER = 653789;
 var summary = "Object.prototype.toLocaleString";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -9,7 +9,7 @@ var summary =
   "global, when the name refers to a binding introduced by a strict mode " +
   "eval frame";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

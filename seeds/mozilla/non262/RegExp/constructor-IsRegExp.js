@@ -1,7 +1,7 @@
 var BUGNUMBER = 1147817;
 var summary = "RegExp constructor with pattern with @@match.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var matchValue;
 var constructorValue;

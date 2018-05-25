@@ -5,7 +5,7 @@
 var BUGNUMBER = 604504;
 var summary = "eval called from a native function is indirect";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

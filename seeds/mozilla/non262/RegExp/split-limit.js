@@ -1,7 +1,7 @@
 var BUGNUMBER = 1287525;
 var summary = "RegExp.prototype[@@split] shouldn't use optimized path if limit is not number.";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var rx = /a/;
 var r = rx[Symbol.split]("abba", {valueOf() {

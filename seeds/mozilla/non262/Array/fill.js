@@ -6,7 +6,7 @@
 var BUGNUMBER = 911147;
 var summary = 'Array.prototype.fill';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

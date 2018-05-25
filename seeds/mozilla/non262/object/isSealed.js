@@ -6,7 +6,7 @@
 var BUGNUMBER = 1062860;
 var summary = "Object.isSealed() should return true when given primitive values as input";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 assertEq(Object.isSealed(), true);
 assertEq(Object.isSealed(undefined), true);
 assertEq(Object.isSealed(null), true);

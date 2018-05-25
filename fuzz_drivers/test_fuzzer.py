@@ -25,11 +25,6 @@ def test_tinyjs():
     multicall.multicall_directories(path_name, True, validator=validate)
 
 @pytest.mark.skip(reason="temporarilly disabling")
-def test_jerryjs():
-    path_name = os.path.join(constants.seeds_dir, 'JerryJS/jerryjs.ecma')
-    multicall.multicall_directories(path_name, True, validator=validate)
-
-@pytest.mark.skip(reason="temporarilly disabling")
 def test_fuzz_webkit_benchmarks():
     path_name = os.path.join(constants.seeds_dir, 'WebKit.JSTests.microbenchmarks')
     multicall.multicall_directories(path_name, True, validator=validate)

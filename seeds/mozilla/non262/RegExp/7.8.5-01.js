@@ -6,7 +6,7 @@
 var BUGNUMBER = 615070;
 var summary = "Line terminator after backslash is invalid in regexp literals";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -10,7 +10,7 @@ var summary =
   "new DataView(...) shouldn't misbehave horribly if index-argument " +
   "conversion detaches the ArrayBuffer to be viewed";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

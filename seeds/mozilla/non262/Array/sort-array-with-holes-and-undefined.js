@@ -9,7 +9,7 @@ var summary =
   "Sorting an array containing only holes and |undefined| should move all " +
   "|undefined| to the start of the array";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

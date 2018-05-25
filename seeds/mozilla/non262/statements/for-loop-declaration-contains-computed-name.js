@@ -9,7 +9,7 @@ var summary =
   "Support computed property names in destructuring declarations in " +
   "for-in/of loop heads";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

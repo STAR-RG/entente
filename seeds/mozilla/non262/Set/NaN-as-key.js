@@ -7,7 +7,7 @@
 var BUGNUMBER = 722260;
 var summary = 'All NaNs must be treated as identical keys for Set';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

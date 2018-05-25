@@ -8,7 +8,7 @@ var BUGNUMBER = 514581;
 var summary = "Function.prototype.caller should throw a TypeError for " +
               "strict-mode functions";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

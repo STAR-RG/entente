@@ -10,7 +10,7 @@ var summary =
   "ES6 for-loop semantics for for(;;) loops whose heads contain lexical "
   "declarations";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -1,7 +1,7 @@
 var BUGNUMBER = 918879;
 var summary = 'String.prototype.codePointAt';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 // Tests taken from:
 // https://github.com/mathiasbynens/String.prototype.codePointAt/blob/master/tests/tests.js

@@ -9,7 +9,7 @@ var summary =
   'Guard against infinite recursion when converting |this| to string for the ' +
   'String.prototype.* methods';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

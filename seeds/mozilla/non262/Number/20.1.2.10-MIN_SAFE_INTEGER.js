@@ -6,7 +6,7 @@
 var BUGNUMBER = 885798;
 var summary = "ES6 (draft April 2014) 20.1.2.10 Number.MIN_SAFE_INTEGER";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

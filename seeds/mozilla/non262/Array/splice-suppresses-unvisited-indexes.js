@@ -9,7 +9,7 @@ var summary =
   'Array.prototype.splice, when it deletes elements, should make sure any ' +
   'deleted but not visited elements are suppressed from subsequent enumeration';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

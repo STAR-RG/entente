@@ -9,7 +9,7 @@ var summary =
   '|var| statements for existing, read-only/permanent properties should not ' +
   'be errors';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

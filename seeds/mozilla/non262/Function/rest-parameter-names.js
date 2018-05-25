@@ -7,7 +7,7 @@ var summary =
   "Rest parameters to functions can be named |yield| or |eval| or |let| in "
   "non-strict code";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

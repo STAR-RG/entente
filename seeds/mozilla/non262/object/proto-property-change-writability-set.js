@@ -13,7 +13,7 @@ var summary =
   "Don't assert anything about a shape from the property cache until it's " +
   "known the cache entry matches";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

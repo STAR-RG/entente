@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------
 var BUGNUMBER = 562448;
 var summary = 'Function.prototype.apply should accept any arraylike arguments';
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

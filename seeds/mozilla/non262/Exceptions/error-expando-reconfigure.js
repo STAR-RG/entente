@@ -10,7 +10,7 @@ var summary =
   "Reconfiguring the first expando property added to an Error object " +
   "shouldn't assert";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

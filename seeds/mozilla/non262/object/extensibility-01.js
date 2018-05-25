@@ -10,7 +10,7 @@ var gTestfile = '15.2.3.10-01.js';
 var BUGNUMBER = 492849;
 var summary = 'ES5: Implement Object.preventExtensions, Object.isExtensible';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

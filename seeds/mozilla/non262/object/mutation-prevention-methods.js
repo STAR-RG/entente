@@ -10,7 +10,7 @@ var gTestfile = 'mutation-prevention-methods.js';
 var BUGNUMBER = 492849;
 var summary = 'Object.is{Sealed,Frozen}, Object.{seal,freeze}';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

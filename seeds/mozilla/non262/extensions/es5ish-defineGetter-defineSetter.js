@@ -5,7 +5,7 @@
 var BUGNUMBER = 715821;
 var summary = "Implement __define[GS]etter__ using Object.defineProperty";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /*************
  * UTILITIES *

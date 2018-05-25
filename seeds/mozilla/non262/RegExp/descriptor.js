@@ -1,7 +1,7 @@
 var BUGNUMBER = 1120169;
 var summary = "Implement RegExp.prototype.{global, ignoreCase, multiline, sticky, unicode} - property descriptor";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 var getters = [
   "flags",

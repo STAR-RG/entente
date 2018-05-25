@@ -6,7 +6,7 @@
 var BUGNUMBER = 587366;
 var summary = "String.prototype.replace with non-regexp searchValue";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

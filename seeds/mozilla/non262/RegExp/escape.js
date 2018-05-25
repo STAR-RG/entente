@@ -1,7 +1,7 @@
 var BUGNUMBER = 1130860;
 var summary = 'Slash and LineTerminator should be escaped correctly.';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 function test(re, source) {
   assertEq(re.source, source);

@@ -7,7 +7,7 @@
 var BUGNUMBER = 604971;
 var summary = 'array.sort compare-function gets incorrect this';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -7,7 +7,7 @@ var summary =
   "Make __proto__ in object literals a special form not influenced by " +
   "|Object.prototype|";
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 /**************
  * BEGIN TEST *

@@ -6,7 +6,7 @@
 var BUGNUMBER = 430133;
 var summary = 'ES5 Object.defineProperty(O, P, Attributes): Function.length';
 
-print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 loadRelativeToScript("defineProperty-setup.js");
 
