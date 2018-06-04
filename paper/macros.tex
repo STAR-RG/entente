@@ -1,0 +1,78 @@
+%% helpers
+\newcommand{\js}{JS}
+\newcommand{\tname}{TNAME}
+\newcommand{\Comment}[1]{}
+\newcommand{\numsubjects}{5}
+\newcommand{\etal}{and colleagues'}
+\newcommand{\ie}{i.e.}
+\newcommand{\eg}{e.g.}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{{\color{red}\ding{55}}}%
+\newcommand{\pGoodGood}{$\mathit{P}${\small\cmark\!\cmark}}%
+\newcommand{\pGoodBad}{$\mathit{P}${\small\cmark\!\xmark}}%
+\newcommand{\pBadDontCare}{$\mathit{P_?}$}%
+\newcommand{\sfl}{SFL\xspace}
+\newcommand{\ddg}{DDG\xspace}
+
+%% annotations
+\newif\ifdraftmode
+%% Comment or uncomment the \draftmodetrue line.
+\draftmodetrue
+\ifdraftmode
+ \newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
+ \newcommand{\Mar}[1]{\textbf{[[Marcelo: }{\color{magenta} #1}\textbf{]]}}
+ \newcommand{\Igor}[1]{\textbf{[[Igor: }{\color{blue} #1}\textbf{]]}}
+ \newcommand{\note}[1]{\todo[inline,color=red!30,caption={}]{#1}}
+\else
+ \newcommand{\Fix}[1]{\relax}
+ \newcommand{\marcelo}[1]{\relax}
+ \newcommand{\alex}[1]{\relax}
+ \newcommand{\xiangyu}[1]{\relax}
+ \newcommand{\note}[1]{\relax}
+\fi
+
+% For submitted version only.
+\pagenumbering{arabic}
+
+% Uncomment this if you need more space
+%% \makeatletter
+%% \def\@copyrightspace{\enlargethispage{-10pt}\relax}
+%% \makeatother
+
+\newcommand{\codesize}{\smaller}
+\newcommand{\CodeIn}[1]{\codeid{#1}}
+\newcommand{\CodeInM}[1]{\mcodeid{#1}}
+% \|name| or \mathid{name} denotes identifiers and slots in formulas
+\def\|#1|{\mathid{#1}}
+\newcommand{\mathid}[1]{\ensuremath{\mathit{#1}}}
+% \<name> or \codeid{name} denotes computer code identifiers
+\def\<#1>{\codeid{#1}}
+\newcommand{\codeid}[1]{\ifmmode{\mbox{\codesize\ttfamily{#1}}}\else{\codesize\ttfamily #1}\fi}
+\def\<#1>{\mcodeid{#1}}
+\newcommand{\mcodeid}[1]{\mbox{\codesize\ttfamily{#1}}}
+
+%% thumbs up down
+\newcommand*{\RightThumbsUpAux}[1]{%
+  \begingroup
+    \sbox0{Ag}%
+    \raisebox{-\dp0}{%
+      \includegraphics[{%
+        height=\dimexpr\dp0+\ht0\relax,
+        #1%
+      }]{thumbsup.pdf}%
+    }%
+  \endgroup
+}
+\newcommand*{\RightThumbsUp}{%
+  \RightThumbsUpAux{}%
+}
+\newcommand*{\RightThumbsDown}{%
+  \RightThumbsUpAux{origin=c,angle=180}%
+}
+\newcommand*{\LeftThumbsUp}{%
+  \scalebox{-1}[1]{\RightThumbsUp}%
+}
+\newcommand*{\LeftThumbsDown}{%
+  \scalebox{-1}[1]{\RightThumbsDown}%
+}
+
