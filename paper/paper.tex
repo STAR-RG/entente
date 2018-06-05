@@ -2,6 +2,14 @@
 \documentclass[10pt,conference,anonymous]{IEEEtran}
 \IEEEoverridecommandlockouts
 
+%% Marcelo added this
+\makeatletter
+\renewcommand\footnoterule{%
+  \kern-3\p@
+  \hrule\@width.4\columnwidth
+  \kern2.6\p@}
+  \makeatother
+
 \input{packages}
 \input{macros}
 
@@ -51,7 +59,7 @@ to detect errors not manifested by universal oracles.
 
 This paper reports on a study to find those kinds of bugs in
 JavaScript engines. The goal of the study is to improve quality of
-existing \js{} engines by improving the bug finding process. We used
+existing \js{} engines by improving the bug-finding process. We used
 differential testing~\cite{Brumley-etal-ss07}, a technique that has
 been applied in a variety of
 contexts~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}
@@ -84,75 +92,41 @@ infrastructure we used in this study. Arrowed lines indicate control
 flow (dashed) and data flow (filled); lines with no arrow denote
 encapsulation. The bug-finding process takes on input JS files
 originating from the regression test suites of various JS engines. It
-is worth noting that we found online regression suites for a total of
-\Fix{YY} JS engines.\Mar{show table with name and count of JS files}
-If input fuzzing~\cite{fuzz-testing-history} is not selected, the
-oracle checks whether or not the output is consistent across all
-engine implementations. In case the test passes in all engines or
-fails in all engines (\ie{}, the output is consistent), the
-infrastructure discards the corresponding input. Otherwise, it
-considers the input as potentially fault-revealing; hence interesting
-for human inspection. If fuzzing is selected, new inputs are obtained
-from a given input using some off-the-shelf fuzzer; the workflow is
-similar to that of no fuzzing. Several fuzzing methods have been
-proposed in the past, varying with respect to how new inputs are
-generated (\eg{}, coverage-based~\cite{afl,honggfuzz},
+is worth noting that we mined the repositories of JS engines and found
+a total of \Fix{XX} JS files associated with \Fix{YY} test suite.\Mar{show table with name and count of JS files}
+
+The bug-finding process works as follows.  Considering the case of a
+single input file, the oracle checks whether or not the output
+produced for that file is consistent across all engine
+implementations. In case the test passes in all engines or fails in
+all engines (\ie{}, the output is consistent), the infrastructure
+discards the corresponding input. Otherwise, it considers the input as
+potentially fault-revealing; hence interesting for human
+inspection. Considering the case fuzzing~\cite{fuzz-testing-history}
+is selected, new inputs are obtained from a given input using some
+off-the-shelf fuzzer\footnote{Several fuzzing methods have been proposed in
+the past, varying with respect to how new inputs are generated (\eg{},
+coverage-based~\cite{afl,honggfuzz},
 grammar-based~\cite{grammarinator,jsfunfuzz}, and
-random-based~\cite{radamsa}). \Mar{which ones we covered? why is this
-  relevant?}
+random-based~\cite{radamsa}).}. The workflow is similar to that of no
+fuzzing. In this case, however, multiple warnings can be produced for
+a given seed input.
 
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. The HI
-group includes those inputs that manifest anomaly directly by the test
-(or its close neighborhood) as opposed to anomaly in some JS
-function. The rationale is that the test was able to execute to
-completion without violating any internal checks of the API, but
-failed to satisfy some check of the test. The LO group, in contrast,
-includes those cases where the anomaly was observed executing some JS
-function. We found that engine implementations often check
-pre-conditions of API functions differently, leading to premature
-failures. Most of the inputs in this category failed to satisfy the
-pre-condition check of some, but not all engines. Although we did find
-real bugs from warnings manifested in this category, the proportion is
-much lower compared to the HI category--only 12\% of the reals bugs we
-found originated from the LO category.\Mar{can we detect dups mining
-  issue trackers?}
-
-\Mar{show real examples of HI and LO and provide the
-  rationale for such classification.}
-
-%% selects randomly one of the inputs to fuzz with a
-%% given tool, say the black-box fuzzer Radamsa~\cite{radamsa}. Each fuzzing iteration produces a new
-%% file. For grammar-agnostic fuzzers, like Radamsa, the infrastructure
-%% can discard syntactically invalid inputs using an external parser for
-%% the input language; semantically invalid inputs can be prevented with
-%% with linters. Once the input is found to be likely valid, the
-%% infrastructure invokes the oracle to check correctness. 
-
-
-% \section{Related Work}
-% Differential testing with fuzzing can improve the quality of programs
-% Yang et al. \cite{yang-2011-finding}
-
-%% \Mar{rule of thumb: explain the
-%%   contribution/novelty, then results achieved, and then how it relates
-%% with our proposal.}
-%% \Mar{this is not clear$\rightarrow$}Yang et al. \cite{yang-2011-finding} proposed CSmith\footnote{\url{http://embed.cs.utah.edu/csmith/}}, a grammar-fuzzer 
-%% of C programs to generate invalid entries\Fix{the goal of a
-%%    fuzzer is to generate valid inputs/entries. this is strange}\MAB{the
-%%   goal is to generate valid programs without undefined behavior to
-%%   facilitate differential testing} and
-%% find bugs in several C compilers\Fix{it is strange that you don't mention differential
-%%   testing, which is central in CSmith, and the use of LLVM and GCC as
-%%   oracles.}.\Mar{this is just listing fuzzers. don't do this. try to
-%%   follow rule of thumb above.}Similar fuzzers involving grammar and rules are found in Holler et al. \cite{holler-2012-fuzzing} 
-%% that exposes the LangFuzz to generate entries based in code fragments 
-%% (language grammar, sample code, test suite) and the tool Mozilla 
-%% Funfuzz\footnote{\url{https://github.com/MozillaSecurity/funfuzz}}
-%% that implements a fuzzer based on JavaScript language to improve the 
-%% testing for SpiderMonkey engine, the interpreter of Mozilla Firefox.
-%% \Fix{...}
+group includes those inputs where execution manifests anomaly in the
+test code (or its close neighborhood) as opposed to some internal JS
+function. The rationale is that the test in this group executed
+without violating any internal checks of the API.
+The LO group, in contrast, includes those cases where the anomaly
+was observed executing some JS function. We found that engine
+implementations often check pre-conditions of API functions
+differently, leading to premature failures. Although we did find real bugs from warnings manifested
+in this category, the proportion is much lower compared to the HI
+category--only 12\% of the reals bugs we found originated from the LO
+category. \Mar{show real examples of HI and LO and provide the
+  rationale for such classification.} \Mar{can we detect dups mining issue trackers?}
 
 \section{Current Results}
 \label{sec:results}
@@ -170,7 +144,7 @@ found originated from the LO category.\Mar{can we detect dups mining
   \label{tab:bugs}
   \begin{tabular}{cccccc}
     \toprule
-    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}   \\
+    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  \\
     \midrule    
     1  & 4/12 & \checkm & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}      \\ 
     2  & 4/12 & \checkm & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}      \\
@@ -208,25 +182,10 @@ found originated from the LO category.\Mar{can we detect dups mining
 %% Although there are many features yet to implement in our
 %% infrastructure, 
 
-The workflow described in Section~\ref{sec:design} is currently
-functional. This section shows preliminary results obtained with our
-infrastructure providing some evidence that finding bugs in JS runtime
-engines with differential testing is promising. Table~\ref{tab:bugs} shows the list of bugs we
-reported on issue trackers of different engines in the period of 42 days. For example, bug \# 6 was manifested by the JS code \CodeIn{var
-  a = \{valueOf:~function()\{return ``\textbackslash{}x00''\}\}
-  assert(+a === 0)\}}.  The object property \CodeIn{valueOf} stores a
-function that returns a primitive value identifying the target
-object~\cite{valueof}. That function returns an empty string in the
-original version of this code. The modified version of the code
-returns a string representation of a null character (called
-\CodeIn{NUL} in ascii). The unary plus expression ``\CodeIn{+a}", appearing in the assertion,
-is equivalent to the abstract operation \CodeIn{ToNumber(a.valueOf())}
-that converts a string to a number, otherwise the operation returns NaN 
-(Not a Number)\cite{unary-plus}. For this case, Chakra evaluates the unary
-plus to NaN as expected, as the null character cannot be converted. As result, the test fails as
-expected. Chakra, in contrast, incorrectly converts the string to zero, making the test to pass.
-
-So far, ten of the bugs we reported
+This section shows results obtained under our
+infrastructure. Table~\ref{tab:bugs} shows the list of bugs we
+reported on issue trackers of different engines in the period of 42
+days. So far, ten of the bugs we reported
 were confirmed, two of which were fixed. One bug report we
 submitted was rejected on the basis that the offending JS file
 manifested an expected incompatibility across engine
@@ -243,6 +202,25 @@ discrepancies were \emph{not} produced with fuzzing (column
 observation emphasizes the importance of continuously collecting test suites from
 multiple sources; today, we use test suites from seven different open
 source engines, including a total of 30K test files.
+
+\vspace{1ex}\noindent\textbf{Bug \# 6.} The JS code \CodeIn{var a = \{valueOf:~function()\{return
+  ``\textbackslash{}x00''\}\} assert(+a === 0)\}} 
+manifested a bug in the \js{} engine Chakra.  The object
+property \CodeIn{valueOf} stores a function that returns a primitive
+value identifying the target object~\cite{valueof}. The original
+version of this code returns an empty string whereas the version of
+the code modified by the Radamsa fuzzer~\cite{radamsa} returns a string
+representation of a null character (called \CodeIn{NUL} in ascii). The
+unary plus expression ``\CodeIn{+a}", appearing in the assertion, is
+equivalent to the abstract operation \CodeIn{ToNumber(a.valueOf())}
+that converts a string to a number, otherwise the operation returns
+NaN (Not a Number)\cite{unary-plus}. For this case, Chakra evaluates
+the unary plus to NaN as expected, as the null character cannot be
+converted. As result, the test fails as expected. Chakra, in contrast,
+incorrectly converts the string to zero, making the test to pass. All
+other engines fail on this test. As Table~\ref{tab:bugs} shows, the
+Chakra team fixed the issue soon after we reported the problem.
+
 
 %\section*{Acknowledgment}
 
