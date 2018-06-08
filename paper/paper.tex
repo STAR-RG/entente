@@ -15,7 +15,7 @@
 
 \begin{document}
 
-\title{Finding Bugs in JavaScript Engines with Differential
+\title{Finding Functional Bugs in JavaScript Engines with Differential
   Testing---an Experience Report}
 
 %% \author{
@@ -81,28 +81,55 @@ waste/cost) and output correctness (as to reduce false positives).}
 
 
 %\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
-  \includegraphics[trim=20 350 200 0,clip,width=0.45\textwidth]{google-awards-workflow}
+%  \includegraphics[trim=20 350 200
+%    0,clip,width=0.35\textwidth]{google-awards-workflow}
+  \includegraphics[trim=0 250 0 0,clip,width=0.5\textwidth]{google-awards-workflow}  
   \caption{\label{fig:workflow}Infrastructure.}
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates the workflow of the
-infrastructure we used in this study. Arrowed lines indicate control
-flow (dashed) and data flow (filled); lines with no arrow denote
-encapsulation. The bug-finding process takes on input JS files
-originating from the regression test suites of various JS engines. It
-is worth noting that we mined the repositories of JS engines and found
-a total of \Fix{XX} JS files associated with \Fix{YY} test suite.\Mar{show table with name and count of JS files}
+infrastructure we used in this study. Boxes denote encapsulation,
+arrowed lines indicate control flow (dashed) and data flow (filled),
+and the cyclic icons denote repetition. In this case, it indicates
+that each test file will be proceseed in separate and, if fuzzing is
+selected, a single file can be processed multiple times--one for each
+of its fuzzed variants. The bug-finding process takes on input JS
+files from regression test suites of various JS
+engines. Table~\ref{tab:test-suites} shows the JS sources we mined
+from online repositories of various open-source engines. Overall, we
+found a total of \Fix{XX} JS files.
 
-The bug-finding process works as follows.  Considering the case of a
-single input file, the oracle checks whether or not the output
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:test-suites}Test Suites\Fix{use path in the repo}}
+  \begin{tabular}{ccc}
+    \toprule
+    TestSuite & Source & \# JS files \\
+    \midrule
+    \Fix{duktape} & - & - \\
+    \Fix{jerryjs} & - & - \\
+    \Fix{jsi} & - & - \\
+    \Fix{tiny} & - & - \\
+    \Fix{mozilla} & - & - \\
+    v8.test.benchmarks.data & - & - \\
+    webkit.jstests.es6 & - & - \\
+    webkit.jstests.microbenchmarks & - & - \\
+   \bottomrule     
+  \end{tabular}
+\end{table}
+
+
+The bug-finding process works as follows.  Considering the case
+fuzzing is not selected, as illustrated in the inner box at the bottom
+of the figure, the oracle checks whether or not the output
 produced for that file is consistent across all engine
 implementations. In case the test passes in all engines or fails in
 all engines (\ie{}, the output is consistent), the infrastructure
 discards the corresponding input. Otherwise, it considers the input as
 potentially fault-revealing; hence interesting for human
-inspection. Considering the case fuzzing~\cite{fuzz-testing-history}
+inspection. Considering the case where fuzzing~\cite{fuzz-testing-history}
 is selected, new inputs are obtained from a given input using some
 off-the-shelf fuzzer\footnote{Several fuzzing methods have been proposed in
 the past, varying with respect to how new inputs are generated (\eg{},
@@ -122,20 +149,15 @@ without violating any internal checks of the API.
 The LO group, in contrast, includes those cases where the anomaly
 was observed executing some JS function. We found that engine
 implementations often check pre-conditions of API functions
-differently, leading to premature failures. Although we did find real bugs from warnings manifested
-in this category, the proportion is much lower compared to the HI
-category--only 12\% of the reals bugs we found originated from the LO
+differently, leading to premature failures which manifest themselves as
+discrepancy in our infrastructure. Although we did find real bugs from
+warnings in the LO group, the proportion was much lower compared to the HI
+group--only 12\% of the reals bugs we found originated from the LO
 category. \Mar{show real examples of HI and LO and provide the
-  rationale for such classification.} \Mar{can we detect dups mining issue trackers?}
+  rationale for such classification.} \Mar{can we detect dups mining
+  issue trackers?}
 
-\section{Current Results}
-\label{sec:results}
-
-\newcommand{\checkm}{Y}
-\newcommand{\crossmark}{N}
-%\begin{wraptable}[20]{t}[0pt]{0.5\textwidth}
-
-\begin{table*}
+\begin{table*}[ht!]
   \vspace{-3ex}
 %  \scriptsize
   \centering
@@ -179,10 +201,42 @@ category. \Mar{show real examples of HI and LO and provide the
   \end{tabular}
 \end{table*}
 
+\section{Methodology}
+\label{sec:methodology}
+
+\Fix{talk about students...}
+
+\subsection{Constants.}~We used the following engines in
+this study: Microsoft's Chakra~\Fix{cite}, Google's v8~\Fix{cite},
+Mozilla's SpiderMonkey~\Fix{cite}, and Apple's JavaScriptCore
+(WebKit)~\Fix{cite}. We selected these engines based on
+popularity. Note that they represent the main players in web
+technology. \Fix{versions}
+
+\subsection{Dependent and Independent variables.}
+
+Our dependent/effect variable is bug-finding ability. We consider a
+search successful only if it lends in a bug confirmed by developers or
+the affected engine. For the independent experimental variables, we
+considered: seeds, fuzzing strategy, and combination of fuzzers. In
+short, our experiment assesses the impact of these factors in
+bug-finding ability.
+
+Considering the seed factor, we want to observe how often fuzzing
+really helps. In the limit, all bugs could be found without extra
+inputs, \ie{}, executing the seed input on each engine and comparing
+their outcomes. Considering the fuzzing strategy, it is important to
+understand whether a particular strategy or implementation is
+prominent. Finally, \Fix{not sure if we should consider this
+  dimension...}
+
+\section{Bugs Found}
+\label{sec:results}
+
 %% Although there are many features yet to implement in our
 %% infrastructure, 
 
-This section shows results obtained under our
+This section shows results obtained with our
 infrastructure. Table~\ref{tab:bugs} shows the list of bugs we
 reported on issue trackers of different engines in the period of 42
 days. So far, ten of the bugs we reported
