@@ -90,13 +90,13 @@ waste/cost) and output correctness (as to reduce false positives).}
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates the workflow of the
-infrastructure we used in this study. Boxes denote encapsulation,
-arrowed lines indicate control flow (dashed) and data flow (filled),
-and the cyclic icons denote repetition. In this case, it indicates
-that each test file will be proceseed in separate and, if fuzzing is
-selected, a single file can be processed multiple times--one for each
-of its fuzzed variants. The bug-finding process takes on input JS
-files from regression test suites of various JS
+infrastructure we used in this study. Boxes denote encapsulation;
+arrowed lines indicate control flow (dashed) and data flow
+(filled). The cyclic icons denote repetition--the leftmost cyclic icon
+indicates that each file in the input list will be analyzed in
+separate and the rightmost icon indicates that a single file will be
+processed multiple times in fuzzing mode. The bug-finding process
+takes on input JS files from regression test suites of various JS
 engines. Table~\ref{tab:test-suites} shows the JS sources we mined
 from online repositories of various open-source engines. Overall, we
 found a total of \Fix{XX} JS files.
@@ -123,21 +123,21 @@ found a total of \Fix{XX} JS files.
 
 The bug-finding process works as follows.  Considering the case
 fuzzing is not selected, as illustrated in the inner box at the bottom
-of the figure, the oracle checks whether or not the output
-produced for that file is consistent across all engine
-implementations. In case the test passes in all engines or fails in
-all engines (\ie{}, the output is consistent), the infrastructure
-discards the corresponding input. Otherwise, it considers the input as
-potentially fault-revealing; hence interesting for human
-inspection. Considering the case where fuzzing~\cite{fuzz-testing-history}
-is selected, new inputs are obtained from a given input using some
-off-the-shelf fuzzer\footnote{Several fuzzing methods have been proposed in
-the past, varying with respect to how new inputs are generated (\eg{},
-coverage-based~\cite{afl,honggfuzz},
-grammar-based~\cite{grammarinator,jsfunfuzz}, and
-random-based~\cite{radamsa}).}. The workflow is similar to that of no
-fuzzing. In this case, however, multiple warnings can be produced for
-a given seed input.
+of the figure, the oracle checks whether or not the output produced
+for that file is consistent across all engine implementations. In case
+the test passes in all engines or fails in all engines (\ie{}, the
+output is consistent), the infrastructure discards the corresponding
+input (mark ....). Otherwise, it considers the input as potentially
+fault-revealing; hence interesting for human inspection. Considering
+the case where fuzzing~\cite{fuzz-testing-history} is selected, new
+inputs are obtained from a given input using some off-the-shelf
+fuzzer\footnote{Several fuzzing methods have been proposed in the
+  past, varying with respect to how new inputs are generated (\eg{},
+  coverage-based~\cite{afl,honggfuzz},
+  grammar-based~\cite{grammarinator,jsfunfuzz}, and
+  random-based~\cite{radamsa}).}. The workflow is similar to that of
+no fuzzing. In this case, however, multiple warnings can be produced
+for a given seed input.
 
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
@@ -210,25 +210,32 @@ category. \Mar{show real examples of HI and LO and provide the
 this study: Microsoft's Chakra~\Fix{cite}, Google's v8~\Fix{cite},
 Mozilla's SpiderMonkey~\Fix{cite}, and Apple's JavaScriptCore
 (WebKit)~\Fix{cite}. We selected these engines based on
-popularity. Note that they represent the main players in web
-technology. \Fix{versions}
+popularity~\Fix{cite}. Considering fuzzing tools, we used
+representatives of the most popular approaches to fuzzing. For
+random-based fuzzing, we used Radamsa~\cite{radamsa}; for
+coverage-based fuzzing, we used
+\Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
+generative-based fuzzing, we used
+\Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
+be found elsewhere~\cite{fuzz-bart}.
 
 \subsection{Dependent and Independent variables.}
 
-Our dependent/effect variable is bug-finding ability. We consider a
-search successful only if it lends in a bug confirmed by developers or
-the affected engine. For the independent experimental variables, we
-considered: seeds, fuzzing strategy, and combination of fuzzers. In
-short, our experiment assesses the impact of these factors in
-bug-finding ability.
+The independent variable of our experiment is the fuzzing strategy as
+represented by various fuzzing tools. Our dependent variables are (i)
+the ratio of bugs found with fuzzing as opposed to no fuzzing and (ii)
+and the ratio of bugs found for each fuzzing strategy. We consider a
+search successful only if it lends in a bug confirmed by the
+developers of the affected engine. In short, our experiment assesses
+the impact of these factors in bug-finding ability.
 
-Considering the seed factor, we want to observe how often fuzzing
-really helps. In the limit, all bugs could be found without extra
-inputs, \ie{}, executing the seed input on each engine and comparing
-their outcomes. Considering the fuzzing strategy, it is important to
-understand whether a particular strategy or implementation is
-prominent. Finally, \Fix{not sure if we should consider this
-  dimension...}
+Considering the ratio of bugs found with fuzzing versus no fuzzing, we
+want to observe how often fuzzing really helps. In the limit, all bugs
+could be found without extra inputs, \ie{}, simply executing the seed
+inputs on each engine and comparing their outcomes. Recall that we
+mined test suites from a variety of sources. Considering the fuzzing
+strategy, it is important to understand whether a fuzzing strategy is
+particularly prominent.
 
 \section{Bugs Found}
 \label{sec:results}
