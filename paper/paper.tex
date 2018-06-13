@@ -15,8 +15,8 @@
 
 \begin{document}
 
-\title{Finding Functional Bugs in JavaScript Engines with Differential
-  Testing---an Experience Report}
+\title{Should I Fuzz my Inputs or Improve my Test Suite? Lessons from
+  Differential Testing Runtime Engines.}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -38,6 +38,11 @@
 \maketitle
 
 \begin{abstract}
+Differential testing has shown to be a successful approach to finding
+bugs in compilers and runtime engines. This paper assesses the impact
+that the fuzzing strategy and the test suites have in bug-finging
+ability. We focused on JavaScript and WebAssembly runtime
+engines. \Fix{...}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -46,35 +51,37 @@
 
 \section{Introduction}
 
-JavaScript (\js{}) is one of the most popular programming languages of
-today~\cite{business-insider,stackify}. The \js{} specification
-changes relatively frequently to accommodate the pressing demands of
-the community. For example, the JS specification went through a severe
-change recently called by the name of ECMAScript6
-(ES6)~\cite{es6-features}.  These changes often entail sensible
-changes in engine implementations~\cite{kangax} that could lead to
-errors, including regressions. Automated techniques can help finding
-bugs, but the lack of executable specifications limits their ability
-to detect errors not manifested by universal oracles.
+JavaScript (\js{}) is one of the most popular programming languages
+for the web today~\cite{business-insider,stackify}. The interest of
+the community in the JS ecossystem incentivizes improvements both in
+the language and their runtime engine implementations. It is natural
+to expect that such improvements will entail sensible changes in
+engine implementations~\cite{kangax} that could lead to
+errors. Finding bugs on JS engines is therefore and important
+problem. Automated techniques, such as Fuzz Testing~\cite{fuzz-bart},
+have shown successful at finding universal errors, such as memory
+errors~\cite{libfuzzer-tutorial}. However, they don't address the
+problem of finding functional errors that could arise when an engine
+does not adhere to the specification.
 
 This paper reports on a study to find those kinds of bugs in
-JavaScript engines. The goal of the study is to improve quality of
-existing \js{} engines by improving the bug-finding process. We used
-differential testing~\cite{Brumley-etal-ss07}, a technique that has
-been applied in a variety of
+JavaScript engines.\Mar{revise...a study answer questions? the
+  statement is more propositive.} The goal of the study is to improve
+quality of existing \js{} engines by improving the bug-finding
+process. We used differential testing~\cite{Brumley-etal-ss07}, a
+technique that has been applied in a variety of
 contexts~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}
 to address the oracle problem. Differential testing leverages the
 diversity across system's implementations to detect anomalous
-behavior. \Mar{this needs work$\rightarrow$}
-\Fix{but it has not been thoroughly explored to find functional bugs in JS
-engines. The closest work was done by Patra and
-Pradel~\cite{patra2016learning}, where they evaluated their proposed
-language-agnostic fuzzer to find cross-browser HTML+JS
-discrepancies. This project aims at building and evaluating an
-infrastructure for differential testing of runtime engines, such as
-the JS engine or WebAssembly's. The sensible parts of the
-infrastructure are the checks of input validity (as to reduce
-waste/cost) and output correctness (as to reduce false positives).}
+behavior. \Mar{this needs work$\rightarrow$} \Fix{but it has not been
+  thoroughly explored to find functional bugs in JS engines. The
+  closest work was done by Patra and Pradel~\cite{patra2016learning},
+  where they evaluated their proposed language-agnostic fuzzer to find
+  cross-browser HTML+JS discrepancies. This project aims at building
+  and evaluating an infrastructure for differential testing of runtime
+  engines, such as the JS engine or WebAssembly's. The sensible parts
+  of the infrastructure are the checks of input validity (as to reduce
+  waste/cost) and output correctness (as to reduce false positives).}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -157,7 +164,7 @@ category. \Mar{show real examples of HI and LO and provide the
   rationale for such classification.} \Mar{can we detect dups mining
   issue trackers?}
 
-\begin{table*}[ht!]
+\begin{table*}[h!]
   \vspace{-3ex}
 %  \scriptsize
   \centering
@@ -201,10 +208,12 @@ category. \Mar{show real examples of HI and LO and provide the
   \end{tabular}
 \end{table*}
 
+
 \section{Methodology}
 \label{sec:methodology}
 
-\Fix{talk about students...}
+The goal of this study is to assess the impact of fuzzing in finding
+bugs with differential testing.
 
 \subsection{Constants.}~We used the following engines in
 this study: Microsoft's Chakra~\Fix{cite}, Google's v8~\Fix{cite},
@@ -212,30 +221,29 @@ Mozilla's SpiderMonkey~\Fix{cite}, and Apple's JavaScriptCore
 (WebKit)~\Fix{cite}. We selected these engines based on
 popularity~\Fix{cite}. Considering fuzzing tools, we used
 representatives of the most popular approaches to fuzzing. For
-random-based fuzzing, we used Radamsa~\cite{radamsa}; for
-coverage-based fuzzing, we used
+random-based fuzzing we used Radamsa~\cite{radamsa}; for
+coverage-based fuzzing we used
 \Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
-generative-based fuzzing, we used
+generative-based fuzzing we used
 \Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
 be found elsewhere~\cite{fuzz-bart}.
 
 \subsection{Dependent and Independent variables.}
 
 The independent variable of our experiment is the fuzzing strategy as
-represented by various fuzzing tools. Our dependent variables are (i)
-the ratio of bugs found with fuzzing as opposed to no fuzzing and (ii)
-and the ratio of bugs found for each fuzzing strategy. We consider a
+implemented by various fuzzing tools. Our dependent variables are (i)
+the ratio of bugs found with fuzzing versus no fuzzing and (ii) and
+the ratio of bugs found with each fuzzing strategy. We consider a
 search successful only if it lends in a bug confirmed by the
-developers of the affected engine. In short, our experiment assesses
-the impact of these factors in bug-finding ability.
-
-Considering the ratio of bugs found with fuzzing versus no fuzzing, we
-want to observe how often fuzzing really helps. In the limit, all bugs
+developers of the affected engine.  The rationale for considering the
+ratio of bugs found with fuzzing versus no fuzzing is to observe how
+often fuzzing really helps in this scenario. In the limit, all bugs
 could be found without extra inputs, \ie{}, simply executing the seed
 inputs on each engine and comparing their outcomes. Recall that we
-mined test suites from a variety of sources. Considering the fuzzing
-strategy, it is important to understand whether a fuzzing strategy is
-particularly prominent.
+mined test suites from a variety of sources. The rationale for
+considering the fuzzing strategy is to understand to which extent each
+strategy--as implemented by representative tools--helps in this
+context.
 
 \section{Bugs Found}
 \label{sec:results}
@@ -264,6 +272,8 @@ observation emphasizes the importance of continuously collecting test suites fro
 multiple sources; today, we use test suites from seven different open
 source engines, including a total of 30K test files.
 
+\Mar{justify why we discuss these bugs} \Mar{discuss other bugs}
+
 \vspace{1ex}\noindent\textbf{Bug \# 6.} The JS code \CodeIn{var a = \{valueOf:~function()\{return
   ``\textbackslash{}x00''\}\} assert(+a === 0)\}} 
 manifested a bug in the \js{} engine Chakra.  The object
@@ -282,6 +292,15 @@ incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 Chakra team fixed the issue soon after we reported the problem.
 
+\section{Results}
+
+\subsection{Fuzzing versus No Fuzzing}
+
+\subsection{Fuzzing Strategy}
+
+\section{Related Work}
+
+RFC-Directed Differential Testing of Certificate Validation in SSL/TLS Implementations...[ICSE18]
 
 %\section*{Acknowledgment}
 
