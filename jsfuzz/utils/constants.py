@@ -11,11 +11,13 @@ logs_dir = os.path.join(base_dir, 'logs_{}/'.format(date))
 if not os.path.exists(os.path.join(base_dir, 'js_engines')):
     raise NameError("Could not find js_engines directory. Please check" + os.path.join(base_dir, 'js_engines'))
 js_dir = os.path.join(base_dir, 'js_engines/bin')
+fuzzers_dir = os.path.join(base_dir, 'jsfuzz', 'fuzzer')
 
 # fuzzing constants
 num_iterations = 20
 limit_num_consecutive_unsuccessful_iterations = 10
 timeout_JS_engine = 2
+num_tests_grammar_based = 1000
 
 # loggers
 logging.basicConfig(level=logging.DEBUG, filename='/tmp/debug.log', filemode='w')
