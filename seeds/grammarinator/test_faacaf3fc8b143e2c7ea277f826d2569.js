@@ -1,0 +1,1 @@
+for(var\u9402;;)continue

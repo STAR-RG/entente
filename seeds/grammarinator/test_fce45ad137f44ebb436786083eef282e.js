@@ -1,0 +1,1 @@
+if(voidthis?this:{})try{}finally{}

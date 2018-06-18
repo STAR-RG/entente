@@ -1,0 +1,1 @@
+$＿⁀_:try{}catch($){}finally{}

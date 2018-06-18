@@ -1,0 +1,1 @@
+if(!function(){}%this){{}}elsecontinue

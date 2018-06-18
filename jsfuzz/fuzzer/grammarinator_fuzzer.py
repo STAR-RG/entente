@@ -1,14 +1,8 @@
-import os, shlex, logging, datetime
-from shutil import copyfile
+import os, shlex, logging, datetime, hashlib
 from subprocess import call
 from jsfuzz.utils import constants
-from jsfuzz.fuzzer.radamsa_fuzzer import call_engines, validate_wrapper
 from jsfuzz.fuzzer import validator
-
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
-
-import hashlib
-
 
 OUTPUT_DEPENDENCIES_PATH = os.path.join(constants.fuzzers_dir, 'grammarinator_deps')
 
@@ -66,37 +60,45 @@ class Grammarinator:
             call(args)
 
         return (unlexer, unparser)
-        
-    def run_grammarinator(self, path, number_of_testcases):
+       
+    def run_grammarinator(self, path, number_of_testcases, depths, validation=True):
         """ generate testcases using grammarinator """
         widgets = ['generating new files ', Percentage(), ' ', Bar(marker=RotatingMarker()), ' ', ETA(), ' ']
         bar = ProgressBar(widgets=widgets, maxval=number_of_testcases).start()
+        
+        N = number_of_testcases if not validation else 1
+        jobs = 4 if not validation else 1
 
-        new_file = os.path.join(path, 'test_0')
+        out = os.path.join(path, 'test_%d.js')
         generate_cmd = """
         grammarinator-generate --unlexer {} \
         --unparser {} \
         --rule program \
-        --encoding utf-8 \
         --out {} \
-        --max-depth 20 \
-        --jobs 1
-        """.format(self.unlexer, self.unparser, os.path.join(path, 'test_%d'))
+        --max-depth {} \
+        -n {} \
+        --jobs {}
+        """.format(self.unlexer, self.unparser, out , depths, N, jobs)
 
         args = shlex.split(generate_cmd)
-        valid_files = 0
         logging.debug('starting grammarinator %s', datetime.datetime.now().isoformat())
-        while valid_files < number_of_testcases:
+        if validation:
+            new_file = os.path.join(path, 'test_0.js')
+            valid_files = 0
+            while valid_files < number_of_testcases:
+                call(args)
+                if not validator.validate(new_file):
+                    with open(new_file) as f:
+                        filename = self.str_to_hash(f.read())
+                    filename = 'test_{}.js'.format(filename)
+                    if filename in os.listdir(path):
+                        continue
+
+                    os.rename(new_file, os.path.join(constants.seeds_dir, 'grammarinator', filename))
+                    valid_files += 1
+                    bar.update(valid_files)
+        else:
             call(args)
-            if not validator.validate(new_file):
-                with open(new_file) as f:
-                    filename = self.str_to_hash(f.read())
-                filename = 'test_{}'.format(filename)
-                if filename in os.listdir(path):
-                    continue
-                    
-                os.rename(new_file, os.path.join(constants.seeds_dir, 'grammarinator', filename))
-                valid_files += 1
-                bar.update(valid_files)
+
         bar.finish()
         logging.debug('finished grammarinator %s', datetime.datetime.now().isoformat())
