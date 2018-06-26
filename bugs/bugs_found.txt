@@ -1,4 +1,57 @@
 ======
+BUG #18 (NEW)
+
+Date reported:June 26, 2018
+
+Type: Assertation failure
+
+Priority: HIGH
+
+URL:https://bugs.webkit.org/show_bug.cgi?id=187042
+
+Original:
+./jsfuzz/seeds/JerryJS/regression/regexp-non-capture-groups.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_regression_edited_regexp-non-capture-groups.js
+
+Patch:
+--- ./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_regression_edited_regexp-non-capture-groups.js
++++ .jsfuzz/seeds/JerryJS/regression/regexp-non-capture-groups.js
+@@ -111,7 +110,7 @@
+ r = new RegExp ("(?:a|b){1,4}");
+ assert (r.exec ("bbb") == "bbb");
+ 
+-r = new RegExp ("(?:a|b){1,4}");
++r = new RegExp ("(?:a|b){1,5}");
+ assert (r.exec ("abab") == "abab");
+ 
+ r = new RegExp ("(?:aba)*");
+@@ -190,8 +189,8 @@
+ r = new RegExp ("(?:(?:bb?)*)*bbb\\Ba");
+ assert (r.exec ("bbba") == "bbba");
+ 
+-r = new RegExp ("(?:a??){0,109}a");
++r = new RegExp ("(?:a??){0,1}a");
+ assert (r.exec ("aa") == "aa");
+ 
+-r = new RegExp ("(?:a{0,340282366920938463463374607431768211457}?){0,1}a");
++r = new RegExp ("(?:a{0,1}?){0,1}a");
+ assert (r.exec ("aa") == "aa");
+
+pattern:
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+
+-------------SpiderMonkey
+
+-------------v8
+
+Explanation:
+RegExp.exec returns wrong value with a long integer quantifier. when regexp quantifier have a max value higher then eleven
+the exec method return the wrong answer. 
+======
 BUG #17 (NEW)
 
 Date reported: May 24, 2018
