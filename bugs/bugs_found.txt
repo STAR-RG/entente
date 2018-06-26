@@ -56,7 +56,7 @@ Priority: LOW
 URL: https://github.com/Microsoft/ChakraCore/issues/5203
 
 Original:
-./jsfuzz/seeds/mozzila/non262/statements/for-in-with-assignments.js
+./jsfuzz/seeds/mozilla/non262/statements/for-in-with-assignments.js
 
 Fuzzed:
 ./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_statements_for-in-with-assignments.js
@@ -106,7 +106,7 @@ can be writable and configurable. All engines can override the property,
 Chakra does not support the redeclaration.
 
 ======
-BUG #14 (NEW)
+BUG #14 (FIXED)
 
 Date reported: May 17, 2018
 
