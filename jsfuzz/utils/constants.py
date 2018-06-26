@@ -12,6 +12,7 @@ if not os.path.exists(os.path.join(base_dir, 'js_engines')):
     raise NameError("Could not find js_engines directory. Please check" + os.path.join(base_dir, 'js_engines'))
 js_dir = os.path.join(base_dir, 'js_engines/bin')
 fuzzers_dir = os.path.join(base_dir, 'jsfuzz', 'fuzzer')
+quickfuzz_dir = os.path.join(seeds_dir, 'quickfuzz')
 
 # fuzzing constants
 num_iterations = 20
@@ -49,3 +50,4 @@ spidermonkey = find('spidermonkey', js_dir)
 v8 = find('v8', js_dir)
 # radamsa
 radamsa = find('radamsa', js_dir)
+quickfuzz = find('QuickFuzz', js_dir)
