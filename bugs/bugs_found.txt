@@ -3,7 +3,7 @@ BUG #18 (NEW)
 
 Date reported:June 26, 2018
 
-Type: Assertation failure
+Type: Assertion failure
 
 Priority: HIGH
 
@@ -43,14 +43,13 @@ pattern:
 -------------JavaScriptCore
 Error: Test failed
 -------------Chakra
-
 -------------SpiderMonkey
-
 -------------v8
 
 Explanation:
-RegExp.exec returns wrong value with a long integer quantifier. when regexp quantifier have a max value higher then eleven
-the exec method return the wrong answer. 
+RegExp.exec returns wrong value with a long integer quantifier. 
+If the quantifier exceeds the MAX_INT value the matcher cannot be solved.
+
 ======
 BUG #17 (NEW)
 
