@@ -36,9 +36,9 @@ def test_quickfuzz_mutate():
 
     multicall.multicall_directories(q.outpath, False, validator=validate)
 
-@pytest.mark.skip(reason="temporarilly disabling")
+# @pytest.mark.skip(reason="temporarilly disabling")
 def test_mutate_all():
-    quantity = 500
+    quantity = 1000
     seeds = [
         os.path.join(constants.seeds_dir, 'Tiny-js.tests'),
         os.path.join(constants.seeds_dir, 'WebKit.JSTests.es6'),
@@ -51,6 +51,64 @@ def test_mutate_all():
         os.path.join(constants.seeds_dir, 'jsi.tests'),
         os.path.join(constants.seeds_dir, 'v8.test.benchmarks.data', 'kraken'),
         os.path.join(constants.seeds_dir, 'v8.test.benchmarks.data', 'sunspider'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Array/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/ArrayBuffer/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/arrow-functions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/async-functions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/AsyncGenerators/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Boolean/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/class/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/comprehensions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/DataView/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Date/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/destructuring/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Error/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/eval/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Exceptions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/execution-contexts/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/expressions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/extensions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Function/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/GC/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/generators/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/get-set/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/global/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Intl/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/iterable/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/jit/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/JSON/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/lexical/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/lexical-conventions/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/lexical-environment/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Map/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Math/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/misc/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/module/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Number/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/object/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/operators/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/pipeline/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Promise/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Proxy/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Reflect/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/reflect-parse/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/RegExp/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/regress/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Scope/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Script/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Set/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/SIMD/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/statements/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/strict/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/String/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Symbol/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/syntax/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/template-strings/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/TypedArray/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/TypedObject/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/types/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/Unicode/'),
+        os.path.join(constants.seeds_dir, 'mozilla/non262/WeakMap/')
     ]
 
     for seed_path in seeds:
@@ -59,6 +117,9 @@ def test_mutate_all():
             q.mutate(seed_path, quantity) # generating N files for each seed
         except timeout_decorator.TimeoutError as e:
             print('something wrong happened:', str(e))
+            continue
+
+        if 'mozilla' in seed_path: # cannot run mozilla test with quickfuzz yet
             continue
 
         multicall.multicall_directories(q.outpath, False, validator=validate)

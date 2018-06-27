@@ -39,7 +39,6 @@ class Quickfuzz:
                             self.progress_bar.update(valid_inputs)
                             if valid_inputs == quantity:
                                 break
-                
                 shutil.rmtree(tmp_path)
         except Exception as e:
             shutil.rmtree(outdir)
@@ -94,7 +93,7 @@ class Quickfuzz:
         os.remove(tmp_filepath)
         self.progress_bar.finish()
     
-    @timeout_decorator.timeout(15)
+    @timeout_decorator.timeout(10)
     def call_file(self, jspath):
         """ 
             this function checks if there is an infinite loop on file
