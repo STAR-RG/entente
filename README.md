@@ -8,7 +8,8 @@
 ### Installation
 1. Clone this repository
 2. Download the compressed JS Engines file ([instructions here](https://github.com/damorim/jsfuzz/blob/master/js_engines/README_download_executables)) and extract it in `js_engines` folder
-3. Open a terminal window, go to project folder and run these steps to create a simbolic link for radamsa and quickfuzz:
+3. Extract quickfuzz.zip in `js_engines` folder
+4. Open a terminal window, go to project folder and run these steps to create a simbolic link for radamsa and quickfuzz:
    1. $> sudo ln -s $(pwd)/js_engines/radamsa /usr/bin/radamsa
    2. $> sudo ln -s $(pwd)/js_engines/QuickFuzz /usr/bin/quickfuzz
 
