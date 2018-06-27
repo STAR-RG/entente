@@ -46,10 +46,10 @@ class Quickfuzz:
             raise Exception("Fail when try to validate quickfuzz tests. Error: ", e)
         self.progress_bar.finish()
 
-
+    @timeout_decorator.timeout(60)
     def mutate(self, seed_dir, quantity):
         process_cmd = """
-        quickfuzz muttest js "cat @@" {} -v -t 1 -l 1 -u 5 -q 1 -o {}
+        quickfuzz muttest js "cat @@" {} -v -t 1 -l 1 -u 3 -q 1 -o {}
         """
         quickfuzz_path = constants.quickfuzz_dir
         seed_name = os.path.basename(seed_dir) if not seed_dir.endswith('/') else os.path.basename(seed_dir[:-1])
@@ -65,7 +65,6 @@ class Quickfuzz:
         while valid_files < quantity:
             tmp_filepath = os.path.join(self.outpath, pattern)
             args = shlex.split(process_cmd.format(seed_dir, quickfuzz_path))
-            # call(args)
             pipe = Popen(args, stdout=PIPE)
             output = pipe.communicate()[0]
             with open(tmp_filepath, 'w') as tmp_file:
