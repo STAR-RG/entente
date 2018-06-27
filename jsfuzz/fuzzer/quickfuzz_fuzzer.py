@@ -1,5 +1,5 @@
-import os, shlex, logging, shutil, hashlib, timeout_decorator
-from subprocess import call, PIPE, Popen, check_output
+import os, shlex, logging, shutil, hashlib, timeout_decorator, time
+from subprocess import call, PIPE, Popen, check_output, STDOUT, getstatusoutput
 from jsfuzz.utils import constants, blacklist
 from jsfuzz.fuzzer import validator
 from progressbar import ProgressBar, Percentage, Bar, RotatingMarker, ETA, FileTransferSpeed
@@ -96,7 +96,19 @@ class Quickfuzz:
     @timeout_decorator.timeout(10)
     def call_file(self, jspath):
         """ 
-            this function checks if there is an infinite loop on file
+            this function checks if there is an infinite loop on file.
+            Using this to track unexpected behaviour
         """
-        call([constants.v8, jspath], stdout=PIPE)
+        cmd, msg = [constants.v8, jspath], None
+        try:
+            msg = check_output(cmd, stderr=STDOUT, timeout=10).decode('utf-8')
+        except:
+            pass
         
+        if not msg:
+            # double check to get unexpected behaviour
+            error = getstatusoutput(cmd)[1]
+            if error:
+                # saving file
+                shutil.copy(jspath, os.path.join(self.outpath, 'unexpected-{}.js'.format(time.time())))
+        # call([constants.v8, jspath], stdout=PIPE)
