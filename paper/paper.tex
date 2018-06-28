@@ -104,9 +104,41 @@ indicates that each file in the input list will be analyzed in
 separate and the rightmost icon indicates that a single file will be
 processed multiple times in fuzzing mode. The bug-finding process
 takes on input JS files from regression test suites of various JS
-engines. Table~\ref{tab:test-suites} shows the JS sources we mined
+engines. 
+
+\Igor{
+\subsection{Populating seed files.}~This section describes 
+how we found valid javascript files based on 
+existing sources on the open-source repositories.
+Originally, we mined JS engines repositories that we 
+support (ie. V8, SpiderMonkey, Chakra and JavascriptCore) and 
+we found a total of \Fix{XX} files of regression suites and 
+benchmarks testing involving javascript files.
+Latelly, we need to increase our input seeds through existing
+open-sources projects that involves javascript engines.
+We mined repositories from GitHub based on these requirements:
+\begin{itemize}
+  \item The project must be an open-source project and at least 1K stars from community.
+  \item The repository must have JavaScript tests included.
+  \item The tests should be plug-and-play and/or easy integration.
+\end{itemize}
+
+We wrote a query to mine these repositories on GitHub
+\CodeIn{\url{https://api.github.com/search/repositories?q=javascript-engine&sort=stars&order=desc}}\Fix{wip}
+and we follow the requirements ignoring invalid projects.
+\Fix{discuss wip}
+
+Table~\ref{tab:test-suites} shows the JS sources we mined
 from online repositories of various open-source engines. Overall, we
-found a total of \Fix{XX} JS files.
+found a total of \Fix{30K} JS files.
+}
+\Igor{
+\begin{itemize}
+  \item discuss about changes in seeds for run in our infraestructure (wip)
+  \item discuss about generating new files via fuzzers grammar-based (wip)
+  \item discuss about mutation fuzzers (wip)
+\end{itemize}
+}
 
 \begin{table}[h]
   \centering
@@ -115,14 +147,14 @@ found a total of \Fix{XX} JS files.
     \toprule
     TestSuite & Source & \# JS files \\
     \midrule
-    \Fix{duktape} & - & - \\
-    \Fix{jerryjs} & - & - \\
-    \Fix{jsi} & - & - \\
-    \Fix{tiny} & - & - \\
+    \Fix{duktape} & - & 997 \\
+    \Fix{jerryjs} & - & 1.803 \\
+    \Fix{jsi} & - & 99 \\
+    \Fix{tiny} & - & 44 \\
     \Fix{mozilla} & - & - \\
-    v8.test.benchmarks.data & - & - \\
-    webkit.jstests.es6 & - & - \\
-    webkit.jstests.microbenchmarks & - & - \\
+    v8.test.benchmarks.data & - & 64 \\
+    webkit.jstests.es6 & - & 605 \\
+    webkit.jstests.microbenchmarks & - & 426 \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -175,12 +207,12 @@ category. \Mar{show real examples of HI and LO and provide the
     \toprule
     Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  \\
     \midrule    
-    1  & 4/12 & \checkm & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}      \\ 
-    2  & 4/12 & \checkm & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}      \\
-    3  & 4/14 & \checkm & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}        \\
+    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}      \\ 
+    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}      \\
+    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}        \\
     4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}        \\
     5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}       \\
-    6  & 4/25 & \checkm & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}      \\
+    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}      \\
     7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
     \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}
     \\
@@ -189,21 +221,22 @@ category. \Mar{show real examples of HI and LO and provide the
                         &  &                       &
     JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}    \\
     \midrule    
-    9  & 4/29 & \checkm & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}    \\
+    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}    \\
     \midrule    
-    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{\checkm} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} \\    
+    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} \\    
                         &                        &        &
     JavascriptCore & New &
     \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}
     \\
     \midrule    
-    11 & 5/02 & \checkm & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}\\
+    11 & 5/02 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}\\
     12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}\\
-    13 & 5/10 & \checkm & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} \\
-    14 & 5/17 & \checkm & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} \\
+    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} \\
+    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} \\
     15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} \\
     16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} \\
-    17 & 5/24 & \checkm & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}\\
+    17 & 5/24 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}\\
+    18 & 6/26 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}\\
    \bottomrule     
   \end{tabular}
 \end{table*}
@@ -216,9 +249,9 @@ The goal of this study is to assess the impact of fuzzing in finding
 bugs with differential testing.
 
 \subsection{Constants.}~We used the following engines in
-this study: Microsoft's Chakra~\Fix{cite}, Google's v8~\Fix{cite},
-Mozilla's SpiderMonkey~\Fix{cite}, and Apple's JavaScriptCore
-(WebKit)~\Fix{cite}. We selected these engines based on
+this study: Microsoft's Chakra~\cite{chakra2018repo}, Google's v8~\cite{v82018repo},
+Mozilla's SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
+(WebKit)~\cite{jsc2018repo}. We selected these engines based on
 popularity~\Fix{cite}. Considering fuzzing tools, we used
 representatives of the most popular approaches to fuzzing. For
 random-based fuzzing we used Radamsa~\cite{radamsa}; for
@@ -244,6 +277,21 @@ mined test suites from a variety of sources. The rationale for
 considering the fuzzing strategy is to understand to which extent each
 strategy--as implemented by representative tools--helps in this
 context.
+
+\Igor{
+\subsection{Grammar-based Fuzzers}
+Fuzzers grammar-based can generate a new file through a language grammar (ie. BNF).
+Our infrastructure supports any grammar fuzzer with a few adjusts. However, 
+we try to integrate several grammar-based fuzzers, for example 
+Grammarinator~\footnote{https://github.com/renatahodovan/grammarinator}, QuickFuzz~\cite{grieco2016quickfuzz}
+and \Fix{others fuzzers} to generate new JavaScript files based on grammar, but 
+after several runs it was observed that this approach was ineffective
+due the amount of invalid files and/or files without discrepancies. For example, if we ran 
+Grammarinator to generate 1K JS files ten times with a random seed generation, we obtained
+\Fix{XX\%} of valid files. Checking in our environment almost \Fix{XX\%}
+are js files that shows undefined variables and due the differential testing in our environment
+all engines will raise a SyntaxError and this approach was not relevant to our experiment.
+}
 
 \section{Bugs Found}
 \label{sec:results}
