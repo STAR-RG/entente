@@ -15,8 +15,8 @@
 
 \begin{document}
 
-\title{Should I Fuzz my Inputs or Improve my Test Suite? Lessons from
-  Differential Testing Runtime Engines.}
+%Should I Fuzz my Inputs or Improve my Tests? 
+\title{Lessons Learned from Differential Testing JS Engines}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -37,12 +37,18 @@
 
 \maketitle
 
+%% page numbering -M
+\thispagestyle{plain}
+\pagestyle{plain}
+
+%% JavaScript (\js{}) is a popular programming language for the
+%% web. Finding errors in JS runtime engines is an important problem.
 \begin{abstract}
-Differential testing has shown to be a successful approach to finding
-bugs in compilers and runtime engines. This paper assesses the impact
-that the fuzzing strategy and the test suites have in bug-finging
-ability. We focused on JavaScript and WebAssembly runtime
-engines. \Fix{...}
+This paper assesses the impact of Differential Testing (DT) to find
+functional bugs in JS engines. This is an important problem given the
+importance of JS today. DT has shown successful in finding bugs in
+compilers and runtimes, but has not been thoroughly explored in this
+important domain. Our study \Fix{...}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -51,29 +57,27 @@ engines. \Fix{...}
 
 \section{Introduction}
 
-JavaScript (\js{}) is one of the most popular programming languages
-for the web today~\cite{business-insider,stackify}. The interest of
-the community in the JS ecossystem incentivizes improvements both in
-the language and their runtime engine implementations. It is natural
-to expect that such improvements will entail sensible changes in
-engine implementations~\cite{kangax} that could lead to
-errors. Finding bugs on JS engines is therefore and important
-problem. Automated techniques, such as Fuzz Testing~\cite{fuzz-bart},
-have shown successful at finding universal errors, such as memory
-errors~\cite{libfuzzer-tutorial}. However, they don't address the
-problem of finding functional errors that could arise when an engine
-does not adhere to the specification.
+JavaScript (\js{}) is today one of the most popular programming
+languages for the web~\cite{business-insider,stackify}. The interest
+of the community for the language encourages constant improvements in
+its specification and implementations. It is natural to expect that
+such improvements will entail sensible changes in runtime
+engines~\cite{kangax}; changes that could lead to errors. Finding bugs
+on JS engines is an important problem. In this paper, we are
+particularly interested in finding functional (non-crash) bugs.
 
-This paper reports on a study to find those kinds of bugs in
-JavaScript engines.\Mar{revise...a study answer questions? the
-  statement is more propositive.} The goal of the study is to improve
-quality of existing \js{} engines by improving the bug-finding
-process. We used differential testing~\cite{Brumley-etal-ss07}, a
-technique that has been applied in a variety of
-contexts~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}
-to address the oracle problem. Differential testing leverages the
-diversity across system's implementations to detect anomalous
-behavior. \Mar{this needs work$\rightarrow$} \Fix{but it has not been
+Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
+approach that has been applied in a variety of contexts to find
+functional
+bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. DT
+automates test generation in scenarios where multiple implementations
+of a system exist. It leverages the diversity across system's
+implementations to detect anomalous behavior. This paper reports the
+results of a study we conducted to assess the impact of DT in finding
+bugs on \js{} engines.
+
+
+\Mar{this needs work$\rightarrow$} \Fix{but it has not been
   thoroughly explored to find functional bugs in JS engines. The
   closest work was done by Patra and Pradel~\cite{patra2016learning},
   where they evaluated their proposed language-agnostic fuzzer to find
@@ -99,34 +103,12 @@ behavior. \Mar{this needs work$\rightarrow$} \Fix{but it has not been
 Figure~\ref{fig:workflow} illustrates the workflow of the
 infrastructure we used in this study. Boxes denote encapsulation;
 arrowed lines indicate control flow (dashed) and data flow
-(filled). The cyclic icons denote repetition--the leftmost cyclic icon
+(filled). The cycle icons denote repetition--the leftmost icon
 indicates that each file in the input list will be analyzed in
-separate and the rightmost icon indicates that a single file will be
+separate whereas the rightmost icon indicates that a single file will be
 processed multiple times in fuzzing mode. The bug-finding process
 takes on input JS files from regression test suites of various JS
-engines. Table~\ref{tab:test-suites} shows the JS sources we mined
-from online repositories of various open-source engines. Overall, we
-found a total of almost 36,5K JS files.
-
-\begin{table}[h]
-  \centering
-  \caption{\label{tab:test-suites}Test Suites\Fix{use path in the repo}}
-  \begin{tabular}{ccc}
-    \toprule
-    TestSuite & Source & \# JS files \\
-    \midrule
-    Duktape & \href{https://github.com/svaarala/duktape}{GitHub} & 997 \\
-    JerryJS & \href{https://github.com/jerryscript-project/jerryscript}{GitHub} & 1.803 \\
-    JSI & \href{https://github.com/technosaurus/jsish}{GitHub} & 99 \\
-    Tiny-js & \href{https://github.com/gfwilliams/tiny-js}{GitHub} & 44 \\
-    Mozilla & \href{-}{-} & 32414 \\
-    V8.test.benchmarks.data & \href{https://github.com/svaarala/duktape/tree/master/tests/ecmascript}{GitHub} & 64 \\
-    WebKit.jstests.es6 & \href{https://github.com/svaarala/duktape/tree/master/tests/ecmascript}{GitHub} & 605 \\
-    WebKit.jstests.microbenchmarks & \href{https://github.com/svaarala/duktape/tree/master/tests/ecmascript}{GitHub} & 426 \\
-   \bottomrule     
-  \end{tabular}
-\end{table}
-
+engines.
 
 The bug-finding process works as follows.  Considering the case
 fuzzing is not selected, as illustrated in the inner box at the bottom
@@ -149,20 +131,22 @@ for a given seed input.
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. The HI
-group includes those inputs where execution manifests anomaly in the
-test code (or its close neighborhood) as opposed to some internal JS
-function. The rationale is that the test in this group executed
-without violating any internal checks of the API.
-The LO group, in contrast, includes those cases where the anomaly
-was observed executing some JS function. We found that engine
-implementations often check pre-conditions of API functions
-differently, leading to premature failures which manifest themselves as
-discrepancy in our infrastructure. Although we did find real bugs from
-warnings in the LO group, the proportion was much lower compared to the HI
-group--only 12\% of the reals bugs we found originated from the LO
-category. \Mar{show real examples of HI and LO and provide the
-  rationale for such classification.} \Mar{can we detect dups mining
-  issue trackers?}
+group includes those inputs where execution manifests anomaly during
+the execution of the test code or its close neighborhood\Comment{ as
+  opposed to that of some internal JS function}. The rationale is that
+the test in this group executed without violating any internal checks
+of the API.  The LO group, in contrast, includes those cases where the
+anomaly was observed during the execution of some API function. We
+found that engine implementations often check pre-conditions of API
+functions differently. It can happen, for example, that one engine
+enforces a pre-condition that another engine does not. In those cases,
+our infrastructure would observe a discrepancy that is more likely to
+be associated with a bug in the (fuzzed) test; not the code. Although
+we did find real bugs from warnings in the LO group, the proportion
+was much lower compared to the HI group--only 12\% of the reals bugs
+we found originated from the LO category. \Mar{show real examples of
+  HI and LO and provide the rationale for such classification.}
+\Mar{can we detect dups mining issue trackers?}
 
 \begin{table*}[h!]
   \vspace{-3ex}
@@ -211,47 +195,62 @@ category. \Mar{show real examples of HI and LO and provide the
 \end{table*}
 
 
-\section{Methodology}
+\section{Objects of Study}
 \label{sec:methodology}
 
-The goal of this study is to assess the impact of fuzzing in finding
-bugs with differential testing. In this section, we discuss
-the methodology applied to prepare our environment for the experiments.
-The dependents and independents variables
-will be discuss in Section~\ref{sec:results}.
+This section discusses the objects we used in our study.
 
-\subsection{Engines.}~We used the following engines in
-this study: Microsoft's Chakra~\cite{chakra2018repo}, Google's v8~\cite{v82018repo},
-Mozilla's SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
-(WebKit)~\cite{jsc2018repo}. We selected these engines based on
-popularity~\Fix{cite}. Considering fuzzing tools, we used
-representatives of the most popular approaches to fuzzing. For
-random-based fuzzing we used Radamsa~\cite{radamsa}; for
-coverage-based fuzzing we used
-\Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
-generative-based fuzzing we used
-\Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
-be found elsewhere~\cite{fuzz-bart}.
+%% methodology we used in our study.  The
+%% dependent and independent variables will be discuss in
+%% Section~\ref{sec:results}.
 
-\subsection{Seeds.}~This section describes 
-how we found valid javascript files based on 
-existing sources on the open-source repositories.
-Originally, we looking JS engines repositories that we 
-support (ie. V8, SpiderMonkey, Chakra and JavascriptCore) getting
-their regression suites and benchmarks testing involving javascript files.
-In addition, we mined repositories from GitHub based on the following criteria:
+\subsection{Engines}
+\label{sec:methodology:engines}~We selected the most popular JS
+engines on the web~\Fix{cite} to focus our bug-finding efforts, namely
+Microsoft's Chakra~\cite{chakra2018repo}, Google's
+v8~\cite{v82018repo}, Mozilla's
+SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
+(WebKit)~\cite{jsc2018repo}.
+
+\subsection{Seed JS files}~We considered in our study test suites
+associated with all four JS engines we analyzed
+(section~\ref{sec:methodology:engines}). In addition, we mined test
+suites from other repositories based on the following criteria:
 \begin{itemize}
   \item The project must be an open-source project and at least 1K stars from community.
   \item The repository must have JavaScript tests included.
-  \item The tests should be plug-and-play and/or easy integration.
+  \item The tests should be plug-and-play and/or easy
+    integration.\Mar{not clear what you mean}
 \end{itemize}
 
-We focused on JavaScript Engines for its capacity to testing the
-interpreter with pure JS files. The Figure~\ref{fig:query} 
-illustrates the query to the Github API as an HTTP request, the result 
-is sorted in descending order of stars. Initially, we obtained
-a total of \Fix{XX} projects. Manually, we follow the criteria to exclude 
-invalid projects and we obtained a total of \Fix{XX} repositories.
+Figure~\ref{fig:query} illustrates the Github API query\Fix{cite} we
+used.\Mar{identify sources assoc. with the four analyzed engines.} The results of this query is sorted in descending order of
+stars. Initially, we obtained a total of \Fix{XX} projects. Manually,
+we follow the criteria to exclude invalid projects and we obtained a
+total of \Fix{XX} repositories. Table~\ref{tab:test-suites} shows the
+JS sources we considered. Overall, we found a total of \totfiles{} JS
+files.\Mar{Briefly explain these names}
+
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:test-suites}Test Suites}
+  \begin{tabular}{ccr}
+    \toprule
+    TestSuite & Source & \# JS files \\
+    \midrule
+    Duktape & \cite{duktape} & 997 \\
+    JerryJS & \cite{jerryscript} & 1,803 \\
+    JSI & \cite{jsi} & 99 \\
+    Tiny-js & \cite{tinyjs} & 44 \\
+    Mozilla & \Fix{??} & 32,414 \\
+    V8.test.benchmarks.data & \Fix{??} & 64 \\
+    WebKit.jstests.es6 & \Fix{??} & 605 \\
+    WebKit.jstests.microbenchmarks & \Fix{??} & 426 \\
+    \midrule
+     &  & 36,452 \\
+   \bottomrule     
+  \end{tabular}
+\end{table}
 
 \begin{figure}
   \centering
@@ -259,20 +258,35 @@ invalid projects and we obtained a total of \Fix{XX} repositories.
 https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000&sort=stars
   \end{lstlisting}
   \caption{\label{fig:query}
-  Query to the GitHub API for JS engines projects that contains at least 1K of stars from community.\Fix{fix query}
+  Query to the GitHub API for JS engines projects that contain over 1K stars.\Fix{fix query}
   }
 \end{figure}
 
-Due the variance of engines implementations, many projects uses distinct frameworks for testing 
-and require external libs to run their testing suites. We try to use only the JS file with minor fixes
-to support our environment. These fixes are composed by an assertion function that throws an Error that
-we can capture by our infraestruture. 
+It is worth noting that many projects use distinct frameworks for
+testing and require external libraries to run their testing
+suites. For some projects, we made small changes in the testing
+infrastructure to be able to uniformly run the test in all
+engines.\Mar{not entirely clear what you did to support
+  this.$\rightarrow$}We aimed to use only the JS file with minor fixes
+to support our environment. These fixes are composed by an assertion
+function that throws an Error that we can capture by our
+infraestruture.
+
 % For example to run the JerryScript tests it was necessary 
 % use the unit-test package to run it, but with our changes we added the assertion
 % does not have an assertion in the test file
 % \Fix{add code to explain}
 
 \subsection{Fuzzers}
+
+\Mar{revise...}~We used representatives of popular fuzzing approaches. For
+random-based fuzzing we used Radamsa~\cite{radamsa}; for
+coverage-based fuzzing we used
+\Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
+generative-based fuzzing we used
+\Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
+be found elsewhere~\cite{fuzz-bart}.
+
 Fuzzers grammar-based can generate a new file through a language grammar (ie. BNF).
 Our infrastructure supports any grammar fuzzer with a few adjusts. However, 
 we try to integrate several grammar-based fuzzers, for example 
