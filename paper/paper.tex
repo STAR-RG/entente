@@ -100,52 +100,55 @@ bugs on \js{} engines.
   \caption{\label{fig:workflow}Infrastructure.}
 \end{figure}
 
-Figure~\ref{fig:workflow} illustrates the workflow of the
-infrastructure we used in this study. Boxes denote encapsulation;
+Figure~\ref{fig:workflow} illustrates the infrastructure we used in
+this study.
+The bug-finding process
+takes on input JS files from regression test suites of various JS
+engines and generates warnings on output. Boxes in the figure denote encapsulation;
 arrowed lines indicate control flow (dashed) and data flow
 (filled). The cycle icons denote repetition--the leftmost icon
 indicates that each file in the input list will be analyzed in
-separate whereas the rightmost icon indicates that a single file will be
-processed multiple times in fuzzing mode. The bug-finding process
-takes on input JS files from regression test suites of various JS
-engines.
-
-The bug-finding process works as follows.  Considering the case
-fuzzing is not selected, as illustrated in the inner box at the bottom
+separate whereas the rightmost icon shows that a single file will be
+fuzzed multiple times. The bug-finding process works as follows.  Considering the case
+where fuzzing is not selected, as illustrated in the inner box at the bottom
 of the figure, the oracle checks whether or not the output produced
 for that file is consistent across all engine implementations. In case
 the test passes in all engines or fails in all engines (\ie{}, the
 output is consistent), the infrastructure discards the corresponding
-input (mark ....). Otherwise, it considers the input as potentially
+input. Otherwise, it considers the input as potentially
 fault-revealing; hence interesting for human inspection. Considering
 the case where fuzzing~\cite{fuzz-testing-history} is selected, new
 inputs are obtained from a given input using some off-the-shelf
-fuzzer\footnote{Several fuzzing methods have been proposed in the
+fuzzer. Several fuzzing methods have been proposed in the
   past, varying with respect to how new inputs are generated (\eg{},
   coverage-based~\cite{afl,honggfuzz},
   grammar-based~\cite{grammarinator,jsfunfuzz}, and
-  random-based~\cite{radamsa}).}. The workflow is similar to that of
-no fuzzing. In this case, however, multiple warnings can be produced
+  random-based~\cite{radamsa}). Section~\ref{sec:objects:fuzzers} describes the
+  fuzzers we selected. The workflow of the infrastructure with fuzzing
+  enabled is similar to that of no fuzzing. In this case, however, multiple warnings can be produced
 for a given seed input.
 
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
-groups, reflecting their likelihood to manifest a real bug. The HI
-group includes those inputs where execution manifests anomaly during
-the execution of the test code or its close neighborhood\Comment{ as
+groups, reflecting their likelihood to manifest a real bug. Warnings
+in the HI group are associated with the cases when the anomaly has been
+detected during the execution of the test code or its close neighborhood\Comment{ as
   opposed to that of some internal JS function}. The rationale is that
 the test in this group executed without violating any internal checks
-of the API.  The LO group, in contrast, includes those cases where the
-anomaly was observed during the execution of some API function. We
-found that engine implementations often check pre-conditions of API
+of the API. In constrast, warnings in the LO group reflect the cases where the
+anomaly was observed during the execution of some standard JS
+function\Mar{is this correct? what are those?}. We
+found that different engines often check the pre-conditions of those
 functions differently. It can happen, for example, that one engine
-enforces a pre-condition that another engine does not. In those cases,
+enforces a pre-condition that another engine does not\Mar{why is that?
+that should not happen if the spec was fully documented and engines
+properly implemented those checks. Explain and give example.}. In those cases,
 our infrastructure would observe a discrepancy that is more likely to
 be associated with a bug in the (fuzzed) test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only 12\% of the reals bugs
 we found originated from the LO category. \Mar{show real examples of
-  HI and LO and provide the rationale for such classification.}
+  HI and LO.}
 \Mar{can we detect dups mining issue trackers?}
 
 \begin{table*}[h!]
@@ -224,16 +227,36 @@ suites from other repositories based on the following criteria:
 \end{itemize}
 
 Figure~\ref{fig:query} illustrates the Github API query\Fix{cite} we
-used.\Mar{identify sources assoc. with the four analyzed engines.} The results of this query is sorted in descending order of
-stars. Initially, we obtained a total of \Fix{XX} projects. Manually,
-we follow the criteria to exclude invalid projects and we obtained a
-total of \Fix{XX} repositories. Table~\ref{tab:test-suites} shows the
-JS sources we considered. Overall, we found a total of \totfiles{} JS
-files.\Mar{Briefly explain these names}
+used to find projects with JS files\Mar{why the query is so specific?
+  as per ``q=javascript-engine''? Need to be consistent to what you
+  are saying an coherent to what you actually did.}. The query sorts
+results in descending order in the number of stars\Mar{sorting is only
+  relevant if you set a limit on the number of projects you will
+  analyze. What limit is that?}. The resulting list includes a total
+of \Fix{XX} projects. A total of \Fix{...}  projects remained after
+removing projects that \Fix{...}. Table~\ref{tab:test-suites} shows
+the JS sources we considered for each of these selected
+projects..\Mar{identify the sources assoc. with the four analyzed
+  engines. you said in the first sentence this is one source.} Overall, we found a total of \totfiles{} JS
+files.\Mar{Briefly explain these sources.}
 
-\begin{table}[h]
+\begin{figure}[h]
   \centering
-  \caption{\label{tab:test-suites}Test Suites}
+  \begin{lstlisting}
+https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000&sort=stars
+  \end{lstlisting}
+  \caption{\label{fig:query}
+  Query to the GitHub API for JS engines projects that contain over 1K stars.\Fix{fix query}
+  }
+\end{figure}
+
+
+\begin{table}[t]
+  \centering
+  \caption{\label{tab:test-suites}Test Suites\Mar{try to use a single
+      name (if possible) to facilitate reference in the paper. Use the
+  full path in the URL (citation) to indicate where one can find those
+  files.}}
   \begin{tabular}{ccr}
     \toprule
     TestSuite & Source & \# JS files \\
@@ -252,20 +275,10 @@ files.\Mar{Briefly explain these names}
   \end{tabular}
 \end{table}
 
-\begin{figure}
-  \centering
-  \begin{lstlisting}
-https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000&sort=stars
-  \end{lstlisting}
-  \caption{\label{fig:query}
-  Query to the GitHub API for JS engines projects that contain over 1K stars.\Fix{fix query}
-  }
-\end{figure}
-
-It is worth noting that many projects use distinct frameworks for
+It is worth noting that some projects use distinct frameworks for
 testing and require external libraries to run their testing
-suites. For some projects, we made small changes in the testing
-infrastructure to be able to uniformly run the test in all
+suites. For these projects, we needed to make small changes in the testing
+infrastructure to be able to uniformly run tests in all
 engines.\Mar{not entirely clear what you did to support
   this.$\rightarrow$}We aimed to use only the JS file with minor fixes
 to support our environment. These fixes are composed by an assertion
@@ -278,6 +291,7 @@ infraestruture.
 % \Fix{add code to explain}
 
 \subsection{Fuzzers}
+\label{sec:objects:fuzzers}
 
 \Mar{revise...}~We used representatives of popular fuzzing approaches. For
 random-based fuzzing we used Radamsa~\cite{radamsa}; for
