@@ -222,18 +222,13 @@ suites from other repositories based on the following criteria:
 \begin{itemize}
   \item The project must be an open-source project and at least 1K stars from community.
   \item The repository must have JavaScript tests included.
-  \item The tests should be plug-and-play and/or easy
-    integration.\Mar{not clear what you mean}
+  \item It does not use external libraries 
 \end{itemize}
 
 Figure~\ref{fig:query} illustrates the Github API query\Fix{cite} we
-used to find projects with JS files\Mar{why the query is so specific?
-  as per ``q=javascript-engine''? Need to be consistent to what you
-  are saying an coherent to what you actually did.}. The query sorts
-results in descending order in the number of stars\Mar{sorting is only
-  relevant if you set a limit on the number of projects you will
-  analyze. What limit is that?}. The resulting list includes a total
-of \Fix{XX} projects. A total of \Fix{...}  projects remained after
+used to find javascript engines projects defined by the keyword "javascript-engine". 
+The resulting list includes a total of 33 projects.
+A total of \Fix{...}  projects remained after
 removing projects that \Fix{...}. Table~\ref{tab:test-suites} shows
 the JS sources we considered for each of these selected
 projects..\Mar{identify the sources assoc. with the four analyzed
@@ -243,7 +238,7 @@ files.\Mar{Briefly explain these sources.}
 \begin{figure}[h]
   \centering
   \begin{lstlisting}
-https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000&sort=stars
+https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000
   \end{lstlisting}
   \caption{\label{fig:query}
   Query to the GitHub API for JS engines projects that contain over 1K stars.\Fix{fix query}
@@ -280,7 +275,7 @@ testing and require external libraries to run their testing
 suites. For these projects, we needed to make small changes in the testing
 infrastructure to be able to uniformly run tests in all
 engines.\Mar{not entirely clear what you did to support
-  this.$\rightarrow$}We aimed to use only the JS file with minor fixes
+  this.$\rightarrow$}\Igor{wip}We aimed to use only the JS file with minor fixes
 to support our environment. These fixes are composed by an assertion
 function that throws an Error that we can capture by our
 infraestruture.
@@ -387,9 +382,11 @@ strategy--as implemented by representative tools--helps in this
 context.
 
 \subsection{Fuzzing versus No Fuzzing}
-\Fix{nao entendi muito sobre essa subsection... 
-seria explicacao do porque utilizar o fuzzing baseado nos nosso resultados?}
 \Igor{
+  Para identificar a eficacia e eficiencia da nossa abordagem, 
+  foi necessario identificar se seeds de diferentes engenhos 
+  sao efetivos em 
+
   Os engines JS mais populares foram arduamente testados ao longo dos últimos anos, 
   o sistema robusto nao significa que esta livre de bugs, ao contrario,
   estamos testando-o com simples entradas a partir de testes de regressao 
