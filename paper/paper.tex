@@ -16,7 +16,8 @@
 \begin{document}
 
 %Should I Fuzz my Inputs or Improve my Tests? 
-\title{Lessons Learned from Differential Testing JS Engines}
+\title{Differential Testing Runtime Engines--Lessons Learned from the
+  JavaScript Domain}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -63,8 +64,7 @@ of the community for the language encourages constant improvements in
 its specification and implementations. It is natural to expect that
 such improvements will entail sensible changes in runtime
 engines~\cite{kangax}; changes that could lead to errors. Finding bugs
-on JS engines is an important problem. In this paper, we are
-particularly interested in finding functional (non-crash) bugs.
+on JS engines is an important problem. 
 
 Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
 approach that has been applied in a variety of contexts to find
@@ -72,20 +72,22 @@ functional
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. DT
 automates test generation in scenarios where multiple implementations
 of a system exist. It leverages the diversity across system's
-implementations to detect anomalous behavior. This paper reports the
-results of a study we conducted to assess the impact of DT in finding
-bugs on \js{} engines.
+implementations to detect anomalous behavior.
+%% WHAT WE DID
+This paper reports the results of a study we conducted to assess the
+ability of DT to find bugs on \js{} engines.  We analyzed
+the impact of two orthogonal dimensions: test mining and fuzzing. The
+first dimension, test mining, considers the effect that \js{} test
+files mined from the repository of a given open-source engine have in
+detecting functional bugs in other engines. The second dimension,
+fuzzing, considers the impact of fuzzing the mined files in bug
+detection.
+%% WHAT WE FOUND
+To sum, we found that \Fix{...}
 
+%% LIST OF CONTRIBUTIONS
+This paper makes the following contributions \Fix{...}
 
-\Mar{this needs work$\rightarrow$} \Fix{but it has not been
-  thoroughly explored to find functional bugs in JS engines. The
-  closest work was done by Patra and Pradel~\cite{patra2016learning},
-  where they evaluated their proposed language-agnostic fuzzer to find
-  cross-browser HTML+JS discrepancies. This project aims at building
-  and evaluating an infrastructure for differential testing of runtime
-  engines, such as the JS engine or WebAssembly's. The sensible parts
-  of the infrastructure are the checks of input validity (as to reduce
-  waste/cost) and output correctness (as to reduce false positives).}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -151,61 +153,10 @@ we found originated from the LO category. \Mar{show real examples of
   HI and LO.}
 \Mar{can we detect dups mining issue trackers?}
 
-\begin{table*}[h!]
-  \vspace{-3ex}
-%  \scriptsize
-  \centering
-  \caption{List of bug reports issued by our team
-    24, 2018.}
-  \label{tab:bugs}
-  \begin{tabular}{cccccccc}
-    \toprule
-    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Priority & Seed \\
-    \midrule    
-    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & HI & webkit.jstests.es6 \\ 
-    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & webkit.jstests.es6 \\
-    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & webkit.jstests.es6    \\
-    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScriptjs.ecma      \\
-    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033} & HI & mozilla      \\
-    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038} & HI & JerryScriptjs.ecma   \\
-    7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
-    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065} & HI & mozilla
-    \\
-    \midrule
-    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} & \multirow{2}{*}{HI} & \multirow{2}{*}{mozilla}\\
-                        &  &                       &
-    JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}  &   & \\
-    \midrule    
-    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}  & HI  & JerryScriptjs.ecma\\
-    \midrule    
-    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} & \multirow{2}{*}{HI} & \multirow{2}{*}{tinyjs.tests}\\    
-                        &                        &        &
-    JavascriptCore & New &
-    \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156} &  & 
-    \\
-    \midrule    
-    11 & 5/02 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & mozilla \\
-    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & mozilla \\
-    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScriptjs.regression \\
-    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & v8.test.benchmarks\\
-    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & webkit.jstests.es6\\
-    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & mozilla\\
-    17 & 5/24 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & webkit.jstests.es6\\
-    18 & 6/26 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScriptjs.regression\\
-    19 & 6/28 & \crossmark & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & webkit.jstests.es6\\
-   \bottomrule     
-  \end{tabular}
-\end{table*}
-
-
 \section{Objects of Study}
 \label{sec:methodology}
 
 This section discusses the objects we used in our study.
-
-%% methodology we used in our study.  The
-%% dependent and independent variables will be discuss in
-%% Section~\ref{sec:results}.
 
 \subsection{Engines}
 \label{sec:methodology:engines}~We selected the most popular JS
@@ -215,7 +166,7 @@ v8~\cite{v82018repo}, Mozilla's
 SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
 (WebKit)~\cite{jsc2018repo}.
 
-\subsection{Seed JS files}~We considered in our study test suites
+\subsection{Seed JS files\label{sec:seeds}}~We considered in our study test suites
 associated with all four JS engines we analyzed
 (section~\ref{sec:methodology:engines}). In addition, we mined test
 suites from other repositories based on the following criteria:
@@ -308,11 +259,127 @@ Grammarinator to generate 1K JS files ten times with a random seed generation, w
 are js files that shows undefined variables and due the differential testing in our environment
 all engines will raise a SyntaxError and this approach was not relevant to our experiment.
 
+\section{Results}
+\label{sec:results}
+
+In this study, we analyzed the impact of two orthogonal dimensions in
+bug finding: test mining and fuzzing. The first dimension focuses on
+the impact of new inputs in bug finding whereas the second dimension
+focuses on the impact of variations of existing inputs in bug finding.
+
+\subsection{Test Mining}
+
+In this experiment, we ran all tests (see Section~\ref{sec:seeds})
+using our infrastructure in no-fuzzing mode. We inspected all warnings
+reported by our tool and, for those we found suspicious, we filed a
+bug report in the corresponding bug tracker.
+
+\Igor{  
+  Nosso estudo revelou que dos \Fix{19} bugs reportados pelo nosso time, 
+  apenas 8 nao foram fuzzados \Fix{42.1\%}, isso se da 
+  a importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
+  quanto em projetos distintos de mesma ordem, pois neste caso engines JS 
+  devem interpretar arquivos, entao quanto mais entradas, melhores os resultados.
+  \Fix{discuss}
+}
+
+%% \Fix{nao entendi muito sobre essa subsection... 
+%% seria explicacao do porque utilizar o fuzzing baseado nos nosso resultados?}
+%% \Igor{
+%%   Os engines JS mais populares foram arduamente testados ao longo dos últimos anos, 
+%%   o sistema robusto nao significa que esta livre de bugs, ao contrario,
+%%   estamos testando-o com simples entradas a partir de testes de regressao 
+%%   de bugs previamente encontrados, porem estas entradas poderiam servir como seeds 
+%%   para novos testcases. Partindo disso, realizar fuzzer em arquivos 
+%%   existentes em projetos open-sources eh uma maneira de
+%%   aumentar ainda mais a eficiencia destes engines, por exemplo o Google incentiva o 
+%%   uso de fuzzers no seu ecossistema\cite{oss-fuzz,honggfuzz}.
+
+
+
+\subsection{Fuzzing}
+
+The rationale for considering fuzzing as a dimension of study is to
+assess the extent to which changing existing inputs helps in finding
+new bugs. We measured this ability both in absolute terms and
+relatively to the number of bugs found with the seed inputs in
+no-fuzzing mode.
+
+\Igor{
+  Para realizar nossos experimentos, tivemos que decidir qual as 
+  melhores abordagens para aumentar a efetividade dos fuzzers.
+  Os fuzzers mutacionais se mostraram mais eficientes em relacao
+  aos fuzzers geracionais, entao focamos neste ponto.
+  Utilizamos os fuzzers radamsa, QuickFuzz e \Fix{others} nas suas configuracoes
+  default para realizar a mutacao em arquivos existentes.
+  O fuzzer radamsa eh um fuzzer mutacional agnostico de linguagem e possui algumas
+  deficiencias para a nossa infraestrutura como a falta de uma gramatica para guiar a suas mutacoes, 
+  pois muitas das vezes a unica mutacao ocorre em uma palavra dentro de um comentario por exemplo.
+  O fuzzer QuickFuzz tem uma gramatica JS integrada e sua mutacao ocorre de forma mais robusta que o 
+  radamsa, gerando arquivos mais relevantes.
+  Nossa infraestrutura usa a library Esprima\footnote{cite esprima url} para garantir que o arquivo fuzzado
+  é um arquivo de teste relevante, seguindo estes requisitos:
+  \begin{itemize}
+    \item it contains only unicode text
+    \item it is parseable (i.e., it is structurally well-formed)
+    \item it does not contain engine-specific functions  
+    \item it does not empty
+  \end{itemize}
+
+}
+
 \section{Bugs Found}
 \label{sec:bugs}
 
 %% Although there are many features yet to implement in our
-%% infrastructure, 
+%% infrastructure,
+
+\begin{table*}[h!]
+  \vspace{-3ex}
+%  \scriptsize
+  \centering
+  \caption{List of bug reports issued by our team
+    24, 2018.}
+  \label{tab:bugs}
+  \begin{tabular}{cccccccc}
+    \toprule
+    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Priority & Seed \\
+    \midrule    
+    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & HI & webkit.jstests.es6 \\ 
+    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & webkit.jstests.es6 \\
+    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & webkit.jstests.es6    \\
+    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScriptjs.ecma      \\
+    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033} & HI & mozilla      \\
+    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038} & HI & JerryScriptjs.ecma   \\
+    7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
+    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065} & HI & mozilla
+    \\
+    \midrule
+    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} & \multirow{2}{*}{HI} & \multirow{2}{*}{mozilla}\\
+                        &  &                       &
+    JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}  &   & \\
+    \midrule    
+    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}  & HI  & JerryScriptjs.ecma\\
+    \midrule    
+    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} & \multirow{2}{*}{HI} & \multirow{2}{*}{tinyjs.tests}\\    
+                        &                        &        &
+    JavascriptCore & New &
+    \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156} &  & 
+    \\
+    \midrule    
+    11 & 5/02 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & mozilla \\
+    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & mozilla \\
+    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScriptjs.regression \\
+    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & v8.test.benchmarks\\
+    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & webkit.jstests.es6\\
+    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & mozilla\\
+    17 & 5/24 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & webkit.jstests.es6\\
+    18 & 6/26 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScriptjs.regression\\
+    19 & 6/28 & \crossmark & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & webkit.jstests.es6\\
+   \bottomrule     
+  \end{tabular}
+\end{table*}
+
 
 This section shows results obtained with our
 infrastructure. Table~\ref{tab:bugs} shows the list of bugs we
@@ -355,80 +422,17 @@ incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 Chakra team fixed the issue soon after we reported the problem.
 
-\section{Results}
-\label{sec:results}
-
-\Igor{
-  In this section we discuss our findings to reach
-  bugs in JS engines. Our experiments shows that fuzzing existents files
-  still effective over the inputs without fuzzing.
-}
-
-\subsection{Dependent and Independent variables.}
-
-The independent variable of our experiment is the fuzzing strategy as
-implemented by various fuzzing tools. Our dependent variables are (i)
-the ratio of bugs found with fuzzing versus no fuzzing and (ii) and
-the ratio of bugs found with each fuzzing strategy. We consider a
-search successful only if it lends in a bug confirmed by the
-developers of the affected engine.  The rationale for considering the
-ratio of bugs found with fuzzing versus no fuzzing is to observe how
-often fuzzing really helps in this scenario. In the limit, all bugs
-could be found without extra inputs, \ie{}, simply executing the seed
-inputs on each engine and comparing their outcomes. Recall that we
-mined test suites from a variety of sources. The rationale for
-considering the fuzzing strategy is to understand to which extent each
-strategy--as implemented by representative tools--helps in this
-context.
-
-\subsection{Fuzzing versus No Fuzzing}
-\Igor{
-  Para identificar a eficacia e eficiencia da nossa abordagem, 
-  foi necessario identificar se seeds de diferentes engenhos 
-  sao efetivos em 
-
-  Os engines JS mais populares foram arduamente testados ao longo dos últimos anos, 
-  o sistema robusto nao significa que esta livre de bugs, ao contrario,
-  estamos testando-o com simples entradas a partir de testes de regressao 
-  de bugs previamente encontrados, porem estas entradas poderiam servir como seeds 
-  para novos testcases. Partindo disso, realizar fuzzer em arquivos 
-  existentes em projetos open-sources eh uma maneira de
-  aumentar ainda mais a eficiencia destes engines, por exemplo o Google incentiva o 
-  uso de fuzzers no seu ecossistema\cite{oss-fuzz,honggfuzz}.
-  
-  Nosso estudo revelou que dos \Fix{19} bugs reportados pelo nosso time, 
-  apenas 8 nao foram fuzzados \Fix{42.1\%}, isso se da 
-  a importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
-  quanto em projetos distintos de mesma ordem, pois neste caso engines JS 
-  devem interpretar arquivos, entao quanto mais entradas, melhores os resultados.
-  \Fix{discuss}
-}
-
-\subsection{Fuzzing Strategy}
-\Igor{
-  Para realizar nossos experimentos, tivemos que decidir qual as 
-  melhores abordagens para aumentar a efetividade dos fuzzers.
-  Os fuzzers mutacionais se mostraram mais eficientes em relacao
-  aos fuzzers geracionais, entao focamos neste ponto.
-  Utilizamos os fuzzers radamsa, QuickFuzz e \Fix{others} nas suas configuracoes
-  default para realizar a mutacao em arquivos existentes.
-  O fuzzer radamsa eh um fuzzer mutacional agnostico de linguagem e possui algumas
-  deficiencias para a nossa infraestrutura como a falta de uma gramatica para guiar a suas mutacoes, 
-  pois muitas das vezes a unica mutacao ocorre em uma palavra dentro de um comentario por exemplo.
-  O fuzzer QuickFuzz tem uma gramatica JS integrada e sua mutacao ocorre de forma mais robusta que o 
-  radamsa, gerando arquivos mais relevantes.
-  Nossa infraestrutura usa a library Esprima\footnote{cite esprima url} para garantir que o arquivo fuzzado
-  é um arquivo de teste relevante, seguindo estes requisitos:
-  \begin{itemize}
-    \item it contains only unicode text
-    \item it is parseable (i.e., it is structurally well-formed)
-    \item it does not contain engine-specific functions  
-    \item it does not empty
-  \end{itemize}
-
-}
 
 \section{Related Work}
+
+\Fix{The
+  closest work to ours was done by Patra and Pradel~\cite{patra2016learning},
+  where they evaluated their proposed language-agnostic fuzzer to find
+  cross-browser HTML+JS discrepancies. This project aims at building
+  and evaluating an infrastructure for differential testing of runtime
+  engines, such as the JS engine or WebAssembly's. The sensible parts
+  of the infrastructure are the checks of input validity (as to reduce
+  waste/cost) and output correctness (as to reduce false positives).}
 
 RFC-Directed Differential Testing of Certificate Validation in SSL/TLS Implementations...[ICSE18]
 
