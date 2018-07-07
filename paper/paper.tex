@@ -166,25 +166,18 @@ v8~\cite{v82018repo}, Mozilla's
 SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
 (WebKit)~\cite{jsc2018repo}.
 
-\subsection{Seed JS files\label{sec:seeds}}~We considered in our study test suites
+\subsection{Seed JS files\label{sec:seeds}}~We considered test suites
 associated with all four JS engines we analyzed
-(section~\ref{sec:methodology:engines}). In addition, we mined test
-suites from other repositories based on the following criteria:
-\begin{itemize}
-  \item The project must be an open-source project and at least 1K stars from community.
-  \item The repository must have JavaScript tests included.
-  \item It does not use external libraries 
-\end{itemize}
-
-Figure~\ref{fig:query} illustrates the Github API query\Fix{cite} we
-used to find javascript engines projects defined by the keyword "javascript-engine". 
-The resulting list includes a total of 33 projects.
-A total of \Fix{...}  projects remained after
-removing projects that \Fix{...}. Table~\ref{tab:test-suites} shows
-the JS sources we considered for each of these selected
-projects..\Mar{identify the sources assoc. with the four analyzed
-  engines. you said in the first sentence this is one source.} Overall, we found a total of \totfiles{} JS
-files.\Mar{Briefly explain these sources.}
+(section~\ref{sec:methodology:engines}). In addition, we mined tests
+from other GitHub repositories based on the following selection
+criteria--the project must have received at least 1K stars and the
+project must not use external libraries. Figure~\ref{fig:query}
+illustrates the GitHub API query~\cite{github-rest-api} we used to
+find javascript engines projects defined by the keyword
+``javascript-engine''\Mar{is this a label or two keywords?}.  The
+resulting list included a total of 33 projects.  A total of \Fix{4?}
+projects remained after removing projects that \Fix{...}.\Mar{explique
+como o numero baixou tanto.}
 
 \begin{figure}[h]
   \centering
@@ -192,10 +185,25 @@ files.\Mar{Briefly explain these sources.}
 https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000
   \end{lstlisting}
   \caption{\label{fig:query}
-  Query to the GitHub API for JS engines projects that contain over 1K stars.\Fix{fix query}
+  Query used to find JS engine projects with over 1K stars.
   }
 \end{figure}
 
+Table~\ref{tab:test-suites} shows the JS sources we considered for
+each of the selected projects.\Mar{identify the sources assoc. with
+  the four analyzed engines. you said in the first sentence this is
+  one source.}  Overall, we found a total of \totfiles{} JS
+files.\Mar{Briefly explain these sources.} It is worth noting that some projects use distinct frameworks for
+testing and require external libraries to run their testing
+suites. For these projects, we needed to make small changes in the testing
+infrastructure to be able to uniformly run tests in all
+engines.\Mar{not entirely clear what you did to support
+  this.$\rightarrow$}\Igor{wip}\Mar{apenas explique o que fez (mesmo
+  que em portugues). isto
+  nao deveria levar tempo que justifique escrever wip.}We aimed to use only the JS file with minor fixes
+to support our environment. These fixes are composed by an assertion
+function that throws an Error that we can capture by our
+infraestruture.
 
 \begin{table}[t]
   \centering
@@ -220,16 +228,6 @@ https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000
    \bottomrule     
   \end{tabular}
 \end{table}
-
-It is worth noting that some projects use distinct frameworks for
-testing and require external libraries to run their testing
-suites. For these projects, we needed to make small changes in the testing
-infrastructure to be able to uniformly run tests in all
-engines.\Mar{not entirely clear what you did to support
-  this.$\rightarrow$}\Igor{wip}We aimed to use only the JS file with minor fixes
-to support our environment. These fixes are composed by an assertion
-function that throws an Error that we can capture by our
-infraestruture.
 
 % For example to run the JerryScript tests it was necessary 
 % use the unit-test package to run it, but with our changes we added the assertion
