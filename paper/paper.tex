@@ -237,25 +237,60 @@ infraestruture.
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
 
-\Mar{revise...}~We used representatives of popular fuzzing approaches. For
-random-based fuzzing we used Radamsa~\cite{radamsa}; for
-coverage-based fuzzing we used
-\Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
-generative-based fuzzing we used
-\Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
-be found elsewhere~\cite{fuzz-bart}.
+In the following, we describe the list of fuzzers we analyzed. We
+initially considered generational grammar-based fuzzers and mutational
+fuzzers.
 
-Fuzzers grammar-based can generate a new file through a language grammar (ie. BNF).
-Our infrastructure supports any grammar fuzzer with a few adjusts. However, 
-we try to integrate several grammar-based fuzzers, for example 
-Grammarinator~\footnote{https://github.com/renatahodovan/grammarinator}, QuickFuzz~\cite{grieco2016quickfuzz}
-and \Fix{others fuzzers} to generate new JavaScript files based on grammar, but 
-after several runs it was observed that this approach was ineffective
-due the amount of invalid files and/or files without discrepancies. For example, if we ran 
-Grammarinator to generate 1K JS files ten times with a random seed generation, we obtained
-\Fix{XX\%} of valid files. Checking in our environment almost \Fix{XX\%}
-are js files that shows undefined variables and due the differential testing in our environment
-all engines will raise a SyntaxError and this approach was not relevant to our experiment.
+Grammar-based fuzzers generate a new file using the grammar of the
+language whose inputs should be fuzzed. Intuitively, those fuzzers
+implement a traversal of the production rules of the input grammar to
+create syntax trees, which are then pretty-printed. Consequently, this
+approach produces inputs that are syntatically valid by construction.
+We analyzed two grammar-based
+fuzzers--Grammarinator~\cite{grammarinator} and
+QuickFuzz~\cite{grieco2016quickfuzz}.  Unfortunately none was
+effective out of the box. Given the bound limits we defined, we were
+unable to find any discrepancy in the inputs those tools generated. To
+sum, the tools produced a high percentage of semantically-invalid
+inputs such as \Fix{give one or two concrete examples--variable usage
+  without definition?} that we needed to discard and the valid inputs
+manifested no discrepancies. For example, we produced 10K inputs with
+Grammarinator and only \Fix{X} were valid. With QuickFuzz, we were
+able to produce \Fix{Y, Y$>$Y?} valid inputs as it contains some
+heuristics to avoid generation of semantically-invalid
+inputs. Nonetheless, running those inputs in our infrastructure we
+were unable to find discrepancies. Inpecting the valid inputs we found
+that they produced only very simple inputs. \Mar{are there weights
+  associated with production rules besides the depth you can set?}
+
+%% Our
+%% infrastructure supports any grammar fuzzer with a few
+%% adjusts. However, we try to integrate several grammar-based fuzzers,
+%% for example
+%% and \Fix{others fuzzers} to
+%% generate new JavaScript files based on grammar, but after several runs
+%% it was observed that this approach was ineffective due the amount of
+%% invalid files and/or files without discrepancies.
+%% For example, if we
+%% ran Grammarinator to generate 1K JS files ten times with a random seed
+%% generation, we obtained \Fix{XX\%} of valid files. Checking in our
+%% environment almost \Fix{XX\%} are js files that shows undefined
+%% variables and due the differential testing in our environment all
+%% engines will raise a SyntaxError and this approach was not relevant to
+%% our experiment.
+
+%% We initially considered used representatives of popular fuzzing approaches. For
+%% random-based fuzzing we used Radamsa~\cite{radamsa}; for
+%% coverage-based fuzzing we used
+%% \Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
+%% generative-based fuzzing we used
+%% \Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
+%% be found elsewhere~\cite{fuzz-bart}.
+
+\Fix{do the same as above for coverage-based fuzzing}
+
+\Fix{do the same as above for black-box fuzzing}
+
 
 \section{Results}
 \label{sec:results}
