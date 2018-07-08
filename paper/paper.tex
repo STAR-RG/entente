@@ -287,9 +287,32 @@ that they produced only very simple inputs. \Mar{are there weights
 %% \Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
 %% be found elsewhere~\cite{fuzz-bart}.
 
-\Fix{do the same as above for coverage-based fuzzing}
+\Mar{------------ estou aqui -M}
 
-\Fix{do the same as above for black-box fuzzing}
+\Fix{quick on mutational fuzzers}
+
+Coverage-based fuzzers like American Fuzz Loop (AFL)~\cite{afl} and
+libfuzzer~\cite{libfuzzer} run tests inputs in coverage-instrumented
+versions of the program under testing. The typical approach to input
+generation of this kind of fuzzer is evolutionary--they try to
+minimize the distances to still uncovered branches of the
+program. AFL, for instance, takes the instrumented program binary and
+one input seed and produces on output crash inputs. Considering our
+context of application, we needed to build one runtime engine to
+collect coverage information for fuzzing; we chose v8. (There are
+options in LLVM clang for that~\cite{libfuzzer}.)  Unfortunately, we
+found that most of the inputs produced violate the JS grammar and the
+fuzzing task can take days even when considering one seed. That
+happens because the entire decision tree of the engine is explored,
+including the branches associated with the lexer and parser. For this
+reason, Google promotes the creation of fuzz targets associated with
+specific program functions. Although that approach has shown very
+effective, it requires domain knowledge to create the calling context
+for the fuzz target. For those reason, coverage-based fuzzers were not
+considered in this study.
+
+\Fix{...do the same as above for black-box fuzzing. explain what kinds of
+inputs they can generate.}
 
 
 \section{Results}
@@ -371,8 +394,8 @@ no-fuzzing mode.
   \vspace{-3ex}
 %  \scriptsize
   \centering
-  \caption{List of bug reports issued by our team
-    24, 2018.}
+  \caption{List of bug reports issued by our team since April,
+    2018. The analysis of warnings was not uninterrupted.}
   \label{tab:bugs}
   \begin{tabular}{cccccccc}
     \toprule
