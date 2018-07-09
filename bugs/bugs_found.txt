@@ -1,5 +1,32 @@
+BUG #19 (CONFIRMED)
+
+Date reported:June 28, 2018
+
+Type: Assertion failure
+
+Priority: HIGH
+
+URL: https://github.com/Microsoft/ChakraCore/issues/5388
+
+Original:
+
+Fuzzed:
+
+Patch:
+
+pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+When a regex pattern is called the property 'lastIndex' should be updated 
+with the last ocurrence of the pattern match. 
+Chakra just checks the 'lastIndex' property on the beginning.
 ======
-BUG #18 (NEW)
+BUG #18 (FIXED)
 
 Date reported:June 26, 2018
 
@@ -51,7 +78,7 @@ RegExp.exec returns wrong value with a long integer quantifier.
 If the quantifier exceeds the MAX_INT value the matcher cannot be solved.
 
 ======
-BUG #17 (NEW)
+BUG #17 (FIXED)
 
 Date reported: May 24, 2018
 
