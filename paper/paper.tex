@@ -135,23 +135,104 @@ To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. Warnings
 in the HI group are associated with the cases when the anomaly has been
 detected during the execution of the test code or its close neighborhood\Comment{ as
-  opposed to that of some internal JS function}. The rationale is that
+  opposed to that of some internal JS function}, \Igor{crashes (ie. FatalError) and core dumps 
+  are considered HI group as well}. The rationale is that
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
 anomaly was observed during the execution of some standard JS
-function\Mar{is this correct? what are those?}. We
+function.
+\Mar{is this correct? what are those?}\Igor{Yeah, it's okay}We
 found that different engines often check the pre-conditions of those
 functions differently. It can happen, for example, that one engine
-enforces a pre-condition that another engine does not\Mar{why is that?
-that should not happen if the spec was fully documented and engines
-properly implemented those checks. Explain and give example.}. In those cases,
+enforces a pre-condition that another engine does not, 
+% \Mar{why is that?
+% that should not happen if the spec was fully documented and engines
+% properly implemented those checks. Explain and give example.}
+\Igor{these cases happen because the specification describes how a function
+should work, however the internal implementation is defined by the engine developers}.
+In those cases,
 our infrastructure would observe a discrepancy that is more likely to
 be associated with a bug in the (fuzzed) test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only 12\% of the reals bugs
 we found originated from the LO category. \Mar{show real examples of
   HI and LO.}
+\Igor{For example, a bug caught by our environment and reported as LO priority was reported 
+on Chakra engine, the JS code can be found in Figure~\ref{fig:lo-priority}. In this case,
+this is a seed from Mozilla suite (\CodeIn{mozilla/non262/statements/for-in-with-assignments.js}),
+the warning was not caught by the \CodeIn{assertEq} function that compares if two arguments are equals, 
+the bug appears inside the generator function\footnote{Generators \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*}}
+at line 2. According to ES6 specification\footnote{ES6 YieldExpression \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#prod-YieldExpression}},
+it is allowed the use of \CodeIn{yield in} in a \CodeIn{for} loop. In our infrastructure,
+only Chakra engine fails with an error output \CodeIn{SyntaxError: Syntax error}, due
+the output does not shows nothing related with assertions, we considered this one as a warning from LO group.
+Until now, the issue was confirmed and waiting for merge/closed.
+\Fix{checar ate o prazo de submissao. Essa issue esta confirmada e com commits, falta apenas o merge.}
+}
+\begin{figure}[h!]
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function},
+  }
+  \begin{lstlisting}
+function* g1() {
+  for (var x = yield in {}) ;
+}
+var it = g1();
+assertEq(it.next().done, false);
+assertEq(it.next().done, true);
+  \end{lstlisting}
+  \normalsize
+  \caption{Bug caught by our environment as LO priority.}
+  \label{fig:lo-priority}
+  \end{figure}
+
+An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
+This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
+initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
+integer 3 to a big integer number. We reported this case in chakra due a core dumps that occurs
+during the runtime, however this case was rejected due \CodeIn{incompatibility by design} that
+this is an intentional behavior of engine that crash the process if it runs out of memory
+\footnote{Chakra issue \#4979 \url{https://github.com/Microsoft/ChakraCore/issues/4979}}.
+
+\begin{figure}[h!]
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+function test() {
+  return typeof String.prototype.repeat === "function"
+    && "foo".repeat(657604378) === "foofoofoo";
+}
+if (!test())
+  throw new Error("Test failed");
+  \end{lstlisting}
+  \normalsize
+  \caption{Warning captured as HI priority.}
+  \label{fig:hi-priority}
+  \end{figure}
+
 \Mar{can we detect dups mining issue trackers?}
+\Igor{
+  acho que encontrar duplicatas seria um estudo a parte, devido a linguagem natural.
+  Tenho umas consideracoes:
+  \begin{itemize}
+    \item warning HI possui a msg "Error: Test Failed", nao tem como buscar algo com isso, 
+    se for pegar a linha que falhou, provavelmente vai mostrar a linha onde o assert se encontra.
+    \item warning LO: podemos tentar conseguir buscar pelo output/funcao que falhou,
+    \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
+  \end{itemize}
+}
 
 \section{Objects of Study}
 \label{sec:methodology}
@@ -173,11 +254,20 @@ from other GitHub repositories based on the following selection
 criteria--the project must have received at least 1K stars and the
 project must not use external libraries. Figure~\ref{fig:query}
 illustrates the GitHub API query~\cite{github-rest-api} we used to
-find javascript engines projects defined by the keyword
-``javascript-engine''\Mar{is this a label or two keywords?}.  The
-resulting list included a total of 33 projects.  A total of \Fix{4?}
-projects remained after removing projects that \Fix{...}.\Mar{explique
-como o numero baixou tanto.}
+find javascript engines projects defined by the label
+``javascript-engine''.  The resulting list included a total of 33 projects.
+\Igor{
+  Due the GitHub does not supports to get the repository files via API, we
+  analyzed manually each of them. It was observed that sixteen projects
+  are invalid for us due the uses NodeJS that our engine cannot support it,
+  empty repositories and browser support as well and another 13 projects 
+  does not have a test module in their repository.
+  A total of 4 projects remained after the manual inspection, two of them
+  are added before, for example the V8\footnote{The official mirror of the V8 Git repository \url{https://github.com/v8/v8}}
+  and V7\footnote{V7 Embedded JavaScript engine \url{https://github.com/cesanta/v7}} repositories.
+  The Duktape and JerryScript tests are the seeds that we integrate on our infraestruture.
+  The repositories of JSI and TinyJS are found manually and was incorpored also even less 1K of stars.
+}
 
 \begin{figure}[h]
   \centering
@@ -216,7 +306,7 @@ infraestruture.
     TestSuite & Source & \# JS files \\
     \midrule
     Duktape & \cite{duktape} & 997 \\
-    JerryJS & \cite{jerryscript} & 1,803 \\
+    JerryScript & \cite{jerryscript} & 1,803 \\
     JSI & \cite{jsi} & 99 \\
     Tiny-js & \cite{tinyjs} & 44 \\
     Mozilla & \Fix{??} & 32,414 \\
