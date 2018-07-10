@@ -135,13 +135,13 @@ To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. Warnings
 in the HI group are associated with the cases when the anomaly has been
 detected during the execution of the test code or its close neighborhood\Comment{ as
-  opposed to that of some internal JS function}, \Igor{crashes (ie. FatalError) and core dumps 
-  are considered HI group as well}. The rationale is that
+  opposed to that of some internal JS function}, crashes (ie. FatalError) and core dumps 
+  are considered HI group as well. The rationale is that
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
 anomaly was observed during the execution of some standard JS
 function.
-\Mar{is this correct? what are those?}\Igor{Yeah, it's okay}We
+\Mar{is this correct? what are those?}We
 found that different engines often check the pre-conditions of those
 functions differently. It can happen, for example, that one engine
 enforces a pre-condition that another engine does not, 
@@ -157,70 +157,13 @@ we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only 12\% of the reals bugs
 we found originated from the LO category. \Mar{show real examples of
   HI and LO.}
-\Igor{For example, a bug caught by our environment and reported as LO priority was reported 
-on Chakra engine, the JS code can be found in Figure~\ref{fig:lo-priority}. In this case,
-this is a seed from Mozilla suite (\CodeIn{mozilla/non262/statements/for-in-with-assignments.js}),
-the warning was not caught by the \CodeIn{assertEq} function that compares if two arguments are equals, 
-the bug appears inside the generator function\footnote{Generators \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*}}
-at line 2. According to ES6 specification\footnote{ES6 YieldExpression \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#prod-YieldExpression}},
-it is allowed the use of \CodeIn{yield in} in a \CodeIn{for} loop. In our infrastructure,
-only Chakra engine fails with an error output \CodeIn{SyntaxError: Syntax error}, due
-the output does not shows nothing related with assertions, we considered this one as a warning from LO group.
-Until now, the issue was confirmed and waiting for merge/closed.
-\Fix{checar ate o prazo de submissao. Essa issue esta confirmada e com commits, falta apenas o merge.}
-}
-\begin{figure}[h!]
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function},
-  }
-  \begin{lstlisting}
-function* g1() {
-  for (var x = yield in {}) ;
-}
-var it = g1();
-assertEq(it.next().done, false);
-assertEq(it.next().done, true);
-  \end{lstlisting}
-  \normalsize
-  \caption{Bug caught by our environment as LO priority.}
-  \label{fig:lo-priority}
-  \end{figure}
 
-An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
-This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
-initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
-integer 3 to a big integer number. We reported this case in chakra due a core dumps that occurs
-during the runtime, however this case was rejected due \CodeIn{incompatibility by design} that
-this is an intentional behavior of engine that crash the process if it runs out of memory
-\footnote{Chakra issue \#4979 \url{https://github.com/Microsoft/ChakraCore/issues/4979}}.
+\subsection{ES6 design}
+\Fix{to appear}
+% no-bug low console output
 
-\begin{figure}[h!]
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
-function test() {
-  return typeof String.prototype.repeat === "function"
-    && "foo".repeat(657604378) === "foofoofoo";
-}
-if (!test())
-  throw new Error("Test failed");
-  \end{lstlisting}
-  \normalsize
-  \caption{Warning captured as HI priority.}
-  \label{fig:hi-priority}
-  \end{figure}
+% bug high console output
+
 
 \Mar{can we detect dups mining issue trackers?}
 \Igor{
@@ -248,36 +191,16 @@ SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
 (WebKit)~\cite{jsc2018repo}.
 
 \subsection{Seed JS files\label{sec:seeds}}~We considered test suites
-associated with all four JS engines we analyzed
-(section~\ref{sec:methodology:engines}). In addition, we mined tests
-from other GitHub repositories based on the following selection
-criteria--the project must have received at least 1K stars and the
-project must not use external libraries. Figure~\ref{fig:query}
-illustrates the GitHub API query~\cite{github-rest-api} we used to
-find javascript engines projects defined by the label
-``javascript-engine''.  The resulting list included a total of 33 projects.
+associated with all \Fix{four} JS engines we analyzed
+(section~\ref{sec:methodology:engines}).
 \Igor{
-  Due the GitHub does not supports to get the repository files via API, we
-  analyzed manually each of them. It was observed that sixteen projects
-  are invalid for us due the uses NodeJS that our engine cannot support it,
-  empty repositories and browser support as well and another 13 projects 
-  does not have a test module in their repository.
-  A total of 4 projects remained after the manual inspection, two of them
-  are added before, for example the V8\footnote{The official mirror of the V8 Git repository \url{https://github.com/v8/v8}}
-  and V7\footnote{V7 Embedded JavaScript engine \url{https://github.com/cesanta/v7}} repositories.
-  The Duktape and JerryScript tests are the seeds that we integrate on our infraestruture.
-  The repositories of JSI and TinyJS are found manually and was incorpored also even less 1K of stars.
+  We selected only the seeds that supports integration without external dependencies. 
+  In addition, we found in public repositories (ie. GitHub) several kinds of projects 
+  that contains javascript files, however, the most of them uses nodejs that have 
+  internal functions that our engines does not support. 
+  We found a total of four engines projects that we can integrate to our seeds 
+  with minor fixes on the files, due the "assertion function" is missing in some cases.
 }
-
-\begin{figure}[h]
-  \centering
-  \begin{lstlisting}
-https://api.github.com/search/repositories?q=javascript-engine+stars:>=1000
-  \end{lstlisting}
-  \caption{\label{fig:query}
-  Query used to find JS engine projects with over 1K stars.
-  }
-\end{figure}
 
 Table~\ref{tab:test-suites} shows the JS sources we considered for
 each of the selected projects.\Mar{identify the sources assoc. with
@@ -297,10 +220,12 @@ infraestruture.
 
 \begin{table}[t]
   \centering
-  \caption{\label{tab:test-suites}Test Suites\Mar{try to use a single
-      name (if possible) to facilitate reference in the paper. Use the
-  full path in the URL (citation) to indicate where one can find those
-  files.}}
+  \caption{\label{tab:test-suites}Test Suites
+  % \Mar{try to use a single
+  %     name (if possible) to facilitate reference in the paper. Use the
+  % full path in the URL (citation) to indicate where one can find those
+  % files.}
+  }
   \begin{tabular}{ccr}
     \toprule
     TestSuite & Source & \# JS files \\
@@ -309,10 +234,10 @@ infraestruture.
     JerryScript & \cite{jerryscript} & 1,803 \\
     JSI & \cite{jsi} & 99 \\
     Tiny-js & \cite{tinyjs} & 44 \\
-    Mozilla & \Fix{??} & 32,414 \\
-    V8.test.benchmarks.data & \Fix{??} & 64 \\
-    WebKit.jstests.es6 & \Fix{??} & 605 \\
-    WebKit.jstests.microbenchmarks & \Fix{??} & 426 \\
+    Mozilla & \cite{mozilla} & 32,414 \\
+    V8 & \cite{v8} & 64 \\
+    WebKit & \cite{webkit} & 1031 \\
+    % Chakra & \cite{chakracore} & 2632 \\
     \midrule
      &  & 36,452 \\
    \bottomrule     
@@ -538,9 +463,15 @@ no-fuzzing mode.
     14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & v8.test.benchmarks\\
     15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & webkit.jstests.es6\\
     16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & mozilla\\
-    17 & 5/24 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & webkit.jstests.es6\\
-    18 & 6/26 & radamsa & JavascriptCore & New  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScriptjs.regression\\
+    17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & webkit.jstests.es6\\
+    18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScriptjs.regression\\
     19 & 6/28 & \crossmark & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & webkit.jstests.es6\\
+    20 & 7/10 & quickfuzz & JavaScriptCore & New  & \href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520} & HI & x\\
+    21 & 7/10 & quickfuzz & Chakra & New  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & x\\    
+    \midrule
+    \multirow{2}{*}{22}  & \multirow{2}{*}{7/10} &  \multirow{2}{*}{quickfuzz} & Chakra & New & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & \multirow{2}{*}{HI} & \multirow{2}{*}{x}\\
+                        &  &                       &
+    JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187519}{\#187519}  &   & \\
    \bottomrule     
   \end{tabular}
 \end{table*}
@@ -586,6 +517,76 @@ converted. As result, the test fails as expected. Chakra, in contrast,
 incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 Chakra team fixed the issue soon after we reported the problem.
+
+\subsection{False Positives Bugs}
+
+An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
+This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
+initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
+integer 3 to a big integer number. We reported this case in chakra due a core dumps that occurs
+during the runtime, however this case was rejected due \CodeIn{incompatibility by design} that
+this is an intentional behavior of engine that crash the process if it runs out of memory
+\cite{bug4979}.
+
+\begin{figure}[h!]
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+function test() {
+  return typeof String.prototype.repeat === "function"
+    && "foo".repeat(657604378) === "foofoofoo";
+}
+if (!test())
+  throw new Error("Test failed");
+  \end{lstlisting}
+  \normalsize
+  \caption{Warning captured as HI priority.}
+  \label{fig:hi-priority}
+  \end{figure}
+
+% \subsection{LO bugs}
+% 
+% \Igor{For example, a bug caught by our environment and reported as LO priority was reported 
+% on Chakra engine, the JS code can be found in Figure~\ref{fig:lo-priority}. In this case,
+% this is a seed from Mozilla suite (\CodeIn{mozilla/non262/statements/for-in-with-assignments.js}),
+% the warning was not caught by the \CodeIn{assertEq} function that compares if two arguments are equals, 
+% the bug appears inside the generator function\footnote{Generators \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*}}
+% at line 2. According to ES6 specification\footnote{ES6 YieldExpression \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#prod-YieldExpression}},
+% it is allowed the use of \CodeIn{yield in} in a \CodeIn{for} loop. In our infrastructure,
+% only Chakra engine fails with an error output \CodeIn{SyntaxError: Syntax error}, due
+% the output does not shows nothing related with assertions, we considered this one as a warning from LO group.
+% Until now, the issue was confirmed and waiting for merge/closed.
+% \Fix{checar ate o prazo de submissao. Essa issue esta confirmada e com commits, falta apenas o merge.}
+% }
+% \begin{figure}[h!]
+%   \centering
+%   \scriptsize
+%   \lstset{escapeinside={@}{@},
+%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%     numberstyle=\tiny,
+%     morekeywords={assertEq, var, yield, in, function},
+%   }
+%   \begin{lstlisting}
+% function* g1() {
+%   for (var x = yield in {}) ;
+% }
+% var it = g1();
+% assertEq(it.next().done, false);
+% assertEq(it.next().done, true);
+%   \end{lstlisting}
+%   \normalsize
+%   \caption{Bug caught by our environment as LO priority.}
+%   \label{fig:lo-priority}
+%   \end{figure}
+  
 
 
 \section{Related Work}
