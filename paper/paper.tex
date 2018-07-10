@@ -116,8 +116,7 @@ where fuzzing is not selected, as illustrated in the inner box at the bottom
 of the figure, the oracle checks whether or not the output produced
 for that file is consistent across all engine implementations. In case
 the test passes in all engines or fails in all engines (\ie{}, the
-output is consistent), the infrastructure discards the corresponding
-input. Otherwise, it considers the input as potentially
+output is consistent), the infrastructure discards the test. Otherwise, it considers the input as potentially
 fault-revealing; hence interesting for human inspection. Considering
 the case where fuzzing~\cite{fuzz-testing-history} is selected, new
 inputs are obtained from a given input using some off-the-shelf
