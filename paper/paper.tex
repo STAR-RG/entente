@@ -88,6 +88,8 @@ To sum, we found that \Fix{...}
 %% LIST OF CONTRIBUTIONS
 This paper makes the following contributions \Fix{...}
 
+\section{ES6 design}
+\Fix{to appear}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -138,27 +140,29 @@ detected during the execution of the test code or its close neighborhood\Comment
   are considered HI group as well. The rationale is that
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
-anomaly was observed during the execution of some standard JS
-function.
-\Mar{is this correct? what are those?}We
-found that different engines often check the pre-conditions of those
+anomaly was observed during the execution of functions from standard JS
+libraries.\Mar{what is that exactly? can we cite? is that only spec or
+actually code as most of java.* libraries.}We
+found that different engines often check pre-conditions of those
 functions differently. It can happen, for example, that one engine
-enforces a pre-condition that another engine does not, 
+enforces a weaker pre-condition compared to another.
 % \Mar{why is that?
 % that should not happen if the spec was fully documented and engines
 % properly implemented those checks. Explain and give example.}
 \Igor{these cases happen because the specification describes how a function
-should work, however the internal implementation is defined by the engine developers}.
+should work, however the internal implementation is defined by the
+engine developers}\Mar{If you confirm that there is no code in specs
+  (see comment above), what would be those abstract
+  functions/interfaces that you mentioned to me the other day?}.
 In those cases,
 our infrastructure would observe a discrepancy that is more likely to
 be associated with a bug in the (fuzzed) test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only 12\% of the reals bugs
 we found originated from the LO category. \Mar{show real examples of
-  HI and LO.}
+  HI and LO. Use the stacktraces to explain what is going on.}
 
-\subsection{ES6 design}
-\Fix{to appear}
+
 % no-bug low console output
 
 % bug high console output
