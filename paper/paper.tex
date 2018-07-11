@@ -88,6 +88,8 @@ To sum, we found that \Fix{...}
 %% LIST OF CONTRIBUTIONS
 This paper makes the following contributions \Fix{...}
 
+\section{ES6 design}
+\Fix{to appear}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -116,8 +118,7 @@ where fuzzing is not selected, as illustrated in the inner box at the bottom
 of the figure, the oracle checks whether or not the output produced
 for that file is consistent across all engine implementations. In case
 the test passes in all engines or fails in all engines (\ie{}, the
-output is consistent), the infrastructure discards the corresponding
-input. Otherwise, it considers the input as potentially
+output is consistent), the infrastructure discards the test. Otherwise, it considers the input as potentially
 fault-revealing; hence interesting for human inspection. Considering
 the case where fuzzing~\cite{fuzz-testing-history} is selected, new
 inputs are obtained from a given input using some off-the-shelf
@@ -139,29 +140,30 @@ detected during the execution of the test code or its close neighborhood\Comment
   are considered HI group as well. The rationale is that
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
-anomaly was observed during the execution of some standard JS
-function. In addiction, we observed that several testcases run loops that can 
-affect the time-consuming of an execution, we decided to use an watcher to check 
-if an test consumes more than 5 seconds to run, if exceed this condition we stop 
-the engine execution and considered these cases as TIMEOUT error. These tests are 
-labeled as LO group.
-\Mar{is this correct? what are those?}We
-found that different engines often check the pre-conditions of those
+anomaly was observed during the execution of functions from standard JS
+libraries.\Mar{what is that exactly? can we cite? is that only spec or
+actually code as most of java.* libraries.}We
+found that different engines often check pre-conditions of those
 functions differently. It can happen, for example, that one engine
-enforces a pre-condition that another engine does not, 
+enforces a weaker pre-condition compared to another.
 % \Mar{why is that?
 % that should not happen if the spec was fully documented and engines
 % properly implemented those checks. Explain and give example.}
 \Igor{these cases happen because the specification describes how a function
-should work, however the internal implementation is defined by the engine developers}.
+should work, however the internal implementation is defined by the
+engine developers}\Mar{If you confirm that there is no code in specs
+  (see comment above), what would be those abstract
+  functions/interfaces that you mentioned to me the other day?}.
 In those cases,
 our infrastructure would observe a discrepancy that is more likely to
 be associated with a bug in the (fuzzed) test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only 12\% of the reals bugs
 we found originated from the LO category. \Mar{show real examples of
-  HI and LO.}
+  HI and LO. Use the stacktraces to explain what is going on.}
 
+
+<<<<<<< HEAD
 \Igor{
   We defined if an warning is in HI or LO group according to console output.
   The error stream in the output shows relevant informations that we can 
@@ -171,6 +173,9 @@ we found originated from the LO category. \Mar{show real examples of
   that thows an Error exception. This case was considered as HI groups and after 
   several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
 }
+=======
+% no-bug low console output
+>>>>>>> 7cf79dbe4960fbe4eededdf8876cdc810b0c73e1
 
 % bug high console output
 This a case of a warning reported as HI priority, the Figure~\ref{} shows
@@ -278,37 +283,42 @@ This section discusses the objects we used in our study.
 
 \subsection{Engines}
 \label{sec:methodology:engines}~We selected the most popular JS
-engines on the web~\Fix{cite} to focus our bug-finding efforts, namely
+engines on the web~\Fix{ha alguma referencia que de suporte a isto?} to focus our bug-finding efforts, namely
 Microsoft's Chakra~\cite{chakra2018repo}, Google's
 v8~\cite{v82018repo}, Mozilla's
 SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
 (WebKit)~\cite{jsc2018repo}.
 
-\subsection{Seed JS files\label{sec:seeds}}~We considered test suites
-associated with all \Fix{four} JS engines we analyzed
-(section~\ref{sec:methodology:engines}).
-\Igor{
-  We selected only the seeds that supports integration without external dependencies. 
-  In addition, we found in public repositories (ie. GitHub) several kinds of projects 
-  that contains javascript files, however, the most of them uses nodejs that have 
-  internal functions that our engines does not support. 
-  We found a total of four engines projects that we can integrate to our seeds 
-  with minor fixes on the files, due the "assertion function" is missing in some cases.
-}
+\subsection{Seed JS files\label{sec:seeds}}~
+We selected test files from several public projects from GitHub. We
+looked for self-contained tests from JS engine projects, initially
+using the GitHub REST API\Fix{cite}. We noticed that some of the tests
+we found depend on external libraries, which not all engines we use
+(see Section~\ref{sec:methodology:engines}) support. We decided to
+discard those. For example, many tests we found required a
+nodejs\Fix{cite} runtime for execution. Overall, we considered the
+test suites of three of the four engines mentioned in
+Section~\ref{sec:methodology:engines} and four other engines.
+
+\Mar{vc. jah nao fala disto no paragrafo a seguir? se sim, junte os dois.}
+We
+implemented minor changes on test files with fixable file dependencies. For
+example, some of the files used assertion functions defined in their
+projects; we replaced those with our definitions.\Mar{not sure if this
+  is a good example; why one would like to redefine assertion? why
+  didn't you incorporate the assertion function to your infra?}
 
 Table~\ref{tab:test-suites} shows the JS sources we considered for
-each of the selected projects.\Mar{identify the sources assoc. with
-  the four analyzed engines. you said in the first sentence this is
-  one source.}  Overall, we found a total of \totfiles{} JS
-files.\Mar{Briefly explain these sources.} It is worth noting that some projects use distinct frameworks for
-testing and require external libraries to run their testing
-suites. For these projects, we needed to make small changes in the testing
-infrastructure to be able to uniformly run tests in all
-engines.\Mar{not entirely clear what you did to support
+each of the selected projects. Overall, we found a total of
+\totfiles{} JS files. It is worth noting that some projects use
+distinct frameworks for testing and require external libraries to run
+their testing suites. For these projects, we needed to make small
+changes in the testing infrastructure to be able to uniformly run
+tests in all engines.\Mar{not entirely clear what you did to support
   this.$\rightarrow$}\Igor{wip}\Mar{apenas explique o que fez (mesmo
-  que em portugues). isto
-  nao deveria levar tempo que justifique escrever wip.}We aimed to use only the JS file with minor fixes
-to support our environment. These fixes are composed by an assertion
+  que em portugues). isto nao deveria levar tempo que justifique
+  escrever wip.}We aimed to use only the JS file with minor fixes to
+support our environment. These fixes are composed by an assertion
 function that throws an Error that we can capture by our
 infraestruture.
 
@@ -324,13 +334,14 @@ infraestruture.
     \toprule
     TestSuite & Source & \# JS files \\
     \midrule
+    Mozilla & \cite{mozilla} & 32,414 \\
+    V8 & \cite{v8} & 64 \\
+    WebKit & \cite{webkit} & 1,031 \\
+    \midrule    
     Duktape & \cite{duktape} & 997 \\
     JerryScript & \cite{jerryscript} & 1,803 \\
     JSI & \cite{jsi} & 99 \\
-    Tiny-js & \cite{tinyjs} & 44 \\
-    Mozilla & \cite{mozilla} & 32,414 \\
-    V8 & \cite{v8} & 64 \\
-    WebKit & \cite{webkit} & 1031 \\
+    Tiny-js & \cite{tinyjs} & 44 \\    
     % Chakra & \cite{chakracore} & 2632 \\
     \midrule
      &  & 36,452 \\
