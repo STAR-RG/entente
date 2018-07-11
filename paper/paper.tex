@@ -277,26 +277,29 @@ generate a new file using the grammar of the language whose inputs
 should be fuzzed. Intuitively, those fuzzers implement a traversal of
 the production rules of the input grammar to create syntax trees,
 which are then pretty-printed. Consequently, this approach produces
-inputs that are syntactically valid by construction.  We analyzed two
-grammar-based fuzzers--Grammarinator~\cite{grammarinator} and
-QuickFuzz~\cite{quickfuzz,grieco2016quickfuzz}.  Unfortunately none
-was effective out of the box. Given the bound limits we defined on the
-number of inputs to generate and the depth of exploration in the
-syntax tree, we were unable to find discrepancies on the inputs those
-tools generated. To sum, the tools produced a high percentage of
+inputs that are syntactically valid by construction.  We analyzed
+three grammar-based fuzzers--Grammarinator~\cite{grammarinator},
+jsfunfuzz~\cite{jsfunfuzz}, and
+QuickFuzz~\cite{quickfuzz,grieco2016quickfuzz}.  Unfortunately, none
+of those was effective out of the box. Given the bound limits we
+defined on the number of inputs to generate and the exploration depth
+of the syntax tree, we were unable to find discrepancies on the inputs
+those tools generated. To sum, the tools produced a high percentage of
 semantically-invalid inputs (\eg{}, \Fix{give one or two concrete
   examples--variable usage without definition?}) that we needed to
 discard and the valid inputs manifested no discrepancies. For example,
-we produced 10K inputs with Grammarinator and only \Fix{X} of those
+we produced 100K inputs with Grammarinator and only \Fix{X} of those
 were valid. With QuickFuzz, we were able to produce \Fix{Y, Y$>$Y?}
 valid inputs as it contains some heuristics to circumvent violation of
 certain type rules such as \Fix{variable used must be
   defined?}. Nonetheless, running those inputs in our infrastructure
 we were unable to find discrepancies. Inpecting those inputs, we
-realized that they reflected very simple scenarios. \Mar{are there
+realized that they reflected very simple scenarios.\Comment{ \Mar{are there
   weights associated with production rules besides the depth you can
-  set?} To sum, we did not consider this kind of fuzzer in this
-study\Fix{...}
+  set?}} Although grammar-based fuzzers has been shown effective to
+find real bugs\Fix{cite some jsfunfuzz bug reports}, generating
+valid inputs is very time-consuming, especially for the context of
+differential testing. For this reason, we did not consider those fuzzers.
 
 %% Our
 %% infrastructure supports any grammar fuzzer with a few
@@ -322,37 +325,37 @@ study\Fix{...}
 %% \Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
 %% be found elsewhere~\cite{fuzz-bart}.
 
-Mutational fuzzers can be either white-box or
-black-box. White-box mutational fuzzers are typically
-coverage-based. American Fuzz Loop
-(AFL)~\cite{afl} and libFuzzer~\cite{libfuzzer} are examples of
-this kind of fuzzers. These fuzzers run tests inputs
-against instrumented versions of the program under testing with the
-typical goal of finding univeral errors like crashes and buffer
-overflows. The instrumentation adds code to collect branch coverage and
-monitor specific properties\footnote{There are options in the clang
-  toolchain to build programs with fuzzing
-  instrumentation~\cite{libfuzzer}. clang provides several sanitizers
-  for property checking~\cite{clang-documentation}.}. The typical
-approach to input generation is evolutionary--these fuzzers try to
-minimize the distances to still-uncovered branches of the
-program. AFL, for instance, takes the instrumented program binary
-(say, a JS engine) and one seed input to that program (say, a JS
-program) and produces on output fault-revealing inputs, if
+Mutational fuzzers can be either white-box or black-box. White-box
+mutational fuzzers are typically coverage-based. American Fuzz Loop
+(AFL)~\cite{afl} and libFuzzer~\cite{libfuzzer} are examples of this
+kind of fuzzers. These fuzzers run tests inputs against instrumented
+versions of the program under testing with the typical goal of finding
+univeral errors like crashes and buffer overflows. The instrumentation
+adds code to collect branch coverage and to monitor specific
+properties\footnote{There are options in the clang toolchain to build
+  programs with fuzzing instrumentation~\cite{libfuzzer}. clang
+  provides several sanitizers for property
+  checking~\cite{clang-documentation}.}. AFL use coverage to determine
+inputs that uncover a new branch and deserve fuzzing whereas libFuzzer
+uses evolutionary generation--it tries to minimize the distances to
+still-uncovered branches of the program. AFL takes the instrumented
+program binary (say, a JS engine) and one seed input to that program
+(say, a JS program) and produces on output fault-revealing inputs, if
 found. Considering our context of application, we needed to instrument
 one runtime engine for fuzzing; we chose v8. Unfortunately, we found
 that most of the inputs produced by AFL violate the JS
-grammar. Furthermore, the fuzzing task took days, even when considering
-only one seed and there is no simple way to guide the
-exploration. That happens because the fuzzer aims to explore the
-entire decision tree induced from the engine's main function,
-including the branches associated with the lexer and the parser. For
-those reasons, coverage-based fuzzers were not considered in this
-study. It is worth mentioning that Google mitigates that problem by
-promoting developers to create fuzz targets for specific program
-functions\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although that approach has shown very effective,
-it requires domain knowledge to create the calling context to invoke
-the fuzz target.
+grammar. Furthermore, the fuzzing task can take daysfor a single seed
+input and there is no simple way to guide the
+exploration~\Fix{cite}. That happens because the fuzzer aims to
+explore the entire decision tree induced from the engine's main
+function, including the branches associated with the lexer and the
+parser. For those reasons, coverage-based fuzzers were not considered
+in this study. It is worth mentioning that Google mitigates that
+problem with libFuzzer by asking developers to create fuzz targets for
+specific program
+functions\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although
+that approach has shown very effective, it requires domain knowledge
+to create the calling context to invoke the fuzz target.
 
 \Fix{...do the same as above for black-box fuzzing. explain what kinds of
 inputs they can generate.}
