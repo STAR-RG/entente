@@ -140,7 +140,11 @@ detected during the execution of the test code or its close neighborhood\Comment
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
 anomaly was observed during the execution of some standard JS
-function.
+function. In addiction, we observed that several testcases run loops that can 
+affect the time-consuming of an execution, we decided to use an watcher to check 
+if an test consumes more than 5 seconds to run, if exceed this condition we stop 
+the engine execution and considered these cases as TIMEOUT error. These tests are 
+labeled as LO group.
 \Mar{is this correct? what are those?}We
 found that different engines often check the pre-conditions of those
 functions differently. It can happen, for example, that one engine
@@ -158,12 +162,99 @@ was much lower compared to the HI group--only 12\% of the reals bugs
 we found originated from the LO category. \Mar{show real examples of
   HI and LO.}
 
-\subsection{ES6 design}
-\Fix{to appear}
-% no-bug low console output
+\Igor{
+  We defined if an warning is in HI or LO group according to console output.
+  The error stream in the output shows relevant informations that we can 
+  process. The Figure~\ref{fig:hi-priority} shows an example of a warning 
+  considered as a HI group, the stream output came from V8 engine. The error message 
+  shows informations related to the assertion code (see at line 2) 
+  that thows an Error exception. This case was considered as HI groups and after 
+  several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
+}
 
 % bug high console output
+This a case of a warning reported as HI priority, the Figure~\ref{} shows
+the output console of V8 engine. We consider this case as a HI group due 
+the fail by assertion, defined at line 2 as \CodeIn{throw new Error("Test failed");}
 
+\begin{figure}[h!]
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+seeds/Duktape/ecma_fixed/test-dev-bound-func-many-args.js:4: Error: Test Failed
+throw new Error("Test Failed");
+  ^
+Error: Test Failed
+  at String.target (seeds/Duktape/ecma_fixed/test-dev-bound-func-many-args.js:4:13)
+  at seeds/Duktape/ecma_fixed/test-dev-bound-func-many-args.js:23:1
+\end{lstlisting}
+\normalsize
+\caption{Warning captured as HI priority.}
+\label{fig:hi-priority}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+\begin{minipage}{.45\textwidth}
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}[caption=JavaScript code fuzzed by radamsa,frame=tlrb]{Name}
+  void code()
+  {
+  
+  }
+  \end{lstlisting}
+  \end{minipage}\vfill
+  \begin{minipage}{.45\textwidth}
+    \scriptsize
+    \lstset{escapeinside={@}{@},
+      numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+      basicstyle=\ttfamily\scriptsize, boxpos=c,
+      numberstyle=\tiny,
+      morekeywords={assertEq, var, yield, in, function, 
+      typeof, return, throw, new, Error, if},
+    }
+  \begin{lstlisting}[caption=Console Output,frame=tlrb]{Name}
+  void code()
+  {
+  
+  }
+  \end{lstlisting}
+  \end{minipage}
+  \caption{Warning captured as HI priority.}
+  \label{fig:lo-priority}
+\end{figure}
+
+% no-bug low console output
+\begin{figure}[h!]
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+\end{lstlisting}
+\normalsize
+\caption{Warning captured as HI priority.}
+\label{fig:lo-priority}
+\end{figure}
 
 \Mar{can we detect dups mining issue trackers?}
 \Igor{
@@ -176,6 +267,9 @@ we found originated from the LO category. \Mar{show real examples of
     \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
   \end{itemize}
 }
+
+\subsection{ES6 design}
+\Fix{to appear}
 
 \section{Objects of Study}
 \label{sec:methodology}
@@ -525,8 +619,7 @@ This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, t
 initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
 integer 3 to a big integer number. We reported this case in chakra due a core dumps that occurs
 during the runtime, however this case was rejected due \CodeIn{incompatibility by design} that
-this is an intentional behavior of engine that crash the process if it runs out of memory
-\cite{bug4979}.
+this is an intentional behavior of engine that crash the process if it runs out of memory.
 
 \begin{figure}[h!]
   \centering
