@@ -100,36 +100,35 @@ This paper makes the following contributions \Fix{...}
   \centering
 %  \includegraphics[trim=20 350 200
 %    0,clip,width=0.35\textwidth]{google-awards-workflow}
-  \includegraphics[trim=0 250 0 0,clip,width=0.5\textwidth]{google-awards-workflow}  
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}  
   \caption{\label{fig:workflow}Infrastructure.}
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates the infrastructure we used in
-this study.
-The bug-finding process
-takes on input JS files from regression test suites of various JS
-engines and generates warnings on output. Boxes in the figure denote encapsulation;
-arrowed lines indicate control flow (dashed) and data flow
-(filled). The cycle icons denote repetition--the leftmost icon
-indicates that each file in the input list will be analyzed in
+this study.  The bug-finding process takes on input JS files from
+regression test suites of various JS engines and generates warnings on
+output. Boxes in the figure denote encapsulation; arrowed lines
+indicate data flow. The cycle icons denote repetition--the leftmost
+icon indicates that each file in the input list will be analyzed in
 separate whereas the rightmost icon shows that a single file will be
-fuzzed multiple times. The bug-finding process works as follows.  Considering the case
-where fuzzing is not selected, as illustrated in the inner box at the bottom
-of the figure, the oracle checks whether or not the output produced
-for that file is consistent across all engine implementations. In case
-the test passes in all engines or fails in all engines (\ie{}, the
-output is consistent), the infrastructure discards the test. Otherwise, it considers the input as potentially
-fault-revealing; hence interesting for human inspection. Considering
-the case where fuzzing~\cite{fuzz-testing-history} is selected, new
-inputs are obtained from a given input using some off-the-shelf
-fuzzer. Several fuzzing methods have been proposed in the
-  past, varying with respect to how new inputs are generated (\eg{},
-  coverage-based~\cite{afl,honggfuzz},
-  grammar-based~\cite{grammarinator,jsfunfuzz}, and
-  random-based~\cite{radamsa}). Section~\ref{sec:objects:fuzzers} describes the
-  fuzzers we selected. The workflow of the infrastructure with fuzzing
-  enabled is similar to that of no fuzzing. In this case, however, multiple warnings can be produced
-for a given seed input.
+fuzzed multiple times. The bug-finding process works as follows.
+Considering the case where fuzzing is not selected, the oracle checks
+whether or not the output produced for the input file is consistent
+across all engine implementations. In case the test passes in all
+engines or fails in all engines (\ie{}, the output is consistent), the
+infrastructure discards the test. Otherwise, it considers the input as
+potentially fault-revealing; hence interesting for human
+inspection. We used the open-source eshost-cli
+project~\cite{eshost-cli} for that. Microsoft uses eshost-cli to check
+functional discrepancies in the Chakra JS engine. Considering the case
+where fuzzing~\cite{fuzz-testing-history} is selected, new inputs are
+obtained from a given input using some off-the-shelf fuzzer. The
+workflow with fuzzing is similar to the workflow without fuzzing. In
+this case, however, the checker can produce multiple warnings for a
+given input. Several fuzzing methods have been proposed in the past,
+varying with respect to how new inputs are
+generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.
+Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
