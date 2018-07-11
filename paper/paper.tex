@@ -185,12 +185,44 @@ we found originated from the LO category. \Mar{show real examples of
 This section discusses the objects we used in our study.
 
 \subsection{Engines}
-\label{sec:methodology:engines}~We selected the most popular JS
-engines on the web~\Fix{ha alguma referencia que de suporte a isto?} to focus our bug-finding efforts, namely
-Microsoft's Chakra~\cite{chakra2018repo}, Google's
-v8~\cite{v82018repo}, Mozilla's
-SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
-(WebKit)~\cite{jsc2018repo}.
+\label{sec:methodology:engines}~We selected 
+JS engines according to the following criteria.
+
+\begin{itemize}
+\item Released latest version after Jan 1, 2018
+\item Contains more than 1K starts, if on GitHub  
+\item Uses a public issue tracker
+\end{itemize}  
+
+The first criterion focuses on actively maintained projects whereas
+the second criterion focuses on popular cases. As we wanted to report
+bugs, we also looked for project with public issue trackers.
+Table~\ref{tab:engines} shows the engines we selected in this
+study. We made an exception to the second criterion with
+XS~\Fix{cite}. As the project is young, \Fix{created in xx.yy.zz}), we
+thought there was insufficient time to obtain 1K stars for XS. We
+still considered this project as it seems to be attracting interest
+from the community\Fix{is this true?}. It is worth noting that we used
+JSVU~\cite{jsvu} to automatically install and configure versions of
+different JS engines in our host environment. This is important as we
+aim to use the most recent stable versions of each engine as to avoid
+reporting old and already-fixed bugs to developers.
+
+
+\begin{table}[t]
+  \centering
+  \caption{\label{tab:engines}Engines Analyzed}
+  \begin{tabular}{ccr}
+    \toprule
+    Name & URL & \# Stars \\
+    \midrule
+    MS's Chakra & \cite{chakra2018repo} & - \\
+    Google's v8 & \cite{v82018repo} & - \\
+    Mozilla's SpiderMonkey & \cite{spidermonkey2018repo} & - \\
+    Apple's JavaScriptCore (WebKit) & \cite{jsc2018repo} & - \\
+   \bottomrule     
+  \end{tabular}
+\end{table}
 
 \subsection{Seed JS files\label{sec:seeds}}~
 We selected test files from several public projects from GitHub. We
@@ -235,7 +267,7 @@ infraestruture.
   }
   \begin{tabular}{ccr}
     \toprule
-    TestSuite & Source & \# JS files \\
+    Name & Source & \# JS files \\
     \midrule
     Mozilla & \cite{mozilla} & 32,414 \\
     V8 & \cite{v8} & 64 \\
