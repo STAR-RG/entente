@@ -89,6 +89,13 @@ To sum, we found that \Fix{...}
 This paper makes the following contributions \Fix{...}
 
 \section{ES6 design}
+\label{sec:es6-design}
+The EcmaScript is a language specification maintained by 
+a committee called TC39 (Technical Committee) that follows 
+standard rules proposed by ISO/ETC JTC 1 - 
+Information Technology since 1996~\cite{es6-website}.
+The latest version of EcmaScript commonly called ES6
+
 \Fix{to appear}
 
 \section{Infrastructure}
@@ -141,9 +148,11 @@ detected during the execution of the test code or its close neighborhood\Comment
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
 anomaly was observed during the execution of functions from standard JS
-libraries.\Mar{what is that exactly? can we cite? is that only spec or
-actually code as most of java.* libraries.}We
-found that different engines often check pre-conditions of those
+libraries. For example, according to the latest version of ES6 specification\cite{es6-spec},
+they
+\Mar{what is that exactly? can we cite? is that only spec or
+actually code as most of java.* libraries.}
+We found that different engines often check pre-conditions of those
 functions differently. It can happen, for example, that one engine
 enforces a weaker pre-condition compared to another.
 % \Mar{why is that?
@@ -154,6 +163,10 @@ should work, however the internal implementation is defined by the
 engine developers}\Mar{If you confirm that there is no code in specs
   (see comment above), what would be those abstract
   functions/interfaces that you mentioned to me the other day?}.
+\Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
+due the capacity of a fuzzer add an infinite repetition statement. We expected that
+each test process can running utmost 5 seconds, if exceed this condition we stop 
+the process and add a output message of a TIMEOUT error.}
 In those cases,
 our infrastructure would observe a discrepancy that is more likely to
 be associated with a bug in the (fuzzed) test; not the code. Although
@@ -163,7 +176,6 @@ we found originated from the LO category. \Mar{show real examples of
   HI and LO. Use the stacktraces to explain what is going on.}
 
 
-<<<<<<< HEAD
 \Igor{
   We defined if an warning is in HI or LO group according to console output.
   The error stream in the output shows relevant informations that we can 
@@ -173,9 +185,6 @@ we found originated from the LO category. \Mar{show real examples of
   that thows an Error exception. This case was considered as HI groups and after 
   several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
 }
-=======
-% no-bug low console output
->>>>>>> 7cf79dbe4960fbe4eededdf8876cdc810b0c73e1
 
 % bug high console output
 This a case of a warning reported as HI priority, the Figure~\ref{} shows
@@ -540,43 +549,45 @@ no-fuzzing mode.
     \toprule
     Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Priority & Seed \\
     \midrule    
-    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & HI & webkit.jstests.es6 \\ 
-    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & webkit.jstests.es6 \\
-    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & webkit.jstests.es6    \\
-    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScriptjs.ecma      \\
-    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033} & HI & mozilla      \\
-    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038} & HI & JerryScriptjs.ecma   \\
+    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & HI & WebKit \\ 
+    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & WebKit \\
+    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & WebKit    \\
+    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScript      \\
+    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033} & HI & Mozilla      \\
+    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038} & HI & JerryScript   \\
     7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
-    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065} & HI & mozilla
+    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065} & HI & Mozilla
     \\
     \midrule
-    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} & \multirow{2}{*}{HI} & \multirow{2}{*}{mozilla}\\
+    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} & \multirow{2}{*}{HI} & \multirow{2}{*}{Mozilla}\\
                         &  &                       &
     JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}  &   & \\
     \midrule    
-    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}  & HI  & JerryScriptjs.ecma\\
+    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}  & HI  & JerryScript\\
     \midrule    
-    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} & \multirow{2}{*}{HI} & \multirow{2}{*}{tinyjs.tests}\\    
+    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
                         &                        &        &
     JavascriptCore & New &
     \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156} &  & 
     \\
     \midrule    
-    11 & 5/02 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & mozilla \\
-    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & mozilla \\
-    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScriptjs.regression \\
-    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & v8.test.benchmarks\\
-    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & webkit.jstests.es6\\
-    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & mozilla\\
-    17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & webkit.jstests.es6\\
-    18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScriptjs.regression\\
-    19 & 6/28 & \crossmark & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & webkit.jstests.es6\\
-    20 & 7/10 & quickfuzz & JavaScriptCore & New  & \href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520} & HI & x\\
-    21 & 7/10 & quickfuzz & Chakra & New  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & x\\    
+    11 & 5/02 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & Mozilla \\
+    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & Mozilla \\
+    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScript \\
+    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & V8\\
+    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & WebKit\\
+    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & Mozilla\\
+    17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & Webkit\\
+    18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScript\\
+    19 & 6/28 & \crossmark & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & WebKit\\
+    20 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520} & HI & JerryScript\\
+    21 & 7/10 & quickfuzz & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & JerryScript\\
     \midrule
-    \multirow{2}{*}{22}  & \multirow{2}{*}{7/10} &  \multirow{2}{*}{quickfuzz} & Chakra & New & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & \multirow{2}{*}{HI} & \multirow{2}{*}{x}\\
+    \multirow{2}{*}{22}  & \multirow{2}{*}{7/10} &  \multirow{2}{*}{\crossmark} & Chakra & Confirmed & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & \multirow{2}{*}{HI} & \multirow{2}{*}{JerryScript}\\
                         &  &                       &
     JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187519}{\#187519}  &   & \\
+    \midrule
+    23 & 7/12 & \crossmark & Chakra & New  & \href{https://github.com/Microsoft/ChakraCore/issues/5453}{\#5453} & HI & JerryScript\\
    \bottomrule     
   \end{tabular}
 \end{table*}
