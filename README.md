@@ -3,7 +3,8 @@
 - Linux
 - Python3.6
 - [tox virtualenv](https://tox.readthedocs.io/en/latest/)
-- [Git LFS](https://git-lfs.github.com)
+- ECMAScript host [eshost](https://github.com/bterlson/eshost-cli)
+- JavaScript (engine) Version Updater [jsvu](https://github.com/GoogleChromeLabs/jsvu)
 
 ### Installation
 1. Clone this repository
