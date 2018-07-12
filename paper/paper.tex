@@ -68,20 +68,21 @@ on JS engines is an important problem.
 
 Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
 approach that has been applied in a variety of contexts to find
-functional
-bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. DT
+functional bugs in
+software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. It
 automates test generation in scenarios where multiple implementations
-of a system exist. It leverages the diversity across system's
+of a system exist. DT leverages the diversity across system's
 implementations to detect anomalous behavior.
 %% WHAT WE DID
-This paper reports the results of a study we conducted to assess the
-ability of DT to find bugs on \js{} engines.  We analyzed
-the impact of two orthogonal dimensions: test mining and fuzzing. The
-first dimension, test mining, considers the effect that \js{} test
-files mined from the repository of a given open-source engine have in
-detecting functional bugs in other engines. The second dimension,
-fuzzing, considers the impact of fuzzing the mined files in bug
-detection.
+This paper reports the results of a study we conducted to (i) assess
+the reliability of existing JS engines and to (ii) evaluate the
+importance of different factors when using DT for bug finding. More
+precisely, we analyzed the impact of two orthogonal factors in the use
+of DT: test mining and fuzzing. The first dimension, test mining,
+considers the effect that \js{} test files mined from the repository
+of a given open-source engine have in detecting functional bugs in
+other engines. The second dimension, fuzzing, considers the impact of
+fuzzing the mined files in bug detection.
 %% WHAT WE FOUND
 To sum, we found that \Fix{...}
 
