@@ -95,7 +95,7 @@ The EcmaScript is a language specification maintained by
 a committee called TC39 (Technical Committee) that follows 
 standard rules proposed by ISO/ETC JTC 1 - 
 Information Technology since 1996~\cite{es6-website}.
-Along the year, a new version of EcmaScript (the latest version is ES2017) adds
+Every year, a new version of EcmaScript (the latest version is ES2017) adds
 new features and minor fixes for the language. \Fix{discutir mais sobre isso}
 
 \section{Infrastructure}
@@ -177,7 +177,7 @@ could be considered as a case of incompatibility by engine design.}
 In those cases, our infrastructure would observe a discrepancy that is more likely to
 be associated with a bug in the (fuzzed) test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
-was much lower compared to the HI group--only 12\% of the reals bugs
+was much lower compared to the HI group--only \Fix{12\%} of the reals bugs
 we found originated from the LO category.
 \Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
 due the capacity of a fuzzer add an infinite repetition statement. We expected that
@@ -188,14 +188,32 @@ the process and add a output message of a TIMEOUT error.}
   HI and LO. Use the stacktraces to explain what is going on.}
 
 \Igor{
-  We defined if an warning is in HI or LO group according to console output.
+  We defined if a warning is in HI or LO group according to console output.
   The error stream in the output shows relevant informations that we can 
-  process. The Figure~\ref{fig:hi-priority} shows an example of a warning 
-  considered as a HI group, the stream output came from V8 engine. The error message 
-  shows informations related to the assertion code (see at line 2) 
-  that thows an Error exception. This case was considered as HI groups and after 
-  several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
+  process. The Figure~\ref{fig:error-output} shows examples of HI and LO warning
+  outputs based on the stream output came from Chakra engine. 
+  % The error message shows informations related to the assertion code (see at line 2) 
+  % that thows an Error exception. This case was considered as HI groups and after 
+  % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
 }
+
+% \begin{figure}[h!]
+%   \centering
+%   \scriptsize
+%   \lstset{escapeinside={@}{@},
+%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%     numberstyle=\tiny,
+%     morekeywords={assertEq, var, yield, in, function, 
+%     typeof, return, throw, new, Error, if},
+%   }
+% \begin{lstlisting}
+
+% \end{lstlisting}
+% \normalsize
+% \caption{Warning captured as HI priority.}
+% \label{fig:hi-priority}
+% \end{figure}
 
 % bug high console output
 % This a case of a warning reported as HI priority, the Figure~\ref{} shows
@@ -212,10 +230,22 @@ the process and add a output message of a TIMEOUT error.}
 %     morekeywords={assertEq, var, yield, in, function, 
 %     typeof, return, throw, new, Error, if},
 %   }
-%   \begin{lstlisting}
+% \begin{lstlisting}
+% function test() {
+%   var buffer = new ArrayBuffer(64);
+%   var view = new DataView(buffer);
+%   view.setInt8 (0, 0x80);
+%   -return view.getInt8(0) === -0x80;
+  
+%   // radamsa fuzzing
+%   +return view.getInt8(-1770523502845470856862803727694) === -0x80;
+%   }
+  
+%   if (!test())
+%       throw new Error("Test Failed");
 % \end{lstlisting}
 % \normalsize
-% \caption{Warning captured as LO priority.}
+% \caption{Warning captured as HI priority.}
 % \label{fig:hi-priority}
 % \end{figure}
 
@@ -269,10 +299,15 @@ the second criterion focuses on popular cases. As we wanted to report
 bugs, we also looked for project with public issue trackers.
 Table~\ref{tab:engines} shows the engines we selected in this
 study. We made an exception to the second criterion with
-XS~\Fix{cite}. As the project is young, \Fix{created in xx.yy.zz}), we
+XS~\Fix{cite}. As the project is young, created in Oct 2017, we
 thought there was insufficient time to obtain 1K stars for XS. We
 still considered this project as it seems to be attracting interest
-from the community\Fix{is this true?}. It is worth noting that we used
+from the community\Fix{is this true?}
+\Igor{eu pensei sobre isso, acho que nao eh relevante colocar o XS sendo 
+que ele eh uma engine para iot/embarcados, temos como exemplo o 
+JerryScript que tambem tem o mesmo proposito e esta ha bem mais tempo
+que ele. Por mim, utilizamos apenas o Jerry ou os dois (e compara-los ja que 
+sao similares), oq vc acha?}. It is worth noting that we used
 JSVU~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
 aim to use the most recent stable versions of each engine as to avoid
@@ -306,28 +341,23 @@ discard those. For example, many tests we found required a
 nodejs\Fix{cite} runtime for execution. Overall, we considered the
 test suites of three of the four engines mentioned in
 Section~\ref{sec:methodology:engines} and four other engines.
-
-\Mar{vc. jah nao fala disto no paragrafo a seguir? se sim, junte os dois.}
-We
-implemented minor changes on test files with fixable file dependencies. For
-example, some of the files used assertion functions defined in their
-projects; we replaced those with our definitions.\Mar{not sure if this
-  is a good example; why one would like to redefine assertion? why
-  didn't you incorporate the assertion function to your infra?}
-
 Table~\ref{tab:test-suites} shows the JS sources we considered for
 each of the selected projects. Overall, we found a total of
 \totfiles{} JS files. It is worth noting that some projects use
 distinct frameworks for testing and require external libraries to run
-their testing suites. For these projects, we needed to make small
+their testing suites. 
+For these projects, we needed to make small
 changes in the testing infrastructure to be able to uniformly run
-tests in all engines.\Mar{not entirely clear what you did to support
-  this.$\rightarrow$}\Mar{apenas explique o que fez (mesmo
-  que em portugues). isto nao deveria levar tempo que justifique
-  escrever wip.}We aimed to use only the JS file with minor fixes to
-support our environment. These fixes are composed by an assertion
-function that throws an Error that we can capture by our
-infraestruture.
+tests in all engines. For example, some of the files does not use assertion 
+functions defined in their projects; we replaced those with our definitions.
+\Mar{not sure if this
+  is a good example; why one would like to redefine assertion? why
+  didn't you incorporate the assertion function to your infra?}
+\Igor{sim, poderiamos fazer isso. Porem, lembro que alguns testcases por exemplo usam 
+algo diferente de "assert", outras usam alguma funcao interna 
+que apenas uma engine suporta. Eu posso analisar melhor aqui nossas seeds 
+e ver um jeito global de resolver isso, como se fosse um "shell.js" da nossa 
+ferramenta.}
 
 \begin{table}[t]
   \centering
@@ -556,7 +586,7 @@ no-fuzzing mode.
     \toprule
     Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Priority & Seed \\
     \midrule    
-    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & HI & WebKit \\ 
+    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & LO & WebKit \\ 
     2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & WebKit \\
     3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & WebKit    \\
     4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScript      \\
