@@ -95,9 +95,8 @@ The EcmaScript is a language specification maintained by
 a committee called TC39 (Technical Committee) that follows 
 standard rules proposed by ISO/ETC JTC 1 - 
 Information Technology since 1996~\cite{es6-website}.
-The latest version of EcmaScript commonly called ES6
-
-\Fix{to appear}
+Along the year, a new version of EcmaScript (the latest version is ES2017) adds
+new features and minor fixes for the language. \Fix{discutir mais sobre isso}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -108,7 +107,7 @@ The latest version of EcmaScript commonly called ES6
   \centering
 %  \includegraphics[trim=20 350 200
 %    0,clip,width=0.35\textwidth]{google-awards-workflow}
-  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}  
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
   \caption{\label{fig:workflow}Infrastructure.}
 \end{figure}
 
@@ -148,8 +147,7 @@ detected during the execution of the test code or its close neighborhood\Comment
 the test in this group executed without violating any internal checks
 of the API. In constrast, warnings in the LO group reflect the cases where the
 anomaly was observed during the execution of functions from standard JS
-libraries. For example, according to the latest version of ES6 specification\cite{es6-spec},
-they
+libraries.
 \Mar{what is that exactly? can we cite? is that only spec or
 actually code as most of java.* libraries.}
 We found that different engines often check pre-conditions of those
@@ -163,6 +161,13 @@ should work, however the internal implementation is defined by the
 engine developers}\Mar{If you confirm that there is no code in specs
   (see comment above), what would be those abstract
   functions/interfaces that you mentioned to me the other day?}.
+For example, the latest version of ES specs~\cite{es6-spec} describes that,
+the function \CodeIn{Number.toPrecision(precision)}, in general,
+returns a String containing the Number value represented either 
+in decimal exponential notation or in decimal fixed notation, 
+if precision is defined~\cite{es6-toPrecision}. The Number object uses a 
+property called
+
 \Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
 due the capacity of a fuzzer add an infinite repetition statement. We expected that
 each test process can running utmost 5 seconds, if exceed this condition we stop 
@@ -202,54 +207,10 @@ the fail by assertion, defined at line 2 as \CodeIn{throw new Error("Test failed
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-seeds/Duktape/ecma_fixed/test-dev-bound-func-many-args.js:4: Error: Test Failed
-throw new Error("Test Failed");
-  ^
-Error: Test Failed
-  at String.target (seeds/Duktape/ecma_fixed/test-dev-bound-func-many-args.js:4:13)
-  at seeds/Duktape/ecma_fixed/test-dev-bound-func-many-args.js:23:1
 \end{lstlisting}
 \normalsize
-\caption{Warning captured as HI priority.}
+\caption{Warning captured as LO priority.}
 \label{fig:hi-priority}
-\end{figure}
-
-\begin{figure}[h!]
-  \centering
-\begin{minipage}{.45\textwidth}
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}[caption=JavaScript code fuzzed by radamsa,frame=tlrb]{Name}
-  void code()
-  {
-  
-  }
-  \end{lstlisting}
-  \end{minipage}\vfill
-  \begin{minipage}{.45\textwidth}
-    \scriptsize
-    \lstset{escapeinside={@}{@},
-      numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-      basicstyle=\ttfamily\scriptsize, boxpos=c,
-      numberstyle=\tiny,
-      morekeywords={assertEq, var, yield, in, function, 
-      typeof, return, throw, new, Error, if},
-    }
-  \begin{lstlisting}[caption=Console Output,frame=tlrb]{Name}
-  void code()
-  {
-  
-  }
-  \end{lstlisting}
-  \end{minipage}
-  \caption{Warning captured as HI priority.}
-  \label{fig:lo-priority}
 \end{figure}
 
 % no-bug low console output
@@ -356,7 +317,7 @@ distinct frameworks for testing and require external libraries to run
 their testing suites. For these projects, we needed to make small
 changes in the testing infrastructure to be able to uniformly run
 tests in all engines.\Mar{not entirely clear what you did to support
-  this.$\rightarrow$}\Igor{wip}\Mar{apenas explique o que fez (mesmo
+  this.$\rightarrow$}\Mar{apenas explique o que fez (mesmo
   que em portugues). isto nao deveria levar tempo que justifique
   escrever wip.}We aimed to use only the JS file with minor fixes to
 support our environment. These fixes are composed by an assertion
