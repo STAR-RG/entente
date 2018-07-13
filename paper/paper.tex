@@ -150,6 +150,10 @@ anomaly was observed during the execution of functions from standard JS
 libraries.
 \Mar{what is that exactly? can we cite? is that only spec or
 actually code as most of java.* libraries.}
+\Igor{seems like an API. They define the language behavior; grammar;
+values to static variables; the methods for each "class"(Object)...
+These irregularities appears on engine implementation, 
+maybe an wrong if statement and so on.}
 We found that different engines often check pre-conditions of those
 functions differently. It can happen, for example, that one engine
 enforces a weaker pre-condition compared to another.
@@ -161,25 +165,27 @@ should work, however the internal implementation is defined by the
 engine developers}\Mar{If you confirm that there is no code in specs
   (see comment above), what would be those abstract
   functions/interfaces that you mentioned to me the other day?}.
-For example, the latest version of ES specs~\cite{es6-spec} describes that,
+\Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that,
 the function \CodeIn{Number.toPrecision(precision)}, in general,
-returns a String containing the Number value represented either 
-in decimal exponential notation or in decimal fixed notation, 
-if precision is defined~\cite{es6-toPrecision}. The Number object uses a 
-property called
-
+if precision is defined the method returns a String 
+containing the Number value represented either 
+in decimal exponential notation or in decimal 
+fixed notation~\cite{es6-toPrecision}. The Number object uses a 
+property that the specification describes as approximately so when we use 
+toPrecision with a bigger precision, the values of each engine may vary, this
+could be considered as a case of incompatibility by engine design.}
+In those cases, our infrastructure would observe a discrepancy that is more likely to
+be associated with a bug in the (fuzzed) test; not the code. Although
+we did find real bugs from warnings in the LO group, the proportion
+was much lower compared to the HI group--only 12\% of the reals bugs
+we found originated from the LO category.
 \Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
 due the capacity of a fuzzer add an infinite repetition statement. We expected that
 each test process can running utmost 5 seconds, if exceed this condition we stop 
 the process and add a output message of a TIMEOUT error.}
-In those cases,
-our infrastructure would observe a discrepancy that is more likely to
-be associated with a bug in the (fuzzed) test; not the code. Although
-we did find real bugs from warnings in the LO group, the proportion
-was much lower compared to the HI group--only 12\% of the reals bugs
-we found originated from the LO category. \Mar{show real examples of
-  HI and LO. Use the stacktraces to explain what is going on.}
 
+\Mar{show real examples of
+  HI and LO. Use the stacktraces to explain what is going on.}
 
 \Igor{
   We defined if an warning is in HI or LO group according to console output.
@@ -192,44 +198,44 @@ we found originated from the LO category. \Mar{show real examples of
 }
 
 % bug high console output
-This a case of a warning reported as HI priority, the Figure~\ref{} shows
-the output console of V8 engine. We consider this case as a HI group due 
-the fail by assertion, defined at line 2 as \CodeIn{throw new Error("Test failed");}
+% This a case of a warning reported as HI priority, the Figure~\ref{} shows
+% the output console of V8 engine. We consider this case as a HI group due 
+% the fail by assertion, defined at line 2 as \CodeIn{throw new Error("Test failed");}
 
-\begin{figure}[h!]
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
-\end{lstlisting}
-\normalsize
-\caption{Warning captured as LO priority.}
-\label{fig:hi-priority}
-\end{figure}
+% \begin{figure}[h!]
+%   \centering
+%   \scriptsize
+%   \lstset{escapeinside={@}{@},
+%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%     numberstyle=\tiny,
+%     morekeywords={assertEq, var, yield, in, function, 
+%     typeof, return, throw, new, Error, if},
+%   }
+%   \begin{lstlisting}
+% \end{lstlisting}
+% \normalsize
+% \caption{Warning captured as LO priority.}
+% \label{fig:hi-priority}
+% \end{figure}
 
 % no-bug low console output
-\begin{figure}[h!]
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
-\end{lstlisting}
-\normalsize
-\caption{Warning captured as HI priority.}
-\label{fig:lo-priority}
-\end{figure}
+% \begin{figure}[h!]
+%   \centering
+%   \scriptsize
+%   \lstset{escapeinside={@}{@},
+%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%     numberstyle=\tiny,
+%     morekeywords={assertEq, var, yield, in, function, 
+%     typeof, return, throw, new, Error, if},
+%   }
+%   \begin{lstlisting}
+% \end{lstlisting}
+% \normalsize
+% \caption{Warning captured as HI priority.}
+% \label{fig:lo-priority}
+% \end{figure}
 
 \Mar{can we detect dups mining issue trackers?}
 \Igor{
@@ -242,9 +248,6 @@ the fail by assertion, defined at line 2 as \CodeIn{throw new Error("Test failed
     \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
   \end{itemize}
 }
-
-\subsection{ES6 design}
-\Fix{to appear}
 
 \section{Objects of Study}
 \label{sec:methodology}
@@ -283,10 +286,12 @@ reporting old and already-fixed bugs to developers.
     \toprule
     Name & URL & \# Stars \\
     \midrule
-    MS's Chakra & \cite{chakra2018repo} & - \\
-    Google's v8 & \cite{v82018repo} & - \\
+    MS's Chakra & \cite{chakra2018repo} & 7200+ \\
+    Google's v8 & \cite{v82018repo} & 9800+ \\
     Mozilla's SpiderMonkey & \cite{spidermonkey2018repo} & - \\
     Apple's JavaScriptCore (WebKit) & \cite{jsc2018repo} & - \\
+    Mozilla's Rhino & \cite{rhino2018repo} & 1800+ \\
+    JerryScript's JerryScript & \cite{jerryscript2018repo} & 3100+ \\
    \bottomrule     
   \end{tabular}
 \end{table}
