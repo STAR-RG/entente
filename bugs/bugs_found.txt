@@ -1,3 +1,134 @@
+=====
+BUG 18 (NEW)
+
+Date reported: July 12, 2018
+
+Type: Assertion failure
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=187520
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz2/ecma/test_33e9a90bb4616578222d07862c1d1b9c.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+
+-------------SpiderMonkey
+
+-------------v8
+
+Explanation:
+Inconsistence in jsc when we try to get an invalid property in a TypedArray, 
+in this case a Float32Array.
+
+Steps to reproduce:
+var a = new Float32Array([0.1, 0.2, 0.3]);
+print(Object.getOwnPropertyNames(a).sort())
+var c = a.hasOwnProperty(3);
+if (c) throw new Error("Test failed");
+
+Actual results:
+0,1,2
+Error: Test failed
+
+Expected results:
+0,1,2
+
+=====
+BUG 17 (NEW)
+
+Date reported: July 12, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5443
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_86fa37f728125aa1ef258a192560e0e6.js
+
+Patch:None
+
+Pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+
+-------------SpiderMonkey
+Error: null
+-------------v8
+Error: null
+
+Explanation:
+Inconsistence on Error() with more than one argument.
+According to ES6 Error constructor the Error is called with only one argument (message).
+The other engines returns the first argument, chakra returns the second argument.
+
+Steps to reproduce:
+
+try{
+    throw new Error(null)
+}catch (e){
+    print(e)
+}
+
+try{
+    throw new Error(null, 'test failed', 'another argument')
+}catch (e){
+    print(e)
+}
+Actual results:
+Error: null
+Error: test failed
+
+Expected results:
+Error: null
+Error: null
+
+=====
+BUG 16 (NEW)
+
+Date reported: July 12, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5442
+https://bugs.webkit.org/show_bug.cgi?id=187519
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_3183201ee05ec7573387939c7e48ba88.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+
+-------------Chakra
+
+-------------SpiderMonkey
+Error: Test Failed
+-------------v8
+Error: Test Failed
+
+Explanation:
+Inconsistence on Date() with a negative value.
+
+Steps to reproduce:
+
+d = new Date(-0);
+print(Object.is(d.getTime(), +0))
+Actual results:
+false
+
+Expected results:
+true
+
 ======
 BUG #15 (NEW)
 
