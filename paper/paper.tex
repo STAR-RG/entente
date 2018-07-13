@@ -68,20 +68,21 @@ on JS engines is an important problem.
 
 Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
 approach that has been applied in a variety of contexts to find
-functional
-bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. DT
+functional bugs in
+software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. It
 automates test generation in scenarios where multiple implementations
-of a system exist. It leverages the diversity across system's
+of a system exist. DT leverages the diversity across system's
 implementations to detect anomalous behavior.
 %% WHAT WE DID
-This paper reports the results of a study we conducted to assess the
-ability of DT to find bugs on \js{} engines.  We analyzed
-the impact of two orthogonal dimensions: test mining and fuzzing. The
-first dimension, test mining, considers the effect that \js{} test
-files mined from the repository of a given open-source engine have in
-detecting functional bugs in other engines. The second dimension,
-fuzzing, considers the impact of fuzzing the mined files in bug
-detection.
+This paper reports the results of a study we conducted to (i) assess
+the reliability of existing JS engines and to (ii) evaluate the
+importance of different factors when using DT for bug finding. More
+precisely, we analyzed the impact of two orthogonal factors in the use
+of DT: test mining and fuzzing. The first dimension, test mining,
+considers the effect that \js{} test files mined from the repository
+of a given open-source engine have in detecting functional bugs in
+other engines. The second dimension, fuzzing, considers the impact of
+fuzzing the mined files in bug detection.
 %% WHAT WE FOUND
 To sum, we found that \Fix{...}
 
@@ -107,36 +108,35 @@ The latest version of EcmaScript commonly called ES6
   \centering
 %  \includegraphics[trim=20 350 200
 %    0,clip,width=0.35\textwidth]{google-awards-workflow}
-  \includegraphics[trim=0 250 0 0,clip,width=0.5\textwidth]{google-awards-workflow}  
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}  
   \caption{\label{fig:workflow}Infrastructure.}
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates the infrastructure we used in
-this study.
-The bug-finding process
-takes on input JS files from regression test suites of various JS
-engines and generates warnings on output. Boxes in the figure denote encapsulation;
-arrowed lines indicate control flow (dashed) and data flow
-(filled). The cycle icons denote repetition--the leftmost icon
-indicates that each file in the input list will be analyzed in
+this study.  The bug-finding process takes on input JS files from
+regression test suites of various JS engines and generates warnings on
+output. Boxes in the figure denote encapsulation; arrowed lines
+indicate data flow. The cycle icons denote repetition--the leftmost
+icon indicates that each file in the input list will be analyzed in
 separate whereas the rightmost icon shows that a single file will be
-fuzzed multiple times. The bug-finding process works as follows.  Considering the case
-where fuzzing is not selected, as illustrated in the inner box at the bottom
-of the figure, the oracle checks whether or not the output produced
-for that file is consistent across all engine implementations. In case
-the test passes in all engines or fails in all engines (\ie{}, the
-output is consistent), the infrastructure discards the test. Otherwise, it considers the input as potentially
-fault-revealing; hence interesting for human inspection. Considering
-the case where fuzzing~\cite{fuzz-testing-history} is selected, new
-inputs are obtained from a given input using some off-the-shelf
-fuzzer. Several fuzzing methods have been proposed in the
-  past, varying with respect to how new inputs are generated (\eg{},
-  coverage-based~\cite{afl,honggfuzz},
-  grammar-based~\cite{grammarinator,jsfunfuzz}, and
-  random-based~\cite{radamsa}). Section~\ref{sec:objects:fuzzers} describes the
-  fuzzers we selected. The workflow of the infrastructure with fuzzing
-  enabled is similar to that of no fuzzing. In this case, however, multiple warnings can be produced
-for a given seed input.
+fuzzed multiple times. The bug-finding process works as follows.
+Considering the case where fuzzing is not selected, the oracle checks
+whether or not the output produced for the input file is consistent
+across all engine implementations. In case the test passes in all
+engines or fails in all engines (\ie{}, the output is consistent), the
+infrastructure discards the test. Otherwise, it considers the input as
+potentially fault-revealing; hence interesting for human
+inspection. We used the open-source eshost-cli
+project~\cite{eshost-cli} for that. Microsoft uses eshost-cli to check
+functional discrepancies in the Chakra JS engine. Considering the case
+where fuzzing~\cite{fuzz-testing-history} is selected, new inputs are
+obtained from a given input using some off-the-shelf fuzzer. The
+workflow with fuzzing is similar to the workflow without fuzzing. In
+this case, however, the checker can produce multiple warnings for a
+given input. Several fuzzing methods have been proposed in the past,
+varying with respect to how new inputs are
+generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.
+Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
@@ -291,12 +291,44 @@ Error: Test Failed
 This section discusses the objects we used in our study.
 
 \subsection{Engines}
-\label{sec:methodology:engines}~We selected the most popular JS
-engines on the web~\Fix{ha alguma referencia que de suporte a isto?} to focus our bug-finding efforts, namely
-Microsoft's Chakra~\cite{chakra2018repo}, Google's
-v8~\cite{v82018repo}, Mozilla's
-SpiderMonkey~\cite{spidermonkey2018repo}, and Apple's JavaScriptCore
-(WebKit)~\cite{jsc2018repo}.
+\label{sec:methodology:engines}~We selected 
+JS engines according to the following criteria.
+
+\begin{itemize}
+\item Released latest version after Jan 1, 2018
+\item Contains more than 1K starts, if on GitHub  
+\item Uses a public issue tracker
+\end{itemize}  
+
+The first criterion focuses on actively maintained projects whereas
+the second criterion focuses on popular cases. As we wanted to report
+bugs, we also looked for project with public issue trackers.
+Table~\ref{tab:engines} shows the engines we selected in this
+study. We made an exception to the second criterion with
+XS~\Fix{cite}. As the project is young, \Fix{created in xx.yy.zz}), we
+thought there was insufficient time to obtain 1K stars for XS. We
+still considered this project as it seems to be attracting interest
+from the community\Fix{is this true?}. It is worth noting that we used
+JSVU~\cite{jsvu} to automatically install and configure versions of
+different JS engines in our host environment. This is important as we
+aim to use the most recent stable versions of each engine as to avoid
+reporting old and already-fixed bugs to developers.
+
+
+\begin{table}[t]
+  \centering
+  \caption{\label{tab:engines}Engines Analyzed}
+  \begin{tabular}{ccr}
+    \toprule
+    Name & URL & \# Stars \\
+    \midrule
+    MS's Chakra & \cite{chakra2018repo} & - \\
+    Google's v8 & \cite{v82018repo} & - \\
+    Mozilla's SpiderMonkey & \cite{spidermonkey2018repo} & - \\
+    Apple's JavaScriptCore (WebKit) & \cite{jsc2018repo} & - \\
+   \bottomrule     
+  \end{tabular}
+\end{table}
 
 \subsection{Seed JS files\label{sec:seeds}}~
 We selected test files from several public projects from GitHub. We
@@ -341,7 +373,7 @@ infraestruture.
   }
   \begin{tabular}{ccr}
     \toprule
-    TestSuite & Source & \# JS files \\
+    Name & Source & \# JS files \\
     \midrule
     Mozilla & \cite{mozilla} & 32,414 \\
     V8 & \cite{v8} & 64 \\
@@ -382,26 +414,29 @@ generate a new file using the grammar of the language whose inputs
 should be fuzzed. Intuitively, those fuzzers implement a traversal of
 the production rules of the input grammar to create syntax trees,
 which are then pretty-printed. Consequently, this approach produces
-inputs that are syntactically valid by construction.  We analyzed two
-grammar-based fuzzers--Grammarinator~\cite{grammarinator} and
-QuickFuzz~\cite{quickfuzz,grieco2016quickfuzz}.  Unfortunately none
-was effective out of the box. Given the bound limits we defined on the
-number of inputs to generate and the depth of exploration in the
-syntax tree, we were unable to find discrepancies on the inputs those
-tools generated. To sum, the tools produced a high percentage of
+inputs that are syntactically valid by construction.  We analyzed
+three grammar-based fuzzers--Grammarinator~\cite{grammarinator},
+jsfunfuzz~\cite{jsfunfuzz}, and
+QuickFuzz~\cite{quickfuzz,grieco2016quickfuzz}.  Unfortunately, none
+of those was effective out of the box. Given the bound limits we
+defined on the number of inputs to generate and the exploration depth
+of the syntax tree, we were unable to find discrepancies on the inputs
+those tools generated. To sum, the tools produced a high percentage of
 semantically-invalid inputs (\eg{}, \Fix{give one or two concrete
   examples--variable usage without definition?}) that we needed to
 discard and the valid inputs manifested no discrepancies. For example,
-we produced 10K inputs with Grammarinator and only \Fix{X} of those
+we produced 100K inputs with Grammarinator and only \Fix{X} of those
 were valid. With QuickFuzz, we were able to produce \Fix{Y, Y$>$Y?}
 valid inputs as it contains some heuristics to circumvent violation of
 certain type rules such as \Fix{variable used must be
   defined?}. Nonetheless, running those inputs in our infrastructure
 we were unable to find discrepancies. Inpecting those inputs, we
-realized that they reflected very simple scenarios. \Mar{are there
+realized that they reflected very simple scenarios.\Comment{ \Mar{are there
   weights associated with production rules besides the depth you can
-  set?} To sum, we did not consider this kind of fuzzer in this
-study\Fix{...}
+  set?}} Although grammar-based fuzzers has been shown effective to
+find real bugs\Fix{cite some jsfunfuzz bug reports}, generating
+valid inputs is very time-consuming, especially for the context of
+differential testing. For this reason, we did not consider those fuzzers.
 
 %% Our
 %% infrastructure supports any grammar fuzzer with a few
@@ -427,37 +462,37 @@ study\Fix{...}
 %% \Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
 %% be found elsewhere~\cite{fuzz-bart}.
 
-Mutational fuzzers can be either white-box or
-black-box. White-box mutational fuzzers are typically
-coverage-based. American Fuzz Loop
-(AFL)~\cite{afl} and libFuzzer~\cite{libfuzzer} are examples of
-this kind of fuzzers. These fuzzers run tests inputs
-against instrumented versions of the program under testing with the
-typical goal of finding univeral errors like crashes and buffer
-overflows. The instrumentation adds code to collect branch coverage and
-monitor specific properties\footnote{There are options in the clang
-  toolchain to build programs with fuzzing
-  instrumentation~\cite{libfuzzer}. clang provides several sanitizers
-  for property checking~\cite{clang-documentation}.}. The typical
-approach to input generation is evolutionary--these fuzzers try to
-minimize the distances to still-uncovered branches of the
-program. AFL, for instance, takes the instrumented program binary
-(say, a JS engine) and one seed input to that program (say, a JS
-program) and produces on output fault-revealing inputs, if
+Mutational fuzzers can be either white-box or black-box. White-box
+mutational fuzzers are typically coverage-based. American Fuzz Loop
+(AFL)~\cite{afl} and libFuzzer~\cite{libfuzzer} are examples of this
+kind of fuzzers. These fuzzers run tests inputs against instrumented
+versions of the program under testing with the typical goal of finding
+univeral errors like crashes and buffer overflows. The instrumentation
+adds code to collect branch coverage and to monitor specific
+properties\footnote{There are options in the clang toolchain to build
+  programs with fuzzing instrumentation~\cite{libfuzzer}. clang
+  provides several sanitizers for property
+  checking~\cite{clang-documentation}.}. AFL use coverage to determine
+inputs that uncover a new branch and deserve fuzzing whereas libFuzzer
+uses evolutionary generation--it tries to minimize the distances to
+still-uncovered branches of the program. AFL takes the instrumented
+program binary (say, a JS engine) and one seed input to that program
+(say, a JS program) and produces on output fault-revealing inputs, if
 found. Considering our context of application, we needed to instrument
 one runtime engine for fuzzing; we chose v8. Unfortunately, we found
 that most of the inputs produced by AFL violate the JS
-grammar. Furthermore, the fuzzing task took days, even when considering
-only one seed and there is no simple way to guide the
-exploration. That happens because the fuzzer aims to explore the
-entire decision tree induced from the engine's main function,
-including the branches associated with the lexer and the parser. For
-those reasons, coverage-based fuzzers were not considered in this
-study. It is worth mentioning that Google mitigates that problem by
-promoting developers to create fuzz targets for specific program
-functions\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although that approach has shown very effective,
-it requires domain knowledge to create the calling context to invoke
-the fuzz target.
+grammar. Furthermore, the fuzzing task can take daysfor a single seed
+input and there is no simple way to guide the
+exploration~\Fix{cite}. That happens because the fuzzer aims to
+explore the entire decision tree induced from the engine's main
+function, including the branches associated with the lexer and the
+parser. For those reasons, coverage-based fuzzers were not considered
+in this study. It is worth mentioning that Google mitigates that
+problem with libFuzzer by asking developers to create fuzz targets for
+specific program
+functions\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although
+that approach has shown very effective, it requires domain knowledge
+to create the calling context to invoke the fuzz target.
 
 \Fix{...do the same as above for black-box fuzzing. explain what kinds of
 inputs they can generate.}
@@ -508,6 +543,12 @@ assess the extent to which changing existing inputs helps in finding
 new bugs. We measured this ability both in absolute terms and
 relatively to the number of bugs found with the seed inputs in
 no-fuzzing mode.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 20 0 0,clip,width=0.25\textwidth]{R/barplot}  
+  \caption{\label{fig:workflow}HI and LO warnings reports by each fuzzer.}
+\end{figure}
 
 \Igor{
   Para realizar nossos experimentos, tivemos que decidir qual as 
@@ -634,7 +675,7 @@ incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 Chakra team fixed the issue soon after we reported the problem.
 
-\subsection{False Positives Bugs}
+\subsection{False Positives}
 
 An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
 This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
