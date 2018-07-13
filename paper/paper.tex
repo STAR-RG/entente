@@ -439,6 +439,12 @@ new bugs. We measured this ability both in absolute terms and
 relatively to the number of bugs found with the seed inputs in
 no-fuzzing mode.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 20 0 0,clip,width=0.25\textwidth]{R/barplot}  
+  \caption{\label{fig:workflow}HI and LO warnings reports by each fuzzer.}
+\end{figure}
+
 \Igor{
   Para realizar nossos experimentos, tivemos que decidir qual as 
   melhores abordagens para aumentar a efetividade dos fuzzers.
@@ -562,7 +568,7 @@ incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 Chakra team fixed the issue soon after we reported the problem.
 
-\subsection{False Positives Bugs}
+\subsection{False Positives}
 
 An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
 This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
