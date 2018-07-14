@@ -96,7 +96,31 @@ a committee called TC39 (Technical Committee) that follows
 standard rules proposed by ISO/ETC JTC 1 - 
 Information Technology since 1996~\cite{es6-website}.
 Every year, a new version of EcmaScript (the latest version is ES2017) adds
-new features and minor fixes for the language. \Fix{discutir mais sobre isso}
+new features and minor fixes for the language. \Fix{discutir mais
+  sobre isso}
+
+\Mar{what is that exactly? can we cite? is that only spec or actually
+  code as most of java.* libraries.}  \Igor{seems like an API. They
+  define the language behavior; grammar; values to static variables;
+  the methods for each "class"(Object)...  These irregularities
+  appears on engine implementation, maybe an wrong if statement and so
+  on.} \Mar{Igor, avoid general discussion like $\leftarrow$this. look for
+  explanation in some forum/tutorial and explain **when** you
+  undertand the JS ecosystem design and can explain with confidence.}
+
+\Mar{explain what is an **acceptable** incompatibilities. cite example
+bug reports.}
+\Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that
+the function \CodeIn{Number.toPrecision(precision)}, in general,
+if precision is defined the method returns a String 
+containing the Number value represented either 
+in decimal exponential notation or in decimal 
+fixed notation~\cite{es6-toPrecision}. The Number object uses a 
+property that the specification describes as approximately so when we use 
+toPrecision with a bigger precision, the values of each engine may vary, this
+could be considered as a case of incompatibility by engine
+design.}\Mar{I don't understand the example very well and don't understand the
+  relationship with HI/LO.}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -137,55 +161,41 @@ varying with respect to how new inputs are
 generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.
 Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 
+
+
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. Warnings
-in the HI group are associated with the cases when the anomaly has been
-detected during the execution of the test code or its close neighborhood\Comment{ as
-  opposed to that of some internal JS function}, crashes (ie. FatalError) and core dumps 
-  are considered HI group as well. The rationale is that
-the test in this group executed without violating any internal checks
-of the API. In constrast, warnings in the LO group reflect the cases where the
-anomaly was observed during the execution of functions from standard JS
-libraries.
-\Mar{what is that exactly? can we cite? is that only spec or
-actually code as most of java.* libraries.}
-\Igor{seems like an API. They define the language behavior; grammar;
-values to static variables; the methods for each "class"(Object)...
-These irregularities appears on engine implementation, 
-maybe an wrong if statement and so on.}
-We found that different engines often check pre-conditions of those
-functions differently. It can happen, for example, that one engine
-enforces a weaker pre-condition compared to another.
+in the HI group are associated with the cases where the anomaly has
+been detected in during the execution of test code or its close
+%% the rationale we provide is related to the above; not crashes
+neighborhood. The rationale is that the test in this group executed
+without violating any internal checks of the API. In constrast,
+warnings in the LO group reflect the cases where the anomaly was
+observed during the execution of functions from standard JS libraries\Fix{check}.
+  We found that different engines often check pre-conditions of
+those functions differently. It can happen, for example, that one
+engine enforces a weaker pre-condition compared to another.
 % \Mar{why is that?
 % that should not happen if the spec was fully documented and engines
 % properly implemented those checks. Explain and give example.}
-\Igor{these cases happen because the specification describes how a function
-should work, however the internal implementation is defined by the
-engine developers}\Mar{If you confirm that there is no code in specs
-  (see comment above), what would be those abstract
-  functions/interfaces that you mentioned to me the other day?}.
-\Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that,
-the function \CodeIn{Number.toPrecision(precision)}, in general,
-if precision is defined the method returns a String 
-containing the Number value represented either 
-in decimal exponential notation or in decimal 
-fixed notation~\cite{es6-toPrecision}. The Number object uses a 
-property that the specification describes as approximately so when we use 
-toPrecision with a bigger precision, the values of each engine may vary, this
-could be considered as a case of incompatibility by engine design.}
+%% \Igor{these cases happen because the specification describes how a function
+%% should work, however the internal implementation is defined by the
+%% engine developers}\Mar{If you confirm that there is no code in specs
+%%   (see comment above), what would be those abstract
+%%   functions/interfaces that you mentioned to me the other day?}.
 In those cases, our infrastructure would observe a discrepancy that is more likely to
-be associated with a bug in the (fuzzed) test; not the code. Although
+be associated with a bug in the fuzzed test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only \Fix{12\%} of the reals bugs
 we found originated from the LO category.
-\Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
-due the capacity of a fuzzer add an infinite repetition statement. We expected that
-each test process can running utmost 5 seconds, if exceed this condition we stop 
-the process and add a output message of a TIMEOUT error.}
 
-\Mar{show real examples of
-  HI and LO. Use the stacktraces to explain what is going on.}
+% I think this will make the definition of HI/LO weaker. We can
+% elaborate this later. for example, in the evaluation.
+%% \Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
+%% due the capacity of a fuzzer add an infinite repetition statement. We expected that
+%% each test process can running utmost 5 seconds, if exceed this condition we stop 
+%% the process and add a output message of a TIMEOUT error.}
 
 \Igor{
   We defined if a warning is in HI or LO group according to console output.
@@ -195,7 +205,7 @@ the process and add a output message of a TIMEOUT error.}
   % The error message shows informations related to the assertion code (see at line 2) 
   % that thows an Error exception. This case was considered as HI groups and after 
   % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
-}
+}\Mar{igor, first add the real example then draft the discussion}
 
 % \begin{figure}[h!]
 %   \centering
@@ -277,7 +287,8 @@ the process and add a output message of a TIMEOUT error.}
     \item warning LO: podemos tentar conseguir buscar pelo output/funcao que falhou,
     \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
   \end{itemize}
-}
+}\Mar{i think this is not the proper place to
+  add this. discuss this with me.}
 
 \section{Objects of Study}
 \label{sec:methodology}
