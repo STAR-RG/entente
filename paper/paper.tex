@@ -96,7 +96,31 @@ a committee called TC39 (Technical Committee) that follows
 standard rules proposed by ISO/ETC JTC 1 - 
 Information Technology since 1996~\cite{es6-website}.
 Every year, a new version of EcmaScript (the latest version is ES2017) adds
-new features and minor fixes for the language. \Fix{discutir mais sobre isso}
+new features and minor fixes for the language. \Fix{discutir mais
+  sobre isso}
+
+\Mar{what is that exactly? can we cite? is that only spec or actually
+  code as most of java.* libraries.}  \Igor{seems like an API. They
+  define the language behavior; grammar; values to static variables;
+  the methods for each "class"(Object)...  These irregularities
+  appears on engine implementation, maybe an wrong if statement and so
+  on.} \Mar{Igor, avoid general discussion like $\leftarrow$this. look for
+  explanation in some forum/tutorial and explain **when** you
+  undertand the JS ecosystem design and can explain with confidence.}
+
+\Mar{explain what is an **acceptable** incompatibilities. cite example
+bug reports.}
+\Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that
+the function \CodeIn{Number.toPrecision(precision)}, in general,
+if precision is defined the method returns a String 
+containing the Number value represented either 
+in decimal exponential notation or in decimal 
+fixed notation~\cite{es6-toPrecision}. The Number object uses a 
+property that the specification describes as approximately so when we use 
+toPrecision with a bigger precision, the values of each engine may vary, this
+could be considered as a case of incompatibility by engine
+design.}\Mar{I don't understand the example very well and don't understand the
+  relationship with HI/LO.}
 
 \section{Infrastructure}
 \label{sec:design}
@@ -137,55 +161,41 @@ varying with respect to how new inputs are
 generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.
 Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 
+
+
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. Warnings
-in the HI group are associated with the cases when the anomaly has been
-detected during the execution of the test code or its close neighborhood\Comment{ as
-  opposed to that of some internal JS function}, crashes (ie. FatalError) and core dumps 
-  are considered HI group as well. The rationale is that
-the test in this group executed without violating any internal checks
-of the API. In constrast, warnings in the LO group reflect the cases where the
-anomaly was observed during the execution of functions from standard JS
-libraries.
-\Mar{what is that exactly? can we cite? is that only spec or
-actually code as most of java.* libraries.}
-\Igor{seems like an API. They define the language behavior; grammar;
-values to static variables; the methods for each "class"(Object)...
-These irregularities appears on engine implementation, 
-maybe an wrong if statement and so on.}
-We found that different engines often check pre-conditions of those
-functions differently. It can happen, for example, that one engine
-enforces a weaker pre-condition compared to another.
+in the HI group are associated with the cases where the anomaly has
+been detected in during the execution of test code or its close
+%% the rationale we provide is related to the above; not crashes
+neighborhood. The rationale is that the test in this group executed
+without violating any internal checks of the API. In constrast,
+warnings in the LO group reflect the cases where the anomaly was
+observed during the execution of functions from standard JS libraries\Fix{check}.
+  We found that different engines often check pre-conditions of
+those functions differently. It can happen, for example, that one
+engine enforces a weaker pre-condition compared to another.
 % \Mar{why is that?
 % that should not happen if the spec was fully documented and engines
 % properly implemented those checks. Explain and give example.}
-\Igor{these cases happen because the specification describes how a function
-should work, however the internal implementation is defined by the
-engine developers}\Mar{If you confirm that there is no code in specs
-  (see comment above), what would be those abstract
-  functions/interfaces that you mentioned to me the other day?}.
-\Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that,
-the function \CodeIn{Number.toPrecision(precision)}, in general,
-if precision is defined the method returns a String 
-containing the Number value represented either 
-in decimal exponential notation or in decimal 
-fixed notation~\cite{es6-toPrecision}. The Number object uses a 
-property that the specification describes as approximately so when we use 
-toPrecision with a bigger precision, the values of each engine may vary, this
-could be considered as a case of incompatibility by engine design.}
+%% \Igor{these cases happen because the specification describes how a function
+%% should work, however the internal implementation is defined by the
+%% engine developers}\Mar{If you confirm that there is no code in specs
+%%   (see comment above), what would be those abstract
+%%   functions/interfaces that you mentioned to me the other day?}.
 In those cases, our infrastructure would observe a discrepancy that is more likely to
-be associated with a bug in the (fuzzed) test; not the code. Although
+be associated with a bug in the fuzzed test; not the code. Although
 we did find real bugs from warnings in the LO group, the proportion
 was much lower compared to the HI group--only \Fix{12\%} of the reals bugs
 we found originated from the LO category.
-\Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
-due the capacity of a fuzzer add an infinite repetition statement. We expected that
-each test process can running utmost 5 seconds, if exceed this condition we stop 
-the process and add a output message of a TIMEOUT error.}
 
-\Mar{show real examples of
-  HI and LO. Use the stacktraces to explain what is going on.}
+% I think this will make the definition of HI/LO weaker. We can
+% elaborate this later. for example, in the evaluation.
+%% \Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
+%% due the capacity of a fuzzer add an infinite repetition statement. We expected that
+%% each test process can running utmost 5 seconds, if exceed this condition we stop 
+%% the process and add a output message of a TIMEOUT error.}
 
 \Igor{
   We defined if a warning is in HI or LO group according to console output.
@@ -195,7 +205,7 @@ the process and add a output message of a TIMEOUT error.}
   % The error message shows informations related to the assertion code (see at line 2) 
   % that thows an Error exception. This case was considered as HI groups and after 
   % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
-}
+}\Mar{igor, first add the real example then draft the discussion}
 
 % \begin{figure}[h!]
 %   \centering
@@ -277,7 +287,8 @@ the process and add a output message of a TIMEOUT error.}
     \item warning LO: podemos tentar conseguir buscar pelo output/funcao que falhou,
     \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
   \end{itemize}
-}
+}\Mar{i think this is not the proper place to
+  add this. discuss this with me.}
 
 \section{Objects of Study}
 \label{sec:methodology}
@@ -294,40 +305,37 @@ JS engines according to the following criteria.
 \item Uses a public issue tracker
 \end{itemize}  
 
-The first criterion focuses on actively maintained projects whereas
-the second criterion focuses on popular cases. As we wanted to report
-bugs, we also looked for project with public issue trackers.
-Table~\ref{tab:engines} shows the engines we selected in this
-study. We made an exception to the second criterion with
-XS~\Fix{cite}. As the project is young, created in Oct 2017, we
-thought there was insufficient time to obtain 1K stars for XS. We
-still considered this project as it seems to be attracting interest
-from the community\Fix{is this true?}
-\Igor{eu pensei sobre isso, acho que nao eh relevante colocar o XS sendo 
-que ele eh uma engine para iot/embarcados, temos como exemplo o 
-JerryScript que tambem tem o mesmo proposito e esta ha bem mais tempo
-que ele. Por mim, utilizamos apenas o Jerry ou os dois (e compara-los ja que 
-sao similares), oq vc acha?}. It is worth noting that we used
-JSVU~\cite{jsvu} to automatically install and configure versions of
+We look for highly-maintained (as per the first criterion) and popular
+(as per the second criterion) projects. As we wanted to report bugs,
+we also looked for project with public issue trackers.
+It is worth noting that we used
+GoogleChromeLab's JSVU~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
 aim to use the most recent stable versions of each engine as to avoid
 reporting old and already-fixed bugs to developers.
 
+%% Table~\ref{tab:engines} shows the engines we selected in this
+%% study. We made an exception to the second criterion with
+%% XS~\cite{xs2018repo}. As the project is young, created in Oct 2017, we
+%% thought there was insufficient time to obtain 1K stars for XS. We
+%% still considered this project as it seems to be attracting interest
+%% from the community\Fix{is this true?}
 
 \begin{table}[t]
   \centering
-  \caption{\label{tab:engines}Engines Analyzed}
-  \begin{tabular}{ccr}
+  \caption{\label{tab:engines}Engines Analyzed.}
+  \begin{tabular}{cccr}
     \toprule
-    Name & URL & \# Stars \\
+    Group & Name & URL & \# Stars \\
     \midrule
-    MS's Chakra & \cite{chakra2018repo} & 7200+ \\
-    Google's v8 & \cite{v82018repo} & 9800+ \\
-    Mozilla's SpiderMonkey & \cite{spidermonkey2018repo} & - \\
-    Apple's JavaScriptCore (WebKit) & \cite{jsc2018repo} & - \\
-    Mozilla's Rhino & \cite{rhino2018repo} & 1800+ \\
-    JerryScript's JerryScript & \cite{jerryscript2018repo} & 3100+ \\
-    Moddable's XS & \cite{xs2018repo} & 140+ \\
+    Apple & JavaScriptCore (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{-} \\
+    Google & v8 & \cite{v82018repo} & 9800+ \\
+    JerryScript & JerryScript & \cite{jerryscript2018repo} & 3100+ \\
+    Microsoft & Chakra & \cite{chakra2018repo} & 7200+ \\
+%    Moddable & XS & \cite{xs2018repo} & 140+ \\
+    \midrule
+    \multirow{2}{*}{Mozilla} & Rhino & \cite{rhino2018repo} & 1800+ \\
+    & SpiderMonkey & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{-} \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -335,42 +343,35 @@ reporting old and already-fixed bugs to developers.
 \subsection{Seed JS files\label{sec:seeds}}~
 We selected test files from several public projects from GitHub. We
 looked for self-contained tests from JS engine projects, initially
-using the GitHub REST API\Fix{cite}. We noticed that some of the tests
-we found depend on external libraries, which not all engines we use
-(see Section~\ref{sec:methodology:engines}) support. We decided to
-discard those. For example, many tests we found required a
-nodejs\Fix{cite} runtime for execution. Overall, we considered the
-test suites of three of the four engines mentioned in
+using the GitHub REST API~\cite{github-rest-api}. We noticed that some
+of the tests we found depend on external libraries, which not all
+engines we use (see Section~\ref{sec:methodology:engines}) support. We
+decided to discard those. For example, many tests we found required a
+Node.js runtime~\cite{node} for execution. We considered the offical
+TC-39~\cite{tc39-github} conformance test suite for the ECMA262
+specification~\cite{ecmas262-spec}. Furthermore, we considered test
+suites of three of the four engines mentioned in
 Section~\ref{sec:methodology:engines} and four other engines.
 Table~\ref{tab:test-suites} shows the JS sources we considered for
 each of the selected projects. Overall, we found a total of
-\totfiles{} JS files. It is worth noting that some projects use
+\totfiles{} JS files. It is worth noting that some test suites use
 distinct frameworks for testing and require external libraries to run
-their testing suites. 
-For these projects, we needed to make small
-changes in the testing infrastructure to be able to uniformly run
-tests in all engines. For example, some of the files does not use assertion 
-functions defined in their projects; we replaced those with our definitions.
-\Mar{not sure if this
-  is a good example; why one would like to redefine assertion? why
-  didn't you incorporate the assertion function to your infra?}
-\Igor{sim, poderiamos fazer isso. Porem, lembro que alguns testcases por exemplo usam 
-algo diferente de "assert", outras usam alguma funcao interna 
-que apenas uma engine suporta. Eu posso analisar melhor aqui nossas seeds 
-e ver um jeito global de resolver isso, como se fosse um "shell.js" da nossa 
-ferramenta.}
+their testing suites.  For these projects, we needed to make small
+changes in the testing infrastructure to be able to run the tests
+uniformly across all engines. More precisely, we needed to mock
+functions, related to the test harness, which are only available to
+certain engines.
 
 \begin{table}[t]
   \centering
-  \caption{\label{tab:test-suites}Test Suites
-  % \Mar{try to use a single
-  %     name (if possible) to facilitate reference in the paper. Use the
-  % full path in the URL (citation) to indicate where one can find those
-  % files.}
-  }
+  \caption{\label{tab:test-suites}Test Suites. The sections of the
+    table show, respectively, the TC-39 conformance test suite, suites
+    from engines we analyzed, and other suites.}
   \begin{tabular}{ccr}
     \toprule
     Name & Source & \# JS files \\
+    \midrule
+    TS-39 & \cite{ecma262-conformance-suite} & \Fix{-} \\
     \midrule
     Mozilla & \cite{mozilla} & 32,414 \\
     V8 & \cite{v8} & 64 \\
