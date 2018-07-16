@@ -371,9 +371,9 @@ certain engines.
     \toprule
     Name & Source & \# JS files \\
     \midrule
-    TS-39 & \cite{ecma262-conformance-suite} & \Fix{-} \\
+    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
     \midrule
-    Mozilla & \cite{mozilla} & 32,414 \\
+    Mozilla & \cite{mozilla} & 2,633 \\
     V8 & \cite{v8} & 64 \\
     WebKit & \cite{webkit} & 1,031 \\
     \midrule    
@@ -512,14 +512,30 @@ reported by our tool and, for those we found suspicious, we filed a
 bug report in the corresponding bug tracker.
 
 \Igor{
-  After ran all our mined seeds (see \ref{sec:seeds}) without fuzzing we found 
-  a total of \Fix{arg}
-  Nosso estudo revelou que dos \Fix{19} bugs reportados pelo nosso time, 
-  apenas 8 nao foram fuzzados \Fix{42.1\%}, isso se da 
-  a importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
+  No total, foram obtidos \nofuzzingAll{} warnings, sendo estes \nofuzzingHigh{}
+  com priority HI e \nofuzzingLow{} do grupo LO. Nos analisamos cuidadosamente
+  cada warning reportado pela ferramenta, a fim de encontrar bugs reais nos engenhos
+  javascript. Nosso estudo revelou que dos \nofuzzingHigh{} do grupo HI, 
+  \nofuzzHighReport{} foram reportados enquanto que no grupo LO, apenas 
+  \nofuzzLowReport{} possuiam bugs reais (ratio HI $>$ LO).
+
+  A diversidade de suites de testes influencia na busca de bugs nao descobertos
+  pelo proprio projeto do engenhos. Por exemplo, cerca de \Fix{62} warnings 
+  foram obtidos do repositorio da Mozilla, 12 na suite do JerryScript, 
+  9 sao do WebKit e 2 sao do V8 e Duktape, respectivamente. 
+  Os warnings encontrados em sua maioria sao dos engenhos do 
+  Chakra e do JavascriptCore.
+
+  A importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
   quanto em projetos distintos de mesma ordem, pois neste caso engines JS 
   devem interpretar arquivos, entao quanto mais entradas, melhores os resultados.
   \Fix{discuss}
+
+  % Nosso estudo revelou que dos \tableBugsNum{} bugs reportados pelo nosso time, 
+  % apenas \Fix{10} nao foram fuzzados \Fix{43.4\%},
+  % Apesar do engenhos do V8 e SpiderMonkey
+  % serem os mais robustos em relacao aos demais, tambem 
+  % foram encontrados warnings nestes engenhos, porem
 }
 
 %% \Fix{nao entendi muito sobre essa subsection... 
@@ -628,8 +644,9 @@ no-fuzzing mode.
                         &  &                       &
     JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187519}{\#187519}  &   & \\
     \midrule
-    23 & 7/12 & \crossmark & Chakra & New  & \href{https://github.com/Microsoft/ChakraCore/issues/5453}{\#5453} & HI & JerryScript\\
-   \bottomrule     
+    23 & 7/12 & \crossmark & Chakra & Dup (\#10) & \href{https://github.com/Microsoft/ChakraCore/issues/5453}{\#5453} & HI & JerryScript\\
+    24 & 7/17 & \crossmark & SpiderMonkey & New & \href{https://bugzilla.mozilla.org/show_bug.cgi?id=1476321}{\#1476321} & HI & JerryScript\\
+   \bottomrule
   \end{tabular}
 \end{table*}
 
@@ -645,10 +662,15 @@ implementations.
 Note from the table that all bug
 reports still waiting for confirmation are associated with the
 JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
-showed that the triage process is very slow for that engine. As of
-now, we did not find any new bug on SpiderMonkey and V8; the bugs we
-found were duplicates and were not reported. Finally, it is
-worth noting that 8 of the 19 JS files that manifested
+showed that the triage process is very slow for that engine. 
+\Igor{
+The bugs reported on Chakra's bug tracker was defined as confirmed, 
+however the bugs are included on a milestone for the next release
+following an internal priority.
+}
+As of now, we did not find any new bug on SpiderMonkey and V8; 
+the bugs we found were duplicates and were not reported. Finally, it is
+worth noting that \Fix{11 of the 19} JS files that manifested
 discrepancies were \emph{not} produced with fuzzing (column
 ``Fuzz''). These are test files from suites of different engines. This
 observation emphasizes the importance of continuously collecting test suites from
