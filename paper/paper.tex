@@ -207,6 +207,16 @@ we found originated from the LO category.
   % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
 }\Mar{igor, first add the real example then draft the discussion}
 
+\subsection{Expected Inconsistencies}
+
+\Mar{answer from C. Holler. Think through this...}
+
+1) The stack depth in JS is often close to the real (native) C stack depth, nevertheless observable by JS through recursion. This causes differential behavior even on the same engine when JITs are enabled or disabled, as the stack frame sizes vary. LangFuzz in particular produces a lot of recursions and hits these problems even more often than jsfunfuzz.
+
+2) JS has some "undefined behavior", such as the enumeration order of object properties in certain cases. In our engine, we have an --enable-more-deterministic mode (build option) to solve some of these issues.
+
+3) JS naturally has some observable differential behavior in global objects, e.g. Math.random, Date, etc. These can often be mocked to solve these issues, but fuzzers can be surprisingly effective to find more of these sources or even get the old objects back somehow.
+
 % \begin{figure}[h!]
 %   \centering
 %   \scriptsize
@@ -277,18 +287,18 @@ we found originated from the LO category.
 % \label{fig:lo-priority}
 % \end{figure}
 
-\Mar{can we detect dups mining issue trackers?}
-\Igor{
-  acho que encontrar duplicatas seria um estudo a parte, devido a linguagem natural.
-  Tenho umas consideracoes:
-  \begin{itemize}
-    \item warning HI possui a msg "Error: Test Failed", nao tem como buscar algo com isso, 
-    se for pegar a linha que falhou, provavelmente vai mostrar a linha onde o assert se encontra.
-    \item warning LO: podemos tentar conseguir buscar pelo output/funcao que falhou,
-    \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
-  \end{itemize}
-}\Mar{i think this is not the proper place to
-  add this. discuss this with me.}
+%% \Mar{can we detect dups mining issue trackers?}
+%% \Igor{
+%%   acho que encontrar duplicatas seria um estudo a parte, devido a linguagem natural.
+%%   Tenho umas consideracoes:
+%%   \begin{itemize}
+%%     \item warning HI possui a msg "Error: Test Failed", nao tem como buscar algo com isso, 
+%%     se for pegar a linha que falhou, provavelmente vai mostrar a linha onde o assert se encontra.
+%%     \item warning LO: podemos tentar conseguir buscar pelo output/funcao que falhou,
+%%     \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
+%%   \end{itemize}
+%% }\Mar{i think this is not the proper place to
+%%   add this. discuss this with me.}
 
 \section{Objects of Study}
 \label{sec:methodology}
