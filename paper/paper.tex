@@ -72,7 +72,19 @@ functional bugs in
 software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. It
 automates test generation in scenarios where multiple implementations
 of a system exist. DT leverages the diversity across system's
-implementations to detect anomalous behavior.
+implementations to detect anomalous behavior. For example, Mozilla
+runs JS files--created with the grammar-based fuzzer
+jsfunfuzz~\cite{jsfunfuzz}--against different configurations of their
+SpiderMonkey engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
+across configurations. They use this technique since 2002 and have
+been able to find over 270 bugs since
+then~\cite{jsfunfuzz-at-mozilla}, some of which are security bugs.
+Cross-engine differential testing checks correctness by comparing the
+output produced by \emph{different} engines on a given
+input~\cite{patra2016learning}. The availability on the web of public
+implementations of JS engines (see Table~\ref{tab:engines}) and test
+suites makes this bug-finding approach very appealing.
+
 %% WHAT WE DID
 This paper reports the results of a study we conducted to (i) assess
 the reliability of existing JS engines and to (ii) evaluate the
