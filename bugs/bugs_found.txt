@@ -732,7 +732,7 @@ Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
 
-Priority: HIGH
+Priority: LOW
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/4978
 
