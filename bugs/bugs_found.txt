@@ -1,3 +1,85 @@
+=====
+BUG #22 (CONFIRMED)
+
+Date reported: July 10, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5442
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz/ecma_edited/test_3183201ee05ec7573387939c7e48ba88.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Date(-0) should be converted to Date(0), using date.getTime() Chakra is the only that
+returns -0, causing an assertion failure.
+
+
+=====
+BUG #21 (CONFIRMED)
+
+Date reported: July 10, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5443
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_86fa37f728125aa1ef258a192560e0e6.js
+
+Patch:None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+-------------SpiderMonkey
+Error: null
+-------------v8
+Error: null
+
+Explanation:
+Inconsistence on Error() with more than one argument.
+According to ES6 Error constructor the Error is called with only one argument (message).
+The other engines returns the first argument, chakra returns the second argument.
+
+=====
+BUG #20 (FIXED)
+
+Date reported: July 10, 2018
+
+Type: Assertion failure
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=187520
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz2/ecma/test_33e9a90bb4616578222d07862c1d1b9c.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Inconsistence in jsc when we try to get an invalid property in a TypedArray, 
+in this case a Float32Array.
+
+=======
 BUG #19 (CONFIRMED)
 
 Date reported:June 28, 2018
@@ -10,7 +92,7 @@ URL: https://github.com/Microsoft/ChakraCore/issues/5388
 
 Original:
 
-Fuzzed:
+Fuzzed: None
 
 Patch:
 
@@ -25,6 +107,7 @@ Explanation:
 When a regex pattern is called the property 'lastIndex' should be updated 
 with the last ocurrence of the pattern match. 
 Chakra just checks the 'lastIndex' property on the beginning.
+
 ======
 BUG #18 (FIXED)
 
@@ -122,6 +205,36 @@ Explanation:
 JavascriptCore should return destructuring elements with trailing commas in iterable patterns. 
 It was observed that javascriptcore have unexpected behaviour when trying to return a destructuring 
 list inside a function.
+
+======
+BUG #16 (NEW)
+
+Date reported: May 21, 2018
+
+Type: Incosistent treatment/check of pre-conditions
+
+Priority: LOW
+
+URL: https://github.com/Microsoft/ChakraCore/issues/5203
+
+Original:
+./jsfuzz/seeds/mozilla/non262/statements/for-in-with-assignments.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_statements_for-in-with-assignments.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+-------------SpiderMonkey
+Error: Test Failed
+-------------v8
+Error: Test Failed
+
+Explanation:
+Chakra and JSC cannot convert Date(-0) to Date(0).
 
 ======
 BUG #16 (NEW)
