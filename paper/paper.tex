@@ -122,6 +122,16 @@ could be considered as a case of incompatibility by engine
 design.}\Mar{I don't understand the example very well and don't understand the
   relationship with HI/LO.}
 
+\subsection{Randomness and Undefined Behavior}
+
+\Mar{answer from C. Holler. Think through this...}
+
+1) The stack depth in JS is often close to the real (native) C stack depth, nevertheless observable by JS through recursion. This causes differential behavior even on the same engine when JITs are enabled or disabled, as the stack frame sizes vary. LangFuzz in particular produces a lot of recursions and hits these problems even more often than jsfunfuzz.
+
+2) JS has some "undefined behavior", such as the enumeration order of object properties in certain cases. In our engine, we have an --enable-more-deterministic mode (build option) to solve some of these issues.
+
+3) JS naturally has some observable differential behavior in global objects, e.g. Math.random, Date, etc. These can often be mocked to solve these issues, but fuzzers can be surprisingly effective to find more of these sources or even get the old objects back somehow.
+
 \section{Infrastructure}
 \label{sec:design}
 
@@ -207,15 +217,6 @@ we found originated from the LO category.
   % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
 }\Mar{igor, first add the real example then draft the discussion}
 
-\subsection{Expected Inconsistencies}
-
-\Mar{answer from C. Holler. Think through this...}
-
-1) The stack depth in JS is often close to the real (native) C stack depth, nevertheless observable by JS through recursion. This causes differential behavior even on the same engine when JITs are enabled or disabled, as the stack frame sizes vary. LangFuzz in particular produces a lot of recursions and hits these problems even more often than jsfunfuzz.
-
-2) JS has some "undefined behavior", such as the enumeration order of object properties in certain cases. In our engine, we have an --enable-more-deterministic mode (build option) to solve some of these issues.
-
-3) JS naturally has some observable differential behavior in global objects, e.g. Math.random, Date, etc. These can often be mocked to solve these issues, but fuzzers can be surprisingly effective to find more of these sources or even get the old objects back somehow.
 
 % \begin{figure}[h!]
 %   \centering
