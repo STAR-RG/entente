@@ -1,7 +1,62 @@
 =====
-BUG 18 (NEW)
+BUG #22 (CONFIRMED)
 
-Date reported: July 12, 2018
+Date reported: July 10, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5442
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz/ecma_edited/test_3183201ee05ec7573387939c7e48ba88.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Date(-0) should be converted to Date(0), using date.getTime() Chakra is the only that
+returns -0, causing an assertion failure.
+
+
+=====
+BUG #21 (CONFIRMED)
+
+Date reported: July 10, 2018
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5443
+
+Original:
+
+Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_86fa37f728125aa1ef258a192560e0e6.js
+
+Patch:None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+-------------SpiderMonkey
+Error: null
+-------------v8
+Error: null
+
+Explanation:
+Inconsistence on Error() with more than one argument.
+According to ES6 Error constructor the Error is called with only one argument (message).
+The other engines returns the first argument, chakra returns the second argument.
+
+=====
+BUG #20 (FIXED)
+
+Date reported: July 10, 2018
 
 Type: Assertion failure
 
@@ -17,117 +72,199 @@ Pattern:
 -------------JavaScriptCore
 Error: Test failed
 -------------Chakra
-
 -------------SpiderMonkey
-
 -------------v8
 
 Explanation:
 Inconsistence in jsc when we try to get an invalid property in a TypedArray, 
 in this case a Float32Array.
 
-Steps to reproduce:
-var a = new Float32Array([0.1, 0.2, 0.3]);
-print(Object.getOwnPropertyNames(a).sort())
-var c = a.hasOwnProperty(3);
-if (c) throw new Error("Test failed");
+=======
+BUG #19 (CONFIRMED)
 
-Actual results:
-0,1,2
-Error: Test failed
-
-Expected results:
-0,1,2
-
-=====
-BUG 17 (NEW)
-
-Date reported: July 12, 2018
+Date reported:June 28, 2018
 
 Type: Assertion failure
 
-URLs: https://github.com/Microsoft/ChakraCore/issues/5443
+Priority: HIGH
+
+URL: https://github.com/Microsoft/ChakraCore/issues/5388
 
 Original:
 
-Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_86fa37f728125aa1ef258a192560e0e6.js
+Fuzzed: None
 
-Patch:None
+Patch:
+
+pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+When a regex pattern is called the property 'lastIndex' should be updated 
+with the last ocurrence of the pattern match. 
+Chakra just checks the 'lastIndex' property on the beginning.
+
+======
+BUG #18 (FIXED)
+
+Date reported:June 26, 2018
+
+Type: Assertion failure
+
+Priority: HIGH
+
+URL:https://bugs.webkit.org/show_bug.cgi?id=187042
+
+Original:
+./jsfuzz/seeds/JerryJS/regression/regexp-non-capture-groups.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_regression_edited_regexp-non-capture-groups.js
+
+Patch:
+--- ./jsfuzz/bugs/fuzzed_files/fuzzed_JerryJS_regression_edited_regexp-non-capture-groups.js
++++ .jsfuzz/seeds/JerryJS/regression/regexp-non-capture-groups.js
+@@ -111,7 +110,7 @@
+ r = new RegExp ("(?:a|b){1,4}");
+ assert (r.exec ("bbb") == "bbb");
+ 
+-r = new RegExp ("(?:a|b){1,4}");
++r = new RegExp ("(?:a|b){1,5}");
+ assert (r.exec ("abab") == "abab");
+ 
+ r = new RegExp ("(?:aba)*");
+@@ -190,8 +189,8 @@
+ r = new RegExp ("(?:(?:bb?)*)*bbb\\Ba");
+ assert (r.exec ("bbba") == "bbba");
+ 
+-r = new RegExp ("(?:a??){0,109}a");
++r = new RegExp ("(?:a??){0,1}a");
+ assert (r.exec ("aa") == "aa");
+ 
+-r = new RegExp ("(?:a{0,340282366920938463463374607431768211457}?){0,1}a");
++r = new RegExp ("(?:a{0,1}?){0,1}a");
+ assert (r.exec ("aa") == "aa");
+
+pattern:
+-------------JavaScriptCore
+Error: Test failed
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+RegExp.exec returns wrong value with a long integer quantifier. 
+If the quantifier exceeds the MAX_INT value the matcher cannot be solved.
+
+======
+BUG #17 (FIXED)
+
+Date reported: May 24, 2018
+
+Type: Assertion failure
+
+Priority: HIGH
+
+URL: https://bugs.webkit.org/show_bug.cgi?id=185943
+
+Original:
+./jsfuzz/seeds/WebKit.JSTests.es6/destructuring_trailing_commas_in_iterable_patterns.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.es6_destructuring_trailing_commas_in_iterable_patterns.js
+
+Patch:
+--- ./jsfuzz/seeds/WebKit.JSTests.es6/destructuring_trailing_commas_in_iterable_patterns.js
++++ ./jsfuzz/bugs/fuzzed_files/fuzzed_WebKit.JSTests.es6_destructuring_trailing_commas_in_iterable_patterns.js
+@@ -1,10 +1,10 @@
+ function test() {
+ 
+ var [a,] = [1];
++return[a,] = [1];
+ return a === 1;
+       
+ }
+ 
+ if (!test())
+-    throw new Error("Test failed");
+-
++    throw new Error("Test fa󠁵iled");
 
 Pattern:
 -------------JavaScriptCore
-
+Error: Test fa󠁵iled
 -------------Chakra
-
 -------------SpiderMonkey
-Error: null
 -------------v8
-Error: null
 
 Explanation:
-Inconsistence on Error() with more than one argument.
-According to ES6 Error constructor the Error is called with only one argument (message).
-The other engines returns the first argument, chakra returns the second argument.
+JavascriptCore should return destructuring elements with trailing commas in iterable patterns. 
+It was observed that javascriptcore have unexpected behaviour when trying to return a destructuring 
+list inside a function.
 
-Steps to reproduce:
+======
+BUG #16 (NEW)
 
-try{
-    throw new Error(null)
-}catch (e){
-    print(e)
-}
+Date reported: May 21, 2018
 
-try{
-    throw new Error(null, 'test failed', 'another argument')
-}catch (e){
-    print(e)
-}
-Actual results:
-Error: null
-Error: test failed
+Type: Incosistent treatment/check of pre-conditions
 
-Expected results:
-Error: null
-Error: null
+Priority: LOW
 
-=====
-BUG 16 (NEW)
-
-Date reported: July 12, 2018
-
-Type: Assertion failure
-
-URLs: https://github.com/Microsoft/ChakraCore/issues/5442
-https://bugs.webkit.org/show_bug.cgi?id=187519
+URL: https://github.com/Microsoft/ChakraCore/issues/5203
 
 Original:
+./jsfuzz/seeds/mozilla/non262/statements/for-in-with-assignments.js
 
-Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_3183201ee05ec7573387939c7e48ba88.js
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_statements_for-in-with-assignments.js
 
 Patch: None
 
 Pattern:
 -------------JavaScriptCore
-
 -------------Chakra
-
 -------------SpiderMonkey
 Error: Test Failed
 -------------v8
 Error: Test Failed
 
 Explanation:
-Inconsistence on Date() with a negative value.
+Chakra and JSC cannot convert Date(-0) to Date(0).
 
-Steps to reproduce:
+======
+BUG #16 (NEW)
 
-d = new Date(-0);
-print(Object.is(d.getTime(), +0))
-Actual results:
-false
+Date reported: May 21, 2018
 
-Expected results:
-true
+Type: Incosistent treatment/check of pre-conditions
+
+Priority: LOW
+
+URL: https://github.com/Microsoft/ChakraCore/issues/5203
+
+Original:
+./jsfuzz/seeds/mozilla/non262/statements/for-in-with-assignments.js
+
+Fuzzed:
+./jsfuzz/bugs/fuzzed_files/fuzzed_mozilla_non262_statements_for-in-with-assignments.js
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Syntax error
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra should not throw an Exception when use an empty "yield" expression 
+in "in" expression. Example "for(var x = yield in {})".
 
 ======
 BUG #15 (NEW)
@@ -135,6 +272,8 @@ BUG #15 (NEW)
 Date reported: May 17, 2018
 
 Type: Assertion failure
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5187
 
@@ -159,11 +298,13 @@ can be writable and configurable. All engines can override the property,
 Chakra does not support the redeclaration.
 
 ======
-BUG #14 (NEW)
+BUG #14 (FIXED)
 
 Date reported: May 17, 2018
 
 Type: Incosistent treatment/check of pre-conditions
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5182
 
@@ -246,6 +387,8 @@ Date reported: May 10, 2018
 
 Type: Test failure
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/5128
 
 Original:
@@ -271,6 +414,8 @@ BUG #12 (NEW)
 Date reported: May 02, 2018
 
 Type: Test failure
+
+Priority: HIGH
 
 URLs
 JSCore: https://bugs.webkit.org/show_bug.cgi?id=185208
@@ -300,6 +445,8 @@ BUG #11 (NEW)
 Date reported: May 02, 2018
 
 Type: Test failure
+
+Priority: LOW
 
 URLs
 JSCore: https://bugs.webkit.org/show_bug.cgi?id=185197
@@ -342,6 +489,8 @@ Date reported: April 30, 2018
 
 Type: Test failure
 
+Priority: HIGH
+
 URLs
 JSCore: https://bugs.webkit.org/show_bug.cgi?id=185156
 Chakra: https://github.com/Microsoft/ChakraCore/issues/5076
@@ -381,6 +530,8 @@ BUG #9 (NEW)
 Date reported: April 29, 2018
 
 Type: Test failure
+
+Priority: HIGH
 
 URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185127
 
@@ -424,6 +575,8 @@ Date reported: April 29, 2018
 
 Type: Assertion failure
 
+Priority: HIGH
+
 URL Chakra: https://github.com/Microsoft/ChakraCore/issues/5067
 URL JSCore: https://bugs.webkit.org/show_bug.cgi?id=185130
 
@@ -457,6 +610,8 @@ Date reported: April 29, 2018
 
 Type: Assertion failure
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/5065
 
 Original:
@@ -487,6 +642,8 @@ BUG #6 (CONFIRMED/FIXED)
 Date reported: April 25, 2018
 
 Type: Assertion failure
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5038
 
@@ -530,6 +687,8 @@ Date reported: April 23, 2018
 
 Type: Should throw TypeError 
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/5033
 
 Original:
@@ -559,6 +718,8 @@ BUG #4 (NEW)
 Date reported: April 18, 2018
 
 Type: Access invalid position 
+
+Priority: HIGH
 
 URLs: https://bugs.webkit.org/show_bug.cgi?id=184749
 
@@ -590,6 +751,8 @@ BUG #3 (NEW)
 Date reported: April 14, 2018
 
 Type: Inconsistent assertions violated in test case
+
+Priority: HIGH
 
 URLs: https://bugs.webkit.org/show_bug.cgi?id=184629
 
@@ -638,6 +801,8 @@ Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
 
+Priority: HIGH
+
 URLs: https://github.com/Microsoft/ChakraCore/issues/4979
 
 Original:
@@ -679,6 +844,8 @@ BUG #1 (CONFIRMED/FIXED)
 Date reported: April 12, 2018
 
 Type: Incosistent treatment/check of pre-conditions
+
+Priority: HIGH
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/4978
 

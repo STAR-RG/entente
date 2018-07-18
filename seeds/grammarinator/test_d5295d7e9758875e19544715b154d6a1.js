@@ -1,0 +1,1 @@
+if(deleteງ)var_٥

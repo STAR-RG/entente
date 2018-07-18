@@ -1,0 +1,1 @@
+varቐ＿=function(){}
