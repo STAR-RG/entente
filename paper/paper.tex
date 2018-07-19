@@ -219,15 +219,15 @@ we found originated from the LO category.
 %% each test process can running utmost 5 seconds, if exceed this condition we stop 
 %% the process and add a output message of a TIMEOUT error.}
 
-\Igor{
-  We defined if a warning is in HI or LO group according to console output.
-  The error stream in the output shows relevant informations that we can 
-  process. The Figure~\ref{fig:error-output} shows examples of HI and LO warning
-  outputs based on the stream output came from Chakra engine. 
+% \Igor{
+%   We defined if a warning is in HI or LO group according to console output.
+%   The error stream in the output shows relevant informations that we can 
+%   process. The Figure~\ref{fig:error-output} shows examples of HI and LO warning
+%   outputs based on the stream output came from Chakra engine. 
   % The error message shows informations related to the assertion code (see at line 2) 
   % that thows an Error exception. This case was considered as HI groups and after 
   % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
-}\Mar{igor, first add the real example then draft the discussion}
+% }\Mar{igor, first add the real example then draft the discussion}
 
 
 % \begin{figure}[h!]
@@ -535,22 +535,23 @@ reported by our tool and, for those we found suspicious, we filed a
 bug report in the corresponding bug tracker.
 
 \Igor{
-  No total, foram obtidos \nofuzzingAll{} warnings, sendo estes \nofuzzingHigh{}
-  pertencentes aos buckets com prioridade HI e \nofuzzingLow{} da prioridade LO. 
-  N\'os analisamos com rigor cada log gerado, sempre checando as 
+  No total, foram obtidos \nofuzzAll{} warnings, sendo estes \nofuzzHighTotal{}
+  pertencentes aos buckets com prioridade HI e \nofuzzLowTotal{} da prioridade LO. 
+  Durante 3 meses, n\'os analisamos com rigor cada log gerado, sempre checando as 
   especificacoes do EcmaScript, a fim de encontrar bugs reais nos engenhos
   javascript que violem condições da especificacao ou apresentem discrepancias
-  entre outputs dos engenhos.
-  Nosso estudo revelou que dos \nofuzzingHigh{} buckets do grupo HI, 
+  entre as saidas de cada engenhos.
+  Nosso estudo revelou que dos \nofuzzHighTotal{} buckets do grupo HI, 
   \nofuzzHighReport{} foram reportados enquanto que no grupo LO, apenas 
   \nofuzzLowReport{} possuiam bugs reais (ratio HI $>$ LO).
 
-  A diversidade de suites de testes influencia na busca de bugs nao descobertos
-  pelo proprio projeto do engenhos. Por exemplo, cerca de \Fix{62} warnings 
-  foram obtidos do repositorio da Mozilla, 12 na suite do JerryScript, 
-  9 sao do WebKit e 2 sao do V8 e Duktape, respectivamente. 
-  Os warnings encontrados em sua maioria sao dos engenhos do 
-  Chakra e do JavascriptCore.
+  A diversidade de suites de testes influenciou na busca de bugs nao descobertos
+  pelo proprio projeto do engenhos. Por exemplo, cerca de \nofuzzTC{} buckets 
+  foram encontrados usando a suite do TC-39, alem de \nofuzzMozilla{} warnings 
+  foram obtidos do repositorio da Mozilla, \nofuzzJerry{} na suite do JerryScript, 
+  \nofuzzWebKit{} sao do WebKit e \nofuzzGoogleDuktap{} para o V8 e o Duktape, 
+  os arquivos dos repositorios do TinyJS e JSI nao mostraram discrepancias entre as
+  engines.
 
   A importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
   quanto em projetos distintos de mesma ordem, pois neste caso engines JS 
