@@ -381,7 +381,7 @@ certain engines.
     \toprule
     Name & Source & \# JS files \\
     \midrule
-    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
+    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 45,144 \\
     \midrule
     Mozilla & \cite{mozilla} & 2,633 \\
     V8 & \cite{v8} & 64 \\
@@ -393,7 +393,7 @@ certain engines.
     Tiny-js & \cite{tinyjs} & 44 \\    
     % Chakra & \cite{chakracore} & 2632 \\
     \midrule
-     &  & 36,452 \\
+     &  & 51,815 \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -523,9 +523,12 @@ bug report in the corresponding bug tracker.
 
 \Igor{
   No total, foram obtidos \nofuzzingAll{} warnings, sendo estes \nofuzzingHigh{}
-  com priority HI e \nofuzzingLow{} do grupo LO. Nos analisamos cuidadosamente
-  cada warning reportado pela ferramenta, a fim de encontrar bugs reais nos engenhos
-  javascript. Nosso estudo revelou que dos \nofuzzingHigh{} do grupo HI, 
+  pertencentes aos buckets com prioridade HI e \nofuzzingLow{} da prioridade LO. 
+  N\'os analisamos com rigor cada log gerado, sempre checando as 
+  especificacoes do EcmaScript, a fim de encontrar bugs reais nos engenhos
+  javascript que violem condições da especificacao ou apresentem discrepancias
+  entre outputs dos engenhos.
+  Nosso estudo revelou que dos \nofuzzingHigh{} buckets do grupo HI, 
   \nofuzzHighReport{} foram reportados enquanto que no grupo LO, apenas 
   \nofuzzLowReport{} possuiam bugs reais (ratio HI $>$ LO).
 
@@ -638,7 +641,7 @@ no-fuzzing mode.
     \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156} &  & 
     \\
     \midrule    
-    11 & 5/02 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & Mozilla \\
+    11 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & Mozilla \\
     12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & Mozilla \\
     13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScript \\
     14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & V8\\
@@ -646,16 +649,12 @@ no-fuzzing mode.
     16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & Mozilla\\
     17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & Webkit\\
     18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScript\\
-    19 & 6/28 & \crossmark & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & WebKit\\
+    19 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & WebKit\\
     20 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520} & HI & JerryScript\\
-    21 & 7/10 & quickfuzz & Chakra & Confirmed  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & JerryScript\\
-    \midrule
-    \multirow{2}{*}{22}  & \multirow{2}{*}{7/10} &  \multirow{2}{*}{\crossmark} & Chakra & Confirmed & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & \multirow{2}{*}{HI} & \multirow{2}{*}{JerryScript}\\
-                        &  &                       &
-    JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187519}{\#187519}  &   & \\
-    \midrule
-    23 & 7/12 & \crossmark & Chakra & Dup (\#10) & \href{https://github.com/Microsoft/ChakraCore/issues/5453}{\#5453} & HI & JerryScript\\
-    24 & 7/17 & \crossmark & SpiderMonkey & New & \href{https://bugzilla.mozilla.org/show_bug.cgi?id=1476321}{\#1476321} & HI & JerryScript\\
+    22 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & HI & JerryScript\\
+    21 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & JerryScript\\
+    23 & 7/18 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478} & HI & Mozilla\\
+    24 & 7/18 & \crossmark & JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777} & HI & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
