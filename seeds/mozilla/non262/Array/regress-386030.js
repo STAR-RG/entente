@@ -55,7 +55,7 @@ function test()
 
   try {
     a = new Array(2);
-    print(a.reduceRight(add));
+    // print(a.reduceRight(add));
     actual = "FAIL, empty reduceRight";
   } catch (e) {
     actual = "PASS";

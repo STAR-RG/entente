@@ -12,7 +12,7 @@ var expect = '';
 printBugNumber(BUGNUMBER);
 printStatus (summary);
  
-print('mmmm, food!');
+// print('mmmm, food!');
 
 
 var SNI = {};

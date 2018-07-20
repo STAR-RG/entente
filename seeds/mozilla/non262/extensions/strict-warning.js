@@ -5,7 +5,7 @@ if (options().split().indexOf('werror') == -1)
     options('werror');
 
 function expectSyntaxError(stmt) {
-    print(stmt);
+//printstmt);
     var result = 'no error';
     try {
         Function(stmt);

@@ -23,4 +23,4 @@ assertEq(keys.indexOf("__proto__") >= 0, true,
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

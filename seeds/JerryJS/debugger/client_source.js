@@ -12,27 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("client-source-test");
+//print("client-source-test");
 
 function finish(z) {
-  print("function finish");
-  print("finish: " + z);
+  //print("function finish");
+  print('==>', z)
+  if(z !== "test-foo-bar") {
+  	throw new Error("Test fail")
+  }
+  //print("finish: " + z);
 }
 
 function bar(y) {
-  print("function bar");
+  //print("function bar");
   finish(y + "-bar");
 }
 
 function foo(x)
 {
-  print("function foo");
+  //print("function foo");
   bar(x + "-foo");
 }
 
 function test()
 {
-  print("function test");
+  //print("function test");
   var x = "test";
   foo(x);
 }

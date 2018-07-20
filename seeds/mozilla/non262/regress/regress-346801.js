@@ -30,21 +30,21 @@ function test()
     }
 
     Object.extend = function(destination, source) {
-      print("Start");
-//      print(destination);
-//      print(source);
+  //print"Start");
+//  //printdestination);
+//  //printsource);
       if(destination==source)
-        print("Same desination and source!");
+    //print"Same desination and source!");
       var i = 0;
       for (property in source) {
-//        print("  " + property);
+//    //print"  " + property);
         destination[property] = source[property];
         ++i;
         if (i > 1000) {
           throw "Hang";
         }
       }
-      print("Finish");
+  //print"Finish");
       return destination;
     }
 

@@ -116,4 +116,4 @@ test(function() {
 if (typeof reportCompare === "function")
   reportCompare(0, 0, "ok");
 
-print("Tests complete");
+//print("Tests complete");

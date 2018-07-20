@@ -21,7 +21,7 @@ function test()
  
   var obj;
 
-  print('1');
+//print('1');
 
   obj = {
     set inn(value) {this.for = value;}, 
@@ -32,7 +32,7 @@ function test()
   actual = obj.toSource();
   compareSource(expect, actual, summary + ': 1');
 
-  print('2');
+//print('2');
 
   obj = {
     set in(value) {this.for = value;}, 
@@ -43,7 +43,7 @@ function test()
   actual = obj.toSource();
   compareSource(expect, actual, summary + ': 2');
 
-  print('3');
+//print('3');
 
   obj = {
     set inn(value) {this.for = value;}, 
@@ -54,7 +54,7 @@ function test()
   actual = obj.toSource();
   compareSource(expect, actual, summary + ': 4');
 
-  print('4');
+//print('4');
 
   obj = {
     set in(value) {this.for = value;}, 

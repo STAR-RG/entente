@@ -29,10 +29,10 @@ function test()
   objs = [{__proto__: a}, {__proto__: a}, {__proto__: a}, b, {__proto__: a},
           {__proto__: a}];
   for (i = 0; i < 6; i++) {
-    print(actual += ""+c.x);
+//printactual += ""+c.x);
     objs[i].x = 2;
   }
-  print(actual += c.x);
+//print(actual += c.x);
 
   reportCompare(expect, actual, summary);
 }

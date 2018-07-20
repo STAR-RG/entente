@@ -43,7 +43,7 @@ try
 catch(ex)
 {
   actual = ex + '';
-  print(actual);
+  // print(actual);
 }
 
 reportMatch(expect, actual, summary);

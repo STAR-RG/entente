@@ -23,7 +23,7 @@ function test()
   if (typeof sleep != 'function' || typeof scatter != 'function' ||
       typeof timeout != 'function')
   {
-    print(expect = actual = 'Test skipped: requires mulithreads and timeout.');
+//printexpect = actual = 'Test skipped: requires mulithreads and timeout.');
   }
   else
   {

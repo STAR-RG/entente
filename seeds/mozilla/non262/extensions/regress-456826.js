@@ -113,7 +113,7 @@ function test()
         var n = computeEscapeSpeed(c);
       }
     }
-    print(Date.now() - start);
+//printDate.now() - start);
   }
 
   var realRange = { min: -2.1, max: 2 };

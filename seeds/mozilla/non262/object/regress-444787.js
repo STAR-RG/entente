@@ -55,7 +55,7 @@ function test()
     }
     catch(ex) {
       if (ex instanceof TypeError) {
-        print('Ignore ' + ex);
+    //print'Ignore ' + ex);
       } else {
         actual = ex + '';
         reportCompare(expect, actual, summary + ': new ' + type.name);

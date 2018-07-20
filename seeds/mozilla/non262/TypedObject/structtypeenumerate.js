@@ -29,7 +29,7 @@ function runTests() {
   assertEqArray(keys, ["from", "to"]);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

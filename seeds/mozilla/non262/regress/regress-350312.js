@@ -56,7 +56,7 @@ function test()
 
   try
   {
-    print('test 1');
+//print'test 1');
     f(2, 1);
   }
   catch(ex)
@@ -67,7 +67,7 @@ function test()
   actual = '';
   try
   {
-    print('test 2');
+//print'test 2');
     f(2, 0);
   }
   catch(ex)

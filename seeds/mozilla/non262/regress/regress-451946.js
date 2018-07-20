@@ -19,7 +19,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
  
-  print('This test is only valid with SELinux targetted policy with exeheap protection');
+//print('This test is only valid with SELinux targetted policy with exeheap protection');
 
 
   var i; for (i = 0; i  < 2000000; i++) {;}

@@ -12,26 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("exception handler configuration test")
+//print("exception handler configuration test")
 
 function foo() {
   try {
     undefined();
+    throw new Error('Test failed')
   } catch (e) {
   }
 
   try {
     xxx();
+    throw new Error('Test failed')
   } catch (e) {
   }
 
   try {
     throw 456;
+    throw new Error('Test failed')
   } catch (e) {
   }
 
   try {
     throw new RangeError("Bad range!");
+    throw new Error('Test failed')
   } catch (e) {
   }
 }

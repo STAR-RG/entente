@@ -66,4 +66,4 @@ assertEq(new Date("may 0 0").getTime(), new Date(NaN).getTime());
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

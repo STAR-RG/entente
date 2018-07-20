@@ -32,7 +32,7 @@ function test()
   }
   catch(ex)
   {
-    print(actual = ex + '');
+//printactual = ex + '');
   }
 
   reportCompare(expect, actual, summary);

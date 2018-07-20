@@ -24,7 +24,7 @@ function test()
   {
     dis(f);
   }
-  print(f);
+//print(f);
 
   reportCompare(expect, actual, summary);
 }

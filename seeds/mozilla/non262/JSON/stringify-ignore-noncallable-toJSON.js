@@ -25,4 +25,4 @@ assertEq(JSON.stringify(obj), '{"p":{"toJSON":null},"m":{"toJSON":{}}}');
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

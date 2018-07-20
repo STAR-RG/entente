@@ -211,7 +211,7 @@ function fromNonArrayTypedObjects() {
 }
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     fromOneDimArrayOfUint8ToUint32s();
     fromOneDimArrayOfUint32ToUint8s();
@@ -232,7 +232,7 @@ function runTests() {
 
     if (typeof reportCompare === "function")
         reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

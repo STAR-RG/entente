@@ -46,7 +46,7 @@ function runTests() {
 
   for (var i = 0; i < typesAndAlignments.length; i++) {
     var test = typesAndAlignments[i];
-    print("Type:", test.type.toSource(),
+//print"Type:", test.type.toSource(),
           "Size:", test.type.byteLength,
           "Alignment:", test.type.byteAlignment);
     assertEq(test.type.byteLength, test.size);
@@ -55,7 +55,7 @@ function runTests() {
 
   if (typeof reportCompare === "function")
     reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

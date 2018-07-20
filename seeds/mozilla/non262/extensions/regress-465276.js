@@ -24,7 +24,7 @@ function test()
   empty = [];
   out = [];
   for (var j=0;j<10;++j) { empty[42]; out.push((1 * (1)) | ""); }
-  print(actual = uneval(out));
+//print(actual = uneval(out));
 
 
   reportCompare(expect, actual, summary);

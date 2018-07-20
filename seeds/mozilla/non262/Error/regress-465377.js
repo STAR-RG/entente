@@ -68,7 +68,7 @@ function test()
       }
     }
 
-    print("OK");
+    // print("OK");
   }
   catch(ex)
   {

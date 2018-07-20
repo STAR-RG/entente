@@ -21,7 +21,7 @@ function test()
  
   expect = true;
   var result = [].splice.call(0);
-  print('[].splice.call(0) = ' + result);
+  // print('[].splice.call(0) = ' + result);
   actual = result instanceof Array && result.length == 0;
 
   reportCompare(expect, actual, summary);

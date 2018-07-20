@@ -44,4 +44,4 @@ assertEqArr("A<B>bold</B>and<CODE>coded</CODE>".split(/<(\/)?([^<>]+)>/),
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

@@ -48,7 +48,7 @@ function test()
           d=d[c[e]];
         }
         d[c[c.length-1]]=b;
-        print("hi");
+    //print"hi");
       }
 
       function T(a){return "hmm"}

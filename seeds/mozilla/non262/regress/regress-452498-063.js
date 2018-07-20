@@ -23,7 +23,7 @@ function test()
 
   function f(that) {
     for (ix in this)
-      print(ix);
+  //printix);
     for (let ix in that)
       ;
   }

@@ -26,10 +26,10 @@ function test()
     for (var e = 0; e < 2; ++e) {
     }
     var c = void 0;
-    print(actual += "---");
+//printactual += "---");
     for (var a = 0; a < 3; ++a) {
       c <<= c;
-      print(actual += "" + c);
+  //printactual += "" + c);
     }
   }
   reportCompare(expect, actual, summary + ': 1');
@@ -37,21 +37,21 @@ function test()
   expect = '00000000';
   actual = '';
 
-  print("");
+//print("");
   for (var i = 0; i < 2; ++i) {
     for (var e = 0; e < 2; ++e) {
     }
     var c = void 0;
     for (var a = 0; a < 3; ++a) {
       c <<= c;
-      print(actual += "" + c);
+  //printactual += "" + c);
     }
-    print(actual += c);
+//printactual += c);
   }
   reportCompare(expect, actual, summary + ': 2');
 
   actual = '';
-  print("");
+//print("");
 
   for (var i = 0; i < 2; ++i) {
     for (var e = 0; e < 2; ++e) {
@@ -60,9 +60,9 @@ function test()
     for (var a = 0; a < 3; ++a) {
       c <<= c;
       Math;
-      print(actual += "" + c);
+  //printactual += "" + c);
     }
-    print(actual += c);
+//printactual += c);
   }  
   reportCompare(expect, actual, summary + ': 3');
 }

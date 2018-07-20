@@ -12,13 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("break test");
+//print("break test");
 
-print ("var cat");
+//print ("var cat");
 var cat = 'cat';
 
-function test(x)
-{
+function test(x) {
   function f() {
     return 0;
   }
@@ -33,10 +32,13 @@ function test(x)
     return 2;
   }
 
-  print("function test");
+  //print("function test");
   var a = 3;
   var b = 5, c = a + b;
   global_var = f();
+  if (c !== 8) {
+    throw new Error("Test fail")
+  }
   return c;
 }
 

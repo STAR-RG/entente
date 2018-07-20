@@ -134,4 +134,4 @@ assertEq(error, "typeerror", "should throw on Properties == undefined");
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

@@ -20,4 +20,4 @@ var summary = 'array.sort compare-function gets incorrect this';
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

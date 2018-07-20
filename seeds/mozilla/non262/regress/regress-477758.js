@@ -32,7 +32,7 @@ function test()
     var patterns = [/foo/, /bar/];
     function getSource(r) { return r.source; }
     var patternStrings = map(patterns, getSource);
-    print(actual += [patterns[0].source, patternStrings[0]] + '');
+//printactual += [patterns[0].source, patternStrings[0]] + '');
   }
 
   expect = 'foo,foo';

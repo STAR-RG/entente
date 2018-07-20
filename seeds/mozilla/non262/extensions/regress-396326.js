@@ -22,7 +22,7 @@ function test()
  
   if (typeof dis == 'undefined')
   {
-    print('disassembly not supported. test skipped.');
+//print'disassembly not supported. test skipped.');
     reportCompare(expect, actual, summary);
   }
   else

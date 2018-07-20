@@ -34,7 +34,7 @@ function test()
   }
   else
   {
-    print('Test skipped due to lack of scatter threadsafe function');
+//print'Test skipped due to lack of scatter threadsafe function');
   }
 
 

@@ -12,24 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("backtrace-test");
+//print("backtrace-test");
 
 function f4() {
-	print("function f4");
+	//print("function f4");
+	if(cat !== 'cat'){
+		throw new Error("Test fail")
+	}
 }
 
-function foo()
-{
-  print("function foo");
+function foo() {
+  //print("function foo");
   var tmp = 4;
   f4();
 }
 
 var cat = 'cat';
 
-function test()
-{
-	print("function test");
+function test() {
+	//print("function test");
 	foo();
 }
 

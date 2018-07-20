@@ -79,4 +79,4 @@ assertEq(regex.test("012345678901234567890123456789012345678901\nBAZ"), false);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

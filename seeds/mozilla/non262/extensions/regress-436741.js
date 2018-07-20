@@ -21,7 +21,7 @@ function test()
  
   if (typeof window == 'undefined')
   {
-    print('This test is only meaningful in the browser.');
+//print'This test is only meaningful in the browser.');
   }
   else
   {

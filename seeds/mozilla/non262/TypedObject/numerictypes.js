@@ -181,7 +181,7 @@ function runTests()
     // wrong types
     check(() => uint16(3.14) == 3); // c-like casts in explicit conversion
 
-    print("done");
+//print"done");
 
     reportCompare(0, TestFailCount, "TypedObjects numeric type tests");
 }

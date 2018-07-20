@@ -75,4 +75,4 @@ function notAnError3()
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

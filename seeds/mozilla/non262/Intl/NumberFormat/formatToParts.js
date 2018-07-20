@@ -341,4 +341,4 @@ assertParts(deNoGroupingDecimalFormatter, 124816.8359375,
 if (typeof reportCompare === "function")
     reportCompare(0, 0, 'ok');
 
-print("Tests complete");
+//print("Tests complete");

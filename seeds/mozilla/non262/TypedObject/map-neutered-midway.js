@@ -31,13 +31,13 @@ function mapOneDimArrayOfUint8()
 
 function runTests()
 {
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   mapOneDimArrayOfUint8();
 
   if (typeof reportCompare === "function")
     reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

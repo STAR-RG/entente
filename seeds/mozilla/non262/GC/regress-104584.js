@@ -40,7 +40,7 @@ function G(obj)
 {
   if(!obj)
     obj = {};
-  print(obj);
+//print(obj);
   gc();
-  print(obj);
+//print(obj);
 }

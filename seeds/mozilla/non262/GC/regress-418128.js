@@ -22,9 +22,9 @@ function test()
   var obj = {};
   var id = { toString: function() { return ""+Math.pow(2, 0.1); } }
   obj[id] = { valueOf: unrooter };
-  print(obj[id]++);
+//print(obj[id]++);
   gc();
-  print(uneval(obj));
+//print(uneval(obj));
 
   function unrooter()
   {

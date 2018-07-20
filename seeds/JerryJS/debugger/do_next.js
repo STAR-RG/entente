@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("next test");
+//print("next test");
 
-print ("var cat");
+//print ("var cat");
 var cat = 'cat';
 
 function test()
@@ -25,4 +25,6 @@ function test()
   }
 }
 
-test();
+if (test() !== undefined) {
+	throw new Error("Test fail")
+}

@@ -25,7 +25,7 @@ function assertNotEquivalent(t1, t2) {
 }
 
 function runTests() {
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   // Create a line:
   var PixelType1 = new StructType({x: uint8, y: uint8});
@@ -53,7 +53,7 @@ function runTests() {
   assertNotEquivalent(PixelsType1, PixelsType3);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

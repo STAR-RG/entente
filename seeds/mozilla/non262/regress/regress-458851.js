@@ -20,7 +20,7 @@ function f() {
     i = parseInt(i);
     x++;
   }
-  print(actual = x);
+//print(actual = x);
 }
 
 expect = 16;

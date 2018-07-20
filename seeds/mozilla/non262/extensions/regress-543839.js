@@ -24,7 +24,7 @@ function test()
 
 if (typeof evalcx == 'undefined')
 {
-    print('Skipping. This test requires evalcx.');
+//print'Skipping. This test requires evalcx.');
     actual = expect;
 } else {
     test();

@@ -19,13 +19,13 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
 
-  print('This test case is expected to throw an uncaught SyntaxError');
+//print('This test case is expected to throw an uncaught SyntaxError');
 
   try
   {
     var i = 1;
     i \u002b= 1; 
-    print(i);
+//printi);
   }
   catch(ex)
   {

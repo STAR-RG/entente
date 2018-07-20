@@ -61,5 +61,5 @@ function test()
 
   reportCompare(expect, actual, summary);
 
-  print('Done');
+  // print('Done');
 }

@@ -5,7 +5,7 @@ var summary = "";
 var {StructType, uint32, Object, Any, storage, objectType} = TypedObject;
 
 function main() { // once a C programmer, always a C programmer.
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   var Uints = new StructType({f: uint32, g: uint32});
   var uints = new Uints({f: 0, g: 1});
@@ -28,7 +28,7 @@ function main() { // once a C programmer, always a C programmer.
   assertEq(storage(mixed.g), null);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 main();

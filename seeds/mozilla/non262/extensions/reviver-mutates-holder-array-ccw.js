@@ -36,4 +36,4 @@ assertEq(arr[1].d, 42);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

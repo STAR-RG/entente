@@ -25,4 +25,4 @@ assertEq(arr.length, Math.pow(2, 21) + 1);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

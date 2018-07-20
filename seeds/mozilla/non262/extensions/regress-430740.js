@@ -20,7 +20,7 @@ function test()
   printStatus (summary);
  
   function doevil() {
-    print('evildone');
+//print'evildone');
     return 'evildone';
   }
 

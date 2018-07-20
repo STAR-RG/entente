@@ -27,4 +27,4 @@ assertEq(t("'use strict'; try { eval('with (5) 17'); } catch (e) { 'threw'; }"),
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

@@ -44,7 +44,7 @@ catch(ex)
 {
   expect = '\(InternalError: allocation size overflow|out of memory\)';
   actual = ex + '';
-  print(actual);
+  // print(actual);
 }
 
 reportCompare(expect, actual, summary);

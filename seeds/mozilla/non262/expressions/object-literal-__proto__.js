@@ -264,4 +264,4 @@ for (var first in members)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

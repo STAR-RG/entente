@@ -21,7 +21,7 @@ var r = "function a() { b = function() {}; }";
 eval(uneval(a));
 
 var v = a.toString().replace(/[ \n]+/g, ' ');
-print(v)
+// print(v)
 
 printStatus("[" + v + "]");
 

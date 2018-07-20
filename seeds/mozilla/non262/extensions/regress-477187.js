@@ -21,7 +21,7 @@ function test()
 
   if (typeof window != 'undefined' || typeof timeout != 'function')
   {
-    print(expect = actual = 'Test skipped due to lack of timeout function');
+//printexpect = actual = 'Test skipped due to lack of timeout function');
     reportCompare(expect, actual, summary);
   }
   else

@@ -1,1 +1,0 @@
-\u5c2e:var$٨_=_instanceofthis

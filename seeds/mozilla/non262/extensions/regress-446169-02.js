@@ -37,7 +37,7 @@ function test()
   }
   else
   {
-    print('Test skipped. Requires thread-safe build with scatter function.');
+//print'Test skipped. Requires thread-safe build with scatter function.');
   }
   reportCompare(expect, actual, summary);
 }

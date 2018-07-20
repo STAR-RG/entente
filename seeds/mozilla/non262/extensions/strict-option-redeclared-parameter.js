@@ -27,4 +27,4 @@ eval("function a(x, x, x, x) { }");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

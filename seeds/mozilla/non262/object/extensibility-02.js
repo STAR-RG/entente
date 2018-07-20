@@ -39,4 +39,4 @@ for (var i = 0, sz = objs.length; i < sz; i++)
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

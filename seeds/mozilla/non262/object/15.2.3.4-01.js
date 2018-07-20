@@ -27,4 +27,4 @@ assertEq(names.indexOf("stringify") >= 0, true);
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

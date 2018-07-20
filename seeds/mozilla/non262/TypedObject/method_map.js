@@ -117,7 +117,7 @@ function mapTwoDimArrayOfStructs() {
 }
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     mapOneDimArrayOfUint8();
     mapOneDimArrayOfUint32();
@@ -130,7 +130,7 @@ function runTests() {
 
     if (typeof reportCompare === "function")
         reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

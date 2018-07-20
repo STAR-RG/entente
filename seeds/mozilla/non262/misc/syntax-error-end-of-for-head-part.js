@@ -48,4 +48,4 @@ checkSyntaxError("for(w; w > 3; 5foo");
 
 reportCompare(true, true);
 
-print("Tests complete!");
+//print("Tests complete!");

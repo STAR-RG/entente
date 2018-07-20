@@ -117,14 +117,14 @@ test();
 reportCompare(0, 0, 'ok');
 
 if (os.getenv("JS_RECORD_RESULTS") !== undefined) {
-  print("var captured = [];");
+  // print("var captured = [];");
   for (var i in captured) {
     var s = "captured[" + i + "] = ";
     if (captured[i] instanceof Error) {
-      print(s + captured[i].toSource() + ";");
+      // print(s + captured[i].toSource() + ";");
     } else {
       data = captured[i].clonebuffer.split('').map(c => c.charCodeAt(0));
-      print(s + "serialize(0); captured[" + i + "].clonebuffer = String.fromCharCode(" + data.join(", ") + ");");
+      // print(s + "serialize(0); captured[" + i + "].clonebuffer = String.fromCharCode(" + data.join(", ") + ");");
     }
   }
 }

@@ -23,7 +23,7 @@ function test()
 
   if (typeof it == 'undefined')
   {
-    print(expect = actual = 'it not defined, test skipped');
+//printexpect = actual = 'it not defined, test skipped');
   }
   else
   {

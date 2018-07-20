@@ -38,4 +38,4 @@ for (var i = 0, len = ta.length; i < len; i++)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

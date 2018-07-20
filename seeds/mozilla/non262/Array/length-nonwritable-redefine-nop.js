@@ -67,4 +67,4 @@ Object.defineProperty(arr, "length", { writable: false, configurable: false, val
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

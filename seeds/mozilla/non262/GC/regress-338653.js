@@ -13,7 +13,7 @@ var expect = 'No Crash';
 
 printBugNumber(BUGNUMBER);
 printStatus (summary);
-print('This test should never fail explicitly. ' +
+//print('This test should never fail explicitly. ' +
       'You must view the memory usage during the test. ' +
       'This test fails if the memory usage repeatedly spikes ' +
       'by several hundred megabytes.');

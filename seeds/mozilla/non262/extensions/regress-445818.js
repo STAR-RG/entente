@@ -20,7 +20,7 @@ printStatus (summary);
  
 if (typeof scatter == 'undefined')
 {
-  print(expect = actual = 'Test skipped. scatter not defined');
+//print(expect = actual = 'Test skipped. scatter not defined');
 }
 else
 {

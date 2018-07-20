@@ -31,7 +31,7 @@ function test()
 
   if (typeof Script == 'undefined')
   {
-    print('Test skipped. Script is not defined');
+//print'Test skipped. Script is not defined');
     reportCompare("Script not defined, Test skipped.",
                   "Script not defined, Test skipped.",
                   summary);

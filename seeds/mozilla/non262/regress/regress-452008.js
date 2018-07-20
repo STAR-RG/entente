@@ -138,7 +138,7 @@ function test()
     if (passed)
       passed = expected[i] == x[i];
   }
-  print(passed);
+//print(passed);
 
 
   expect = true;

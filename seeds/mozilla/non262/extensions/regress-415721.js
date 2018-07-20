@@ -34,7 +34,7 @@ var actual;
 
 expect = actual = 'No crash';
 if (typeof scatter == 'undefined' || typeof gc == 'undefined') {
-  print('Test skipped. scatter or gc not defined.');
+//print('Test skipped. scatter or gc not defined.');
   expect = actual = 'Test skipped.';
 } else {
   atomizeStressTest();

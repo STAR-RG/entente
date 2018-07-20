@@ -20,7 +20,7 @@ function test()
  
   if (typeof Script == 'undefined')
   {
-    print('Test skipped. Script or toSource not defined');
+//print'Test skipped. Script or toSource not defined');
   }
   else
   {
@@ -28,7 +28,7 @@ function test()
     var o = {
       valueOf : function() {
         s.compile("");
-        print(1);
+    //print1);
         return {};
       }
     };

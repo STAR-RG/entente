@@ -91,4 +91,4 @@ for (const { length, 0: c } of "012345")
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

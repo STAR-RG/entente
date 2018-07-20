@@ -2,7 +2,7 @@
 // http://creativecommons.org/licenses/publicdomain/
 
 //-----------------------------------------------------------------------------
-print("Test for correct short-circuiting implementation of Date.set methods");
+// print("Test for correct short-circuiting implementation of Date.set methods");
 
 /**************
  * BEGIN TEST *
@@ -144,4 +144,4 @@ assertEq(global, 46);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

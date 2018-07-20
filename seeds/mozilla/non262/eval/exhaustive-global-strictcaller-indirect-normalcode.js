@@ -170,4 +170,4 @@ assertEq(resultsY.local5, 71);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete!");
+//print("Tests complete!");

@@ -28,10 +28,10 @@ function test()
       if (e != null)
         throw e;
       actual += 'CATCH,';
-      print("CATCH");
+  //print"CATCH");
     } finally {
       actual += 'FINALLY';
-      print("FINALLY");
+  //print"FINALLY");
     }
   }
 

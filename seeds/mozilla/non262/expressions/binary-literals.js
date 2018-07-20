@@ -112,4 +112,4 @@ assertEq(strict(), 128 + 64 + 16 + 4 + 1);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

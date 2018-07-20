@@ -19,7 +19,7 @@ var protoSetter = protoDesc.set;
 
 function testProxy(target, initialProto)
 {
-  print("Now testing behavior for new Proxy(" + ("" + target) + ", {})");
+//print("Now testing behavior for new Proxy(" + ("" + target) + ", {})");
 
   var pobj = new Proxy(target, {});
 
@@ -56,4 +56,4 @@ testProxy(callForCallOnly, Function.prototype);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

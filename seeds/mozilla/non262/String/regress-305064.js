@@ -54,13 +54,13 @@ for (var j = 0; j < trimMethods.length; ++j)
     continue;
   }
 
-  print('Test empty string.');
+//print('Test empty string.');
   str      = '';
   expected = '';
   actual   = str[method]();
   reportCompare(expected, actual, '"' + toPrinted(str) + '".' + method + '()');                        
 
-  print('Test string with no whitespace.');
+//print('Test string with no whitespace.');
   str      = 'a';
   expected = 'a';
   actual   = str[method]();
@@ -72,20 +72,20 @@ for (var j = 0; j < trimMethods.length; ++j)
     var t = whitespace[i].t;
     v = v + v + v;
 
-    print('=======================================');
-    print('Test ' + method + ' with with only whitespace. : ' + t);
+//print'=======================================');
+//print'Test ' + method + ' with with only whitespace. : ' + t);
     str      = v;
     expected = '';
     actual   = str[method]();
     reportCompare(expected, actual, t + ':' + '"' + toPrinted(str) + '".' + method + '()');
 
-    print('Test ' + method + ' with with no leading or trailing whitespace. : ' + t);
+//print'Test ' + method + ' with with no leading or trailing whitespace. : ' + t);
     str      = 'a' + v + 'b';
     expected = str;
     actual   = str[method]();
     reportCompare(expected, actual, t + ':' + '"' + toPrinted(str) + '".' + method + '()');
 
-    print('Test ' + method + ' with with leading whitespace. : ' + t);
+//print'Test ' + method + ' with with leading whitespace. : ' + t);
     str = v + 'a';
     switch(method)
     {
@@ -102,7 +102,7 @@ for (var j = 0; j < trimMethods.length; ++j)
     actual   = str[method]();
     reportCompare(expected, actual, t + ':' + '"' + toPrinted(str) + '".' + method + '()');
       
-    print('Test ' + method + ' with with trailing whitespace. : ' + t);
+//print'Test ' + method + ' with with trailing whitespace. : ' + t);
     str = 'a' + v;
     switch(method)
     {
@@ -119,7 +119,7 @@ for (var j = 0; j < trimMethods.length; ++j)
     actual = str[method]();
     reportCompare(expected, actual, t + ':' + '"' + toPrinted(str) + '".' + method + '()');
 
-    print('Test ' + method + ' with with leading and trailing whitepace.');
+//print'Test ' + method + ' with with leading and trailing whitepace.');
     str = v + 'a' + v;
     switch(method)
     {

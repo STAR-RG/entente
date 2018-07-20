@@ -20,7 +20,7 @@ var tests = {
   0: function first(myAn)
   {
     /* This print statement is needed to reliably trigger the bug */
-    print("Hello, World!");
+//print"Hello, World!");
   },
   length: 1
 };
@@ -41,7 +41,7 @@ function runAllTests()
 
 if (typeof scatter == 'undefined')
 {
-  print(expect = actual = 'Test skipped. Requires scatter.');
+//print(expect = actual = 'Test skipped. Requires scatter.');
 }
 else
 {

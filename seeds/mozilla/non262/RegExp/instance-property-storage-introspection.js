@@ -125,4 +125,4 @@ while (Math.random() > 17); // fake loop to discourage RegExp object caching
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

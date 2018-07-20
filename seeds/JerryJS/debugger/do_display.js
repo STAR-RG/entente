@@ -12,12 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function a() { print("hi"); }
-function b() { print("welcome"); }
-function c() { print("hello"); }
-function d() { print("goodbye"); }
+function a() { //print("hi"); 
+}
+function b() { //print("welcome"); 
+}
+function c() { //print("hello"); 
+}
+function d() { //print("goodbye"); 
+}
 
-a();
-b();
-c();
-d();
+if(a() !== undefined) {
+	throw new Error("Test fail")
+}
+if(b() !== undefined) {
+	throw new Error("Test fail")
+}
+if(c() !== undefined) {
+	throw new Error("Test fail")
+}
+if(d() !== undefined) {
+	throw new Error("Test fail")
+}

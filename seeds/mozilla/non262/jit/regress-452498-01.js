@@ -67,6 +67,6 @@ var timejit = f(true);
 expect = true;
 actual = timejit < timenonjit;
 
-print('time nonjit: ' + timenonjit + ', time    jit: ' + timejit);
+// print('time nonjit: ' + timenonjit + ', time    jit: ' + timejit);
 
 reportCompare(expect, actual, summary);

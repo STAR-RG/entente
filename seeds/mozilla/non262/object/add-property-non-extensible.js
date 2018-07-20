@@ -115,4 +115,4 @@ assertEq(Object.getOwnPropertyDescriptor(o16, "a"), undefined);
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

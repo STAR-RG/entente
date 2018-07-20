@@ -19,7 +19,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
  
-  print('This test requires GC_MARK_DEBUG');
+//print('This test requires GC_MARK_DEBUG');
 
   var o = {}; o.__defineGetter__(1, Math.sin); gc()
 

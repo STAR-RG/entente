@@ -100,4 +100,4 @@ assertEq(res.valueOf(), "@@@ - constructing");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

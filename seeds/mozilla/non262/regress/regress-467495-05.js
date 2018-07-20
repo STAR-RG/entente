@@ -22,7 +22,7 @@ function test()
   expect = '1';
 
   function g(x) { if (1) function x() {} return x; }
-  print(actual = g(1) + '');
+//print(actual = g(1) + '');
 
   reportCompare(expect, actual, summary);
 }

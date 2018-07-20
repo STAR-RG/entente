@@ -27,7 +27,7 @@ function test()
   b = {__proto__: a};
   c = {__proto__: b};
   for (i = 0; i < 2; i++) {
-    print(actual += c.x);
+//printactual += c.x);
     b.x = 2;
   }
 

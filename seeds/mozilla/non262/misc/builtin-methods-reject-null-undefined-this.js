@@ -150,4 +150,4 @@ for (var className in ClassToMethodMap)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

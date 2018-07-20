@@ -1,7 +1,7 @@
 function createProxy(proxyTarget) {
   var {proxy, revoke} = Proxy.revocable(proxyTarget, new Proxy({}, {
     get(target, propertyKey, receiver) {
-      print("trap get:", propertyKey);
+  //print"trap get:", propertyKey);
       revoke();
     }
   }));

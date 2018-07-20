@@ -2,7 +2,7 @@
 // http://creativecommons.org/licenses/publicdomain/
 
 //-----------------------------------------------------------------------------
-print("(eval)(...) is a direct eval, (1, eval)() isn't, etc.");
+// print("(eval)(...) is a direct eval, (1, eval)() isn't, etc.");
 
 /**************
  * BEGIN TEST *
@@ -65,4 +65,4 @@ assertEq(groupAndNaNTernary(), "global");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

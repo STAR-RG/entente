@@ -27,7 +27,7 @@ function test()
   }
   else
   {
-    print(expect = actual = 'Test requires XPCSafeJSObjectWrapper.');
+//printexpect = actual = 'Test requires XPCSafeJSObjectWrapper.');
     reportCompare(expect, actual, summary);
   }
 }
@@ -41,7 +41,7 @@ function boom()
     g.__defineGetter__("f", g.toSource);
     a[0] = g;
     a[1] = XPCSafeJSObjectWrapper(a);
-    print("" + a);
+//print"" + a);
   }
   catch(ex)
   {

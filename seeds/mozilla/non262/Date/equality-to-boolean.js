@@ -2,7 +2,7 @@
 // http://creativecommons.org/licenses/publicdomain/
 
 //-----------------------------------------------------------------------------
-print("Test for correct implementation of |Date == boolean| and vice versa");
+// print("Test for correct implementation of |Date == boolean| and vice versa");
 
 /**************
  * BEGIN TEST *
@@ -36,4 +36,4 @@ assertEq(false == new Date, false);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

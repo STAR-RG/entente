@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("delete tests");
+//print("delete tests");
 
 var x = 10;
 var y = 10;
@@ -20,9 +20,15 @@ var pi = 3.14;
 
 function delete_test(x,y) {
 	var sum = x + y;
+	if (sum !== 20) {
+		throw new Error("Test fail")
+	}
 	return
 }
 
-delete_test(x, y);
+var output = delete_test(x, y);
+if (output !== undefined) {
+	throw new Error("Test fail")
+} 
 
 var z = 0;

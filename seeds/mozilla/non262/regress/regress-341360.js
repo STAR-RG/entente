@@ -17,14 +17,14 @@ function xxx()
 {
   if(t != null)
   {
-    print('Clearing interval...');
+//print'Clearing interval...');
     window.clearInterval(t);
     t = null;
     setTimeout('yyy()', 2000);
    
   }
   else {
-    print('Clearing interval failed...');
+//print'Clearing interval failed...');
     actual = "Broken";
     gDelayTestDriverEnd = false;
     reportCompare(expect, actual, summary);
@@ -34,13 +34,13 @@ function xxx()
 
 function yyy()
 {
-  print('Checking result...');
+//print('Checking result...');
   actual = 'Ok';
   gDelayTestDriverEnd = false;
   reportCompare(expect, actual, summary);
   jsTestDriverEnd();
 }
 
-print('Start...');
+// print('Start...');
 gDelayTestDriverEnd = true;
 var t = window.setInterval(xxx, 1000);

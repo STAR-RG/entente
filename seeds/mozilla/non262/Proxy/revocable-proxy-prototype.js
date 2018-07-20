@@ -37,4 +37,4 @@ checkFunctionAppliedToRevokedProxy(proxy => Object.setPrototypeOf(proxy, null));
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

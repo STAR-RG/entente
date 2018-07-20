@@ -65,7 +65,7 @@ var expectedObserved =
    "index 6 get",
    "index 2 get"
    /* nothing for 3/4 */];
-print(observed);
+// print(observed);
 // Do this before the assertions below futz even more with |observed|.
 assertEq(observed.length, expectedObserved.length);
 for (var i = 0; i < expectedObserved.length; i++)
@@ -85,4 +85,4 @@ assertEq(arr[7], "index 7 get"); // no deletion, setter doesn't overwrite
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

@@ -17,7 +17,7 @@ printStatus (summary);
 
 if (typeof window == 'undefined')
 {
-  print(expect = actual = 'Test skipped');
+//print(expect = actual = 'Test skipped');
 }
 else
 {

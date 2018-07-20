@@ -22,13 +22,13 @@ function test()
   var s;
 
   // see bug 416933
-  print('see bug 416933 for changed behavior on Gecko 1.9');
+//print('see bug 416933 for changed behavior on Gecko 1.9');
 
   try
   {
     s = '/[Q-b]/.exec("")';
     expect = 'No Error';
-    print(s + ' expect ' + expect);
+//prints + ' expect ' + expect);
     eval(s);
     actual = 'No Error';
   }
@@ -42,7 +42,7 @@ function test()
   {
     s ='/[Q-b]/i.exec("")';
     expect = 'No Error';
-    print(s + ' expect ' + expect);
+//prints + ' expect ' + expect);
     eval(s);
     actual = 'No Error';
   }
@@ -56,7 +56,7 @@ function test()
   {
     s = '/[q-b]/.exec("")';
     expect = 'SyntaxError: invalid range in character class';
-    print(s + ' expect ' + expect);
+//prints + ' expect ' + expect);
     eval(s);
     actual = 'No Error';
   }
@@ -70,7 +70,7 @@ function test()
   {
     s ='/[q-b]/i.exec("")';
     expect = 'SyntaxError: invalid range in character class';
-    print(s + ' expect ' + expect);
+//prints + ' expect ' + expect);
     eval(s);
     actual = 'No Error';
   }

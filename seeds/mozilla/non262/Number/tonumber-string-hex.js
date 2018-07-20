@@ -35,4 +35,4 @@ assertEq(+"- Infinity", NaN);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

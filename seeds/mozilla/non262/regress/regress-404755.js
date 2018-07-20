@@ -39,7 +39,7 @@ function test()
   var time2 = Date.now();
   gc();
   time2 = Date.now() - time2;
-  print(time+" "+time2);
+//print(time+" "+time2);
   if (time > 2 && time > time2 * 5)
     throw "A possible leak is observed";
 

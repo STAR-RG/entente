@@ -172,4 +172,4 @@ assertEq(x["JSON Test Pattern pass3"]["In this test"], "It is an object.");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

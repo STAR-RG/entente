@@ -9,7 +9,7 @@ var summary = 'ES4 Regular Expression /y flag';
 var actual = '';
 var expect = '';
 
-print('See http://developer.mozilla.org/es4/proposals/extend_regexps.html#y_flag');
+// print('See http://developer.mozilla.org/es4/proposals/extend_regexps.html#y_flag');
 
 //-----------------------------------------------------------------------------
 test();
@@ -23,7 +23,7 @@ function test()
   var c;
   var s = '123456';
 
-  print('Test global flag.');
+//print('Test global flag.');
 
   var g = /(1)/g;
   expect = 'captures: 1,1; RegExp.leftContext: ""; RegExp.rightContext: "234561"';
@@ -39,7 +39,7 @@ function test()
   reportCompare(expect, actual, summary + ' - /(1)/g.exec("1234561") second call');
   var y = /(1)/y;
  
-  print('Test sticky flag.');
+//print('Test sticky flag.');
 
   /*
    * calls to reportCompare invoke regular expression matches which interfere

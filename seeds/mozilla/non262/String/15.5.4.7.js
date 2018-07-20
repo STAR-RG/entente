@@ -17,4 +17,4 @@ assertEq("123".indexOf("", 12345), 3);
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

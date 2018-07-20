@@ -45,7 +45,7 @@ function test()
     var x = {};
   }
  
-  print('done');
+//print('done');
 
   setTimeout('checkTest()', 10000);
 }

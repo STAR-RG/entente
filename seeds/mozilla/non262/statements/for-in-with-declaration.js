@@ -28,4 +28,4 @@ assertThrowsInstanceOf(() => Function("for (let x = 2, y = 3 in {}; ; ) break;")
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

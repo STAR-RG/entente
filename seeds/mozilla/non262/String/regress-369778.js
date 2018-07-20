@@ -17,8 +17,8 @@ var actual;
 
 'x'.replace(/x(.)?/g, function(m, group) { actual = group; })
 
-print("expected: " + expected)
-print("actual: " + actual)
+//print("expected: " + expected)
+//print("actual: " + actual)
 
 assertEq(expected, actual)
 

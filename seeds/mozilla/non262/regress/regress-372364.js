@@ -19,7 +19,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
 
-  print('See Also bug 365891');
+//print('See Also bug 365891');
   expect = /TypeError: a\(.+\) (has no properties|is null)/;
   try
   {

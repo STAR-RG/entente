@@ -28,7 +28,7 @@ function test()
   {
     var x = {toString: function() {
         actual = 'toString called';
-        print(actual);
+    //printactual);
       }
     };
     var f = function() { var j = x; j + ""; }

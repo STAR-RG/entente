@@ -42,4 +42,4 @@ assertEq(ErrorToString(fn3), "fn3");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete!");
+//print("Tests complete!");

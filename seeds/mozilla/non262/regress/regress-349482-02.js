@@ -20,7 +20,7 @@ function test()
   printStatus (summary);
  
   var f = function() { with({})     { try{}catch(e){} } }
-  print(f.toString());
+//print(f.toString());
 
   reportCompare(expect, actual, summary);
 }

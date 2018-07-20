@@ -25,7 +25,7 @@ function test()
   {
     if (typeof Script == 'undefined')
     {
-      print('Test skipped. Script not defined.');
+  //print'Test skipped. Script not defined.');
     }
     else
     {

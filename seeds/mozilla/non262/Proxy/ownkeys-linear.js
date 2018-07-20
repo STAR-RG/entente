@@ -67,4 +67,4 @@ assertEq(Object.getOwnPropertyNames(p).length, HALF_COUNT * 2);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

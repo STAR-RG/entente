@@ -45,4 +45,4 @@ for (var { length: x, [x - 1]: y } in "foo")
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

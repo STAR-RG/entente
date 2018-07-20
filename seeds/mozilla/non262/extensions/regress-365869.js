@@ -19,7 +19,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
 
-  print('test crash from bug 371292 Comment 9');
+//print('test crash from bug 371292 Comment 9');
 
   try
   {

@@ -5,7 +5,7 @@ var summary = "";
 var {StructType, uint32, Object, Any, storage, objectType} = TypedObject;
 
 function main() { // once a C programmer, always a C programmer.
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   var Uints = new StructType({f: uint32, g: uint32});
 
@@ -46,7 +46,7 @@ function main() { // once a C programmer, always a C programmer.
   assertThrows(() => new Uints(anArray.buffer, 4294967292)); // overflows int
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 main();

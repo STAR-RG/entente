@@ -86,4 +86,4 @@ assertEq(JSON.parse(str,
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

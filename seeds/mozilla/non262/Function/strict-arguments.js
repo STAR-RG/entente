@@ -450,4 +450,4 @@ assertEq(arraysEqual(strictNestedAssignShadowFunctionName(obj), [obj]), true);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

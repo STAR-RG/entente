@@ -36,7 +36,7 @@ function test()
     stop = Date.now();
   }
 
-  print('limit=' + limit + ', resolution=' + resolution + ', time=' + (stop - start));
+//print('limit=' + limit + ', resolution=' + resolution + ', time=' + (stop - start));
 
   expect = true;
   actual = (stop - start <= resolution);

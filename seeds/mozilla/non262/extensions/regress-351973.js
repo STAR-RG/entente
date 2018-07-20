@@ -42,7 +42,7 @@ function test()
     return o.toSource();
   }
 
-  print(run_test());
+//print(run_test());
 
   reportCompare(expect, actual, summary);
 }

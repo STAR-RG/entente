@@ -21,7 +21,7 @@ function test()
 
   if (typeof shapeOf != 'function')
   {
-    print(expect = actual = 'Test skipped: requires shell');
+//printexpect = actual = 'Test skipped: requires shell');
   }
   else
   {

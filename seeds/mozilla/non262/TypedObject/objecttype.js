@@ -30,7 +30,7 @@ function runTests() {
   assertEq(T.objectType(undefined), T.Any);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

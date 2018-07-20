@@ -33,7 +33,7 @@ function test()
                  "",
                  (void 0)])
              out.push(e);
-  print(actual = uneval(out));
+//print(actual = uneval(out));
 
   reportCompare(expect, actual, summary);
 }

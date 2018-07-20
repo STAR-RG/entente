@@ -15,7 +15,7 @@ var float32 = TypedObject.float32;
 var float64 = TypedObject.float64;
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     var S = new StructType({x: int32, y: uint8, z: float64});
     assertEq(S.__proto__, StructType.prototype);
@@ -41,7 +41,7 @@ function runTests() {
 
     if (typeof reportCompare === "function")
         reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

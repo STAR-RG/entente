@@ -41,7 +41,7 @@ var str = "".concat("++(a[", repeat_str("++f().x + ", (N - 1)), "++f().x])");
 // because in Rhino, eval always uses interpreted mode.
 if (typeof Script == 'undefined')
 {
-  print('Test skipped. Script not defined.');
+  // print('Test skipped. Script not defined.');
 }
 else
 {
@@ -60,7 +60,7 @@ status = inSection(2);
 // which should give (a[0])--
 if (typeof Script == 'undefined')
 {
-  print('Test skipped. Script not defined.');
+  // print('Test skipped. Script not defined.');
 }
 else
 {
@@ -79,7 +79,7 @@ status = inSection(3);
 // build string of the form [[1], [1], ..., [1]]
 if (typeof Script == 'undefined')
 {
-  print('Test skipped. Script not defined.');
+  // print('Test skipped. Script not defined.');
 }
 else
 {
@@ -98,7 +98,7 @@ status = inSection(4);
 // build string of the form ({1:{a:1}, 2:{a:1}, ... N:{a:1}})
 if (typeof Script == 'undefined')
 {
-  print('Test skipped. Script not defined.');
+  // print('Test skipped. Script not defined.');
 }
 else
 {

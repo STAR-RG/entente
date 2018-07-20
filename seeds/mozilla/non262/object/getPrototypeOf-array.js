@@ -29,4 +29,4 @@ assertEq(Object.getPrototypeOf(objWithArrGrandPrototype), objWithArrPrototype);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

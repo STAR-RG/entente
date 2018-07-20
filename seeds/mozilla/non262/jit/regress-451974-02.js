@@ -51,7 +51,7 @@ function test()
   var timenonjit = loop();
   var timejit = loop();
 
-  print('time: nonjit = ' + timenonjit + ', jit = ' + timejit);
+//print('time: nonjit = ' + timenonjit + ', jit = ' + timejit);
 
   expect = true;
   actual = timejit < timenonjit/2;

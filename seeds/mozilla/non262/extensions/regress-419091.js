@@ -22,7 +22,7 @@ function test()
 
   if (typeof scatter == 'undefined')
   {
-    print(expect = actual = 'Test skipped. Requires scatter.');
+//printexpect = actual = 'Test skipped. Requires scatter.');
   }
   else
   {

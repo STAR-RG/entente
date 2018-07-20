@@ -11,7 +11,7 @@ function runTest() {
   var theOneISawWasJustBlack = new Rainbow([]);
   if (typeof reportCompare === "function")
     reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTest();

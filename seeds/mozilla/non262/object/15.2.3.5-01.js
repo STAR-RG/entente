@@ -57,4 +57,4 @@ assertEq(actual, "overridden");
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

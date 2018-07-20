@@ -39,7 +39,7 @@ function test()
     sandbox.createArray = createArray;
     var p1 = Object.getPrototypeOf(createArray());
     var p2 = Object.getPrototypeOf(evalcx("createArray()", sandbox));
-    print(actual = (p1 === p2));
+//printactual = (p1 === p2));
   }
 
   reportCompare(expect, actual, summary);

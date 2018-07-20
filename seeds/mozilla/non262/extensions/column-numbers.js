@@ -5,6 +5,6 @@ try {
 }
 catch(ex) {
     actual = ex.stack;
-    print('Caught exception ' + ex.stack);
+    // print('Caught exception ' + ex.stack);
 }
 reportMatch(expected, actual, 'column number present');

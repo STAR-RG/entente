@@ -138,4 +138,4 @@ Function("var a, b; ({ a: (a) = 5, b} = { a: 1, b: 2 });")();
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

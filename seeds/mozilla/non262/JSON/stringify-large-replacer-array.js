@@ -23,4 +23,4 @@ assertEq(JSON.stringify({ "foopy": "FAIL", "4093": 17 }, replacer), '{"4093":17}
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

@@ -36,6 +36,6 @@ function test()
 
   var stop = new Date();
 
-  print('Elapsed time: ' + Math.floor((stop - start)/1000) + ' seconds');
+//print('Elapsed time: ' + Math.floor((stop - start)/1000) + ' seconds');
 }
 

@@ -9,7 +9,7 @@ var summary =
 
 //print(BUGNUMBER + ": " + summary);
 
-print("Note: You must run this test under valgrind to be certain it passes");
+// print("Note: You must run this test under valgrind to be certain it passes");
 
 /**************
  * BEGIN TEST *
@@ -31,4 +31,4 @@ if (typeof reportCompare === "function")
 if (typeof gczeal === "function")
   gczeal(0);
 
-print("Tests complete");
+//print("Tests complete");

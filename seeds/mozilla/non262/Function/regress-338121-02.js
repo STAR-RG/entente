@@ -31,6 +31,6 @@ var fu=new Function(
 //print("fu="+fu);
 var fuout = 'fu=' + fu;
 
-print('Done');
+// print('Done');
 
 reportCompare(expect, actual, summary);

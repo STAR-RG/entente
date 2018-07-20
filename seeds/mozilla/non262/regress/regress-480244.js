@@ -41,7 +41,7 @@ function test()
   }
 
   outer();
-  print("g=" + g + " h=" + h);
+//print("g=" + g + " h=" + h);
 
 
   reportCompare(expect, actual, summary);

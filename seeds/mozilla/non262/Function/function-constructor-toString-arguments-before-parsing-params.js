@@ -20,4 +20,4 @@ assertThrowsValue(() => Function("@", { toString() { throw 42; } }), 42);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

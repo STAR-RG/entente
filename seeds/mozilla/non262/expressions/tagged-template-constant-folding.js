@@ -25,4 +25,4 @@ assertEq((true ? obj.f : null)``, "global");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

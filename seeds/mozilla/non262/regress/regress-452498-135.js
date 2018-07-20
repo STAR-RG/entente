@@ -27,7 +27,7 @@ function test()
   for (let i = 0; i < 9; ++i) {
     let m = i;
     if (i % 3 == 1) {
-      print('' + (function() { return m; })());
+  //print'' + (function() { return m; })());
     }
   }
 

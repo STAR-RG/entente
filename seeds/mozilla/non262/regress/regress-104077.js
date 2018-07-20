@@ -77,7 +77,7 @@ function tryThis()
     }
     finally
     {
-      print("In finally case of tryThis() function");
+  //print"In finally case of tryThis() function");
     }
   }
   return i;
@@ -98,7 +98,7 @@ function myTest(x)
   with (obj)
   {
     msg = (x != null) ? "NO" : "YES";
-    print("Is the provided argument to myTest() null? : " + msg);
+//print"Is the provided argument to myTest() null? : " + msg);
 
     try
     {
@@ -106,7 +106,7 @@ function myTest(x)
     }
     catch(e)
     {
-      print("Caught thrown exception = " + e);
+  //print"Caught thrown exception = " + e);
     }
   }
 
@@ -140,7 +140,7 @@ function addValues_2(obj)
           }
           catch(e)
           {
-            print('Caught an exception in addValues_2() function: ' + e);
+        //print'Caught an exception in addValues_2() function: ' + e);
           }
         }
       }
@@ -314,17 +314,17 @@ function addValues_5(obj)
       try
       {
         sum += 1;
-        print("In finally block of addValues_5() function: sum = " + sum);
+    //print"In finally block of addValues_5() function: sum = " + sum);
       }
       catch (e)
       {
         sum += 1;
-        print("In finally catch block of addValues_5() function: sum = " + sum + ", e = " + e);
+    //print"In finally catch block of addValues_5() function: sum = " + sum + ", e = " + e);
       }
       finally
       {
         sum += 1;
-        print("In finally finally block of addValues_5() function: sum = " + sum);
+    //print"In finally finally block of addValues_5() function: sum = " + sum);
         return sum;
       }
     }
@@ -360,7 +360,7 @@ function testObj(obj)
   }
   finally
   {
-    print("in finally block of testObj() function");
+//print"in finally block of testObj() function");
     return 999;
   }
 }
@@ -391,7 +391,7 @@ function a120571()
 }
 
 // this caused a crash! Test to see that it doesn't now.
-print(a120571);
+// print(a120571);
 
 // Now test that we have a non-null value for a120571.toString()
 status = inSection(13);
@@ -424,7 +424,7 @@ function b()
 }
 
 // this caused a crash!!! Test to see that it doesn't now.
-print(b);
+// print(b);
 
 // Now test that we have a non-null value for b.toString()
 status = inSection(14);

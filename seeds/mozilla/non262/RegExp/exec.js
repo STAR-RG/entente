@@ -237,4 +237,4 @@ checkExec("/a(b)c/g take two", r, ["00abcd"],
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

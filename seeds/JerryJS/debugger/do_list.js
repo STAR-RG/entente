@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("list tests");
+//print("list tests");
 
 var x = 10;
 var y = 10;
 var pi = 3.14;
 var z = x + y;
+if(z !== 20) {
+	throw new Error("Test fail")
+}

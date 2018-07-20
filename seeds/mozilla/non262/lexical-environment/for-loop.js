@@ -118,4 +118,4 @@ if (save() !== "OUTER V IGNORE")
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

@@ -21,7 +21,7 @@ var float64 = TypedObject.float64;
 
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     var AA = uint8.array(5, 5);
     var aa = new AA();
@@ -91,7 +91,7 @@ function runTests() {
 
     if (typeof reportCompare === "function")
         reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

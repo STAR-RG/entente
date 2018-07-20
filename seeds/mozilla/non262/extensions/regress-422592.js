@@ -22,13 +22,13 @@ function test()
   if (typeof dis == 'undefined')
   {
     expect = actual = 'Test requires function dis. Not tested';
-    print(expect);
+//printexpect);
   }
   else
   {
     expect = 'Completed';
     actual = 'Not Completed';
-    print('Before dis');
+//print'Before dis');
     try
     {
       dis(print);
@@ -36,7 +36,7 @@ function test()
     catch(ex)
     {
     }
-    print('After dis');
+//print'After dis');
     actual = 'Completed';
   }
   reportCompare(expect, actual, summary);
@@ -44,11 +44,11 @@ function test()
   if (typeof dissrc == 'undefined')
   {
     expect = actual = 'Test requires function dissrc. Not tested';
-    print(expect);
+//printexpect);
   }
   else
   {
-    print('Before dissrc');
+//print'Before dissrc');
     expect = 'Completed';
     actual = 'Not Completed';
     try
@@ -58,7 +58,7 @@ function test()
     catch(ex)
     {
     }
-    print('After dissrc');
+//print'After dissrc');
     actual = 'Completed';
   }
   reportCompare(expect, actual, summary);

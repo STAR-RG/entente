@@ -32,7 +32,7 @@ function test()
 	  keys(data);
     keys(g);
     keys(data2); // this call dies with "var prop is not a function"
-    print('no error');
+//print'no error');
   }
 
   try

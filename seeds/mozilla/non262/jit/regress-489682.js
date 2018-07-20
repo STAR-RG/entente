@@ -16,13 +16,13 @@ printStatus (summary);
 var v = 0;
 
 for (var a of [0, {}, {}, {}]) {
-  print(v);
+//print(v);
   v = v >>> 0;
   for (var b of [{}, {}, new String(''), 42, new String(''), {}, 42]) 
            {
            }
          }
-print(v);
+// print(v);
 
 
 expect = '0';

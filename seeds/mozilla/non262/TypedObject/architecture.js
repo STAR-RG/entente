@@ -27,7 +27,7 @@ function assertThrows(f) {
 }
 
 function runTests() {
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   var ArrayType = TypedObject.ArrayType;
   var StructType = TypedObject.StructType;
@@ -49,7 +49,7 @@ function runTests() {
   if (typeof reportCompare === "function")
     reportCompare(true, true);
 
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

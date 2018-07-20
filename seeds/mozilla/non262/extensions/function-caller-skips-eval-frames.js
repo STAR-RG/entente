@@ -31,4 +31,4 @@ assertEq(nest2(), nestTwice);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

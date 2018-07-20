@@ -88,4 +88,4 @@ anyTypedArrayConstructors.forEach(function(TypedArray) {
 
 reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

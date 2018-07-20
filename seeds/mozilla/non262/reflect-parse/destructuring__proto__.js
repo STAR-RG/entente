@@ -13,4 +13,4 @@ if (typeof reportCompare === "function")
 
 
 
-print("Tests complete");
+//print("Tests complete");

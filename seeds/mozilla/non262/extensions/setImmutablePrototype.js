@@ -88,7 +88,7 @@ function runNormalTests(global)
 {
   if (typeof setImmutablePrototype !== "function")
   {
-    print("no testable setImmutablePrototype function available, skipping tests");
+//print"no testable setImmutablePrototype function available, skipping tests");
     return;
   }
 
@@ -192,4 +192,4 @@ if (typeof newGlobal === "function")
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

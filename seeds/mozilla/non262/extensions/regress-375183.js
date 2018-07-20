@@ -20,7 +20,7 @@ function test()
   printStatus (summary);
  
   var obj = { get __noSuchMethod__() {
-      print("Executed");
+  //print"Executed");
       return new Object();
     }};
 

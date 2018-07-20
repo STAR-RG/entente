@@ -20,7 +20,7 @@ function test()
   printStatus (summary);
  
 
-  print(function() { for(/x/[''] in []) { } });
+//print(function() { for(/x/[''] in []) { } });
 
 
 

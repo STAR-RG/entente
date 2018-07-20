@@ -73,4 +73,4 @@ checkFine("function f() { delete ((escape)); }");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

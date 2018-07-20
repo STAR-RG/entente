@@ -35,4 +35,4 @@ assertEq(p2.lastIndex, 4);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

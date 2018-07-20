@@ -81,4 +81,4 @@ assertEq(deepEqual(out.array, addx([1, 2, 3])), true);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

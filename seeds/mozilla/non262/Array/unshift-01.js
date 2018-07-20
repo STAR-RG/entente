@@ -41,4 +41,4 @@ testGetSet(-5, 0);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

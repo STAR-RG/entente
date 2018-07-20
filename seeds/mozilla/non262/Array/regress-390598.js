@@ -28,7 +28,7 @@ function test()
   expect = 10;
   var x = new F(); 
 
-  print('x = new F(); x instanceof Array: ' + (x instanceof Array));
+  // print('x = new F(); x instanceof Array: ' + (x instanceof Array));
 
   x.length = expect;
   actual = x.length;

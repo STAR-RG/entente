@@ -32,7 +32,7 @@ function test()
   reportCompare(expect, actual, summary + ': check year');
 
   l = d.toLocaleString();
-  print(l);
+  // print(l);
   if (this.hasOwnProperty("Intl")) {
     // ECMA-402 specifies that toLocaleString uses a proleptic Gregorian
     // calender without year 0.
@@ -51,7 +51,7 @@ function test()
   d = new Date(maxms );
   y = d.getFullYear();
   l = d.toLocaleString();
-  print(l);
+  // print(l);
 
   actual = y;
   expect = 275760;

@@ -28,4 +28,4 @@ for (var i = 0; i < expected.length; i++)
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

@@ -28,7 +28,7 @@ function test()
     var s = "";
     for (var i = 0; i < 5; i++)
       s += o + o;
-    print(s);
+//prints);
     actual = 'No Exception';
   }
   catch(ex)

@@ -13,8 +13,8 @@ function test(sharedMem) {
     function die(message, uplevel) {
         var e = new Error(message);
         var frame = e.stack.split("\n")[uplevel];
-        print(message + " at " + frame.split("@")[1]);
-        print("Stack:\n" + e.stack);
+        // print(message + " at " + frame.split("@")[1]);
+        // print("Stack:\n" + e.stack);
         throw(e);
     }
 
@@ -42,11 +42,11 @@ function test(sharedMem) {
         }
 
         if (!thrown) {
-            print('(TODO) no exception thrown, expected ' + type.name);
+            // print('(TODO) no exception thrown, expected ' + type.name);
         } else if (!(thrown instanceof type)) {
-            print('(TODO) expected ' + type.name + ', got ' + thrown);
+            // print('(TODO) expected ' + type.name + ', got ' + thrown);
         } else {
-            print('test unexpectedly passed: expected ' + type.name + ' exception');
+            // print('test unexpectedly passed: expected ' + type.name + ' exception');
         }
     }
 
@@ -1604,8 +1604,8 @@ function test(sharedMem) {
         e = exc;
     }
     if (!e) {
-        print("==== TODO but PASSED? ====");
-        print("Bug 753996 unexpectedly passed");
+        // print("==== TODO but PASSED? ====");
+        // print("Bug 753996 unexpectedly passed");
     }
 
     // proto is proxy for view of buffer: should throw TypeError

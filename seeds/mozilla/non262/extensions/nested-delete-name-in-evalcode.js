@@ -82,4 +82,4 @@ assertEq(f(), false); // defined by function code => not configurable => false
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

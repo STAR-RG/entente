@@ -16,7 +16,7 @@ function* gen() {
 }
 
 function turnoff() {
-  print("Turning off profiler\n");
+//print("Turning off profiler\n");
   disableGeckoProfiling();
   return 'hi';
 }

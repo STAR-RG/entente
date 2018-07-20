@@ -21,4 +21,4 @@ Array.prototype.pop.call(p);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

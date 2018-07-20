@@ -278,4 +278,4 @@ check(sncwover, "fwoosh", { value: 17, writable: false, enumerable: true, config
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

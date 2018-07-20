@@ -15,7 +15,7 @@ printStatus (summary);
 with (this)
   with (this) {
   eval("function outer() { function inner() { " +
-       "print('inner');} inner(); print('outer');} outer()");
+       "print('inner');} inner();print('outer');} outer()");
 }
 
 reportCompare(expect, actual, summary);

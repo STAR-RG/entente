@@ -18,7 +18,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
 
-  print('This test must be run under valgrind to check if an UMR occurs in slowarray_enumerate');
+//print('This test must be run under valgrind to check if an UMR occurs in slowarray_enumerate');
 
   try
   {

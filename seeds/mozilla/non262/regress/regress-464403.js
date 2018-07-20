@@ -20,7 +20,7 @@ function test()
   printStatus (summary);
  
 
-  print(8);
+//print(8);
   var u = [print, print, function(){}];
   for (x of u) for (u.e in [1,1,1,1]);
 

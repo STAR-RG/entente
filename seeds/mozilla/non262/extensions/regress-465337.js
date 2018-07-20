@@ -21,7 +21,7 @@ function test()
 
   var out = [];
   for (let j = 0; j < 5; ++j) { out.push(6 - ((void 0) ^ 0x80000005)); }
-  print(uneval(out));
+//print(uneval(out));
 
   reportCompare(expect, actual, summary);
 }

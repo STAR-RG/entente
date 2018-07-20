@@ -27,7 +27,7 @@ function runTests() {
 
   if (typeof reportCompare !== 'undefined')
     reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

@@ -88,7 +88,7 @@ function runTests() {
   if (!failed) throw new Exception("Should have thrown");
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

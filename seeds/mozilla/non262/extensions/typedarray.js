@@ -607,8 +607,8 @@ function test()
         view.copyWithin(dest, start, end);
         check(() => tastring(view) == want.toString());
         if (tastring(view) != want.toString()) {
-            print("Wanted: " + want.toString());
-            print("Got   : " + tastring(view));
+        //print"Wanted: " + want.toString());
+        //print"Got   : " + tastring(view));
         }
     }
 

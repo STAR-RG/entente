@@ -24,4 +24,6 @@ function foo(loop)
 var a = 10;
 
 eval("bar = function bar() {\nprint('bar function') }");
-bar();
+if (bar() !== undefined) {
+	throw new Error("Test fail")
+}

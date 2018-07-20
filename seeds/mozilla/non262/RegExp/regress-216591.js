@@ -37,10 +37,10 @@ addThis();
 /*
  * Add a global flag to the regexp. In Perl 5, this gives the same results as above. Compare:
  *
- * [ ] perl -e '"a {result.data.DATA} b" =~ /\{(([a-z0-9\-_]+?\.)+?)([a-z0-9\-_]+?)\}/i;  print("$&, $1, $2, $3");'
+ * [ ] perl -e '"a {result.data.DATA} b" =~ /\{(([a-z0-9\-_]+?\.)+?)([a-z0-9\-_]+?)\}/i;print("$&, $1, $2, $3");'
  * {result.data.DATA}, result.data., data., DATA
  *
- * [ ] perl -e '"a {result.data.DATA} b" =~ /\{(([a-z0-9\-_]+?\.)+?)([a-z0-9\-_]+?)\}/gi; print("$&, $1, $2, $3");'
+ * [ ] perl -e '"a {result.data.DATA} b" =~ /\{(([a-z0-9\-_]+?\.)+?)([a-z0-9\-_]+?)\}/gi;print("$&, $1, $2, $3");'
  * {result.data.DATA}, result.data., data., DATA
  *
  *

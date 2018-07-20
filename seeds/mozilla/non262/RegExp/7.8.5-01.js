@@ -32,4 +32,4 @@ for(var i=0; i<regexps.length; i++) {
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

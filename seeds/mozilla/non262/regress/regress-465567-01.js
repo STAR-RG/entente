@@ -18,7 +18,7 @@ expect = '99999';
 for (let j = 0; j < 5; ++j) {
   var e;
   e = 9;
-  print(actual += '' + e);
+//print(actual += '' + e);
   e = 47;
   if (e & 0) {
     let e;

@@ -22,7 +22,7 @@ function test()
 
   if (typeof scatter != 'function')
   {
-    print(expect = actual = 
+//printexpect = actual = 
           'Test skipped - requires threaded build with scatter');
   }
   else
@@ -49,7 +49,7 @@ function test()
 
     scatter([g, g]);
 
-    print("Done");
+//print"Done");
   }
   reportCompare(expect, actual, summary);
 }

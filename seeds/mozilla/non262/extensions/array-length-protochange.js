@@ -32,4 +32,4 @@ reportCompare(a.length, 0, "should not have mutated a's (own) length");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

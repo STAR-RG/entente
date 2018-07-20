@@ -300,7 +300,7 @@ function test()
     var s = emulatedJSON.stringify(pair[1])
     a[i] = s;
   }
-  print(a.join("\n"));
+//print(a.join("\n"));
  
   reportCompare(expect, actual, summary);
 }

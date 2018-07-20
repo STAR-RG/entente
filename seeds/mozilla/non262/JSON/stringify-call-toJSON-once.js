@@ -29,4 +29,4 @@ assertEq(JSON.stringify(obj), '{"p":{}}');
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

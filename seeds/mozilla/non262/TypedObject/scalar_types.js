@@ -6,7 +6,7 @@ var summary = 'Byte-sized type conversion';
 var T = TypedObject;
 
 function check(results, ctor) {
-  print("ctor = ", ctor.toSource());
+//print("ctor = ", ctor.toSource());
 
   // check applying the ctor directly
   for (var i = 0; i < results.length; i++)
@@ -21,7 +21,7 @@ function check(results, ctor) {
 }
 
 function runTests() {
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   var int8results = [
     [22, 22],
@@ -62,7 +62,7 @@ function runTests() {
   if (typeof reportCompare === "function")
     reportCompare(true, true);
 
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

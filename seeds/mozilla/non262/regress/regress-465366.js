@@ -29,7 +29,7 @@ function test()
     return k;
   }
   f();
-  print(f());
+//print(f());
 
  
   reportCompare(expect, actual, summary);

@@ -40,19 +40,19 @@ function test()
 
     for (i = 0; i < table.length; i++) {
       var src = pfx + table[i][0] + decl + table[i][1] + end;
-      print('src: ' + src);
+  //print'src: ' + src);
       var fun = eval(src);
       var testval = fun();
       reportCompare(expect, testval, summary + ': ' + src);
       if (testval != expect) {
         break;
       }
-      print('uneval: ' + uneval(fun));
+  //print'uneval: ' + uneval(fun));
       var declsrc = '(' +
         src.slice(1, -1).replace('function f', 'function f' + i) + ')';
-      print('declsrc: ' + declsrc);
+  //print'declsrc: ' + declsrc);
       this['f' + i] = eval(declsrc);
-      print('f' + i + ': ' + this['f' + i]);
+  //print'f' + i + ': ' + this['f' + i]);
     }
   }
   catch(ex)

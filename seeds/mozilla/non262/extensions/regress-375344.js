@@ -17,18 +17,18 @@ if (typeof HTMLElement != 'undefined')
   expect = /TypeError/;
   try 
   {
-    print(HTMLElement.prototype.nodeName);
+//printHTMLElement.prototype.nodeName);
   }
   catch(ex) 
   {
     actual = ex + '';
-    print(actual);
+//printactual);
   }
   reportMatch(expect, actual, summary);
 }
 else
 {
   expect = actual = 'Test can only run in a Gecko 1.9 browser or later.';
-  print(actual);
+//print(actual);
   reportCompare(expect, actual, summary);
 }

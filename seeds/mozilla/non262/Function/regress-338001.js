@@ -37,6 +37,6 @@ catch(ex)
   actual = ex + '';
 }
  
-print('Done: ' + actual);
+// print('Done: ' + actual);
 
 reportMatch(expect, actual, summary);

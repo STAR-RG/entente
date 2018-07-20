@@ -32,7 +32,7 @@ function test()
   var timenonjit = letitbe();
   var timejit = letitbe();
 
-  print('time: nonjit = ' + timenonjit + ', jit = ' + timejit);
+//print('time: nonjit = ' + timenonjit + ', jit = ' + timejit);
 
   expect = true;
   actual = timejit < timenonjit;

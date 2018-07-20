@@ -1,1 +1,0 @@
-if([]++&~function(){})with(function(){});

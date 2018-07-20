@@ -60,4 +60,4 @@ assertEq(new Date("1997-3-8 01::01").getTime(),
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

@@ -37,4 +37,4 @@ assertEq(Number.isSafeInteger(-Math.pow(2, 53) + 2), true);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

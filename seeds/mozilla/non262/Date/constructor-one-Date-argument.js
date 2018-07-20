@@ -37,4 +37,4 @@ assertEq(d.getTime(), 3141592654);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

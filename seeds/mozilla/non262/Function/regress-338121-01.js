@@ -27,6 +27,6 @@ var fu=new Function(
   "done"
   );
 
-print('Done');
+// print('Done');
 
 reportCompare(expect, actual, summary);

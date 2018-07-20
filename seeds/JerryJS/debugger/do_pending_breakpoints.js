@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("pending-breakpoints");
+//print("pending-breakpoints");
 
 eval("1;\nfunction f()\n{ return 5 }");
 
 var bird = "colibri";
-f();
+if (f() !== 5) {
+	throw new Error("Test fail")
+}
 var a = 234;

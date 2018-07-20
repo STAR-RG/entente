@@ -31,4 +31,4 @@ assertThrowsInstanceOf(() => Function("f: function* y() {}"), SyntaxError);
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

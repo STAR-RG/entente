@@ -88,4 +88,4 @@ for (var i = 0; i < 50; i++)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

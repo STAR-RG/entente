@@ -55,7 +55,7 @@ var expect;
 var actual;
 
 if (typeof scatter == 'undefined' || typeof sleep == 'undefined') {
-  print('Test skipped. scatter or sleep not defined.');
+  // print('Test skipped. scatter or sleep not defined.');
   expect = actual = 'Test skipped.';
 } else {
   var results = scatter([function () { return worker(0); },

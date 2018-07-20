@@ -18,7 +18,7 @@ var summary =
 function test(field)
 {
   var prop = "[[" + field[0].toUpperCase() + field.substring(1) + "]]";
-  print("Testing for GC crashes after setting " + prop + " to undefined...");
+//print("Testing for GC crashes after setting " + prop + " to undefined...");
 
   function inner()
   {
@@ -52,4 +52,4 @@ test("set");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

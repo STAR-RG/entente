@@ -548,7 +548,7 @@ TestRunner.prototype =
       var self = this;
       function notPresentTests()
       {
-        print("Running not-present tests now...");
+    //print"Running not-present tests now...");
 
         for (var i = 0, sz = ALL_DESCRIPTORS.length; i < sz; i++)
           self._runSingleNotPresentTest(ALL_DESCRIPTORS[i]);
@@ -563,7 +563,7 @@ TestRunner.prototype =
       var self = this;
       function propertyPresentTests()
       {
-        print("Running already-present tests now...");
+    //print"Running already-present tests now...");
 
         var total = VALID_DESCRIPTORS.length;
         var start = Math.floor((part - 1) / parts * total);
@@ -572,7 +572,7 @@ TestRunner.prototype =
         for (var i = start; i < end; i++)
         {
           var old = VALID_DESCRIPTORS[i];
-          print("Starting test with old descriptor " + old.toSource() + "...");
+      //print"Starting test with old descriptor " + old.toSource() + "...");
 
           for (var j = 0, sz2 = VALID_DESCRIPTORS.length; j < sz2; j++)
             self._runSinglePropertyPresentTest(old, VALID_DESCRIPTORS[j], []);
@@ -606,7 +606,7 @@ TestRunner.prototype =
 
       function nonTerminalPropertyPresentTests()
       {
-        print("Running non-terminal already-present tests now...");
+    //print"Running non-terminal already-present tests now...");
 
         var total = VALID_DESCRIPTORS.length;
         var start = Math.floor((part - 1) / parts * total);
@@ -615,7 +615,7 @@ TestRunner.prototype =
         for (var i = start; i < end; i++)
         {
           var old = VALID_DESCRIPTORS[i];
-          print("Starting test with old descriptor " + old.toSource() + "...");
+      //print"Starting test with old descriptor " + old.toSource() + "...");
 
           for (var j = 0, sz2 = VALID_DESCRIPTORS.length; j < sz2; j++)
           {
@@ -661,7 +661,7 @@ TestRunner.prototype =
 
       function dictionaryPropertyPresentTests()
       {
-        print("Running dictionary already-present tests now...");
+    //print"Running dictionary already-present tests now...");
 
         var total = VALID_DESCRIPTORS.length;
         var start = Math.floor((part - 1) / parts * total);
@@ -670,7 +670,7 @@ TestRunner.prototype =
         for (var i = start; i < end; i++)
         {
           var old = VALID_DESCRIPTORS[i];
-          print("Starting test with old descriptor " + old.toSource() + "...");
+      //print"Starting test with old descriptor " + old.toSource() + "...");
 
           for (var j = 0, sz2 = VALID_DESCRIPTORS.length; j < sz2; j++)
           {
@@ -690,12 +690,12 @@ TestRunner.prototype =
 
     runPropertyPresentTests: function runPropertyPresentTests()
     {
-      print("Running already-present tests now...");
+  //print"Running already-present tests now...");
 
       for (var i = 0, sz = VALID_DESCRIPTORS.length; i < sz; i++)
       {
         var old = VALID_DESCRIPTORS[i];
-        print("Starting test with old descriptor " + old.toSource() + "...");
+    //print"Starting test with old descriptor " + old.toSource() + "...");
 
         for (var j = 0, sz2 = VALID_DESCRIPTORS.length; j < sz2; j++)
           this._runSinglePropertyPresentTest(old, VALID_DESCRIPTORS[j], []);
@@ -707,11 +707,11 @@ TestRunner.prototype =
       {
         fun();
 
-        print(completeMessage);
+    //printcompleteMessage);
       }
       catch (e)
       {
-        print("ERROR, EXITING (line " + (e.lineNumber || -1) + "): " + e);
+    //print"ERROR, EXITING (line " + (e.lineNumber || -1) + "): " + e);
         throw e;
       }
       finally
@@ -722,13 +722,13 @@ TestRunner.prototype =
     _reportAllErrors: function _reportAllErrors()
     {
       var errorCount = this._logLines.length;
-      print("Full accumulated number of errors: " + errorCount);
+  //print"Full accumulated number of errors: " + errorCount);
       if (errorCount > 0)
         throw errorCount + " errors detected, FAIL";
     },
     _fullFunctionLengthTests: function _fullFunctionLengthTests(funFactory, len)
     {
-      print("Running Function.length (" + funFactory + ") tests now...");
+  //print"Running Function.length (" + funFactory + ") tests now...");
 
       for (var i = 0, sz = VALID_DESCRIPTORS.length; i < sz; i++)
       {
@@ -739,7 +739,7 @@ TestRunner.prototype =
     _log: function _log(v)
     {
       var m = "" + v;
-      print(m);
+  //printm);
       this._logLines.push(m);
     },
     _runSingleNotPresentTest: function _runSingleNotPresentTest(desc)
@@ -1014,7 +1014,7 @@ function runDictionaryPropertyPresentTestsFraction(PART, PARTS)
     'ES5 Object.defineProperty(O, P, Attributes): dictionary redefinition ' +
     PART + ' of ' + PARTS;
 
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   try
   {
@@ -1032,7 +1032,7 @@ function runDictionaryPropertyPresentTestsFraction(PART, PARTS)
   if (typeof reportCompare === "function")
     reportCompare(true, true);
 
-  print("Tests complete!");
+  //print("Tests complete!");
 }
 
 function runNonTerminalPropertyPresentTestsFraction(PART, PARTS)
@@ -1042,7 +1042,7 @@ function runNonTerminalPropertyPresentTestsFraction(PART, PARTS)
     'ES5 Object.defineProperty(O, P, Attributes): middle redefinition ' +
     PART + ' of ' + PARTS;
 
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
 
   /**************
@@ -1067,5 +1067,5 @@ function runNonTerminalPropertyPresentTestsFraction(PART, PARTS)
   if (typeof reportCompare === "function")
     reportCompare(true, true);
 
-  print("Tests complete!");
+  //print("Tests complete!");
 }

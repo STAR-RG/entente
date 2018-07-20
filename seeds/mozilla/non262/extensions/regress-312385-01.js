@@ -126,4 +126,4 @@ for (var c in generics)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests finished.");
+//print("Tests finished.");

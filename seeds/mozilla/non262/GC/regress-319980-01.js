@@ -48,7 +48,7 @@ function testFuncWatcher()
   }
   ++currTest;
  
-  print('Executing test ' + currTest + '\n');
+//print('Executing test ' + currTest + '\n');
 
   testFuncWatcherId = setTimeout("testFuncWatcher()", timeOut);
   testFuncTimerId = setTimeout(testFunc, interval);

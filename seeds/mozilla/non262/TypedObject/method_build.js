@@ -123,7 +123,7 @@ function threeDimensionalArrayOfUintsWithDepth1() {
 }
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     oneDimensionalArrayOfUints();
     oneDimensionalArrayOfStructs();
@@ -135,7 +135,7 @@ function runTests() {
 
     if (typeof reportCompare === "function")
         reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

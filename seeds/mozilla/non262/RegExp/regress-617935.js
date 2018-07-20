@@ -39,4 +39,4 @@ try {
 }
 reportCompare(true, true, "No crash occurred.");
 
-print("Tests complete");
+//print("Tests complete");

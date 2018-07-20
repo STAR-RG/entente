@@ -19,7 +19,7 @@ var float32 = TypedObject.float32;
 var uint32 = TypedObject.uint32;
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     assertEq(typeof ArrayType.prototype.prototype.forEach == "function", true);
 
@@ -130,7 +130,7 @@ function runTests() {
 
     if (typeof reportCompare === "function")
         reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

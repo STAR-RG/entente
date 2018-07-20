@@ -53,4 +53,4 @@ assertEq(JSON.stringify(arr, replacer), '[0,1,2,3,4]');
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

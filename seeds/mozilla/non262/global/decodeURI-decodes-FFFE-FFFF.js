@@ -23,4 +23,4 @@ assertEq(decodeURIComponent("%EF%BF%BF"), "\uFFFF");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

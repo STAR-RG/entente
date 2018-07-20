@@ -5,7 +5,7 @@ var summary = 'TypedObjects Equivalent Numeric Types';
 var T = TypedObject;
 
 function runTests() {
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   var simpleTypes = [
     T.int8, T.int16, T.int32,
@@ -19,7 +19,7 @@ function runTests() {
       assertEq(i == j, simpleTypes[i].equivalent(simpleTypes[j]));
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

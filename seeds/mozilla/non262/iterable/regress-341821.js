@@ -48,7 +48,7 @@ function test()
     var x = {};
   }
 
-  print('done');
+//print('done');
   reportCompare(expect, actual, summary);
 }
 

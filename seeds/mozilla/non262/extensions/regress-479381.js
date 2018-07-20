@@ -24,7 +24,7 @@ function test()
 
   if (typeof gczeal != 'function' || typeof scatter != 'function')
   {
-    print(expect = actual = 'Test skipped: requires mulithreads');
+//printexpect = actual = 'Test skipped: requires mulithreads');
   }
   else
   {
@@ -39,7 +39,7 @@ function test()
       return s;
     }
 
-    print(scatter([f, f, f, f]));
+//printscatter([f, f, f, f]));
 
     gczeal(0);
   }

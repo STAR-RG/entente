@@ -39,4 +39,4 @@ for (var i = 0, len = times.length; i < len; i++)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

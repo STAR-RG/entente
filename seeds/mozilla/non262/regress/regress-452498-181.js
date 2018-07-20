@@ -22,7 +22,7 @@ function test()
 
   expect = 3;
 
-  (function(print) { delete print; })(); print(actual = 3);
+  (function(print) { delete print; })();print(actual = 3);
 
   reportCompare(expect, actual, summary);
 }

@@ -23,7 +23,7 @@ function test()
 
 
   for (let j = 0; j < 4; ++j) { for (let one of [new Number(1)]) {
-        print(actual += '' + (3 + one)); } }
+    //printactual += '' + (3 + one)); } }
 
 
   reportCompare(expect, actual, summary);

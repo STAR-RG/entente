@@ -13,9 +13,13 @@
 // limitations under the License.
 
 function f() {
-  print("F1");
+  //print("F1");
 }
 
-f();
-eval("f = function f() {\nprint('F2') }");
-f();
+if (f() !== undefined) {
+	throw new Error("Test fail")
+}
+eval("f = function f() {return'F2' }");
+if (f() !== 'F2') {
+	throw new Error("Test fail")
+}

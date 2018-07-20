@@ -32,4 +32,4 @@ assertThrowsInstanceOf(() => eval(" 'use strict' \n l\\u0065t: 42;"), SyntaxErro
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

@@ -1,1 +1,0 @@
-with(voidthis+this)if({},this,[,],function(){},{});

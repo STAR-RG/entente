@@ -21,7 +21,7 @@ function runTests() {
   assertEqArray(lines[2].from, [13, 14, 15]);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

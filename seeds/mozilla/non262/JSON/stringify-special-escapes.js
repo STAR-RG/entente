@@ -224,4 +224,4 @@ assertEq(JSON.stringify("\\u0020Q"), '"\\\\u0020Q"');
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

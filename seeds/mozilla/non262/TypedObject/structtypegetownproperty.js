@@ -6,7 +6,7 @@ var StructType = TypedObject.StructType;
 var uint8 = TypedObject.uint8;
 
 function runTests() {
-    print(BUGNUMBER + ": " + summary);
+//printBUGNUMBER + ": " + summary);
 
     var PixelType = new StructType({x: uint8, y: uint8});
     var pixel = new PixelType({x: 15, y: 16});
@@ -22,7 +22,7 @@ function runTests() {
     assertEq(typeof desc, "undefined");
 
     reportCompare(true, true);
-    print("Tests complete");
+    //print("Tests complete");
 }
 
 runTests();

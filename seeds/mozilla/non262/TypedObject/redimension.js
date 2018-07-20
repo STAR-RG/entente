@@ -49,7 +49,7 @@ function runTests() {
   }, TypeError);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

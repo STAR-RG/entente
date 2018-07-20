@@ -1,1 +1,0 @@
-with({})with(void_++>>>typeof~{})\u7d6e‍_:;

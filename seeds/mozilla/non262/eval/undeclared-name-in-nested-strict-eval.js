@@ -23,4 +23,4 @@ assertEq(eval('var x = "eval"; eval("x")'), "eval");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete!");
+//print("Tests complete!");

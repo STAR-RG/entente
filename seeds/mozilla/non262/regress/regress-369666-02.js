@@ -30,7 +30,7 @@ function test()
     return bar;
   }
 
-  print(foo()());
+//print(foo()());
 
   baz = false;
 
@@ -49,12 +49,12 @@ function test()
       if (baz)
         return bar;
     } finally {
-      print('finally', x);
+  //print'finally', x);
     }
     return bletch;
   }
 
-  print(foo2()());
+//print(foo2()());
 
   reportCompare(expect, actual, summary);
 }

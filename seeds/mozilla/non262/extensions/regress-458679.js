@@ -43,7 +43,7 @@ try
     let q = x;
     s = q + q; 
   }
-  print(x.length);
+//print(x.length);
 }
 catch(ex)
 {

@@ -6,7 +6,7 @@
  */
 
 //-----------------------------------------------------------------------------
-print("ES5: Array.prototype.join");
+// print("ES5: Array.prototype.join");
 
 /**************
  * BEGIN TEST *
@@ -80,4 +80,4 @@ assertEq(trailingHoles.join(""), "0funkyfnord");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

@@ -23,4 +23,4 @@ assertEq(new Date(new String("2012-01-31T00:00:00.000Z")).valueOf(),
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

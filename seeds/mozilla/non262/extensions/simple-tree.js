@@ -42,7 +42,7 @@ var expect;
 var actual;
 
 if (typeof scatter == 'undefined' || typeof sleep == 'undefined') {
-  print('Test skipped. scatter or sleep not defined.');
+//print('Test skipped. scatter or sleep not defined.');
   expect = actual = 'Test skipped.';
 } else {
   expect = range(0, N).toSource();

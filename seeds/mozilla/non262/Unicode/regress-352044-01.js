@@ -25,7 +25,7 @@ function test()
   {
     var i = 1;
     eval('i \\u002b= 1'); 
-    print(i);
+//printi);
   }
   catch(ex)
   {

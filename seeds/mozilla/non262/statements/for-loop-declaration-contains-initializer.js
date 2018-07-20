@@ -47,4 +47,4 @@ for (var { length: x, [x - 1 + count]: y = "psych" } in "foo")
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

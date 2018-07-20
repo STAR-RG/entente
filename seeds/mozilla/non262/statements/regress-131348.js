@@ -44,7 +44,7 @@ try
 {
   for (var i in undefined)
   {
-    print(i);
+//printi);
   }
 }
 catch(e)
@@ -62,7 +62,7 @@ try
 {
   for (var i in null)
   {
-    print(i);
+//printi);
   }
 }
 catch(e)
@@ -86,7 +86,7 @@ try
 {
   for (var i in this.ZZZ)
   {
-    print(i);
+//printi);
   }
 }
 catch(e)
@@ -108,7 +108,7 @@ try
 {
   for (var i in 'bbb'.match(/aaa/))
   {
-    print(i);
+//printi);
   }
 }
 catch(e)

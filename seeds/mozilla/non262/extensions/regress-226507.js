@@ -91,7 +91,7 @@ source += source;
  */
 if (typeof Script == 'undefined')
 {
-  print('Test skipped. Script not defined.');
+  // print('Test skipped. Script not defined.');
   expect = actual = 0;
 }
 else

@@ -19,7 +19,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
  
-  print('Note: this test requires that javascript.options.gczeal ' +
+//print('Note: this test requires that javascript.options.gczeal ' +
         'be set to 2 prior to the browser start');
 
   m = function(a, b) {

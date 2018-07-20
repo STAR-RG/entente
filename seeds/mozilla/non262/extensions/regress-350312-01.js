@@ -40,8 +40,8 @@ function test()
 
   var passed = ex === 1;
   if (!passed) {
-    print("Failed!");
-    print("ex="+uneval(ex));
+//print"Failed!");
+//print"ex="+uneval(ex));
   }
   reportCompare(true, passed, summary);
 }

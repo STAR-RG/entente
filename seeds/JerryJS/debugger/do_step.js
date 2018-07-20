@@ -20,6 +20,9 @@ function f1()
   }
 
   var i = g();
+  if (i !== 6) {
+  	throw new Error("Test fail")
+  }
   g();
 }
 
@@ -29,5 +32,9 @@ function f2()
   return 7;
 }
 
-f1();
-f2();
+if(f1() !== undefined) {
+	throw new Error("Test fail")
+}
+if(f2() !== 7) {
+	throw new Error("Test fail")
+}

@@ -19,9 +19,9 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
 
-//  print('Note this test originally required jit enabled with the environment ');
-//  print('variable TRACEMONKEY=verbose defined. Note that the calls to enable ');
-//  print('jit are necessary for the crash.');
+////print('Note this test originally required jit enabled with the environment ');
+////print('variable TRACEMONKEY=verbose defined. Note that the calls to enable ');
+////print('jit are necessary for the crash.');
 
   [1,2,3].map(function(v, i, t) { return /a/gi.exec(v); });
 

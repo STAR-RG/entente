@@ -52,4 +52,4 @@ assertEq(bound3.length, 0);
 
 reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

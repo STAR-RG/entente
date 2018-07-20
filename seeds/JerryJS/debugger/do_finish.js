@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-print("finish-test");
+//print("finish-test");
 
 function foo() {
-  print("foo");
+  //print("foo");
+  if (bar() !== 'bar') {
+	throw new Error("Test fail")
+	}
   return bar();
 }
 
@@ -23,22 +26,30 @@ function bar() {
   return "bar";
 }
 
-print(foo());
+//print(foo());
+if (foo() !== 'bar') {
+	throw new Error("Test fail")
+}
 
 function dog() {
-  bark();
-  sit();
-  bark();
+  if (bark() !== undefined) {
+  	throw new Error("Test fail")
+  }
+  if (sit() !== undefined) {
+  	throw new Error("Test fail")
+  }
 }
 
 function bark() {
-  print("*bark*");
+  //print("*bark*");
 }
 
 function sit() {
-  print("*sit*");
+  //print("*sit*");
 }
 
-dog();
+if (dog() !== undefined) {
 
-print("END: finish-test");
+}
+
+//print("END: finish-test");

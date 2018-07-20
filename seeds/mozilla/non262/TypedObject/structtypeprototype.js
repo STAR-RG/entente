@@ -72,7 +72,7 @@ function runTests() {
   assertEq(fade2.to.b, 129);
 
   reportCompare(true, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

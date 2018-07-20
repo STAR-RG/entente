@@ -15,7 +15,7 @@ var float32 = TypedObject.float32;
 var float64 = TypedObject.float64;
 
 function runTests() {
-  print(BUGNUMBER + ": " + summary);
+//print(BUGNUMBER + ": " + summary);
 
   var failed;
   try {
@@ -25,7 +25,7 @@ function runTests() {
     failed = true;
   }
   reportCompare(failed, true);
-  print("Tests complete");
+  //print("Tests complete");
 }
 
 runTests();

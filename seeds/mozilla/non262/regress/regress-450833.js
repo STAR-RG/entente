@@ -29,13 +29,13 @@ function test()
     return n;
   }
 
-  print(actual = f(1));
+//print(actual = f(1));
 
 
   reportCompare(expect, actual, summary);
 
 
-  print(actual = f(.5));
+//print(actual = f(.5));
 
 
   reportCompare(expect, actual, summary);

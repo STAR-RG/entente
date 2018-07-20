@@ -33,7 +33,7 @@ try {
 } catch (e) {
   actual = e;
 }
-print(actual += " | " + foo + " | " + bar); // 21
+// print(actual += " | " + foo + " | " + bar); // 21
 reportCompare(expect, actual, summary);
 
 expect = 'No Error';
@@ -42,7 +42,7 @@ actual = 'No Error';
 try
 {
   eval("", {print:1});
-  print(1);
+//print(1);
 }
 catch(ex)
 {

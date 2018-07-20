@@ -63,7 +63,7 @@ function test()
 
     if (enablejit)
 
-    print((enablejit ? '    JIT' : 'Non-JIT') + ": Number of primes up to: " + n + " is " + numprimes + ", counted in " + timetaken + " secs.");
+//print(enablejit ? '    JIT' : 'Non-JIT') + ": Number of primes up to: " + n + " is " + numprimes + ", counted in " + timetaken + " secs.");
 
     return timetaken;
   }

@@ -21,11 +21,11 @@ function test()
 
   if (typeof Script == 'undefined')
   {
-    print(expect = actual = 'Test skipped. Script object required.');
+//printexpect = actual = 'Test skipped. Script object required.');
   }
   else
   {
-    var scri=new Script(" var s=new Date(); var a=0; for(var i=0;i<1024*1024;i++) {a=i } var e=new Date(); print('time2='+(e-s)/1000);");
+    var scri=new Script(" var s=new Date(); var a=0; for(var i=0;i<1024*1024;i++) {a=i } var e=new Date();print('time2='+(e-s)/1000);");
     scri.compile();
     scri.exec();
   }

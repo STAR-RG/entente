@@ -49,10 +49,10 @@ addThis();
 status = inSection(4);
 string = '`';
 pattern = new RegExp('@', 'i');
-print(string + ' ' + pattern);
+// print(string + ' ' + pattern);
 actualmatch = string.match(pattern);
-print('z ' + actualmatch);
-print('`'.match(/@/i));
+// print('z ' + actualmatch);
+// print('`'.match(/@/i));
 expectedmatch = null;
 addThis();
 

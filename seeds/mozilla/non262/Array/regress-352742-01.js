@@ -19,7 +19,7 @@ function test()
   printBugNumber(BUGNUMBER);
   printStatus (summary);
 
-  print('If the test harness fails, this test fails.');
+  // print('If the test harness fails, this test fails.');
   expect = 4; 
   z = {valueOf: Function};
   actual = 2;

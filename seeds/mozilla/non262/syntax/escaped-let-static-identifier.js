@@ -54,4 +54,4 @@ t("if (1) st\\u0061tic = 42;");
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

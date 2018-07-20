@@ -23,12 +23,12 @@ function test()
   {
     actual = '';
     var g;
-    print(actual += typeof g + ',');
+//printactual += typeof g + ',');
 
     if (x)
       function g(){};
 
-    print(actual += g);
+//printactual += g);
   }
 
   expect = 'undefined,undefined';

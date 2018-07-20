@@ -52,4 +52,4 @@ anyTypedArrayConstructors.forEach(function(ctor) {
 
 reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");

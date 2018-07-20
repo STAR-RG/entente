@@ -22,7 +22,7 @@ function test()
   expect = 'bgcolor="dummy" quality="dummy" allowScriptAccess="dummy" ';
 
 
-  print((function(x) {
+//print((function(x) {
         var ja = "";
         var ka = {bgcolor:"#FFFFFF", quality:"high", allowScriptAccess:"always"};
         for (var la in ka) {

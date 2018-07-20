@@ -15,11 +15,11 @@ var summary =
 
 var o = Object.freeze({});
 for (var i = 0; i < 10; i++)
-  print(o.u = "");
+//print(o.u = "");
 
 Object.freeze(this);
 for (let j = 0; j < 10; j++)
-  print(u = "");
+//print(u = "");
 
 
 /******************************************************************************/
@@ -27,4 +27,4 @@ for (let j = 0; j < 10; j++)
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("All tests passed!");
+//print("All tests passed!");

@@ -29,7 +29,7 @@ function test()
     }
 
     function reportResults(size, N, literalMs, newArrayMs, arrayMs) {
-      print(Array.join(arguments, "\t"));
+      // print(Array.join(arguments, "\t"));
     }
 
     var repetitions = [ 9000, 7000, 4000, 2000, 2000, 2000, 800, 800, 800, 300, 100, 100 ]
@@ -44,8 +44,8 @@ function test()
   }
 
   gc();
-  print("Size\t\Rep.\t\Literal\tnew Arr\tArray()");
-  print("====\t=====\t=======\t=======\t=======");
+  // print("Size\t\Rep.\t\Literal\tnew Arr\tArray()");
+  // print("====\t=====\t=======\t=======\t=======");
   main();
 
   reportCompare(expect, actual, summary);

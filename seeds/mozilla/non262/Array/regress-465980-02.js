@@ -33,11 +33,11 @@ function test()
 
   function testArrayPush(startLength, pushArgs, expectThrow, expectLength)
   {
-    print("running testArrayPush(" +
-          startLength + ", " +
-          "[" + pushArgs.join(", ") + "], " +
-          expectThrow + ", " +
-          expectLength + ")...");
+    // print("running testArrayPush(" +
+    //       startLength + ", " +
+    //       "[" + pushArgs.join(", ") + "], " +
+    //       expectThrow + ", " +
+    //       expectLength + ")...");
     var a = new Array(startLength);
     try
     {
@@ -87,11 +87,11 @@ function test()
 
   function testArrayUnshift(startLength, unshiftArgs, expectThrow, expectLength)
   {
-    print("running testArrayUnshift(" +
-          startLength + ", " +
-          "[" + unshiftArgs.join(", ") + "], " +
-          expectThrow + ", " +
-          expectLength + ")...");
+    // print("running testArrayUnshift(" +
+    //       startLength + ", " +
+    //       "[" + unshiftArgs.join(", ") + "], " +
+    //       expectThrow + ", " +
+    //       expectLength + ")...");
     var a = new Array(startLength);
     try
     {

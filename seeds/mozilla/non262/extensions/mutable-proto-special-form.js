@@ -17,7 +17,7 @@ var passed = true;
 
 function performProtoTests(msg)
 {
-  print("Testing " + msg);
+  // print("Testing " + msg);
   assertEq(passed, true, "passed wrong at start of test set");
 
   assertEq(Object.getPrototypeOf({ __proto__: null }), null);
@@ -28,7 +28,7 @@ function performProtoTests(msg)
   assertEq(Object.getPrototypeOf({ __proto__: obj }), obj);
 
   assertEq(passed, true, "passed wrong at end of test set");
-  print("Tests of " + msg + " passed!");
+  //print("Tests of " + msg + " passed!");
 }
 
 function poisonProto(obj)
@@ -88,4 +88,4 @@ catch (e) {}
 if (typeof reportCompare === "function")
   reportCompare(true, true);
 
-print("Tests complete");
+//print("Tests complete");
