@@ -61,14 +61,19 @@ important domain. Our study \Fix{...}
 JavaScript (\js{}) is today one of the most popular programming
 languages for the web~\cite{business-insider,stackify}. The interest
 of the community for the language encourages constant improvements in
-its specification and implementations. It is natural to expect that
-such improvements will entail sensible changes in runtime
-engines~\cite{kangax}; changes that could lead to errors. Finding bugs
-on JS engines is an important problem. 
+its specification and implementations (see
+Section~\ref{sec:es6-design}). It is natural to expect that such
+improvements will entail sensible changes in runtime
+engines~\cite{kangax}; changes that could lead to errors. Even small
+changes can have a large impact in practice. For example, in October
+2014 a new attribute added to the Array datatype caused a bug that
+resulted in MS Outlook web not working under
+Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}. To
+sum, finding bugs on JS engines is an important problem.
 
 Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
-approach that has been applied in a variety of contexts to find
-functional bugs in
+approach that has been applied in a variety of contexts to find bugs
+in
 software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. It
 automates test generation in scenarios where multiple implementations
 of a system exist. DT leverages the diversity across system's
@@ -79,37 +84,41 @@ SpiderMonkey engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
 across configurations. They use this technique since 2002 and have
 been able to find over 270 bugs since
 then~\cite{jsfunfuzz-at-mozilla}, some of which are security bugs.
-Cross-engine differential testing checks correctness by comparing the
-output produced by \emph{different} engines on a given
-input~\cite{patra2016learning}. The availability on the web of public
+Cross-engine differential testing, in contrast, checks correctness by
+comparing the output produced by \emph{different} engines on a given
+input~\cite{patra2016learning}. The availability of public
 implementations of JS engines (see Table~\ref{tab:engines}) and test
-suites makes this bug-finding approach very appealing.
+suites makes this bug-finding approach appealing.
 
 %% WHAT WE DID
 This paper reports the results of a study we conducted to (i) assess
 the reliability of existing JS engines and to (ii) evaluate the
-importance of different factors when using DT for bug finding. More
-precisely, we analyzed the impact of two orthogonal factors in the use
-of DT: test mining and fuzzing. The first dimension, test mining,
-considers the effect that \js{} test files mined from the repository
-of a given open-source engine have in detecting functional bugs in
-other engines. The second dimension, fuzzing, considers the impact of
-fuzzing the mined files in bug detection.
+importance of different factors when using DT. More precisely, we
+analyzed the impact of two orthogonal factors in DT: test mining and
+fuzzing. The first factor, test mining, considers the effect that
+\js{} test files mined from the repositories of open-source engines
+have in detecting functional bugs in other engines. The second factor,
+fuzzing, considers the impact in bug detection of fuzzing these files.
 %% WHAT WE FOUND
 To sum, we found that \Fix{...}
 
 %% LIST OF CONTRIBUTIONS
 This paper makes the following contributions \Fix{...}
 
-\section{ES6 design}
+\section{EcmaScript}
 \label{sec:es6-design}
-The EcmaScript is a language specification maintained by 
-a committee called TC39 (Technical Committee) that follows 
-standard rules proposed by ISO/ETC JTC 1 - 
-Information Technology since 1996~\cite{es6-website}.
-Every year, a new version of EcmaScript (the latest version is ES2017) adds
-new features and minor fixes for the language. \Fix{discutir mais
-  sobre isso}
+
+ECMAScript (\es{}) emerged with the goal to standardize variants of
+JavaScript, such as Netscape's JavaScript and Microsoft's JScript. The
+\es{} specification is maintained by the TC39~\cite{tc39-github}
+technical committee under the regulation of Ecma
+International~\cite{es6-website}.  Every year, a new version of the
+specification is delivered with new features and minor fixes. The
+canonical spec today is
+ES6~\cite{ecmas262-spec-repo,ecmas262-spec}. Features of these
+versions and supporting engines can be found elsewhere~\cite{kangax}.
+
+\subsection{Engines Design}
 
 \Mar{what is that exactly? can we cite? is that only spec or actually
   code as most of java.* libraries.}  \Igor{seems like an API. They
@@ -119,6 +128,20 @@ new features and minor fixes for the language. \Fix{discutir mais
   on.} \Mar{Igor, avoid general discussion like $\leftarrow$this. look for
   explanation in some forum/tutorial and explain **when** you
   undertand the JS ecosystem design and can explain with confidence.}
+
+
+\subsection{Implementation-Dependent Behavior}
+\label{sec:imp-dep-behavior}
+
+
+The \es{} spec uses the label ``implementation-dependent'' to indicate
+cases where each engine developer can decide how to implement some
+aspect of a functionality. In these cases, execution may differ from
+engine to engine. One of the reasons implementation-dependent behavior
+exists is to enable compiler optimizations. For example, the
+\mcodeid{for-in} loop does not clearly specify the iteration
+order~\cite{for-in-undefined} and different engines capitalize on
+that.
 
 \Mar{explain what is an **acceptable** incompatibilities. cite example
 bug reports.}
@@ -133,6 +156,23 @@ toPrecision with a bigger precision, the values of each engine may vary, this
 could be considered as a case of incompatibility by engine
 design.}\Mar{I don't understand the example very well and don't understand the
   relationship with HI/LO.}
+
+\subsection{Undefined Behavior}
+\label{sec:undef-behavior}
+
+Undefined behavior is not a feature of the C
+language~\cite{c-undefined}.
+
+\Mar{mention strict?}
+
+\subsection{Unintentional Discrepancies}
+
+It is worth to recall that there is no formal specification for \es{};
+the specification is written in natural language. As such, differences
+in behavior from one engine to another, other than those mentioned
+above (Sections~\ref{sec:imp-dep-behavior}
+and~\ref{sec:undef-behavior}), can occur. But these discrepancies are
+not acceptable.
 
 \subsection{Randomness and Undefined Behavior}
 
@@ -389,7 +429,7 @@ certain engines.
   \centering
   \caption{\label{tab:test-suites}Test Suites. The sections of the
     table show, respectively, the TC-39 conformance test suite, suites
-    from engines we analyzed, and other suites.}
+    from engines we analyzed, and suites from other engines.}
   \begin{tabular}{ccr}
     \toprule
     Name & Source & \# JS files \\
