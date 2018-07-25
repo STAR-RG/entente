@@ -1,7 +1,8 @@
+import os
 from fuzz_drivers import *  #pylint: disable=W0614
 
 from jsfuzz.fuzzer.validator import validate
-from jsfuzz.utils import multicall
+from jsfuzz.utils import multicall, constants
 
 search_libfiles = ['shell.js']
 IGNORED_FILES = []

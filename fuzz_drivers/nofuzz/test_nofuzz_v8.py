@@ -1,3 +1,4 @@
+import os
 from fuzz_drivers import *  #pylint: disable=W0614
 
 from jsfuzz.fuzzer.validator import validate

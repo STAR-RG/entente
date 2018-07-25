@@ -1,7 +1,8 @@
+import os
 from fuzz_drivers import *  #pylint: disable=W0614
 
 from jsfuzz.fuzzer.validator import validate
-from jsfuzz.utils import multicall
+from jsfuzz.utils import multicall, constants
 
 jerryjs_path = os.path.join(constants.seeds_dir, 'JerryJS')
 
