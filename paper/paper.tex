@@ -394,19 +394,19 @@ certain engines.
     \toprule
     Name & Source & \# JS files \\
     \midrule
-    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 45,144 \\
+    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
     \midrule
     Mozilla & \cite{mozilla} & 2,633 \\
-    V8 & \cite{v8} & 64 \\
+    V8 & \cite{v8} & 74 \\
     WebKit & \cite{webkit} & 1,031 \\
     \midrule    
-    Duktape & \cite{duktape} & 997 \\
-    JerryScript & \cite{jerryscript} & 1,803 \\
-    JSI & \cite{jsi} & 99 \\
-    Tiny-js & \cite{tinyjs} & 44 \\    
+    Duktape & \cite{duktape} & 1,195 \\ 
+    JerryScript & \cite{jerryscript} & 1,950 \\
+    JSI & \cite{jsi} & 98 \\
+    Tiny-js & \cite{tinyjs} & 48 \\    
     % Chakra & \cite{chakracore} & 2632 \\
     \midrule
-     &  & 51,815 \\
+     &  & 38,305 \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -545,13 +545,13 @@ bug report in the corresponding bug tracker.
   \nofuzzHighReport{} foram reportados enquanto que no grupo LO, apenas 
   \nofuzzLowReport{} possuiam bugs reais (ratio HI $>$ LO).
 
-  A diversidade de suites de testes influenciou na busca de bugs nao descobertos
-  pelo proprio projeto do engenhos. Por exemplo, cerca de \nofuzzTC{} buckets 
-  foram encontrados usando a suite do TC-39, alem de \nofuzzMozilla{} warnings 
-  foram obtidos do repositorio da Mozilla, \nofuzzJerry{} na suite do JerryScript, 
-  \nofuzzWebKit{} sao do WebKit e \nofuzzGoogleDuktap{} para o V8 e o Duktape, 
-  os arquivos dos repositorios do TinyJS e JSI nao mostraram discrepancias entre as
-  engines.
+  % A diversidade de suites de testes influenciou na busca de bugs nao descobertos
+  % pelo proprio projeto do engenhos. Por exemplo, cerca de \nofuzzTC{} buckets 
+  % foram encontrados usando a suite do TC-39, alem de \nofuzzMozilla{} warnings 
+  % foram obtidos do repositorio da Mozilla, \nofuzzJerry{} na suite do JerryScript, 
+  % \nofuzzWebKit{} sao do WebKit e \nofuzzGoogle{}Duktap{} para o V8 e o Duktape, 
+  % os arquivos dos repositorios do TinyJS e JSI nao mostraram discrepancias entre as
+  % engines.
 
   % A importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
   % quanto em projetos distintos de mesma ordem, pois neste caso engines JS 
