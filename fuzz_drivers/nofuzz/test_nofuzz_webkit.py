@@ -6,10 +6,5 @@ from jsfuzz.utils import multicall, constants
 
 # @pytest.mark.skip(reason="temporarilly disabling")
 def test_fuzz_webkit():
-    path_name = os.path.join(constants.seeds_dir, 'WebKit.es6')
-    multicall.multicall_directories(path_name, False, validator=validate)
-
-# @pytest.mark.skip(reason="temporarilly disabling")
-def test_fuzz_webkit_benchmarks():
-    path_name = os.path.join(constants.seeds_dir, 'WebKit.microbenchmarks')
+    path_name = os.path.join(constants.seeds_dir, 'WebKit')
     multicall.multicall_directories(path_name, False, validator=validate)
