@@ -1,0 +1,61 @@
+[make sure you run this with python2.7--i used virtualenv for that]
+$> virtualenv --python=/usr/bin/python2.7 funfuzzenv
+$> source funfuzzenv/bin/activate
+
+[download repo]
+$> git clone https://github.com/MozillaSecurity/funfuzz.git
+
+[requirements]
+$> pip install -r requirements.txt
+$> echo -n 1 | sudo tee /proc/sys/kernel/core_uses_pid
+$> sudo apt-get install lib32z1 gcc-multilib g++-multilib
+$> sudo apt-get install gdb
+[if clang is not already installed] $> sudo apt-get install clang
+
+## make sure mercurial hg is accessible from the command line
+
+-- run
+$> python -u funfuzz/loop_bot.py -b "--random" --target-time 28800 | tee ~/log-loop_botPy.txt
+
+Funfuzz Description: Each iteration of the main funfuzz loop (called
+"localoop" from the main log) fuzzes the binary of a different
+spidermonkey configuration. For example, 32bit debug mode, 64bit
+deterministic, etc. In each iteration, four separate threads are
+spawned to run tests in parallel in a fork-join style, i.e., the next
+loop iteration only begins when all these threads finish
+execution. The function many_times_runs is the entrypoint of
+jsfunfuzz. it is reponsible to run *js*funfuzz on each iteration. It
+is very important to note that this function inlines all dependent
+JavaScript files (see funfuzz/js/files_to_link.txt) in a single .js
+file, which corresponds to the jsfunfuzz file. The function "driver"
+is executed in this file
+
+sequence of calls:
+ funfuzz/bot.py:main
+ funfuzz/util.fork_join.py:forkJoin
+ funfuzz/bot.py:loopFuzzingAndReduction
+ js/loop.py:many_times_runs
+
+argument of a call to many_timed_runs: 1 /tmp/tmpxJlbKBloop0 [u'--repo=/home/damorim/trees/mozilla-central', u'--build=', u'--random-flags', '24', u'mozilla-central', PosixPath('/home/damorim/shell-cache/js-64-linux-e14a35f977a8/js-64-linux-e14a35f977a8')] <Collector.Collector.Collector object at 0x7f05ef8dfa10> False
+
+Comments:
+
+The execution above will build different versions of SpiderMonkey
+under the directory ~/shell-cache. The jsfunfuzz file that is used to
+generate input is stored under /tmp/funfuzz/src. This file is executed
+in the SpiderMonkey binary. It produces js files and executes them.
+
+Important:
+
+The jsfunfuzz file stored under /tmp (see comment above) contains a
+list of test files that **I assume are for mutation**.  These are test
+files from the mozilla-central directory (downloaded by the script
+above). Two related comments:
+
+  - There are several tests in this list that we do *not* use (see
+    jit-tests). We may want to use those to extend our dataset.
+
+  - If my assumption above (about jsfunfuzz mutating existing inputs)
+    is correct, we may want to use jsfunfuzz in the future as we use
+    radamsa/quickfuzz.
+    
