@@ -69,7 +69,10 @@ changes can have a large impact in practice. For example, in October
 2014 a new attribute added to the Array datatype caused a bug that
 resulted in MS Outlook web not working under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}. To
-sum, finding bugs on JS engines is an important problem.
+sum, finding bugs in JS engines is an important problem specially
+because of the speed the specification evolves and the availability of
+various public engines.
+
 
 Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
 approach that has been applied in a variety of contexts to find bugs
@@ -81,56 +84,62 @@ implementations to detect anomalous behavior. For example, Mozilla
 runs JS files--created with the grammar-based fuzzer
 jsfunfuzz~\cite{jsfunfuzz}--against different configurations of their
 SpiderMonkey engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
-across configurations. They use this technique since 2002 and have
-been able to find over 270 bugs since
-then~\cite{jsfunfuzz-at-mozilla}, some of which are security bugs.
+across different configurations of the same build (\eg{}, enabling or
+not eager JIT compilation). They use this technique since 2002 and
+have been able to find over 270 bugs since
+then~\cite{jsfunfuzz-at-mozilla}, including security bugs.
 Cross-engine differential testing, in contrast, checks correctness by
 comparing the output produced by \emph{different} engines on a given
-input~\cite{patra2016learning}. The availability of public
-implementations of JS engines (see Table~\ref{tab:engines}) and test
-suites makes this bug-finding approach appealing.
+input~\cite{patra2016learning}. Although different implementations of
+JS engines today (see Table~\ref{tab:engines}), this technique is not
+used in practice.
 
 %% WHAT WE DID
 This paper reports the results of a study we conducted to (i) assess
 the reliability of existing JS engines and to (ii) evaluate the
 importance of different factors when using DT. More precisely, we
 analyzed the impact of two orthogonal factors in DT: test mining and
-fuzzing. The first factor, test mining, considers the effect that
-\js{} test files mined from the repositories of open-source engines
-have in detecting functional bugs in other engines. The second factor,
-fuzzing, considers the impact in bug detection of fuzzing these files.
+fuzzing. The first factor--\emph{test mining}--considers the effect
+that \js{} test files mined from the repositories of open-source
+engines have in detecting functional bugs in other engines. The second
+factor--\emph{fuzzing}--considers the impact in bug detection of
+fuzzing these files.
 %% WHAT WE FOUND
 To sum, we found that \Fix{...}
 
 %% LIST OF CONTRIBUTIONS
 This paper makes the following contributions \Fix{...}
 
-\section{EcmaScript}
+\section{JavaScript}
 \label{sec:es6-design}
 
-ECMAScript (\es{}) emerged with the goal to standardize variants of
-JavaScript, such as Netscape's JavaScript and Microsoft's JScript. The
-\es{} specification is maintained by the TC39~\cite{tc39-github}
-technical committee under the regulation of Ecma
-International~\cite{es6-website}.  Every year, a new version of the
-specification is delivered with new features and minor fixes. The
-canonical spec today is
+JavaScript engines are virtual machines that parse source code and
+compile it in bytecodes. These engines implement some version of
+ECMAScript\footnote{The name JavaScript still prevails today,
+  certainly for historical reasons.} (\es{}), which emerged with the
+goal to standardize variants of the language, such as Netscape's
+JavaScript and Microsoft's JScript. The \es{} specification is
+regulated by Ecma International~\cite{es6-website} under the
+TC39~\cite{tc39-github} technical committee.  Every year, a new
+version of the \es{} specification is produced with new features and
+minor fixes. The canonical spec today is
 ES6~\cite{ecmas262-spec-repo,ecmas262-spec}. Features of these
-versions and supporting engines can be found elsewhere~\cite{kangax}.
+versions and supporting engines are publicly available~\cite{kangax}.
+In the following, we briefly describe different sources of
+discrepancies that can emerge across different engine implementations
+as results of the active changes in the \es{} specification.
 
-\subsection{Engines Design}
-
-\Mar{what is that exactly? can we cite? is that only spec or actually
-  code as most of java.* libraries.}  \Igor{seems like an API. They
-  define the language behavior; grammar; values to static variables;
-  the methods for each "class"(Object)...  These irregularities
-  appears on engine implementation, maybe an wrong if statement and so
-  on.} \Mar{Igor, avoid general discussion like $\leftarrow$this. look for
-  explanation in some forum/tutorial and explain **when** you
-  undertand the JS ecosystem design and can explain with confidence.}
+%% \Mar{what is that exactly? can we cite? is that only spec or actually
+%%   code as most of java.* libraries.}  \Igor{seems like an API. They
+%%   define the language behavior; grammar; values to static variables;
+%%   the methods for each "class"(Object)...  These irregularities
+%%   appears on engine implementation, maybe an wrong if statement and so
+%%   on.} \Mar{Igor, avoid general discussion like $\leftarrow$this. look for
+%%   explanation in some forum/tutorial and explain **when** you
+%%   undertand the JS ecosystem design and can explain with confidence.}
 
 
-\subsection{Implementation-Dependent Behavior}
+\subsection{Undefined (Implementation-Dependent) Behavior}
 \label{sec:imp-dep-behavior}
 
 
@@ -140,8 +149,9 @@ aspect of a functionality. In these cases, execution may differ from
 engine to engine. One of the reasons implementation-dependent behavior
 exists is to enable compiler optimizations. For example, the
 \mcodeid{for-in} loop does not clearly specify the iteration
-order~\cite{for-in-undefined} and different engines capitalize on
-that.
+order~\cite{so-forin-undefined,javascript-in-chrome} and different
+engines capitalize on that~\cite{for-in-undefined}. As another
+example, \Fix{...}
 
 \Mar{explain what is an **acceptable** incompatibilities. cite example
 bug reports.}
@@ -157,15 +167,26 @@ could be considered as a case of incompatibility by engine
 design.}\Mar{I don't understand the example very well and don't understand the
   relationship with HI/LO.}
 
-\subsection{Undefined Behavior}
-\label{sec:undef-behavior}
+\subsection{Randomness}
 
-Undefined behavior is not a feature of the C
-language~\cite{c-undefined}.
+\sloppy Some elements in JS have non-deterministic behavior (\eg{},
+Math.random and Date). A test that make decisions based on these
+elements could, in principle, produce different outcomes on different
+runs. Carefully-written test cases should not manifest this kind of
+flakiness~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
+fuzzed test files are more likely to manifest them.
 
-\Mar{mention strict?}
+\subsection{\Fix{Other}}
 
-\subsection{Unintentional Discrepancies}
+1) The stack depth in JS is often close to the real (native) C stack
+depth, nevertheless observable by JS through recursion. This causes
+differential behavior even on the same engine when JITs are enabled or
+disabled, as the stack frame sizes vary. LangFuzz in particular
+produces a lot of recursions and hits these problems even more often
+than jsfunfuzz.\Mar{ask C. Holler. it is unclear to me how the output
+  could be different.}
+
+\subsection{Bugs}
 
 It is worth to recall that there is no formal specification for \es{};
 the specification is written in natural language. As such, differences
@@ -174,15 +195,6 @@ above (Sections~\ref{sec:imp-dep-behavior}
 and~\ref{sec:undef-behavior}), can occur. But these discrepancies are
 not acceptable.
 
-\subsection{Randomness and Undefined Behavior}
-
-\Mar{answer from C. Holler. Think through this...}
-
-1) The stack depth in JS is often close to the real (native) C stack depth, nevertheless observable by JS through recursion. This causes differential behavior even on the same engine when JITs are enabled or disabled, as the stack frame sizes vary. LangFuzz in particular produces a lot of recursions and hits these problems even more often than jsfunfuzz.
-
-2) JS has some "undefined behavior", such as the enumeration order of object properties in certain cases. In our engine, we have an --enable-more-deterministic mode (build option) to solve some of these issues.
-
-3) JS naturally has some observable differential behavior in global objects, e.g. Math.random, Date, etc. These can often be mocked to solve these issues, but fuzzers can be surprisingly effective to find more of these sources or even get the old objects back somehow.
 
 \section{Infrastructure}
 \label{sec:design}
@@ -410,19 +422,20 @@ using the GitHub REST API~\cite{github-rest-api}. We noticed that some
 of the tests we found depend on external libraries, which not all
 engines we use (see Section~\ref{sec:methodology:engines}) support. We
 decided to discard those. For example, many tests we found required a
-Node.js runtime~\cite{node} for execution. We considered the offical
-TC-39~\cite{tc39-github} conformance test suite for the ECMA262
-specification~\cite{ecmas262-spec}. Furthermore, we considered test
-suites of three of the four engines mentioned in
+Node.js runtime~\cite{node} for execution. The main source of test
+cases is the offical TC-39~\cite{tc39-github} conformance test suite
+for the ECMA262 specification~\cite{ecmas262-spec}. This test suite
+contains 87\% of all the tests we used. Furthermore, we
+considered test suites of three of the four engines mentioned in
 Section~\ref{sec:methodology:engines} and four other engines.
 Table~\ref{tab:test-suites} shows the JS sources we considered for
 each of the selected projects. Overall, we found a total of
 \totfiles{} JS files. It is worth noting that some test suites use
 distinct frameworks for testing and require external libraries to run
-their testing suites.  For these projects, we needed to make small
+the tests.  For these projects, we needed to make small
 changes in the testing infrastructure to be able to run the tests
 uniformly across all engines. More precisely, we needed to mock
-functions, related to the test harness, which are only available to
+some functions, related to the test harness, which are only available to
 certain engines.
 
 \begin{table}[t]
@@ -475,29 +488,37 @@ generate a new file using the grammar of the language whose inputs
 should be fuzzed. Intuitively, those fuzzers implement a traversal of
 the production rules of the input grammar to create syntax trees,
 which are then pretty-printed. Consequently, this approach produces
-inputs that are syntactically valid by construction.  We analyzed
-three grammar-based fuzzers--Grammarinator~\cite{grammarinator},
-jsfunfuzz~\cite{jsfunfuzz}, and
-QuickFuzz~\cite{quickfuzz,grieco2016quickfuzz}.  Unfortunately, none
-of those was effective out of the box. Given the bound limits we
-defined on the number of inputs to generate and the exploration depth
-of the syntax tree, we were unable to find discrepancies on the inputs
-those tools generated. To sum, the tools produced a high percentage of
-semantically-invalid inputs (\eg{}, \Fix{give one or two concrete
-  examples--variable usage without definition?}) that we needed to
-discard and the valid inputs manifested no discrepancies. For example,
-we produced 100K inputs with Grammarinator and only \Fix{X} of those
-were valid. With QuickFuzz, we were able to produce \Fix{Y, Y$>$Y?}
-valid inputs as it contains some heuristics to circumvent violation of
-certain type rules such as \Fix{variable used must be
-  defined?}. Nonetheless, running those inputs in our infrastructure
-we were unable to find discrepancies. Inpecting those inputs, we
-realized that they reflected very simple scenarios.\Comment{ \Mar{are there
-  weights associated with production rules besides the depth you can
-  set?}} Although grammar-based fuzzers has been shown effective to
-find real bugs\Fix{cite some jsfunfuzz bug reports}, generating
-valid inputs is very time-consuming, especially for the context of
-differential testing. For this reason, we did not consider those fuzzers.
+inputs that are syntactically valid by construction. We analyzed four
+grammar-based fuzzers--Grammarinator~\cite{grammarinator},
+jsfunfuzz~\cite{jsfunfuzz},
+LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, and
+Megadeth~\cite{grieco2016quickfuzz}.  Unfortunately, none of those
+were effective out of the box. For example, we produced 100K inputs
+with Grammarinator and only \Fix{X} of those were valid. With
+Megadeth, we were able to produce \Fix{Y, Y$>$Y?}  valid inputs as it
+contains some heuristics to circumvent violations of certain type
+rules such as \Fix{variable used must be defined?}. Nonetheless,
+running those inputs in our infrastructure we were unable to find
+discrepancies. Inpecting those inputs, we realized that they reflected
+very simple scenarios. To sum, a high percentage of inputs that
+Grammarinator and Megadeth generated were semantically-invalid that we
+needed to discard whereas the valid inputs manifested no
+discrepancies. Considering jsfunfuzz~\cite{jsfunfuzz}, we noticed
+that, in addition to the issues mentioned above, it produces inputs
+that use functions that are only available in the SpiderMonkey
+engine. We would need either to mock those functions in other engines
+or to discard those tests. Considering
+LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, the tool is not
+publicly available. One fundamental issue associated with generational
+fuzzers in our context is that the tests they produce do not contain
+assertions; to enable the integration of this kind of fuzzers in our
+infrastructure, we would need to look for discrepancies across
+compiler messages.  All in all, although grammar-based fuzzers have
+been shown effective to find real
+bugs~\cite{Holler:2012:FCF:2362793.2362831}, generating valid inputs,
+albeit promising conceptually, still requires some engineering
+effort. For this reason, we did not consider those fuzzers in this
+study.
 
 %% Our
 %% infrastructure supports any grammar fuzzer with a few
@@ -534,30 +555,35 @@ properties\footnote{There are options in the clang toolchain to build
   programs with fuzzing instrumentation~\cite{libfuzzer}. clang
   provides several sanitizers for property
   checking~\cite{clang-documentation}.}. AFL use coverage to determine
-inputs that uncover a new branch and deserve fuzzing whereas libFuzzer
-uses evolutionary generation--it tries to minimize the distances to
-still-uncovered branches of the program. AFL takes the instrumented
-program binary (say, a JS engine) and one seed input to that program
-(say, a JS program) and produces on output fault-revealing inputs, if
-found. Considering our context of application, we needed to instrument
-one runtime engine for fuzzing; we chose v8. Unfortunately, we found
-that most of the inputs produced by AFL violate the JS
-grammar. Furthermore, the fuzzing task can take daysfor a single seed
-input and there is no simple way to guide the
-exploration~\Fix{cite}. That happens because the fuzzer aims to
-explore the entire decision tree induced from the engine's main
-function, including the branches associated with the lexer and the
-parser. For those reasons, coverage-based fuzzers were not considered
-in this study. It is worth mentioning that Google mitigates that
-problem with libFuzzer by asking developers to create fuzz targets for
+inputs that uncover a new branch and hence should be fuzzed more
+whereas libFuzzer uses evolutionary generation--it tries to minimize
+the distances to still-uncovered branches of the program. AFL takes
+the instrumented program binary (say, a JS engine) and one seed input
+to that program (say, a JS program) and produces on output
+fault-revealing inputs, if found. Considering our context of
+application, we needed to instrument one runtime engine for fuzzing;
+we chose v8. Unfortunately, we found that most of the inputs produced
+by AFL violate the JS grammar. Furthermore, the fuzzing task can take
+days for a single seed input and there is no simple way to guide the
+exploration\footnote{Exchanged emails with the tool author.}. That
+happens because the fuzzer aims to explore the entire decision tree
+induced from the engine's main function, including the branches
+associated with the higher layers of the compiler (\eg{}, lexer and
+parser). It is worth mentioning that Google mitigates that problem
+with libFuzzer by asking developers to create fuzz targets for
 specific program
 functions\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although
 that approach has shown very effective, it requires domain knowledge
-to create the calling context to invoke the fuzz target.
+to create the calling context to invoke the fuzz target. For those
+reasons, coverage-based fuzzers were not considered in this study.
 
-\Fix{...do the same as above for black-box fuzzing. explain what kinds of
-inputs they can generate.}
-
+We uses two black-box mutational fuzzers in this
+study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
+fuzzers require no instrumentation and domain-knowledge. They mutate
+\emph{existing} inputs randomly. The strenght of the approach is
+limited by the supported mutation operators, which are typically
+simple, and the quality of the test suite. We chose \radamsa\ and
+\quickfuzz\ \Fix{...}
 
 \section{Results}
 \label{sec:results}
@@ -849,3 +875,5 @@ RFC-Directed Differential Testing of Certificate Validation in SSL/TLS Implement
 \bibliography{references,../docs/google-research-awards-latam/tmp}
 
 \end{document}
+
+%%  LocalWords:  bytecodes JScript Ecma
