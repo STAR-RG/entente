@@ -588,12 +588,12 @@ simple, and the quality of the test suite. We chose \radamsa\ and
 \section{Results}
 \label{sec:results}
 
-The overarching goal of our study is to identify the ability of simple
-techniques to find bugs in \js\ engines with cross-engine differential
-testing.  We analyzed the impact of two orthogonal dimensions in this
-study: test mining and fuzzing. The first dimension focuses on the
-impact of inputs, mined from the web, in bug finding whereas the
-second dimension focuses on the impact of fuzzing these inputs.
+The overarching goal of our study is to identify the ability of
+cross-engine differential testing to find bugs in \js\ engines.  We
+analyzed the impact of two orthogonal dimensions in this study: test
+mining and fuzzing. The first dimension focuses on the impact of
+inputs, mined from the web, in bug finding whereas the second
+dimension focuses on the impact of fuzzing these inputs.
 
 In the following, we describe the methodology we used in this
 experiment. Recall that our tool outputs a set of buckets, that each
@@ -919,7 +919,17 @@ if (!test())
 %   \caption{Bug caught by our environment as LO priority.}
 %   \label{fig:lo-priority}
 %   \end{figure}
-  
+
+\section{Discussion}
+
+It is important to highlight that our treatment on both dimensions of
+analysis--test mining and fuzzing--could be improved by selecting more
+test cases or using more advanced fuzzing tools. The main rationale is
+that if these techinques perform well with the objects we used
+(Section~\ref{sec:methodology}) then the approach would perform even
+better with more elaborate objects.
+
+\Fix{...}
 
 
 \section{Related Work}
