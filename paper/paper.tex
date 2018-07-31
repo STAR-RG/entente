@@ -633,8 +633,8 @@ following.
     \cline{4-5}    
     & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\% positive} \\
     \midrule
-    \multirow{2}{*}{no-fuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
-    & hi & \Fix{.} & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{no-fuzz} & lo & \nofuzzFilesLO{} & \nofuzzLOTotal{} & 34.3\% \\
+    & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & 70\% \\
     \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
     & hi & \Fix{.} & \Fix{.} & \Fix{.} \\
     \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
@@ -702,7 +702,7 @@ mode.
 
 This section reports the results obtained by fuzzing inputs with
 existing tools. It is important to mention that, to avoid experimental
-noise, we did not consider the \Fix{XX} files (\Fix{2.8\%} of the
+noise, we did not consider the \nofuzzTotalFiles{} files (\Fix{2.8\%} of the
 total) reported in the previous experiment, \ie{}, we only fuzzed test
 files whose output is consistent across all engines analyzed.
 
@@ -713,28 +713,28 @@ files whose output is consistent across all engines analyzed.
    in buckets.}
 \end{figure}
 
-\Igor{
-  Para realizar nossos experimentos, tivemos que decidir qual as 
-  melhores abordagens para aumentar a efetividade dos fuzzers.
-  Os fuzzers mutacionais se mostraram mais eficientes em relacao
-  aos fuzzers geracionais, entao focamos neste ponto.
-  Utilizamos os fuzzers radamsa, QuickFuzz e \Fix{others} nas suas configuracoes
-  default para realizar a mutacao em arquivos existentes.
-  O fuzzer radamsa eh um fuzzer mutacional agnostico de linguagem e possui algumas
-  deficiencias para a nossa infraestrutura como a falta de uma gramatica para guiar a suas mutacoes, 
-  pois muitas das vezes a unica mutacao ocorre em uma palavra dentro de um comentario por exemplo.
-  O fuzzer QuickFuzz tem uma gramatica JS integrada e sua mutacao ocorre de forma mais robusta que o 
-  radamsa, gerando arquivos mais relevantes.
-  Nossa infraestrutura usa a library Esprima\footnote{cite esprima url} para garantir que o arquivo fuzzado
-  é um arquivo de teste relevante, seguindo estes requisitos:
-  \begin{itemize}
-    \item it contains only unicode text
-    \item it is parseable (i.e., it is structurally well-formed)
-    \item it does not contain engine-specific functions  
-    \item it does not empty
-  \end{itemize}
+% \Igor{
+%   Para realizar nossos experimentos, tivemos que decidir qual as 
+%   melhores abordagens para aumentar a efetividade dos fuzzers.
+%   Os fuzzers mutacionais se mostraram mais eficientes em relacao
+%   aos fuzzers geracionais, entao focamos neste ponto.
+%   Utilizamos os fuzzers radamsa, QuickFuzz e \Fix{others} nas suas configuracoes
+%   default para realizar a mutacao em arquivos existentes.
+%   O fuzzer radamsa eh um fuzzer mutacional agnostico de linguagem e possui algumas
+%   deficiencias para a nossa infraestrutura como a falta de uma gramatica para guiar a suas mutacoes, 
+%   pois muitas das vezes a unica mutacao ocorre em uma palavra dentro de um comentario por exemplo.
+%   O fuzzer QuickFuzz tem uma gramatica JS integrada e sua mutacao ocorre de forma mais robusta que o 
+%   radamsa, gerando arquivos mais relevantes.
+%   Nossa infraestrutura usa a library Esprima\footnote{cite esprima url} para garantir que o arquivo fuzzado
+%   é um arquivo de teste relevante, seguindo estes requisitos:
+%   \begin{itemize}
+%     \item it contains only unicode text
+%     \item it is parseable (i.e., it is structurally well-formed)
+%     \item it does not contain engine-specific functions  
+%     \item it does not empty
+%   \end{itemize}
 
-}
+% }
 
 \section{Bugs Found}
 \label{sec:bugs}
