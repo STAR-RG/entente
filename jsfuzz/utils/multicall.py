@@ -1,9 +1,9 @@
-import shlex, os, hashlib, ntpath, logging
+import shlex, os, hashlib, ntpath, logging, signal, re, timeout_decorator
 from subprocess import STDOUT, check_output, PIPE, CalledProcessError, TimeoutExpired, getstatusoutput
 from tempfile import mkstemp
 from jsfuzz.utils import constants
 from jsfuzz.fuzzer import radamsa_fuzzer
-from jsfuzz.utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH
+from jsfuzz.utils.blacklist import INVALID_STRINGS, ENGINES_KEYWORDS, REPORT_PASS_KEYWORDS, GLOBAL_HASH, SEED_INVALID
 
 '''
     Class that saves state across several multicalls
@@ -79,7 +79,7 @@ class Multicalls:
             self.short_file.write(res.str_canonical())
 
 
-def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=[]):
+def multicall_directories(path_name, should_fuzz, validator=None, libs=None, search_root=None, search_libfiles=[], ignored_files=[], fuzzer='', eshost=False):
     """
         Process files in a directory, running multicall on each file.
 
@@ -98,9 +98,11 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
     
     path_list = path_name.split('/')
     index = path_list.index('seeds') + 1
-    name = 'fuzzed_' + '_'.join(path_list[index:])
 
-    log_name_suffix = ('fuzz' if should_fuzz else '') + '_diff_report_' + name + '.txt'
+    fuzzed = fuzzer if fuzzer else 'nofuzz'
+    name = '_'.join(path_list[index:])
+    
+    log_name_suffix = '_{}_diff_report_{}.txt'.format(fuzzed, name)
 
     if not os.path.isdir(constants.logs_dir):
         os.mkdir(constants.logs_dir)
@@ -131,36 +133,101 @@ def multicall_directories(path_name, should_fuzz, validator=None, libs=None, sea
                         local_libs = [os.path.join(current_dir, f) for f in os.listdir(current_dir) if f in search_libfiles]
                         test_specific_libs = local_libs + test_specific_libs # not efficient, but not gonna use a deque here for now
                         current_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
-
             if should_fuzz:
                 #pylint: disable=W0612
                 try:
                     radamsa_fuzzer.fuzz_file(constants.num_iterations, file_path, mcalls, validator, libs=(libs + test_specific_libs))
                 except Exception as e: # error raised by timeout decorator
-                    logging.error('UNEXPECTED')
+                    logging.error('UNEXPECTED '+ str(e))
                     continue
             else:
-                res = callAll(file_path, libs = (libs + test_specific_libs))
+                res = callAll(file_path, libs = (libs + test_specific_libs), eshost=eshost)
                 mcalls.notify(res)
 
         mcalls.save_summary()
 
 
-def callAll(pathName, validator=None, libs=None):
+def get_valid_engines(path_name):
+    """
+        return the list of engines that could run a specific file (@path_name)
+    """
+    valid_engines = ['chakra', 'jsc', 'spidermonkey', 'v8']
+    
+    # get string after seeds/ pattern
+    pattern = r"(?<=seeds\/).*$"
+    regex = re.compile(pattern, re.IGNORECASE)
+    name = regex.search(path_name).group()
+    
+    # check if engine should not ran this file
+    if name in SEED_INVALID['chakra']:
+        valid_engines.remove('chakra')
+    elif name in SEED_INVALID['spidermonkey']:
+        valid_engines.remove('spidermonkey')
+    elif name in SEED_INVALID['jsc']:
+        valid_engines.remove('jsc')
+    elif name in SEED_INVALID['v8']:
+        valid_engines.remove('v8')
+
+    return valid_engines
+
+
+def to_one_file(path_name, libs):
+    if not (len(libs)>0) or not libs:
+        return path_name
+
+    fd, tmp_path = mkstemp(prefix=path_name, text=True)
+    all_files = []
+    all_files.extend(libs)
+    all_files.append(path_name)
+    with open(fd, 'w', encoding='utf-8', errors='ignore') as outfile:
+        for filename in all_files:
+            with open(filename, encoding='utf-8', errors='ignore') as infile:
+                outfile.write(infile.read())
+                outfile.write("\n\n")
+
+    return tmp_path
+
+def callAll(path_name, validator=None, libs=None, eshost=True):
     '''
         This function calls all engines and returns a Results object (see class below) 
         encapsulating the output and error streams of corresponding calls
     '''
-    res = Results(pathName) if not validator else Results(pathName, validator(pathName))
+    # invalid seeds
+    engines = get_valid_engines(path_name)
+
+    res = Results(path_name, eshost=eshost) if not validator else Results(path_name, validator(path_name), eshost=eshost)
+
+    jsc_outerr, chakra_outerr = '', ''
+    spidermonkey_outerr, v8_outerr = '', ''
+
+    # add all libs to one file if libs != None
+    path_name = to_one_file(path_name, libs)
+
+    print('running file:', path_name)
+    if eshost:
+        output = callJSEngine(path_name, eshost=eshost)
+        out = output.split('####')
+        for i in out:
+            i = i.strip()
+            if 'Chakra' in i:
+                chakra_outerr = i.replace('Chakra', '')
+            elif 'JavaScriptCore' in i:
+                jsc_outerr = i.replace('JavaScriptCore', '')
+            elif 'V8' in i:
+                v8_outerr = i.replace('V8', '')
+            elif 'SpiderMonkey' in i:
+                spidermonkey_outerr = i.replace('SpiderMonkey','')
+    else:
+        jsc_outerr = callJSEngine('{} {}'.format(constants.javascriptcore, path_name), eshost=eshost)
+        v8_outerr = callJSEngine('{} {}'.format(constants.v8, path_name), eshost=eshost)
+        spidermonkey_outerr = callJSEngine('{} {}'.format(constants.spidermonkey, path_name), eshost=eshost)
+        chakra_outerr = callJSEngine('{} {}'.format(constants.chakra, path_name), eshost=eshost)
     
-    # JavaScriptCore
-    jsc_outerr = callJavaScriptCore(pathName, libs)
-    # Chakra
-    chakra_outerr = callChakra(pathName, libs)
-    # SpiderMonkey
-    spidermonkey_outerr = callSpiderMonkey(pathName, libs)
-    # v8
-    v8_outerr = callV8(pathName, libs)
+    if not path_name.endswith('.js'):
+        try:
+            os.remove(path_name)
+        except:
+            raise Exception('Cannot remove tmp file: {}'.format(path_name))
 
     res.set_results({
         "jsc": jsc_outerr,
@@ -169,22 +236,43 @@ def callAll(pathName, validator=None, libs=None):
         "v8": v8_outerr
     })
 
+    for engine in list(res.stack_traces.keys()):
+        if engine not in engines:
+            del res.stack_traces[engine]
+           
     return res
 
-#TODO: see issue #16
-def callJSEngine(cmd_line):
+@timeout_decorator.timeout(constants.timeout_JS_engine)
+def call_cmd(cmd):
+    msg = ''
+    try:
+        msg = check_output(cmd, stderr=STDOUT).decode('utf-8')
+    except CalledProcessError as errorExc:
+        try:
+            msg = errorExc.output.decode('utf-8',errors='ignore')
+            # msg = errorExc.output.decode('utf-8')
+        except:
+            try:
+                msg = errorExc.output.decode("utf-8", "replace")
+            except:
+                msg = errorExc.output
+    return msg
+        
+
+def callJSEngine(cmd_line, eshost=True):
     '''
         This function makes the system call to the JS engine binary
     '''
-    timeout_limit = constants.timeout_JS_engine
+    if not eshost:
+        cmd = shlex.split(cmd_line)
+    else:     
+        cmd_line = 'eshost {}'.format(cmd_line)
+    
     cmd = shlex.split(cmd_line)
-    msg = ''
     #pylint: disable=W0612
     try:
-        msg = check_output(cmd, stderr=STDOUT, timeout=timeout_limit).decode('utf-8')
-    except CalledProcessError as errorExc:
-        msg = errorExc.output.decode('utf-8')
-    except TimeoutExpired as timeoutExc:
+        msg = call_cmd(cmd)
+    except timeout_decorator.TimeoutError as e:
         msg = 'Error: TIMEOUT'
 
     if not msg:
@@ -193,40 +281,18 @@ def callJSEngine(cmd_line):
         if error:
             msg = 'Error: [CHECK_MANUALLY] {}'.format(error)
 
+    close_eshost(eshost)
     return msg
 
-def callJavaScriptCore(pathName, libs=[]):
-    libcmd = " ".join(libs) if libs else ""
-    cmd_line = constants.javascriptcore + " " + libcmd + " " + pathName
-    #os.environ['LD_LIBRARY_PATH'] = constants.javascriptcore_lib_dir
-    return callJSEngine(cmd_line)
-
-# seems chakra only supports a single source file as input
-def callChakra(path_name, libs=[], flags=['-ES6Experimental']):
-    if libs and len(libs) > 0:
-        fd, tmp_path = mkstemp(prefix="chakrafuzz", text=True)
-        all_files = []
-        all_files.extend(libs)
-        all_files.append(path_name)
-        with open(fd, 'w') as outfile:
-            for filename in all_files:
-                with open(filename) as infile:
-                    outfile.write(infile.read())
-                    outfile.write("\n\n")
-        path_name = tmp_path
-
-    cmd_line = constants.chakra + " " + " ".join(flags) + " " + path_name
-    return callJSEngine(cmd_line)
-
-def callSpiderMonkey(pathName, libs=[]):
-    libcmd = (" -f " + " -f ".join(libs)) if libs else ""
-    cmd_line = constants.spidermonkey + libcmd + " " + pathName
-    return callJSEngine(cmd_line)
-
-def callV8(pathName, libs=[]):
-    libcmd = " ".join(libs) if libs else ""
-    cmd_line = constants.v8 + " " + libcmd + " " + pathName
-    return callJSEngine(cmd_line)
+def close_eshost(eshost):
+    ''' close eshost connection (handle OSError for memory allocation) '''
+    if not eshost:
+        return
+    pids = os.popen('ps ax | grep {} | grep -v grep | awk "{print $1}"')
+    pids = [pid.strip() for pid in pids]
+    for pid in pids:
+        if pid:
+            os.kill(int(pid), signal.SIGKILL)
 
 class Results:
     """
@@ -235,7 +301,7 @@ class Results:
         there is observed discrepancies across calls.
     """
 
-    def __init__(self, path_name, validation_error=None):
+    def __init__(self, path_name, validation_error=None, eshost=True):
         self.path_name = path_name
         self.validation_error = validation_error
         self.stack_traces = {'chakra': '', 'jsc': '', 'spidermonkey': '', 'v8': ''}
@@ -243,39 +309,53 @@ class Results:
         self.chakra_outerr = None
         self.spiderm_outerr = None
         self.v8_outerr = None
+        self.eshost = eshost
 
     def __str__(self):
         if self.validation_error:
             return "***  {path}\n    validation error: {error}\n".format(path=self.path_name,error=self.validation_error)
         else:
-            return ("***  " + self.path_name + "\n" 
-            "-------------JavaScriptCore\n" +
-            self.jsc_outerr + "\n" +
-            "-------------Chakra\n" +
-            self.chakra_outerr + "\n" +
-            "-------------SpiderMonkey\n" +
-            self.spiderm_outerr + "\n" +
-            "-------------v8\n" +
-            self.v8_outerr + "\n")
+            return (
+                """
+                ***  {path}\n
+                -------------JavaScriptCore\n{jsc}\n
+                -------------Chakra\n{chakra}\n
+                -------------SpiderMonkey\n{sm}\n
+                -------------v8\n{v8}\n
+                """
+            ).format(path=self.path_name, jsc=self.jsc_outerr, chakra=self.chakra_outerr, sm=self.spiderm_outerr, v8=self.v8_outerr)
 
     '''
         This string function abstract the parts of error messages 
         related to the code that originated the error. This is 
         important to identify duplicate errors.
-    '''
+    '''    
     def str_canonical(self):
         if self.validation_error:
             return self.validation_error
         else:
-            return (
-            "-------------JavaScriptCore\n" +
-            self.abstract(self.jsc_outerr) + "\n" +
-            "-------------Chakra\n" +
-            self.abstract(self.chakra_outerr) + "\n" +
-            "-------------SpiderMonkey\n" +
-            self.abstract(self.spiderm_outerr) + "\n" +
-            "-------------v8\n" +
-            self.abstract(self.v8_outerr) + "\n")
+            if self.eshost:
+                return (
+                    "-------------JavaScriptCore\n" +
+                    self.jsc_outerr + "\n" +
+                    "-------------Chakra\n" +
+                    self.chakra_outerr + "\n" +
+                    "-------------SpiderMonkey\n" +
+                    self.spiderm_outerr + "\n" +
+                    "-------------v8\n" +
+                    self.v8_outerr + "\n"
+                )
+            else:
+                return (
+                    "-------------JavaScriptCore\n" +
+                    self.abstract(self.jsc_outerr) + "\n" +
+                    "-------------Chakra\n" +
+                    self.abstract(self.chakra_outerr) + "\n" +
+                    "-------------SpiderMonkey\n" +
+                    self.abstract(self.spiderm_outerr) + "\n" +
+                    "-------------v8\n" +
+                    self.abstract(self.v8_outerr) + "\n"
+                )
 
     def abstract(self, string):
         error_message = ''
@@ -309,6 +389,28 @@ class Results:
                 break
 
         return error_message
+
+    # def get_report(self):
+    #     if not self.eshost:
+    #         jsc = self.abstract(self.jsc_outerr)
+    #         v8 = self.abstract(self.v8_outerr)
+    #         spidermonkey = self.abstract(self.spiderm_outerr)
+    #         chakra = self.abstract(self.chakra_outerr)
+    #     return (
+    #         """
+    #         ***  {path}\n
+    #         -------------JavaScriptCore\n{jsc}\n
+    #         -------------Chakra\n{chakra}\n
+    #         -------------SpiderMonkey\n{sm}\n
+    #         -------------v8\n{v8}\n
+    #         """
+    #     ).format(
+    #         path=self.path_name, 
+    #         jsc=self.jsc_outerr, 
+    #         chakra=self.chakra_outerr, 
+    #         sm=self.spiderm_outerr, 
+    #         v8=self.v8_outerr
+    #     )
 
     def hash(self):
         bytes = self.str_canonical().encode()
@@ -355,10 +457,10 @@ class Results:
         '''
         try:
             all_engines = all(self.get_all_outerr())
-            is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines
+            is_fundamentally_interesting = self.is_valid() and self.is_atleastone() and not all_engines and not self.is_only_timeout()
             if not (is_fundamentally_interesting): ## necessary condition to be interesting
                 return False
-            
+
             return not self.is_spurious()
         
         except AttributeError:  # TODO either add all missing attr. to the (invalidated) result or fix this
@@ -369,9 +471,6 @@ class Results:
         Remove spurious reports based on keywords/strings
         TODO: updating strings in blacklist file
         """
-        ## TODO: Igor, why only Chakra raises undefined/not defined? - Marcelo
-        ## Chakra is a new engine, some features are not implemented yet
-       
         all_outputs = self.get_all_outerr()
         for engine_output in all_outputs:
             if 'Fatal' in engine_output or '[CHECK_MANUALLY]' in engine_output:
@@ -397,21 +496,26 @@ class Results:
         """
         return any(self.get_all_outerr())
     
+    def is_only_timeout(self):
+        """
+        Return True if all outputs have a timeout error message
+        """
+        outputs = self.get_all_outerr()
+        len_outputs = len(outputs)
+        len_timeouts = len([output for output in outputs if 'TIMEOUT' in output])
+        len_empty = len([output for output in outputs if '' == output])
+        
+        if len_timeouts == len_outputs or (len_empty + len_timeouts == len_outputs):
+            return True
+        return False
+
     def get_all_outerr(self, abstract=True):
         """
         Return a list of all engines output errors
         """
         if abstract:
-            return [
-                self.abstract(self.jsc_outerr),
-                self.abstract(self.chakra_outerr),
-                self.abstract(self.spiderm_outerr),
-                self.abstract(self.v8_outerr)
-            ]
-        return [
-            self.jsc_outerr, self.chakra_outerr, 
-            self.spiderm_outerr, self.v8_outerr
-        ]
+            return [self.abstract(output) for output in self.stack_traces.values()]
+        return [output for output in self.stack_traces.values()]
 
     # TODO generalize this stuff with a dict
     def set_results(self, results):
@@ -431,6 +535,4 @@ class Results:
         self.stack_traces['spidermonkey'] = results['spidermonkey']
 
 if __name__ == "__main__":
-    # example
-    res = callAll(os.path.join(constants.seeds_dir, 'max.js'))
-    print (res)
+    pass
