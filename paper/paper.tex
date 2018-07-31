@@ -236,7 +236,7 @@ generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.
 Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 
 
-
+\Mar{explain what is a bucket (we refer to it later).}
 The infrastructure outputs a list of warnings for human inspection.
 To reduce the number of false alarms, we clustered warnings in two
 groups, reflecting their likelihood to manifest a real bug. Warnings
@@ -588,17 +588,52 @@ simple, and the quality of the test suite. We chose \radamsa\ and
 \section{Results}
 \label{sec:results}
 
-In this study, we analyzed the impact of two orthogonal dimensions in
-bug finding: test mining and fuzzing. The first dimension focuses on
-the impact of new inputs in bug finding whereas the second dimension
-focuses on the impact of variations of existing inputs in bug finding.
+The overarching goal of our study is to identify the ability of simple
+techniques to find bugs in \js\ engines with cross-engine differential
+testing.  We analyzed the impact of two orthogonal dimensions: test
+mining and fuzzing. The first dimension focuses on the impact of
+inputs, mined from the web, in bug finding whereas the second
+dimension focuses on the impact of fuzzing these inputs in bug
+finding.
+
+We describe the methodology we used in this experiment in the
+following. Recall that our tool produces warnings on output organized
+in buckets (Section~\ref{sec:design}). Each bucket describes a
+warnings--one per file (fuzzed or not)--and can be of ``lo'' or ``hi''
+importance, according to the heuristic we
+defined. Figure~\ref{fig:distribution} shows the distribution of
+warnings reported per bucket. Observe that in some cases the number of
+files per bucket is very high; it would be infeasible to manually
+inspect all of them. For that, we inspected each and every reported
+bucket but only one file per bucket. For the cases we found
+suspicious, we filed a bug report in the bug tracker. In some cases,
+we used the Mozila lithium tool~\cite{lithium} to minimize the test
+case. Table~\ref{tab:summary-of-results} summarizes the number of
+buckets of each category per execution mode. \Fix{elaborate}
+
+\begin{table}[t]
+  \centering
+  \caption{\label{tab:summary-of-results}Summary of results.}
+  \begin{tabular}{ccrr}
+    \toprule
+    mode & type & \# buckets & \% positive buckets \\ 
+    \midrule
+    \multirow{2}{*}{no-fuzz} & lo & \Fix{.} & \Fix{.} \\
+    & hi & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} \\
+    & hi & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} \\
+                             & hi & \Fix{.} & \Fix{.} \\    
+    \bottomrule     
+  \end{tabular}
+\end{table}
+
 
 \subsection{Test Mining}
 
 In this experiment, we ran all tests (see Section~\ref{sec:seeds})
-using our infrastructure in no-fuzzing mode. We inspected all warnings
-reported by our tool and, for those we found suspicious, we filed a
-bug report in the corresponding bug tracker.
+using our infrastructure in no-fuzzing mode. The goal is to identify
+the impact of using publicly available tests on .......... 
 
 \Igor{
   No total, foram obtidos \nofuzzAll{} warnings, sendo estes \nofuzzHighTotal{}
