@@ -588,12 +588,19 @@ simple, and the quality of the test suite. We chose \radamsa\ and
 \section{Results}
 \label{sec:results}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.40\textwidth]{R/histograms/histograms.pdf}  
+  \caption{\label{fig:distribution}Distribution of lo and hi warnings
+   in buckets.}
+\end{figure}
+
 The overarching goal of our study is to identify the ability of
 cross-engine differential testing to find bugs in \js\ engines.  We
 analyzed the impact of two orthogonal dimensions in this study: test
 mining and fuzzing. The first dimension focuses on the impact of
 inputs, mined from the web, in bug finding whereas the second
-dimension focuses on the impact of fuzzing these inputs.
+dimension focuses on the impact of fuzzing those inputs.
 
 In the following, we describe the methodology we used in this
 experiment. Recall that our tool outputs a set of buckets, that each
@@ -611,34 +618,77 @@ the files in the bucket. For that reason, we only inspected one file
 per bucket. For the cases we found the warning suspicious, we analyzed
 the parts of the documentation related to the problem and, if still
 suspicious, we looked on the bug tracker of the affected engine for
-potential duplicates. If none was reported, we filed a bug report in
-the bug tracker including the test input that manifested the potential
-problem and explaining the reasons we were suspicious. In some cases,
-we used the Mozila lithium tool~\cite{lithium} to minimize the test
-case. For the cases of false positives, we classified the reason for
-the misclassification and moved to the next
-bucket. Table~\ref{tab:summary-of-results} summarizes our results. It
-shows, for each execution mode and category of bucket (\ie{}, hi or
-lo), the total number of files involved, the number of buckets
-reported, and the percentage of those that resulted in a bug
-report. \Fix{elaborate summary} We elaborate those results in the
-following.
+potential duplicates. If none was reported, we filed a bug report
+including the test input that manifested the potential problem and
+explaining the reasons we were suspicious. In some cases, we used the
+Mozila lithium tool~\cite{lithium} to minimize the test case. For the
+cases of false positives, we identified the source of false positive
+and moved to the next bucket. Table~\ref{tab:summary-of-results}
+summarizes our results. It shows, for each execution mode and category
+of bucket (\ie{}, hi or lo), the total number of files involved, the
+number of buckets reported by our infrastructure, the number of those
+that we classified as bug-revealing, and the number of those that we
+filed a bug report. The difference between the last two columns
+indicate the number of duplicates, \ie{}, the cases of
+already-reported bugs. As expected, the hit ratio for the ``hi'' group
+is higher.
 
 \begin{table}[t]
   \centering
   \caption{\label{tab:summary-of-results}Summary of results.}
-  \begin{tabular}{ccrrr}
+  \begin{tabular}{ccrrrr}
     \toprule
-    \multirow{2}{*}{mode} & \multirow{2}{*}{type} & \multirow{2}{*}{\# files} &  \multicolumn{2}{c}{buckets} \\
-    \cline{4-5}    
-    & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\% positive} \\
+    \multirow{2}{*}{mode} & \multirow{2}{*}{type} & \multirow{2}{*}{\# files} &  \multicolumn{3}{c}{buckets} \\
+    \cline{4-6}    
+    & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\# pos.} &
+    \multicolumn{1}{c}{\# pos. filed} \\
     \midrule
-    \multirow{2}{*}{no-fuzz} & lo & \nofuzzFilesLO{} & \nofuzzLOTotal{} & 34.3\% \\
-    & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & 70\% \\
-    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
-    & hi & \Fix{.} & \Fix{.} & \Fix{.} \\
-    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
-                             & hi & \Fix{.} & \Fix{.} & \Fix{.} \\    
+    \multirow{2}{*}{nofuzz} & lo & \nofuzzFilesLO{} &  \nofuzzLOTotal{} & \Fix{.} & 11 (34) \\
+    & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & \Fix{.} & \Fix{108 (-)} \\
+    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
+    & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
+                             & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\    
+    \bottomrule     
+  \end{tabular}
+\end{table}
+
+Table~\ref{tab:false-positives} shows the distribution of false
+positives per source. A false positive is a bucket that did not reveal
+a bug. We identified five sources of imprecision. The source ``not yet
+implemented'' indicates that the engine does not implement some part
+of the specification. For example, at the time of writing, Chakra does
+not implement various properties from the \CodeIn{Symbol} object. The
+source ``invalid input'' indicates that the test violated some part of
+the specification. For example, the test indirectly invoked some
+function with unexpected arguments\Fix{provide concrete example}. In
+all cases that we analyzed, that happened because fuzzing produced an
+invalid test input. Note that no false positives of this kind appears
+under the column nofuzz. The source ``timeout/ome'' indicates that the
+test times out (we used a 3s time budget) or runs out of memory. That
+happens because engines implement different set of optimizations. For
+example, only \jsc{} implements tail-call optimization to avoid tail
+recursion. Consequently, for a certain input, it finishes execution
+quickly whereas other engines time out. The source
+``implementation-dependent'' is as defined in
+Section~\ref{sec:imp-dep-behavior}.\Fix{provide concrete example} The
+source ``future feature'' corresponds to the case where some feature
+will be part of the spec in the future but implementing it is
+facultative.\Fix{provide concrete example}
+
+\begin{table}[t]
+  \centering
+  \caption{\label{tab:false-positives}Distribution of false
+    positives buckets per source.}
+  \begin{tabular}{crrr}
+    \toprule
+              & nofuzz & \radamsa\ & \quickfuzz\ \\
+%    duplicate & 63      & - & - \\
+    not yet implemented & 8 & - & - \\
+    invalid input & 0 & - & - \\
+    timeout/ome & 13 & - & - \\
+    implementation-dependent & 3 & - & - \\
+    future feature & 3 & - & - \\
     \bottomrule     
   \end{tabular}
 \end{table}
@@ -715,13 +765,6 @@ existing tools. It is important to mention that, to avoid experimental
 noise, we did not consider the \nofuzzTotalFiles{} files (\Fix{2.8\%} of the
 total) reported in the previous experiment, \ie{}, we only fuzzed test
 files whose output is consistent across all engines analyzed.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[trim=0 0 0 0,clip,width=0.40\textwidth]{R/histograms/histograms.pdf}  
-  \caption{\label{fig:distribution}Distribution of lo and hi warnings
-   in buckets.}
-\end{figure}
 
 % \Igor{
 %   Para realizar nossos experimentos, tivemos que decidir qual as 
@@ -953,4 +996,4 @@ RFC-Directed Differential Testing of Certificate Validation in SSL/TLS Implement
 
 \end{document}
 
-%%  LocalWords:  bytecodes JScript Ecma
+%%  LocalWords:  bytecodes JScript Ecma ome
