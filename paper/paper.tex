@@ -590,56 +590,67 @@ simple, and the quality of the test suite. We chose \radamsa\ and
 
 The overarching goal of our study is to identify the ability of simple
 techniques to find bugs in \js\ engines with cross-engine differential
-testing.  We analyzed the impact of two orthogonal dimensions: test
-mining and fuzzing. The first dimension focuses on the impact of
-inputs, mined from the web, in bug finding whereas the second
-dimension focuses on the impact of fuzzing these inputs in bug
-finding.
+testing.  We analyzed the impact of two orthogonal dimensions in this
+study: test mining and fuzzing. The first dimension focuses on the
+impact of inputs, mined from the web, in bug finding whereas the
+second dimension focuses on the impact of fuzzing these inputs.
 
-We describe the methodology we used in this experiment in the
-following. Recall that our tool produces warnings on output organized
-in buckets (Section~\ref{sec:design}). Each bucket includes a set of
-warnings and each warning is related to one file.  A bucket is of
-``lo'' or ``hi'' importance, according to the heuristic we
-defined. Figure~\ref{fig:distribution} shows the distribution of
-warnings reported per bucket. Observe that, in some cases, the number
-of files per bucket is very high; it would be impractical to manually
-inspect all of them. For that, we inspected each and every bucket but
-only inspected one file per bucket. For the cases we found the warning
-suspicious, we analyzed the parts of the documentation related to the
-problem and, if still suspicious, we looked on the bug tracker of the
-affected engine for potential duplicates. If none was reported, we
-filed a bug report in the bug tracker including the test input that
-manifested the potential problem and explaining the reasons we were
-suspicious. In some cases, we used the Mozila lithium
-tool~\cite{lithium} to minimize the test case. For the cases of false
-positive warnings, we classified the reason and moved to the next
-bucket. Table~\ref{tab:summary-of-results} summarizes the number of
-buckets of each category per execution mode. \Fix{elaborate}
+In the following, we describe the methodology we used in this
+experiment. Recall that our tool outputs a set of buckets, that each
+bucket includes a set of warnings, that each warning is related to one
+file, and that a bucket is of ``lo'' or ``hi'' importance, according
+to the heuristic we defined. Figure~\ref{fig:distribution} shows the
+distribution of number of warnings per bucket. We use the the label
+``nofuzz'' to refer to the experiment that analyzed the impact of test
+mining as we do not use fuzzing in that experiment and use the names
+of the fuzzing tools to refer to the results obtained with those
+tools. We inspected each and every bucket for bugs, but observe that
+the number of files per bucket is very high in some cases (\eg{},
+nofuzz [hi]). As such, it would be impractical to manually inspect all
+the files in the bucket. For that reason, we only inspected one file
+per bucket. For the cases we found the warning suspicious, we analyzed
+the parts of the documentation related to the problem and, if still
+suspicious, we looked on the bug tracker of the affected engine for
+potential duplicates. If none was reported, we filed a bug report in
+the bug tracker including the test input that manifested the potential
+problem and explaining the reasons we were suspicious. In some cases,
+we used the Mozila lithium tool~\cite{lithium} to minimize the test
+case. For the cases of false positives, we classified the reason for
+the misclassification and moved to the next
+bucket. Table~\ref{tab:summary-of-results} summarizes our results. It
+shows, for each execution mode and category of bucket (\ie{}, hi or
+lo), the total number of files involved, the number of buckets
+reported, and the percentage of those that resulted in a bug
+report. \Fix{elaborate summary} We elaborate those results in the
+following.
 
 \begin{table}[t]
   \centering
   \caption{\label{tab:summary-of-results}Summary of results.}
-  \begin{tabular}{ccrr}
+  \begin{tabular}{ccrrr}
     \toprule
-    mode & type & \# buckets & \% positive buckets \\ 
+    \multirow{2}{*}{mode} & \multirow{2}{*}{type} & \multirow{2}{*}{\# files} &  \multicolumn{2}{c}{buckets} \\
+    \cline{4-5}    
+    & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\% positive} \\
     \midrule
-    \multirow{2}{*}{no-fuzz} & lo & \Fix{.} & \Fix{.} \\
-    & hi & \Fix{.} & \Fix{.} \\
-    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} \\
-    & hi & \Fix{.} & \Fix{.} \\
-    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} \\
-                             & hi & \Fix{.} & \Fix{.} \\    
+    \multirow{2}{*}{no-fuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
+    & hi & \Fix{.} & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
+    & hi & \Fix{.} & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
+                             & hi & \Fix{.} & \Fix{.} & \Fix{.} \\    
     \bottomrule     
   \end{tabular}
 \end{table}
 
 
-\subsection{Test Mining}
+\subsection{No Fuzzing}
 
-In this experiment, we ran all tests (see Section~\ref{sec:seeds})
-using our infrastructure in no-fuzzing mode. The goal is to identify
-the impact of using publicly available tests on .......... 
+This section reports the results obtained without fuzzing. The goal is
+to observe the impact of the mined test cases in revealing
+differential bugs. In this experiment, we ran all tests (see
+Section~\ref{sec:seeds}) using our infrastructure in no-fuzzing
+mode. 
 
 \Igor{
   Apos este experimento, foram obtidos \nofuzzAll{} buckets sendo destes \nofuzzHITotal
@@ -689,11 +700,11 @@ the impact of using publicly available tests on ..........
 
 \subsection{Fuzzing}
 
-The rationale for considering fuzzing as a dimension of study is to
-assess the extent to which changing existing inputs helps in finding
-new bugs. We measured this ability both in absolute terms and
-relatively to the number of bugs found with the seed inputs in
-no-fuzzing mode.
+This section reports the results obtained by fuzzing inputs with
+existing tools. It is important to mention that, to avoid experimental
+noise, we did not consider the \Fix{XX} files (\Fix{2.8\%} of the
+total) reported in the previous experiment, \ie{}, we only fuzzed test
+files whose output is consistent across all engines analyzed.
 
 \begin{figure}[t]
   \centering
