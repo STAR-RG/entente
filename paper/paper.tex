@@ -653,7 +653,17 @@ Section~\ref{sec:seeds}) using our infrastructure in no-fuzzing
 mode. 
 
 \Igor{
-  Apos este experimento, foram obtidos \nofuzzAll{} buckets sendo destes \nofuzzHITotal
+  Neste experimento, obtemos \nofuzzAll{} buckets distintos, a proporcao \'e de 
+  \nofuzzHITotal{} HI e apenas \nofuzzLOTotal{} LO. Como descrito anteriormente,
+  n\'os analisamos e discutimos se estas discrepancias reportadas pela ferramenta sao 
+  casos de bugs reais ou casos de falso positivos.
+  Nesta analise, nos observamos que cerca de \Fix{63} buckets sao duplicados, ou seja,
+  estes warnings foram reportados anteriormente nos issues trackers dos engenhos 
+  ou podem ser encontrados casos similares em buckets distintos. Um exemplo claro dos 
+  buckets duplicados podem ser encontrados atraves dos testes da suite Test262,
+  onde esta suite cobre as especificacoes da linguagem em arquivos distintos e que
+  podem conter mensagens de erro diferentes.
+  
 
   % Ao total, foram obtidos \nofuzzAll{} warnings, sendo estes \nofuzzHighTotal{}
   % pertencentes aos buckets com prioridade HI e \nofuzzLowTotal{} da prioridade LO. 
