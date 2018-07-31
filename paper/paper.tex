@@ -598,17 +598,23 @@ finding.
 
 We describe the methodology we used in this experiment in the
 following. Recall that our tool produces warnings on output organized
-in buckets (Section~\ref{sec:design}). Each bucket describes a
-warnings--one per file (fuzzed or not)--and can be of ``lo'' or ``hi''
-importance, according to the heuristic we
+in buckets (Section~\ref{sec:design}). Each bucket includes a set of
+warnings and each warning is related to one file.  A bucket is of
+``lo'' or ``hi'' importance, according to the heuristic we
 defined. Figure~\ref{fig:distribution} shows the distribution of
-warnings reported per bucket. Observe that in some cases the number of
-files per bucket is very high; it would be infeasible to manually
-inspect all of them. For that, we inspected each and every reported
-bucket but only one file per bucket. For the cases we found
-suspicious, we filed a bug report in the bug tracker. In some cases,
-we used the Mozila lithium tool~\cite{lithium} to minimize the test
-case. Table~\ref{tab:summary-of-results} summarizes the number of
+warnings reported per bucket. Observe that, in some cases, the number
+of files per bucket is very high; it would be impractical to manually
+inspect all of them. For that, we inspected each and every bucket but
+only inspected one file per bucket. For the cases we found the warning
+suspicious, we analyzed the parts of the documentation related to the
+problem and, if still suspicious, we looked on the bug tracker of the
+affected engine for potential duplicates. If none was reported, we
+filed a bug report in the bug tracker including the test input that
+manifested the potential problem and explaining the reasons we were
+suspicious. In some cases, we used the Mozila lithium
+tool~\cite{lithium} to minimize the test case. For the cases of false
+positive warnings, we classified the reason and moved to the next
+bucket. Table~\ref{tab:summary-of-results} summarizes the number of
 buckets of each category per execution mode. \Fix{elaborate}
 
 \begin{table}[t]
