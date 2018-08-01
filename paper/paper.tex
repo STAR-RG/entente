@@ -16,8 +16,7 @@
 \begin{document}
 
 %Should I Fuzz my Inputs or Improve my Tests? 
-\title{Differential Testing Runtime Engines--Lessons Learned from the
-  JavaScript Domain}
+\title{Assessing Reliability of JavaScript Engines by Leveraging Diversity}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -61,23 +60,35 @@ important domain. Our study \Fix{...}
 JavaScript (\js{}) is today one of the most popular programming
 languages for the web~\cite{business-insider,stackify}. The interest
 of the community for the language encourages constant improvements in
-its specification and implementations (see
-Section~\ref{sec:es6-design}). It is natural to expect that such
-improvements will entail sensible changes in runtime
-engines~\cite{kangax}; changes that could lead to errors. Even small
-changes can have a large impact in practice. For example, in October
-2014 a new attribute added to the Array datatype caused a bug that
+its specification and implementations. It is natural to expect that
+such improvements entails sensible changes in runtime engines. Even
+small changes can have a large impact in practice. For example, in
+October 2014 a new attribute added to Array objects caused a bug that
 resulted in MS Outlook web not working under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}. To
 sum, finding bugs in JS engines is an important problem specially
 because of the speed the specification evolves and the availability of
-various public engines.
+various public engines today~\cite{kangax}.
 
 
-Differential testing~\cite{Brumley-etal-ss07} (DT) is a popular
-approach that has been applied in a variety of contexts to find bugs
-in
-software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17}. It
+%% WHAT WE DID
+This paper reports the results of a study we conducted to assess
+reliability of existing JS engines by leveraging implementation
+diversity in two orthogonal ways. The first method considered is
+\emph{test transplantation}. This approach evaluates the effects that
+running \js{} test files from a given engine have in detecting bugs in
+other engines. The intuition is that when bugs are found in some
+engine implementation a test case is created and added to the
+regression suite. Those test inputs often check interesting corner
+cases that could reveal bugs in different engine implementations. The
+second method considered is \emph{cross-engine differential
+  testing}. This method fuzzes existing inputs, using existing
+techniques, and then compares the output produced by different engines
+using a differential oracle. One possible cause of output discrepancy
+is a bug. It is worth noting that Differential
+Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
+contexts to find bugs in
+software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}. It
 automates test generation in scenarios where multiple implementations
 of a system exist. DT leverages the diversity across system's
 implementations to detect anomalous behavior. For example, Mozilla
@@ -87,23 +98,15 @@ SpiderMonkey engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
 across different configurations of the same build (\eg{}, enabling or
 not eager JIT compilation). They use this technique since 2002 and
 have been able to find over 270 bugs since
-then~\cite{jsfunfuzz-at-mozilla}, including security bugs.
-Cross-engine differential testing, in contrast, checks correctness by
-comparing the output produced by \emph{different} engines on a given
-input~\cite{patra2016learning}. Although different implementations of
-JS engines today (see Table~\ref{tab:engines}), this technique is not
-used in practice.
+then~\cite{jsfunfuzz-at-mozilla}, including security bugs.  In
+contrast, cross-engine differential testing--the technique used in
+this work--checks correctness by comparing the output produced by
+\emph{different engines} on a fuzzed
+input~\cite{patra2016learning}. This approach is not popularized,
+certainly because it is more challenging to fully automate--a number
+of legitimate reasons exist, other than a bug, for a test execution to
+manifest discrepancy (see Table~\ref{tab:false-positives}).
 
-%% WHAT WE DID
-This paper reports the results of a study we conducted to (i) assess
-the reliability of existing JS engines and to (ii) evaluate the
-importance of different factors when using DT. More precisely, we
-analyzed the impact of two orthogonal factors in DT: test mining and
-fuzzing. The first factor--\emph{test mining}--considers the effect
-that \js{} test files mined from the repositories of open-source
-engines have in detecting functional bugs in other engines. The second
-factor--\emph{fuzzing}--considers the impact in bug detection of
-fuzzing these files.
 %% WHAT WE FOUND
 To sum, we found that \Fix{...}
 
@@ -196,7 +199,7 @@ and~\ref{sec:undef-behavior}), can occur. But these discrepancies are
 not acceptable.
 
 
-\section{Infrastructure}
+\section{Differential Testing Infrastructure}
 \label{sec:design}
 
 
@@ -209,161 +212,55 @@ not acceptable.
   \caption{\label{fig:workflow}Infrastructure.}
 \end{figure}
 
-Figure~\ref{fig:workflow} illustrates the infrastructure we used in
-this study.  The bug-finding process takes on input JS files from
-regression test suites of various JS engines and generates warnings on
-output. Boxes in the figure denote encapsulation; arrowed lines
-indicate data flow. The cycle icons denote repetition--the leftmost
-icon indicates that each file in the input list will be analyzed in
-separate whereas the rightmost icon shows that a single file will be
-fuzzed multiple times. The bug-finding process works as follows.
-Considering the case where fuzzing is not selected, the oracle checks
-whether or not the output produced for the input file is consistent
-across all engine implementations. In case the test passes in all
+Figure~\ref{fig:workflow} illustrates the infrastructure we used for
+differential testing.  The bug-finding process takes on input JS files
+from regression test suites of various JS engines and generates
+warnings on output. Boxes in the figure denote encapsulation; arrowed
+lines indicate data flow. The cycle icons denote repetition--the
+leftmost icon indicates that each file in the input list will be
+analyzed in separate whereas the rightmost icon shows that a single
+file will be fuzzed multiple times. The bug-finding process works as
+follows.
+
+New inputs are obtained for a given test input using some
+off-the-shelf input fuzzer~\cite{fuzz-testing-history}.\Comment{
+  Several fuzzing methods have been proposed in the past, varying with
+  respect to how new inputs are
+  generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
+Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+The oracle checks whether or not the output produced for the fuzzed
+file is consistent across all engines. In case the test passes in all
 engines or fails in all engines (\ie{}, the output is consistent), the
 infrastructure discards the test. Otherwise, it considers the input as
 potentially fault-revealing; hence interesting for human
-inspection. We used the open-source eshost-cli
-project~\cite{eshost-cli} for that. Microsoft uses eshost-cli to check
-functional discrepancies in the Chakra JS engine. Considering the case
-where fuzzing~\cite{fuzz-testing-history} is selected, new inputs are
-obtained from a given input using some off-the-shelf fuzzer. The
-workflow with fuzzing is similar to the workflow without fuzzing. In
-this case, however, the checker can produce multiple warnings for a
-given input. Several fuzzing methods have been proposed in the past,
-varying with respect to how new inputs are
-generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.
-Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+inspection. Note that a number of reasons exist, other than a bug, to
+explain discrepancy (see Table~\ref{tab:false-positives}). We used the
+open-source eshost-cli project~\cite{eshost-cli} for checking output
+discrepancy. Microsoft uses that tool in the Chakra JS engine.
 
+%The checker can produce multiple warnings for a given input. 
 
-\Mar{explain what is a bucket (we refer to it later).}
 The infrastructure outputs a list of warnings for human inspection.
-To reduce the number of false alarms, we clustered warnings in two
-groups, reflecting their likelihood to manifest a real bug. Warnings
-in the HI group are associated with the cases where the anomaly has
-been detected in during the execution of test code or its close
-%% the rationale we provide is related to the above; not crashes
-neighborhood. The rationale is that the test in this group executed
-without violating any internal checks of the API. In constrast,
-warnings in the LO group reflect the cases where the anomaly was
-observed during the execution of functions from standard JS libraries\Fix{check}.
-  We found that different engines often check pre-conditions of
-those functions differently. It can happen, for example, that one
-engine enforces a weaker pre-condition compared to another.
-% \Mar{why is that?
-% that should not happen if the spec was fully documented and engines
-% properly implemented those checks. Explain and give example.}
-%% \Igor{these cases happen because the specification describes how a function
-%% should work, however the internal implementation is defined by the
-%% engine developers}\Mar{If you confirm that there is no code in specs
-%%   (see comment above), what would be those abstract
-%%   functions/interfaces that you mentioned to me the other day?}.
-In those cases, our infrastructure would observe a discrepancy that is more likely to
-be associated with a bug in the fuzzed test; not the code. Although
-we did find real bugs from warnings in the LO group, the proportion
-was much lower compared to the HI group--only \Fix{12\%} of the reals bugs
-we found originated from the LO category.
+To reduce the number of false alarms, we classified warnings in two
+kinds, reflecting their likelihood to manifest a real bug. Warnings of
+the kind ``\hi{}'' are associated with the cases where the anomaly has
+been detected in the execution of the test code or its harness. The
+rationale is that the test in this group executed without violating
+any internal checks of the API. In constrast, warnings in the
+``\lo{}'' group reflect the cases where the anomaly was observed
+during the execution of functions not related to the test itself. We
+found that different engines often check pre-conditions of those
+functions differently. It can happen, for example, that one engine
+enforces a weaker pre-condition compared to another and that is
+acceptable.  In those cases, our infrastructure would observe a
+discrepancy that is more likely to be associated with an invalid input
+produced by the fuzzer, \ie{}, a bug in the test not the
+code. Although we did find real bugs from ``\lo{}'' warnings, the
+proportion was much lower compared to the ``\hi{}'' warnings. Overall,
+only \Fix{12\%} of the reals bugs we found originated from ``\lo{}''
+warnings.
 
-% I think this will make the definition of HI/LO weaker. We can
-% elaborate this later. for example, in the evaluation.
-%% \Igor{In addiction, we inserts in LO groups tests that generates a timeout warning
-%% due the capacity of a fuzzer add an infinite repetition statement. We expected that
-%% each test process can running utmost 5 seconds, if exceed this condition we stop 
-%% the process and add a output message of a TIMEOUT error.}
-
-% \Igor{
-%   We defined if a warning is in HI or LO group according to console output.
-%   The error stream in the output shows relevant informations that we can 
-%   process. The Figure~\ref{fig:error-output} shows examples of HI and LO warning
-%   outputs based on the stream output came from Chakra engine. 
-  % The error message shows informations related to the assertion code (see at line 2) 
-  % that thows an Error exception. This case was considered as HI groups and after 
-  % several discussion and specification analysis we reported as a true positive example (see \cite{bug4978}).
-% }\Mar{igor, first add the real example then draft the discussion}
-
-
-% \begin{figure}[h!]
-%   \centering
-%   \scriptsize
-%   \lstset{escapeinside={@}{@},
-%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-%     basicstyle=\ttfamily\scriptsize, boxpos=c,
-%     numberstyle=\tiny,
-%     morekeywords={assertEq, var, yield, in, function, 
-%     typeof, return, throw, new, Error, if},
-%   }
-% \begin{lstlisting}
-
-% \end{lstlisting}
-% \normalsize
-% \caption{Warning captured as HI priority.}
-% \label{fig:hi-priority}
-% \end{figure}
-
-% bug high console output
-% This a case of a warning reported as HI priority, the Figure~\ref{} shows
-% the output console of V8 engine. We consider this case as a HI group due 
-% the fail by assertion, defined at line 2 as \CodeIn{throw new Error("Test failed");}
-
-% \begin{figure}[h!]
-%   \centering
-%   \scriptsize
-%   \lstset{escapeinside={@}{@},
-%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-%     basicstyle=\ttfamily\scriptsize, boxpos=c,
-%     numberstyle=\tiny,
-%     morekeywords={assertEq, var, yield, in, function, 
-%     typeof, return, throw, new, Error, if},
-%   }
-% \begin{lstlisting}
-% function test() {
-%   var buffer = new ArrayBuffer(64);
-%   var view = new DataView(buffer);
-%   view.setInt8 (0, 0x80);
-%   -return view.getInt8(0) === -0x80;
-  
-%   // radamsa fuzzing
-%   +return view.getInt8(-1770523502845470856862803727694) === -0x80;
-%   }
-  
-%   if (!test())
-%       throw new Error("Test Failed");
-% \end{lstlisting}
-% \normalsize
-% \caption{Warning captured as HI priority.}
-% \label{fig:hi-priority}
-% \end{figure}
-
-% no-bug low console output
-% \begin{figure}[h!]
-%   \centering
-%   \scriptsize
-%   \lstset{escapeinside={@}{@},
-%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-%     basicstyle=\ttfamily\scriptsize, boxpos=c,
-%     numberstyle=\tiny,
-%     morekeywords={assertEq, var, yield, in, function, 
-%     typeof, return, throw, new, Error, if},
-%   }
-%   \begin{lstlisting}
-% \end{lstlisting}
-% \normalsize
-% \caption{Warning captured as HI priority.}
-% \label{fig:lo-priority}
-% \end{figure}
-
-%% \Mar{can we detect dups mining issue trackers?}
-%% \Igor{
-%%   acho que encontrar duplicatas seria um estudo a parte, devido a linguagem natural.
-%%   Tenho umas consideracoes:
-%%   \begin{itemize}
-%%     \item warning HI possui a msg "Error: Test Failed", nao tem como buscar algo com isso, 
-%%     se for pegar a linha que falhou, provavelmente vai mostrar a linha onde o assert se encontra.
-%%     \item warning LO: podemos tentar conseguir buscar pelo output/funcao que falhou,
-%%     \item O fuzzinator tem algo similar (dei uma olhada rapida, nao eh complicado)
-%%   \end{itemize}
-%% }\Mar{i think this is not the proper place to
-%%   add this. discuss this with me.}
+\Mar{explain what is a bucket (we refer to it later).} 
 
 \section{Objects of Study}
 \label{sec:methodology}
@@ -382,9 +279,10 @@ JS engines according to the following criteria.
 
 We look for highly-maintained (as per the first criterion) and popular
 (as per the second criterion) projects. As we wanted to report bugs,
-we also looked for project with public issue trackers.
-It is worth noting that we used
-GoogleChromeLab's JSVU~\cite{jsvu} to automatically install and configure versions of
+we also looked for project with public issue
+trackers. Table~\ref{tab:engines} lists the engines we analyzed in
+this work. It is worth noting that we used GoogleChromeLab's JSVU
+tool~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
 aim to use the most recent stable versions of each engine as to avoid
 reporting old and already-fixed bugs to developers.
@@ -401,16 +299,16 @@ reporting old and already-fixed bugs to developers.
   \caption{\label{tab:engines}Engines Analyzed.}
   \begin{tabular}{cccr}
     \toprule
-    Group & Name & URL & \# Stars \\
+    Team & Name & URL & \# Stars \\
     \midrule
     Apple & JavaScriptCore (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{-} \\
     Google & v8 & \cite{v82018repo} & 9800+ \\
-    JerryScript & JerryScript & \cite{jerryscript2018repo} & 3100+ \\
+%    JerryScript & JerryScript & \cite{jerryscript2018repo} & 3100+ \\
     Microsoft & Chakra & \cite{chakra2018repo} & 7200+ \\
 %    Moddable & XS & \cite{xs2018repo} & 140+ \\
-    \midrule
-    \multirow{2}{*}{Mozilla} & Rhino & \cite{rhino2018repo} & 1800+ \\
-    & SpiderMonkey & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{-} \\
+    %% \midrule
+    %% \multirow{2}{*}{Mozilla} & Rhino & \cite{rhino2018repo} & 1800+ \\
+    Mozilla & SpiderMonkey & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{-} \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -577,26 +475,105 @@ that approach has shown very effective, it requires domain knowledge
 to create the calling context to invoke the fuzz target. For those
 reasons, coverage-based fuzzers were not considered in this study.
 
-We uses two black-box mutational fuzzers in this
+We used two black-box mutational fuzzers in this
 study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
 fuzzers require no instrumentation and domain-knowledge. They mutate
 \emph{existing} inputs randomly. The strenght of the approach is
 limited by the supported mutation operators, which are typically
 simple, and the quality of the test suite. We chose \radamsa\ and
-\quickfuzz\ \Fix{...}
+\quickfuzz\ \Fix{...elaborate...}
+
 
 \section{Results}
 \label{sec:results}
 
-The overarching goal of our study is to identify the ability of simple
-techniques to find bugs in \js\ engines with cross-engine differential
-testing.  We analyzed the impact of two orthogonal dimensions in this
-study: test mining and fuzzing. The first dimension focuses on the
-impact of inputs, mined from the web, in bug finding whereas the
-second dimension focuses on the impact of fuzzing these inputs.
+Recall that the goal of our study is to assess reliability of
+\js\ engines by leveraging the rich diversity of implementations in
+this domain. We report results in three parts. First, we report on the
+stability of the engines we analyzed using the EcmaScript standard
+conformance test suite Test262~\cite{ecma262-conformance-suite}. The
+intuition is that the bugs we discover would have low relevance if the
+engines are unstable (\ie{}, too fragile). Second, we report results
+obtained with test transplantation. The hypothesis is that test cases
+written for one engine may reveal bugs in different engines. The
+rationale is that the domain of possible inputs is just too large;
+consequently, test suites of a given engine will cover scenarios and
+corner cases uncovered by another engine.  Third, we analyzed the
+impact of using cross-engine differential testing to find bugs in
+\js{} engines. \Fix{hypothesis/rationale}
 
-In the following, we describe the methodology we used in this
-experiment. Recall that our tool outputs a set of buckets, that each
+\subsection{Stability of Engines}
+
+We evaluated stability with Test262~\cite{ecma262-conformance-suite},
+the official \js{} conformance test suite for the ECMA262
+specification. We ran this suite once per day for seven consecutive
+days. Table~\ref{tab:test262} shows the number of failures over this
+period. It is important to note that failures are expected as it takes
+time for engines to adjust to the spec. It is also important to
+highlight that some engines, namely \smonkey{}, \Fix{...}, have
+variants of Test262 as part of their regression test suite\Mar{with
+  fewer tests?}. We used the official version instead. To sum, we
+observed that \Fix{...} \Mar{check connection with kangax report}
+
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:test262}Results of Test262.}
+  \begin{tabular}{crrrrrrr}
+    \toprule
+           & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \jsc{} & - & - & - & - & - & - & - \\
+    \veight{} & - & - & - & - & - & - & - \\
+    \chakra{} & - & - & - & - & - & - & - \\
+    \smonkey{} & - & - & - & - & - & - & - \\
+    \bottomrule 
+  \end{tabular}
+\end{table}
+
+\subsection{Test Transplantation}
+
+We expanded these results by looking for tests from different
+sources. \Fix{elaborate} Table~\ref{tab:cross-testing} shows
+results. To sum, we observed that \Fix{...}
+
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:cross-testing}Crossed execution of test suites..}
+  \begin{tabular}{crrrr}
+    \toprule
+    test suite/engine & \jsc{} & \veight{} & \chakra{} & \smonkey{} \\
+    Mozilla & - & - & - & -  \\
+    v8 & - & - & - & -  \\
+    WebKit & - & - & - & -  \\
+    Duktape & - & - & - & -  \\
+    JerryScript & - & - & - & -  \\
+    JSI & - & - & - & -  \\
+    Tiny-js & - & - & - & -  \\
+    \bottomrule 
+  \end{tabular}
+\end{table}  
+
+%% Our infrastructure reported a total of \nofuzzAll{} buckets, including
+%% \lo{} and \hi{}, that resulted in \nofuzzBugs{} bug reports. Of the
+%% total of \nofuzzAll{} buckets, we found that \nofuzzDuplicates\ were
+%% duplicates and \nofuzzFalsePositives\ were false positives. Most of
+%% the cases of duplicates were related to the Test262 conformance test
+%% suite, which all \js{} should strive to pass but we found that it is
+%% not uncommon for the engines to fail on some of these. For example,
+%% \veight{} \nofuzzFalsePositives
+
+
+\subsection{Cross-Engine Differential Testing}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.40\textwidth]{R/histograms/histograms.pdf}  
+  \caption{\label{fig:distribution}Distribution of lo and hi warnings
+   in buckets.}
+\end{figure}
+
+In the following, we describe the methodology we used to asses the
+impact of cross-engine differential testing in finding bugs on \js{}
+engines. Recall that our tool outputs a set of buckets, that each
 bucket includes a set of warnings, that each warning is related to one
 file, and that a bucket is of ``lo'' or ``hi'' importance, according
 to the heuristic we defined. Figure~\ref{fig:distribution} shows the
@@ -611,46 +588,85 @@ the files in the bucket. For that reason, we only inspected one file
 per bucket. For the cases we found the warning suspicious, we analyzed
 the parts of the documentation related to the problem and, if still
 suspicious, we looked on the bug tracker of the affected engine for
-potential duplicates. If none was reported, we filed a bug report in
-the bug tracker including the test input that manifested the potential
-problem and explaining the reasons we were suspicious. In some cases,
-we used the Mozila lithium tool~\cite{lithium} to minimize the test
-case. For the cases of false positives, we classified the reason for
-the misclassification and moved to the next
-bucket. Table~\ref{tab:summary-of-results} summarizes our results. It
-shows, for each execution mode and category of bucket (\ie{}, hi or
-lo), the total number of files involved, the number of buckets
-reported, and the percentage of those that resulted in a bug
-report. \Fix{elaborate summary} We elaborate those results in the
-following.
+potential duplicates. If none was reported, we filed a bug report
+including the test input that manifested the potential problem and
+explaining the reasons we were suspicious. In some cases, we used the
+Mozila lithium tool~\cite{lithium} to minimize the test case. For the
+cases of false positives, we identified the source of false positive
+and moved to the next bucket. Table~\ref{tab:summary-of-results}
+summarizes our results. It shows, for each execution mode and category
+of bucket (\ie{}, hi or lo), the total number of files involved, the
+number of buckets reported by our infrastructure, the number of those
+that we classified as bug-revealing, and the number of those that we
+filed a bug report. The difference between the last two columns
+indicate the number of duplicates, \ie{}, the cases of
+already-reported bugs. As expected, the hit ratio for the ``hi'' group
+is higher.
 
 \begin{table}[t]
   \centering
   \caption{\label{tab:summary-of-results}Summary of results.}
-  \begin{tabular}{ccrrr}
+  \begin{tabular}{ccrrrr}
     \toprule
-    \multirow{2}{*}{mode} & \multirow{2}{*}{type} & \multirow{2}{*}{\# files} &  \multicolumn{2}{c}{buckets} \\
-    \cline{4-5}    
-    & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\% positive} \\
+    \multirow{2}{*}{mode} & \multirow{2}{*}{type} & \multirow{2}{*}{\# files} &  \multicolumn{3}{c}{buckets} \\
+    \cline{4-6}    
+    & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\# pos.} &
+    \multicolumn{1}{c}{\# pos. filed} \\
     \midrule
-    \multirow{2}{*}{no-fuzz} & lo & \nofuzzFilesLO{} & \nofuzzLOTotal{} & 34.3\% \\
-    & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & 70\% \\
-    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
-    & hi & \Fix{.} & \Fix{.} & \Fix{.} \\
-    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} \\
-                             & hi & \Fix{.} & \Fix{.} & \Fix{.} \\    
+    %% \multirow{2}{*}{nofuzz} & lo & \nofuzzFilesLO{} &  \nofuzzLOTotal{} & \Fix{.} & 11 (34) \\
+    %% & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & \Fix{.} & \Fix{108 (-)} \\
+    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
+    & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
+    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
+                             & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\    
     \bottomrule     
   \end{tabular}
 \end{table}
 
+Table~\ref{tab:false-positives} shows the distribution of false
+positives per source. A false positive is a bucket that did not reveal
+a bug. We identified five sources of imprecision. The source ``not yet
+implemented'' indicates that the engine does not implement some part
+of the specification. For example, at the time of writing, Chakra does
+not implement various properties from the \CodeIn{Symbol} object. The
+source ``invalid input'' indicates that the test violated some part of
+the specification. For example, the test indirectly invoked some
+function with unexpected arguments\Fix{provide concrete example}. In
+all cases that we analyzed, that happened because fuzzing produced an
+invalid test input. Note that no false positives of this kind appears
+under the column nofuzz. The source ``timeout/ome'' indicates that the
+test times out (we used a 3s time budget) or runs out of memory. That
+happens because engines implement different set of optimizations. For
+example, only \jsc{} implements tail-call optimization to avoid tail
+recursion. Consequently, for a certain input, it finishes execution
+quickly whereas other engines time out. The source
+``implementation-dependent'' is as defined in
+Section~\ref{sec:imp-dep-behavior}.\Fix{provide concrete example} The
+source ``future feature'' corresponds to the case where some feature
+will be part of the spec in the future but implementing it is
+facultative.\Fix{provide concrete example}
 
-\subsection{No Fuzzing}
+\begin{table}[t]
+  \centering
+  \caption{\label{tab:false-positives}Distribution of false
+    positives buckets per source.}
+  \begin{tabular}{crr}
+    \toprule
+    & \radamsa\ & \quickfuzz\ \\
+    %% not yet implemented & 8 & - & - \\
+    %% invalid input & 0 & - & - \\
+    %% timeout/ome & 13 & - & - \\
+    %% implementation-dependent & 3 & - & - \\
+    %% future feature & 3 & - & - \\
+    not yet implemented & - & - \\
+    invalid input & - & - \\
+    timeout/ome & - & - \\
+    implementation-dependent & - & - \\
+    future feature & - & - \\
+    \bottomrule     
+  \end{tabular}
+\end{table}
 
-This section reports the results obtained without fuzzing. The goal is
-to observe the impact of the mined test cases in revealing
-differential bugs. In this experiment, we ran all tests (see
-Section~\ref{sec:seeds}) using our infrastructure in no-fuzzing
-mode. 
 
 \Igor{
   Neste experimento, obtemos \nofuzzAll{} buckets distintos, a proporcao \'e de 
@@ -717,13 +733,6 @@ existing tools. It is important to mention that, to avoid experimental
 noise, we did not consider the \nofuzzTotalFiles{} files (\Fix{2.8\%} of the
 total) reported in the previous experiment, \ie{}, we only fuzzed test
 files whose output is consistent across all engines analyzed.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[trim=0 0 0 0,clip,width=0.40\textwidth]{R/histograms/histograms.pdf}  
-  \caption{\label{fig:distribution}Distribution of lo and hi warnings
-   in buckets.}
-\end{figure}
 
 % \Igor{
 %   Para realizar nossos experimentos, tivemos que decidir qual as 
@@ -921,7 +930,17 @@ if (!test())
 %   \caption{Bug caught by our environment as LO priority.}
 %   \label{fig:lo-priority}
 %   \end{figure}
-  
+
+\section{Discussion}
+
+It is important to highlight that our treatment on both dimensions of
+analysis--test mining and fuzzing--could be improved by selecting more
+test cases or using more advanced fuzzing tools. The main rationale is
+that if these techinques perform well with the objects we used
+(Section~\ref{sec:methodology}) then the approach would perform even
+better with more elaborate objects.
+
+\Fix{...}
 
 
 \section{Related Work}
@@ -940,9 +959,10 @@ RFC-Directed Differential Testing of Certificate Validation in SSL/TLS Implement
 %\section*{Acknowledgment}
 
 %\bibliographystyle{IEEEtran}
+\balance
 \bibliographystyle{plain}
 \bibliography{references,../docs/google-research-awards-latam/tmp}
 
 \end{document}
 
-%%  LocalWords:  bytecodes JScript Ecma
+%%  LocalWords:  bytecodes JScript Ecma ome
