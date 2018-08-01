@@ -16,7 +16,7 @@
 \begin{document}
 
 %Should I Fuzz my Inputs or Improve my Tests? 
-\title{Assessing Reliability of JavaScript Engines by Leveraging Diversity}
+\title{Assessing the Reliability of JavaScript Engines by Leveraging Diversity}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -301,14 +301,14 @@ reporting old and already-fixed bugs to developers.
     \toprule
     Team & Name & URL & \# Stars \\
     \midrule
-    Apple & JavaScriptCore (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{3300+} \\
-    Google & v8 & \cite{v82018repo} & 9800+ \\
+    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{3300+} \\
+    Google & \veight{} & \cite{v82018repo} & 9800+ \\
 %    JerryScript & JerryScript & \cite{jerryscript2018repo} & 3100+ \\
-    Microsoft & Chakra & \cite{chakra2018repo} & 7200+ \\
+    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ \\
 %    Moddable & XS & \cite{xs2018repo} & 140+ \\
     %% \midrule
     %% \multirow{2}{*}{Mozilla} & Rhino & \cite{rhino2018repo} & 1800+ \\
-    Mozilla & SpiderMonkey & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{1100+} \\
+    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{1100+} \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -318,23 +318,24 @@ We selected test files from several public projects from GitHub. We
 looked for self-contained tests from JS engine projects, initially
 using the GitHub REST API~\cite{github-rest-api}. We noticed that some
 of the tests we found depend on external libraries, which not all
-engines we use (see Section~\ref{sec:methodology:engines}) support. We
-decided to discard those. For example, many tests we found required a
-Node.js runtime~\cite{node} for execution. The main source of test
-cases is the offical TC-39~\cite{tc39-github} conformance test suite
-for the ECMA262 specification~\cite{ecmas262-spec}. This test suite
-contains 87\% of all the tests we used. Furthermore, we
-considered test suites of three of the four engines mentioned in
-Section~\ref{sec:methodology:engines} and four other engines.
-Table~\ref{tab:test-suites} shows the JS sources we considered for
-each of the selected projects. Overall, we found a total of
-\totfiles{} JS files. It is worth noting that some test suites use
-distinct frameworks for testing and require external libraries to run
-the tests.  For these projects, we needed to make small
-changes in the testing infrastructure to be able to run the tests
-uniformly across all engines. More precisely, we needed to mock
-some functions, related to the test harness, which are only available to
-certain engines.
+engines we use support. We decided to discard those. For example, many
+tests we found required a Node.js runtime~\cite{node} for
+execution. The main source of test cases is the offical
+TC-39~\cite{tc39-github} conformance test suite for the ECMA262
+specification~\cite{ecmas262-spec}. This test suite contains 87\% of
+all the tests we used. We also considered test suites of three of the
+four engines mentioned in Section~\ref{sec:methodology:engines} and
+four other engines. We did not consider tests from the \chakra{}
+repository because of their intensive use of Chakra-specific
+objects. Table~\ref{tab:test-suites} shows the breakdown of tests we
+considered. Overall, we found a total of \totfiles{} JS files.
+
+It is also worth mentioning that some engines use custom shell,
+including a harness with custom assertions, to run tests.  For these,
+we needed to make small changes in the testing infrastructure to be
+able to run the tests uniformly across all engines. More precisely, we
+needed to mock non-portable harness functions, which are only
+available to certain engines.
 
 \begin{table}[t]
   \centering
@@ -348,8 +349,8 @@ certain engines.
     TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
     \midrule
     Mozilla & \cite{mozilla} & 2,633 \\
-    V8 & \cite{v8} & 74 \\
-    WebKit & \cite{webkit} & 1,031 \\
+    \veight{} & \cite{v8} & 74 \\
+    \jsc{} & \cite{webkit} & 1,031 \\
     \midrule    
     Duktape & \cite{duktape} & 1,195 \\ 
     JerryScript & \cite{jerryscript} & 1,950 \\
@@ -506,14 +507,15 @@ impact of using cross-engine differential testing to find bugs in
 
 We evaluated stability with Test262~\cite{ecma262-conformance-suite},
 the official \js{} conformance test suite for the ECMA262
-specification. We ran this suite once per day for seven consecutive
+specification. We ran this suite once a day for seven consecutive
 days. Table~\ref{tab:test262} shows the number of failures over this
 period. It is important to note that failures are expected as it takes
 time for engines to adjust to the spec. It is also important to
-highlight that some engines, namely \smonkey{}, \Fix{...}, have
-variants of Test262 as part of their regression test suite\Mar{with
-  fewer tests?}. We used the official version instead. To sum, we
-observed that \Fix{...} \Mar{check connection with kangax report}
+highlight that all engines we analyzed, but \chakra{}, use some
+variant of the Test262 suite as part of their regression
+process\Mar{with fewer tests?}. We used the official version
+instead\Mar{, which updates tests regularly?}. To sum, we observed
+that \Fix{...} \Mar{justify regressions using the kangax report}
 
 \begin{table}[h]
   \centering
@@ -541,9 +543,11 @@ results. To sum, we observed that \Fix{...}
   \begin{tabular}{crrrr}
     \toprule
     test suite/engine & \jsc{} & \veight{} & \chakra{} & \smonkey{} \\
+    \midrule
+    \jsc{} & - & - & - & -  \\
+    \veight{} & - & - & - & -  \\
+%    \chakra{} & - & - & - & -  \\
     Mozilla & - & - & - & -  \\
-    v8 & - & - & - & -  \\
-    WebKit & - & - & - & -  \\
     Duktape & - & - & - & -  \\
     JerryScript & - & - & - & -  \\
     JSI & - & - & - & -  \\
@@ -560,6 +564,33 @@ results. To sum, we observed that \Fix{...}
 %% suite, which all \js{} should strive to pass but we found that it is
 %% not uncommon for the engines to fail on some of these. For example,
 %% \veight{} \nofuzzFalsePositives
+
+\begin{table*}[h!]
+  \vspace{-3ex}
+%  \scriptsize
+  \centering
+  \caption{List of bug reports issued as result of test transplantation.}
+  \label{tab:bugs}
+  \begin{tabular}{cccccccc}
+    \toprule Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
+    \midrule    
+    1  & 4/18 & \crossmark & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & \Fix{x} & JerryScript      \\
+   2  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & \Fix{x} & Mozilla      \\
+   3  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}} & \Fix{x} & Mozilla \\
+   \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & \multirow{2}{*}{\Fix{x}} & \multirow{2}{*}{Mozilla}\\
+                       &  &                       &
+    JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &   & \\
+   5 & 5/02 & \crossmark & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & \Fix{x} & Mozilla \\
+   6 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187}} & \Fix{x} & \jsc{}\\
+   7 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & \Fix{x} & Mozilla\\
+   8 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & \Fix{x} & \jsc{}\\
+   9 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & \Fix{x} & JerryScript\\
+  10 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & \Fix{x} & Mozilla\\
+   11 & 7/18 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & \Fix{x} & JerryScript\\
+   \bottomrule
+  \end{tabular}
+\end{table*}
 
 
 \subsection{Cross-Engine Differential Testing}
@@ -770,48 +801,55 @@ files whose output is consistent across all engines analyzed.
   \caption{List of bug reports issued by our team since April,
     2018. The analysis of warnings was not uninterrupted.}
   \label{tab:bugs}
-  \begin{tabular}{cccccccc}
+  \begin{tabular}{ccccccccc}
     \toprule
-    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Priority & Seed \\
+    Issue\#    & Date & Fuzz & Engine  & Status  &
+    \multicolumn{1}{c}{Url}  & Severity & Priority & Seed \\
     \midrule    
-    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & LO & WebKit \\ 
-    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & WebKit \\
-    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & WebKit    \\
-    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScript      \\
-    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033} & HI & Mozilla      \\
-    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038} & HI & JerryScript   \\
-    7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
-    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065} & HI & Mozilla
-    \\
-    \midrule
-    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} & \multirow{2}{*}{HI} & \multirow{2}{*}{Mozilla}\\
-                        &  &                       &
-    JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}  &   & \\
-    \midrule    
-    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}  & HI  & JerryScript\\
-    \midrule    
-    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
+    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}}
+    & \Fix{x} & LO & WebKit \\ 
+    2  & 4/12 & radamsa & Chakra   & Rejected  &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}}
+    & \Fix{x} & HI & WebKit \\
+    3  & 4/14 & radamsa & JavascriptCore  & New &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
+    } & \Fix{x}  & HI & WebKit    \\
+    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}}
+    & \Fix{x} & HI & JerryScript   \\
+    9  & 4/29 & radamsa & JavascriptCore  & New  &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
+    } & \Fix{x}  & HI  & JerryScript\\
+    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  &
+    \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076}}
+    & \Fix{x} & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
                         &                        &        &
     JavascriptCore & New &
-    \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156} &  & 
-    \\
-    \midrule    
-    11 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & Mozilla \\
-    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & Mozilla \\
-    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScript \\
-    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & V8\\
-    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & WebKit\\
-    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & Mozilla\\
-    17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & Webkit\\
-    18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScript\\
-    19 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & WebKit\\
-    20 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520} & HI & JerryScript\\
-    22 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & HI & JerryScript\\
-    21 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & JerryScript\\
-    23 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478} & HI & Mozilla\\
-    24 & 7/18 & \crossmark & JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777} & HI & JerryScript\\
-    25 & 7/27 & \crossmark & Chakra & New & \href{https://github.com/Microsoft/ChakraCore/issues/5548}{\#5548} & HI & Test262\\
-    26 & 7/27 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5549}{\#5549} & HI & Test262\\
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
+    & \Fix{x} &  & \\
+    11 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
+    & \Fix{x} & LO & Mozilla \\
+    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128}}
+    & \Fix{x} & HI & JerryScript \\
+    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182}}
+    & \Fix{x} & HI & V8\\
+    17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
+    & \Fix{x} & HI & Webkit\\
+    18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
+    & \Fix{x} & HI & JerryScript\\
+    20 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
+    & \Fix{x} & HI & JerryScript\\
+    21 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443}}
+    & \Fix{x} & HI & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
