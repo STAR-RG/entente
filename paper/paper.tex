@@ -585,6 +585,7 @@ limited by the supported mutation operators, which are typically
 simple, and the quality of the test suite. We chose \radamsa\ and
 \quickfuzz\ \Fix{...}
 
+
 \section{Results}
 \label{sec:results}
 
@@ -596,14 +597,72 @@ simple, and the quality of the test suite. We chose \radamsa\ and
 \end{figure}
 
 The overarching goal of our study is to identify the ability of
-cross-engine differential testing to find bugs in \js\ engines.  We
-analyzed the impact of two orthogonal dimensions in this study: test
-mining and fuzzing. The first dimension focuses on the impact of
-inputs, mined from the web, in bug finding whereas the second
-dimension focuses on the impact of fuzzing those inputs.
+cross-engine differential testing to find bugs in \js\ engines. We
+organized our study in two parts. First, we investigated the stability
+of the engines we analyzed. The intuition is that discovered bugs
+would have low relevance if the engines are unstable. Then, we
+analyzed the impact of using cross-engine differential testing to find
+bugs in \js{} engines.
 
-In the following, we describe the methodology we used in this
-experiment. Recall that our tool outputs a set of buckets, that each
+\subsection{Stability of Engines}
+
+We evaluated stability using different source of test cases. We used
+the official \js{} conformance test suite and test suites developed
+independently by each engine developing team. The Test262 suite is the
+primary suite that we used to assess stability of engines. We ran this
+suite once per day for seven consecutive days. Table~\ref{tab:test262}
+shows results. To sum, we observed that \Fix{...}
+
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:test262}Results of Test262.}
+  \begin{tabular}{crrrrrrr}
+    \toprule
+           & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+    \jsc{} & - & - & - & - & - & - & - \\
+    \veight{} & - & - & - & - & - & - & - \\
+    \chakra{} & - & - & - & - & - & - & - \\
+    \smonkey{} & - & - & - & - & - & - & - \\
+    \bottomrule 
+  \end{tabular}
+\end{table}  
+
+We expanded these results by looking for tests from different
+sources. \Fix{elaborate} Table~\ref{tab:cross-testing} shows
+results. To sum, we observed that \Fix{...}
+
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:cross-testing}Crossed execution of test suites..}
+  \begin{tabular}{crrrr}
+    \toprule
+    test suite/engine & \jsc{} & \veight{} & \chakra{} & \smonkey{} \\
+    Mozilla & - & - & - & -  \\
+    v8 & - & - & - & -  \\
+    WebKit & - & - & - & -  \\
+    Duktape & - & - & - & -  \\
+    JerryScript & - & - & - & -  \\
+    JSI & - & - & - & -  \\
+    Tiny-js & - & - & - & -  \\
+    \bottomrule 
+  \end{tabular}
+\end{table}  
+
+%% Our infrastructure reported a total of \nofuzzAll{} buckets, including
+%% \lo{} and \hi{}, that resulted in \nofuzzBugs{} bug reports. Of the
+%% total of \nofuzzAll{} buckets, we found that \nofuzzDuplicates\ were
+%% duplicates and \nofuzzFalsePositives\ were false positives. Most of
+%% the cases of duplicates were related to the Test262 conformance test
+%% suite, which all \js{} should strive to pass but we found that it is
+%% not uncommon for the engines to fail on some of these. For example,
+%% \veight{} \nofuzzFalsePositives
+
+
+\subsection{Differential Testing}
+
+In the following, we describe the methodology we used to asses the
+impact of cross-engine differential testing in finding bugs on \js{}
+engines. Recall that our tool outputs a set of buckets, that each
 bucket includes a set of warnings, that each warning is related to one
 file, and that a bucket is of ``lo'' or ``hi'' importance, according
 to the heuristic we defined. Figure~\ref{fig:distribution} shows the
@@ -643,8 +702,8 @@ is higher.
     & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\# pos.} &
     \multicolumn{1}{c}{\# pos. filed} \\
     \midrule
-    \multirow{2}{*}{nofuzz} & lo & \nofuzzFilesLO{} &  \nofuzzLOTotal{} & \Fix{.} & 11 (34) \\
-    & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & \Fix{.} & \Fix{108 (-)} \\
+    %% \multirow{2}{*}{nofuzz} & lo & \nofuzzFilesLO{} &  \nofuzzLOTotal{} & \Fix{.} & 11 (34) \\
+    %% & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & \Fix{.} & \Fix{108 (-)} \\
     \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
     & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
     \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
@@ -680,27 +739,23 @@ facultative.\Fix{provide concrete example}
   \centering
   \caption{\label{tab:false-positives}Distribution of false
     positives buckets per source.}
-  \begin{tabular}{crrr}
+  \begin{tabular}{crr}
     \toprule
-              & nofuzz & \radamsa\ & \quickfuzz\ \\
-%    duplicate & 63      & - & - \\
-    not yet implemented & 8 & - & - \\
-    invalid input & 0 & - & - \\
-    timeout/ome & 13 & - & - \\
-    implementation-dependent & 3 & - & - \\
-    future feature & 3 & - & - \\
+    & \radamsa\ & \quickfuzz\ \\
+    %% not yet implemented & 8 & - & - \\
+    %% invalid input & 0 & - & - \\
+    %% timeout/ome & 13 & - & - \\
+    %% implementation-dependent & 3 & - & - \\
+    %% future feature & 3 & - & - \\
+    not yet implemented & - & - \\
+    invalid input & - & - \\
+    timeout/ome & - & - \\
+    implementation-dependent & - & - \\
+    future feature & - & - \\
     \bottomrule     
   \end{tabular}
 \end{table}
 
-
-\subsection{No Fuzzing}
-
-This section reports the results obtained without fuzzing. The goal is
-to observe the impact of the mined test cases in revealing
-differential bugs. In this experiment, we ran all tests (see
-Section~\ref{sec:seeds}) using our infrastructure in no-fuzzing
-mode. 
 
 \Igor{
   Neste experimento, obtemos \nofuzzAll{} buckets distintos, a proporcao \'e de 
