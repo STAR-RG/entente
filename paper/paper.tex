@@ -16,7 +16,7 @@
 \begin{document}
 
 %Should I Fuzz my Inputs or Improve my Tests? 
-\title{Assessing Reliability of JavaScript Engines by Leveraging Diversity}
+\title{Assessing the Reliability of JavaScript Engines by Leveraging Diversity}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -209,7 +209,7 @@ not acceptable.
 %  \includegraphics[trim=20 350 200
 %    0,clip,width=0.35\textwidth]{google-awards-workflow}
   \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Infrastructure.}
+  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates the infrastructure we used for
@@ -301,14 +301,14 @@ reporting old and already-fixed bugs to developers.
     \toprule
     Team & Name & URL & \# Stars \\
     \midrule
-    Apple & JavaScriptCore (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{3300+} \\
-    Google & v8 & \cite{v82018repo} & 9800+ \\
+    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{3300+} \\
+    Google & \veight{} & \cite{v82018repo} & 9800+ \\
 %    JerryScript & JerryScript & \cite{jerryscript2018repo} & 3100+ \\
-    Microsoft & Chakra & \cite{chakra2018repo} & 7200+ \\
+    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ \\
 %    Moddable & XS & \cite{xs2018repo} & 140+ \\
     %% \midrule
     %% \multirow{2}{*}{Mozilla} & Rhino & \cite{rhino2018repo} & 1800+ \\
-    Mozilla & SpiderMonkey & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{1100+} \\
+    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{1100+} \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -318,23 +318,24 @@ We selected test files from several public projects from GitHub. We
 looked for self-contained tests from JS engine projects, initially
 using the GitHub REST API~\cite{github-rest-api}. We noticed that some
 of the tests we found depend on external libraries, which not all
-engines we use (see Section~\ref{sec:methodology:engines}) support. We
-decided to discard those. For example, many tests we found required a
-Node.js runtime~\cite{node} for execution. The main source of test
-cases is the offical TC-39~\cite{tc39-github} conformance test suite
-for the ECMA262 specification~\cite{ecmas262-spec}. This test suite
-contains 87\% of all the tests we used. Furthermore, we
-considered test suites of three of the four engines mentioned in
-Section~\ref{sec:methodology:engines} and four other engines.
-Table~\ref{tab:test-suites} shows the JS sources we considered for
-each of the selected projects. Overall, we found a total of
-\totfiles{} JS files. It is worth noting that some test suites use
-distinct frameworks for testing and require external libraries to run
-the tests.  For these projects, we needed to make small
-changes in the testing infrastructure to be able to run the tests
-uniformly across all engines. More precisely, we needed to mock
-some functions, related to the test harness, which are only available to
-certain engines.
+engines we use support. We decided to discard those. For example, many
+tests we found required a Node.js runtime~\cite{node} for
+execution. The main source of test cases is the offical
+TC-39~\cite{tc39-github} conformance test suite for the ECMA262
+specification~\cite{ecmas262-spec}. This test suite contains 87\% of
+all the tests we used. We also considered test suites of three of the
+four engines mentioned in Section~\ref{sec:methodology:engines} and
+four other engines. We did not consider tests from the \chakra{}
+repository because of their intensive use of Chakra-specific
+objects. Table~\ref{tab:test-suites} shows the breakdown of tests we
+considered. Overall, we found a total of \totfiles{} JS files.
+
+It is also worth mentioning that some engines use custom shell,
+including a harness with custom assertions, to run tests.  For these,
+we needed to make small changes in the testing infrastructure to be
+able to run the tests uniformly across all engines. More precisely, we
+needed to mock non-portable harness functions, which are only
+available to certain engines.
 
 \begin{table}[t]
   \centering
@@ -348,8 +349,8 @@ certain engines.
     TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
     \midrule
     Mozilla & \cite{mozilla} & 2,633 \\
-    V8 & \cite{v8} & 74 \\
-    WebKit & \cite{webkit} & 1,031 \\
+    \veight{} & \cite{v8} & 74 \\
+    \jsc{} & \cite{webkit} & 1,031 \\
     \midrule    
     Duktape & \cite{duktape} & 1,195 \\ 
     JerryScript & \cite{jerryscript} & 1,950 \\
@@ -357,7 +358,7 @@ certain engines.
     Tiny-js & \cite{tinyjs} & 48 \\    
     % Chakra & \cite{chakracore} & 2632 \\
     \midrule
-     &  & 38,305 \\
+     &  & \totalTestFiles{} \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -488,36 +489,40 @@ simple, and the quality of the test suite. We chose \radamsa\ and
 \label{sec:results}
 
 Recall that the goal of our study is to assess reliability of
-\js\ engines by leveraging the rich diversity of implementations in
-this domain. We report results in three parts. First, we report on the
-stability of the engines we analyzed using the EcmaScript standard
-conformance test suite Test262~\cite{ecma262-conformance-suite}. The
-intuition is that the bugs we discover would have low relevance if the
-engines are unstable (\ie{}, too fragile). Second, we report results
-obtained with test transplantation. The hypothesis is that test cases
-written for one engine may reveal bugs in different engines. The
-rationale is that the domain of possible inputs is just too large;
-consequently, test suites of a given engine will cover scenarios and
-corner cases uncovered by another engine.  Third, we analyzed the
-impact of using cross-engine differential testing to find bugs in
-\js{} engines. \Fix{hypothesis/rationale}
+\js\ engines by leveraging implementation diversity, which is
+specially rich in this domain. We report results in three
+parts. First, we report on the stability of the engines we analyzed
+using the Test262 standard conformance test suite for
+EcmaScript~\cite{ecma262-conformance-suite}. The intuition is that the
+bugs we discover throughout this study would have low relevance if the
+engines are too fragile. Second, we report results obtained with test
+transplantation. The hypothesis is that test cases written for one
+engine may reveal bugs in different engines. The rationale is that the
+domain of possible inputs is too large; consequently, we expect that
+test suites of a given engine cover scenarios and corner cases
+uncovered by another engine. Third, we analyzed the impact of using
+cross-engine differential testing to find bugs. The hypothesis is that
+even black-box fuzzers can expose important bugs.
 
 \subsection{Stability of Engines}
+\label{sec:stability}
 
 We evaluated stability with Test262~\cite{ecma262-conformance-suite},
 the official \js{} conformance test suite for the ECMA262
-specification. We ran this suite once per day for seven consecutive
+specification. We ran this suite once a day for seven consecutive
 days. Table~\ref{tab:test262} shows the number of failures over this
 period. It is important to note that failures are expected as it takes
 time for engines to adjust to the spec. It is also important to
-highlight that some engines, namely \smonkey{}, \Fix{...}, have
-variants of Test262 as part of their regression test suite\Mar{with
-  fewer tests?}. We used the official version instead. To sum, we
-observed that \Fix{...} \Mar{check connection with kangax report}
+highlight that all engines we analyzed, but \chakra{}, use some
+variant of the Test262 suite as part of their regression
+process\Mar{with fewer tests?}. We used the official version
+instead\Mar{, which updates tests regularly?}. To sum, we observed
+that \Fix{...} \Mar{justify regressions using the kangax report}
 
 \begin{table}[h]
   \centering
-  \caption{\label{tab:test262}Results of Test262.}
+  \caption{\label{tab:test262}Number of failures in Test262 over
+    a 7-day period.}
   \begin{tabular}{crrrrrrr}
     \toprule
            & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
@@ -529,21 +534,28 @@ observed that \Fix{...} \Mar{check connection with kangax report}
   \end{tabular}
 \end{table}
 
-\subsection{Test Transplantation}
 
-We expanded these results by looking for tests from different
-sources. \Fix{elaborate} Table~\ref{tab:cross-testing} shows
-results. To sum, we observed that \Fix{...}
+
+\subsection{Test Transplantation}
+\label{sec:transplantation}
+
+This section reports results obtained with test
+transplantation. Table~\ref{tab:cross-testing} shows the number of
+failures that each engine produces on a different test suite. To sum,
+we observed that \Fix{...}
 
 \begin{table}[h]
   \centering
-  \caption{\label{tab:cross-testing}Crossed execution of test suites..}
+  \caption{\label{tab:cross-testing}Number of failures observed exchanging
+  test suites.}
   \begin{tabular}{crrrr}
     \toprule
     test suite/engine & \jsc{} & \veight{} & \chakra{} & \smonkey{} \\
+    \midrule
+    \jsc{} & - & 11 & - & -  \\
+    \veight{} & - & - & - & -  \\
+%    \chakra{} & - & - & - & -  \\
     Mozilla & - & 333 & - & -  \\
-    v8 & - & - & - & -  \\
-    WebKit & - & 11 & - & -  \\
     Duktape & - & 80 & - & -  \\
     JerryScript & - & 92 & - & -  \\
     JSI & - & 14 & - & -  \\
@@ -561,6 +573,38 @@ results. To sum, we observed that \Fix{...}
 %% not uncommon for the engines to fail on some of these. For example,
 %% \veight{} \nofuzzFalsePositives
 
+We inspected each of those failures in detail according to the
+following methodology. \Fix{..elaborate..}
+Figure~\ref{tab:test-transplantation-bugs} shows
+results. \Fix{...elaborate...}
+
+\begin{table*}[t]
+  \vspace{-3ex}
+%  \scriptsize
+  \centering
+  \caption{List of bug reports issued as result of test transplantation.}
+  \label{tab:test-transplantation-bugs}
+  \begin{tabular}{cccccccc}
+    \toprule Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
+    \midrule    
+    1  & 4/18 & \crossmark & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & \Fix{x} & JerryScript      \\
+   2  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & \Fix{x} & Mozilla      \\
+   3  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}} & \Fix{x} & Mozilla \\
+   \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & \multirow{2}{*}{\Fix{x}} & \multirow{2}{*}{Mozilla}\\
+                       &  &                       &
+    JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &   & \\
+   5 & 5/02 & \crossmark & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & \Fix{x} & Mozilla \\
+   6 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187}} & \Fix{x} & \jsc{}\\
+   7 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & \Fix{x} & Mozilla\\
+   8 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & \Fix{x} & \jsc{}\\
+   9 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & \Fix{x} & JerryScript\\
+  10 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & \Fix{x} & Mozilla\\
+   11 & 7/18 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & \Fix{x} & JerryScript\\
+   \bottomrule
+  \end{tabular}
+\end{table*}
+
 
 \subsection{Cross-Engine Differential Testing}
 
@@ -571,39 +615,57 @@ results. To sum, we observed that \Fix{...}
    in buckets.}
 \end{figure}
 
-In the following, we describe the methodology we used to asses the
-impact of cross-engine differential testing in finding bugs on \js{}
-engines. Recall that our tool outputs a set of buckets, that each
-bucket includes a set of warnings, that each warning is related to one
-file, and that a bucket is of ``lo'' or ``hi'' importance, according
-to the heuristic we defined. Figure~\ref{fig:distribution} shows the
-distribution of number of warnings per bucket. We use the the label
-``nofuzz'' to refer to the experiment that analyzed the impact of test
-mining as we do not use fuzzing in that experiment and use the names
-of the fuzzing tools to refer to the results obtained with those
-tools. We inspected each and every bucket for bugs, but observe that
-the number of files per bucket is very high in some cases (\eg{},
-nofuzz [hi]). As such, it would be impractical to manually inspect all
-the files in the bucket. For that reason, we only inspected one file
-per bucket. For the cases we found the warning suspicious, we analyzed
-the parts of the documentation related to the problem and, if still
-suspicious, we looked on the bug tracker of the affected engine for
-potential duplicates. If none was reported, we filed a bug report
-including the test input that manifested the potential problem and
-explaining the reasons we were suspicious. In some cases, we used the
-Mozila lithium tool~\cite{lithium} to minimize the test case. For the
-cases of false positives, we identified the source of false positive
-and moved to the next bucket. Table~\ref{tab:summary-of-results}
-summarizes our results. It shows, for each execution mode and category
-of bucket (\ie{}, hi or lo), the total number of files involved, the
-number of buckets reported by our infrastructure, the number of those
-that we classified as bug-revealing, and the number of those that we
-filed a bug report. The difference between the last two columns
-indicate the number of duplicates, \ie{}, the cases of
-already-reported bugs. As expected, the hit ratio for the ``hi'' group
-is higher.
+This section reports the results obtained by fuzzing inputs, running
+those inputs on different engines, and checking the outcomes with a
+differential oracle (see Figure~\ref{fig:workflow}). 
 
-\begin{table}[t]
+\subsubsection{Methodology}
+In the following, we describe the methodology we used to assess the
+impact of cross-engine differential testing in finding bugs on \js{}
+engines. To avoid experimental noise, we did \emph{not} fuzz test
+files that failed in some engine as per results reported in
+Sections~\ref{sec:stability} and~\ref{sec:transplantation}. The
+intuition is that we want to make sure that the bug was not
+coincidental, \ie{}, the scenario where fuzzing produces an
+fault-revealing input based on a test that was already
+fault-revealing. That decision ensures that we can establish
+cause-effect relationship between fuzzing and the observation of
+discrepancy. For that reason, we discarded a total of \Fix{???} test
+files from a total of \totalTestFiles{}.Recall that our tool outputs a
+set of buckets, that each bucket includes a set of warnings, that each
+warning is related to one file, and that a bucket is of ``lo'' or
+``hi'' importance, according to the heuristic we
+defined. Figure~\ref{fig:distribution} shows the distribution of
+number of warnings reported per bucket. We use the names of the
+fuzzing tools to refer to the results obtained with those tools. We
+inspected each and every bucket for bugs, but observe that the number
+of files per bucket is very high in some cases. As such, it would be
+impractical to manually inspect all the files in the bucket. For that
+reason, we only inspected one file per bucket. For the cases we found
+the warning suspicious, we analyzed the parts of the documentation
+related to the problem and, if still suspicious, we looked on the bug
+tracker of the affected engine for potential duplicates. If none was
+reported, we filed a bug report including the test input that
+manifested the potential problem and explaining the reasons we were
+suspicious. In some cases, we used the Mozila lithium
+tool~\cite{lithium} to minimize the test case. For the cases of false
+positives, we identified the source of false positive and moved to the
+next bucket.
+
+
+\subsubsection{Results}
+Table~\ref{tab:summary-of-results} summarizes our results. It shows,
+for each fuzzer and kind of bucket (\ie{}, hi or lo), the total number
+of files involved, the number of buckets reported by our
+infrastructure, the number of those that we classified as
+bug-revealing (positive), and the number of those that we filed a bug
+report. The difference between the last two columns corresponds to the
+number of duplicates, \ie{}, the cases of bugs already reported in the
+corresponding issue tracker. As expected, the hit ratio for the ``hi''
+group is higher, indicating that chances of filing a bug report for a
+``hi'' warning is higher.
+
+\begin{table}[h]
   \centering
   \caption{\label{tab:summary-of-results}Summary of results.}
   \begin{tabular}{ccrrrr}
@@ -624,27 +686,28 @@ is higher.
 \end{table}
 
 Table~\ref{tab:false-positives} shows the distribution of false
-positives per source. A false positive is a bucket that did not reveal
-a bug. We identified five sources of imprecision. The source ``not yet
-implemented'' indicates that the engine does not implement some part
-of the specification. For example, at the time of writing, Chakra does
-not implement various properties from the \CodeIn{Symbol} object. The
-source ``invalid input'' indicates that the test violated some part of
-the specification. For example, the test indirectly invoked some
-function with unexpected arguments\Fix{provide concrete example}. In
-all cases that we analyzed, that happened because fuzzing produced an
-invalid test input. Note that no false positives of this kind appears
-under the column nofuzz. The source ``timeout/ome'' indicates that the
-test times out (we used a 3s time budget) or runs out of memory. That
-happens because engines implement different set of optimizations. For
-example, only \jsc{} implements tail-call optimization to avoid tail
-recursion. Consequently, for a certain input, it finishes execution
-quickly whereas other engines time out. The source
+positives per source. A false positive is a bucket that did not lend
+itself in a bug report. We identified five sources of imprecision. The
+source ``not yet implemented'' indicates that the engine does not
+implement some part of the specification. For example, at the time of
+writing, Chakra does not implement various properties from the
+\CodeIn{Symbol} object. The source ``invalid input'' indicates that
+the test violated some part of the specification. For example, the
+test indirectly invoked some function with unexpected
+arguments\Fix{provide concrete example}. In all cases that we
+analyzed, that happened because fuzzing produced an invalid test
+input. The source ``timeout/ome''\footnote{ome is for out of memory
+  error.} indicates that the test times out (we used a 3s time budget)
+or runs out of memory. That happens because engines implement
+different optimizations. For example, we found that only \jsc{}
+implements tail-call optimization to avoid tail
+recursion. Consequently, for a certain input, \jsc{} finishes
+execution quickly whereas other engines time out. The source
 ``implementation-dependent'' is as defined in
 Section~\ref{sec:imp-dep-behavior}.\Fix{provide concrete example} The
-source ``future feature'' corresponds to the case where some feature
-will be part of the spec in the future but implementing it is
-facultative.\Fix{provide concrete example}
+source ``future feature'' corresponds to the case where a feature will
+be part of the spec but some engines already implemented it, making a
+test that uses the feature to pass only in those engines.
 
 \begin{table}[t]
   \centering
@@ -666,73 +729,6 @@ facultative.\Fix{provide concrete example}
     \bottomrule     
   \end{tabular}
 \end{table}
-
-
-\Igor{
-  Neste experimento, obtemos \nofuzzAll{} buckets distintos, a proporcao \'e de 
-  \nofuzzHITotal{} HI e apenas \nofuzzLOTotal{} LO. Como descrito anteriormente,
-  n\'os analisamos e discutimos se estas discrepancias reportadas pela ferramenta sao 
-  casos de bugs reais ou casos de falso positivos.
-  Nesta analise, nos observamos que cerca de \Fix{63} buckets sao duplicados, ou seja,
-  estes warnings foram reportados anteriormente nos issues trackers dos engenhos 
-  ou podem ser encontrados casos similares em buckets distintos. Um exemplo claro dos 
-  buckets duplicados podem ser encontrados atraves dos testes da suite Test262,
-  onde esta suite cobre as especificacoes da linguagem em arquivos distintos e que
-  podem conter mensagens de erro diferentes para um mesmo warning.
-
-  Nos separamos os buckets considerados falso positivos de acordo com 
-
-   
-  % Ao total, foram obtidos \nofuzzAll{} warnings, sendo estes \nofuzzHighTotal{}
-  % pertencentes aos buckets com prioridade HI e \nofuzzLowTotal{} da prioridade LO. 
-  % Durante 3 meses, n\'os analisamos com rigor cada log gerado, sempre checando as 
-  % especificacoes do EcmaScript, a fim de encontrar bugs reais nos engenhos
-  % javascript que violem condições da especificacao ou apresentem discrepancias
-  % entre as saidas de cada engenhos.
-  % Nosso estudo revelou que dos \nofuzzHighTotal{} buckets do grupo HI, 
-  % \nofuzzHighReport{} foram reportados enquanto que no grupo LO, apenas 
-  % \nofuzzLowReport{} possuiam bugs reais (ratio HI $>$ LO).
-}
-  % A diversidade de suites de testes influenciou na busca de bugs nao descobertos
-  % pelo proprio projeto do engenhos. Por exemplo, cerca de \nofuzzTC{} buckets 
-  % foram encontrados usando a suite do TC-39, alem de \nofuzzMozilla{} warnings 
-  % foram obtidos do repositorio da Mozilla, \nofuzzJerry{} na suite do JerryScript, 
-  % \nofuzzWebKit{} sao do WebKit e \nofuzzGoogle{} para o V8 e o Duktape, 
-  % os arquivos dos repositorios do TinyJS e JSI nao mostraram discrepancias entre as
-  % engines.
-
-  % A importancia tanto de utilizar fuzzing em arquivos de teste do proprio projeto,
-  % quanto em projetos distintos de mesma ordem, pois neste caso engines JS 
-  % devem interpretar arquivos, entao quanto mais entradas, melhores os resultados.
-
-  % Nosso estudo revelou que dos \tableBugsNum{} bugs reportados pelo nosso time, 
-  % apenas \Fix{10} nao foram fuzzados \Fix{43.4\%},
-  % Apesar do engenhos do V8 e SpiderMonkey
-  % serem os mais robustos em relacao aos demais, tambem 
-  % foram encontrados warnings nestes engenhos, porem
-
-
-%% \Fix{nao entendi muito sobre essa subsection... 
-%% seria explicacao do porque utilizar o fuzzing baseado nos nosso resultados?}
-%% \Igor{
-%%   Os engines JS mais populares foram arduamente testados ao longo dos últimos anos, 
-%%   o sistema robusto nao significa que esta livre de bugs, ao contrario,
-%%   estamos testando-o com simples entradas a partir de testes de regressao 
-%%   de bugs previamente encontrados, porem estas entradas poderiam servir como seeds 
-%%   para novos testcases. Partindo disso, realizar fuzzer em arquivos 
-%%   existentes em projetos open-sources eh uma maneira de
-%%   aumentar ainda mais a eficiencia destes engines, por exemplo o Google incentiva o 
-%%   uso de fuzzers no seu ecossistema\cite{oss-fuzz,honggfuzz}.
-
-
-
-\subsection{Fuzzing}
-
-This section reports the results obtained by fuzzing inputs with
-existing tools. It is important to mention that, to avoid experimental
-noise, we did not consider the \nofuzzTotalFiles{} files (\Fix{2.8\%} of the
-total) reported in the previous experiment, \ie{}, we only fuzzed test
-files whose output is consistent across all engines analyzed.
 
 % \Igor{
 %   Para realizar nossos experimentos, tivemos que decidir qual as 
@@ -767,51 +763,58 @@ files whose output is consistent across all engines analyzed.
   \vspace{-3ex}
 %  \scriptsize
   \centering
-  \caption{List of bug reports issued by our team since April,
-    2018. The analysis of warnings was not uninterrupted.}
+  \caption{List of bug reports issued as result of cross-engine
+    differential testing.}
   \label{tab:bugs}
-  \begin{tabular}{cccccccc}
+  \begin{tabular}{ccccccccc}
     \toprule
-    Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Priority & Seed \\
+    Issue\#    & Date & Fuzz & Engine  & Status  &
+    \multicolumn{1}{c}{Url}  & Severity & Priority & Seed \\
     \midrule    
-    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  & \href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978} & LO & WebKit \\ 
-    2  & 4/12 & radamsa & Chakra   & Rejected  & \href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979} & HI & WebKit \\
-    3  & 4/14 & radamsa & JavascriptCore  & New & \href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}  & HI & WebKit    \\
-    4  & 4/18 & \crossmark & JavascriptCore  & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749} & HI & JerryScript      \\
-    5  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033} & HI & Mozilla      \\
-    6  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     & \href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038} & HI & JerryScript   \\
-    7  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
-    \href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065} & HI & Mozilla
-    \\
-    \midrule
-    \multirow{2}{*}{8}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067} & \multirow{2}{*}{HI} & \multirow{2}{*}{Mozilla}\\
-                        &  &                       &
-    JavascriptCore & New &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}  &   & \\
-    \midrule    
-    9  & 4/29 & radamsa & JavascriptCore  & New  &    \href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}  & HI  & JerryScript\\
-    \midrule    
-    \multirow{2}{*}{10} & \multirow{2}{*}{4/30}  & \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &    \href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076} & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
+    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}}
+    & \Fix{x} & LO & WebKit \\ 
+    2  & 4/12 & radamsa & Chakra   & Rejected  &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}}
+    & \Fix{x} & HI & WebKit \\
+    3  & 4/14 & radamsa & JavascriptCore  & New &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
+    } & \Fix{x}  & HI & WebKit    \\
+    4  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}}
+    & \Fix{x} & HI & JerryScript   \\
+    5  & 4/29 & radamsa & JavascriptCore  & New  &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
+    } & \Fix{x}  & HI  & JerryScript\\
+    \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
+    \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076}}
+    & \Fix{x} & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
                         &                        &        &
     JavascriptCore & New &
-    \href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156} &  & 
-    \\
-    \midrule    
-    11 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} & \href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197} & LO & Mozilla \\
-    12 & 5/02 & \crossmark & JavascriptCore & New  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208} & HI & Mozilla \\
-    13 & 5/10 & radamsa & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128} & HI & JerryScript \\
-    14 & 5/17 & radamsa & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182} & HI & V8\\
-    15 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187} & HI & WebKit\\
-    16 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203} & LO & Mozilla\\
-    17 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943} & HI & Webkit\\
-    18 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042} & HI & JerryScript\\
-    19 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388} & HI & WebKit\\
-    20 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  & \href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520} & HI & JerryScript\\
-    22 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442} & HI & JerryScript\\
-    21 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  & \href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443} & HI & JerryScript\\
-    23 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478} & HI & Mozilla\\
-    24 & 7/18 & \crossmark & JavascriptCore & New & \href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777} & HI & JerryScript\\
-    25 & 7/27 & \crossmark & Chakra & New & \href{https://github.com/Microsoft/ChakraCore/issues/5548}{\#5548} & HI & Test262\\
-    26 & 7/27 & \crossmark & Chakra & \textbf{Confirmed} & \href{https://github.com/Microsoft/ChakraCore/issues/5549}{\#5549} & HI & Test262\\
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
+    & \Fix{x} &  & \\
+    7 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
+    & \Fix{x} & LO & Mozilla \\
+    8 & 5/10 & radamsa & Chakra & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128}}
+    & \Fix{x} & HI & JerryScript \\
+    9 & 5/17 & radamsa & Chakra & \textbf{Fixed} &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182}}
+    & \Fix{x} & HI & V8\\
+    10 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
+    & \Fix{x} & HI & Webkit\\
+    11 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
+    & \Fix{x} & HI & JerryScript\\
+    12 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
+    & \Fix{x} & HI & JerryScript\\
+    13 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  &
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443}}
+    & \Fix{x} & HI & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
