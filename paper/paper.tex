@@ -245,25 +245,26 @@ discrepancy. Microsoft uses that tool in the Chakra JS engine.
 
 %The checker can produce multiple warnings for a given input. 
 
-The infrastructure outputs a list of warnings for human inspection.
-To reduce the number of false alarms, we classified warnings in two
-kinds, reflecting their likelihood to manifest a real bug. Warnings of
-the kind ``\hi{}'' are associated with the cases where the anomaly has
-been detected in the execution of the test code or its harness. The
-rationale is that the test in this group executed without violating
-any internal checks of the API. In constrast, warnings in the
-``\lo{}'' group reflect the cases where the anomaly was observed
-during the execution of functions not related to the test itself. We
-found that different engines often check pre-conditions of those
-functions differently. It can happen, for example, that one engine
-enforces a weaker pre-condition compared to another and that is
-acceptable.  In those cases, our infrastructure would observe a
-discrepancy that is more likely to be associated with an invalid input
-produced by the fuzzer, \ie{}, a bug in the test not the
-code. Although we did find real bugs from ``\lo{}'' warnings, the
-proportion was much lower compared to the ``\hi{}'' warnings. Overall,
-only \Fix{12\%} of the reals bugs we found originated from ``\lo{}''
-warnings.
+Recall that a warning can be results of various causes other than a
+bug (see Table~\ref{tab:false-positives}). To facilitate inspection,
+the infrastructure groups and prioritize these warnings. Considering
+prioritization, we classified warnings in two kinds, reflecting their
+likelihood to manifest a real bug. Warnings of the kind ``\hi{}'' are
+associated with the cases where the anomaly has been detected in the
+execution of the test code or its harness. The rationale is that the
+test in this group executed without violating any internal checks of
+the API. In constrast, warnings in the ``\lo{}'' group reflect the
+cases where the anomaly was observed during the execution of functions
+not related to the test itself. We found that different engines often
+check pre-conditions of those functions differently. It can happen,
+for example, that one engine enforces a weaker pre-condition compared
+to another and that is acceptable.\Mar{example!} In those cases, our
+infrastructure would observe a discrepancy that is more likely to be
+associated with an invalid input produced by the fuzzer, \ie{}, it is
+a bug in the test not the code. Although we did find real bugs from
+``\lo{}'' warnings, the proportion was much lower compared to
+``\hi{}'' warnings. Overall, only \Fix{12\%} of the reals bugs we
+found originated from ``\lo{}'' warnings.
 
 \Mar{explain what is a bucket (we refer to it later).} 
 
