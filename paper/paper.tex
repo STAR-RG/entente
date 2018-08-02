@@ -16,7 +16,7 @@
 \begin{document}
 
 %Should I Fuzz my Inputs or Improve my Tests? 
-\title{Assessing the Reliability of JavaScript Engines by Leveraging Diversity}
+\title{Leveraging Diversity to Find Bugs\\ in JavaScript Engines}
 
 %% \author{
 %% \IEEEauthorblockN{Sabrina Souto}
@@ -44,15 +44,21 @@
 %% JavaScript (\js{}) is a popular programming language for the
 %% web. Finding errors in JS runtime engines is an important problem.
 \begin{abstract}
-This paper assesses the impact of Differential Testing (DT) to find
-functional bugs in JS engines. This is an important problem given the
-importance of JS today. DT has shown successful in finding bugs in
-compilers and runtimes, but has not been thoroughly explored in this
-important domain. Our study \Fix{...}
+JavaScript is a very popular programming language today. Checking
+reliability of JavaScript engines is therefore an important
+problem. This paper reports on a study to assess reliability of
+JavaScript engines by leveraging the rich diversity of open-source
+implementations. We explored two methods for that---test
+transplantation and cross-engine differential testing. Test
+transplatation evaluates the effects of running test suites of a given
+engine in another engine. Cross-engine differential testing evaluates
+the effects of fuzzing existing inputs and then comparing the output
+produced by different engines with a differential oracle. Our results
+indicate that \Fix{...}
 \end{abstract}
 
 \begin{IEEEkeywords}
-...
+JavaScript; Diversity; Software Testing
 \end{IEEEkeywords}
 
 \section{Introduction}
@@ -65,30 +71,30 @@ such improvements entails sensible changes in runtime engines. Even
 small changes can have a large impact in practice. For example, in
 October 2014 a new attribute added to Array objects caused a bug that
 resulted in MS Outlook web not working under
-Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}. To
-sum, finding bugs in JS engines is an important problem specially
-because of the speed the specification evolves and the availability of
-various public engines today~\cite{kangax}.
-
+Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}. Finding
+bugs in JS engines is therefore an important problem. It is also
+challenging because of the speed the specification
+evolves~\cite{ecmas262-spec-repo} and the fact that the behavior of
+various language elements is undefined~\cite{so-undefined-behavior}
+(\ie{} left for the implementation to define).
 
 %% WHAT WE DID
 This paper reports the results of a study we conducted to assess
 reliability of existing JS engines by leveraging implementation
 diversity in two orthogonal ways. The first method considered is
-\emph{test transplantation}. This approach evaluates the effects that
+\emph{test transplantation}. This method evaluates the effects that
 running \js{} test files from a given engine have in detecting bugs in
-other engines. The intuition is that when bugs are found in some
-engine implementation a test case is created and added to the
-regression suite. Those test inputs often check interesting corner
-cases that could reveal bugs in different engine implementations. The
-second method considered is \emph{cross-engine differential
-  testing}. This method fuzzes existing inputs, using existing
-techniques, and then compares the output produced by different engines
-using a differential oracle. One possible cause of output discrepancy
-is a bug. It is worth noting that Differential
-Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
-contexts to find bugs in
-software~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}. It
+other engines. The intuition is that when a bug is found in some
+engine a test case is created and added to the regression suite. Those
+test inputs often check interesting scenarios that could reveal bugs
+in different engine implementations. The second method considered is
+\emph{cross-engine differential testing}. This method fuzzes existing
+inputs~\cite{fuzz-testing-history} and then compares the output
+produced by different engines using a differential oracle. One
+possible cause of output discrepancy is a bug. It is worth noting that
+Differential Testing~\cite{Brumley-etal-ss07} (DT) has been applied in
+a variety of contexts to find
+bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}. It
 automates test generation in scenarios where multiple implementations
 of a system exist. DT leverages the diversity across system's
 implementations to detect anomalous behavior. For example, Mozilla
@@ -100,12 +106,14 @@ not eager JIT compilation). They use this technique since 2002 and
 have been able to find over 270 bugs since
 then~\cite{jsfunfuzz-at-mozilla}, including security bugs.  In
 contrast, cross-engine differential testing--the technique used in
-this work--checks correctness by comparing the output produced by
-\emph{different engines} on a fuzzed
-input~\cite{patra2016learning}. This approach is not popularized,
-certainly because it is more challenging to fully automate--a number
-of legitimate reasons exist, other than a bug, for a test execution to
-manifest discrepancy (see Table~\ref{tab:false-positives}).
+this work--checks functional correctness by comparing the output
+produced by \emph{different engines} on a fuzzed
+input~\cite{patra2016learning}. This approach has not been
+popularized, certainly because it is more challenging to fully
+automate--a number of legitimate reasons exist, other than a bug, for
+a test execution to manifest discrepancy (see
+Table~\ref{tab:false-positives}). This study quantifies human effort
+to find these bugs using this method.
 
 %% WHAT WE FOUND
 To sum, we found that \Fix{...}
@@ -115,6 +123,7 @@ This paper makes the following contributions \Fix{...}
 
 \section{JavaScript}
 \label{sec:es6-design}
+\label{sec:imp-dep-behavior}
 
 JavaScript engines are virtual machines that parse source code and
 compile it in bytecodes. These engines implement some version of
@@ -128,47 +137,49 @@ version of the \es{} specification is produced with new features and
 minor fixes. The canonical spec today is
 ES6~\cite{ecmas262-spec-repo,ecmas262-spec}. Features of these
 versions and supporting engines are publicly available~\cite{kangax}.
+
+It is worth noting that undefined behavior makes differential testing
+more challenging.
+
 In the following, we briefly describe different sources of
 discrepancies that can emerge across different engine implementations
 as results of the active changes in the \es{} specification.
 
-%% \Mar{what is that exactly? can we cite? is that only spec or actually
-%%   code as most of java.* libraries.}  \Igor{seems like an API. They
-%%   define the language behavior; grammar; values to static variables;
-%%   the methods for each "class"(Object)...  These irregularities
-%%   appears on engine implementation, maybe an wrong if statement and so
-%%   on.} \Mar{Igor, avoid general discussion like $\leftarrow$this. look for
-%%   explanation in some forum/tutorial and explain **when** you
-%%   undertand the JS ecosystem design and can explain with confidence.}
+The \es{} spec uses the label ``implementation-dependent'' to indicate
+cases where each engine developer can decide how to implement some
+aspect of a functionality. In these cases, the behavior of some
+language element may differ from engine to engine. One reason this
+flexibility in the spec exists is to enable compiler
+optimizations. For example, the \mcodeid{for-in} loop does not clearly
+specify the iteration
+order~\cite{so-forin-undefined,javascript-in-chrome} and different
+engines capitalize on that~\cite{for-in-undefined}.  As another
+example, the latest version of the \es{} specification states that if
+the \mcodeid{Number.toPrecision()} function is called with more than
+one argument, then the behavior is
+implementation-dependent~\cite{es6-toPrecision}. Various other cases
+like this exist in the specification. 
 
 
 \subsection{Undefined (Implementation-Dependent) Behavior}
-\label{sec:imp-dep-behavior}
 
 
-The \es{} spec uses the label ``implementation-dependent'' to indicate
-cases where each engine developer can decide how to implement some
-aspect of a functionality. In these cases, execution may differ from
-engine to engine. One of the reasons implementation-dependent behavior
-exists is to enable compiler optimizations. For example, the
-\mcodeid{for-in} loop does not clearly specify the iteration
-order~\cite{so-forin-undefined,javascript-in-chrome} and different
-engines capitalize on that~\cite{for-in-undefined}. As another
-example, \Fix{...}
 
-\Mar{explain what is an **acceptable** incompatibilities. cite example
-bug reports.}
-\Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that
-the function \CodeIn{Number.toPrecision(precision)}, in general,
-if precision is defined the method returns a String 
-containing the Number value represented either 
-in decimal exponential notation or in decimal 
-fixed notation~\cite{es6-toPrecision}. The Number object uses a 
-property that the specification describes as approximately so when we use 
-toPrecision with a bigger precision, the values of each engine may vary, this
-could be considered as a case of incompatibility by engine
-design.}\Mar{I don't understand the example very well and don't understand the
-  relationship with HI/LO.}
+
+
+%% \Mar{explain what is an **acceptable** incompatibilities. cite example
+%% bug reports.}
+%% \Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that
+%% the function \CodeIn{Number.toPrecision(precision)}, in general,
+%% if precision is defined the method returns a String 
+%% containing the Number value represented either 
+%% in decimal exponential notation or in decimal 
+%% fixed notation. The Number object uses a 
+%% property that the specification describes as approximately so when we use 
+%% toPrecision with a bigger precision, the values of each engine may vary, this
+%% could be considered as a case of incompatibility by engine
+%% design.}\Mar{I don't understand the example very well and don't understand the
+%%   relationship with HI/LO.}
 
 \subsection{Randomness}
 
