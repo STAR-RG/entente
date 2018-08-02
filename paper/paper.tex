@@ -138,91 +138,70 @@ This paper makes the following contributions \Fix{...}
 \label{sec:es6-design}
 \label{sec:imp-dep-behavior}
 
-JavaScript engines are virtual machines that parse source code and
-compile it in bytecodes. These engines implement some version of the
-ECMAScript (\es{}), which emerged with the goal to standardize
-variants of the language, such as Netscape's JavaScript and
-Microsoft's JScript\footnote{The name JavaScript still prevails today,
-  certainly for historical reasons.}. The \es{} specification is
-regulated by Ecma International~\cite{es6-website} under the
-TC39~\cite{tc39-github} technical committee.  Every year, a new
-version of the \es{} specification is produced with new features and
-minor fixes. The canonical spec today is
+JavaScript engines are virtual machines that parse source code,
+compile it in bytecodes, and run these bytecodes. These engines
+implement some version of the ECMAScript (\es{}), which emerged with
+the goal to standardize variants of the language, such as Netscape's
+JavaScript and Microsoft's JScript\footnote{The name JavaScript still
+  prevails today, certainly for historical reasons.}. The \es{}
+specification is regulated by Ecma International~\cite{es6-website}
+under the TC39~\cite{tc39-github} technical committee.  Every year, a
+new version of the \es{} specification is produced with new features
+and minor fixes. The canonical spec today is
 ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 
 %% In the following, we briefly describe different sources of
 %% discrepancies that can emerge across different engine implementations
 %% as results of the active changes in the \es{} specification.
+%% .........
+%% A compatibility table relating features and supporting engines is
+%% publicly available~\cite{kangax}.
 
-.........
-A compatibility table relating features and supporting engines is
-publicly available~\cite{kangax}.
-
-Another
-challenge is undefined (or implementation-dependent) behavior. The
-\es{} spec uses the label ``implementation-dependent'' to indicate
-cases where each engine developer can decide how to implement some
-aspect of a functionality. In these cases, the behavior of some
-language element may differ from engine to engine. One reason this
-flexibility in the spec exists is to enable compiler
-optimizations. For example, the \mcodeid{for-in} loop does not clearly
-specify the iteration
+Both the specification and implementation of JavaScript are
+incomplete. Certain parts of the specification are undefined; it is
+responsibility of engine engineers to decide how to implement these
+functionalities. The JavaScript spec uses the label
+``implementation-dependent'' to indicate these cases, where behavior
+may differ from engine to engine. One reason this flexibility in the
+spec exists is to enable compiler optimizations. For example, the
+\mcodeid{for-in} loop does not clearly specify the iteration
 order~\cite{so-forin-undefined,javascript-in-chrome} and different
 engines capitalize on that~\cite{for-in-undefined}.  As another
 example, the latest version of the \es{} specification states that if
 the \mcodeid{Number.toPrecision()} function is called with more than
 one argument, then the behavior is
 implementation-dependent~\cite{es6-toPrecision}. Various other cases
-like this exist in the specification.
+like these exist in the specification. Such gap also exists at the
+implementation level. Given the speed the specification changes and
+the complexity of the language some features are not fully implemented
+as can be observed by the Kangax compatibility table~\cite{kangax}.
 
-
-\subsection{Undefined (Implementation-Dependent) Behavior}
-
-
-
-
-
-%% \Mar{explain what is an **acceptable** incompatibilities. cite example
-%% bug reports.}
-%% \Igor{For example, the latest version of ES specs~\cite{es6-spec} describes that
-%% the function \CodeIn{Number.toPrecision(precision)}, in general,
-%% if precision is defined the method returns a String 
-%% containing the Number value represented either 
-%% in decimal exponential notation or in decimal 
-%% fixed notation. The Number object uses a 
-%% property that the specification describes as approximately so when we use 
-%% toPrecision with a bigger precision, the values of each engine may vary, this
-%% could be considered as a case of incompatibility by engine
-%% design.}\Mar{I don't understand the example very well and don't understand the
-%%   relationship with HI/LO.}
-
-\subsection{Randomness}
-
-\sloppy Some elements in JS have non-deterministic behavior (\eg{},
-Math.random and Date). A test that make decisions based on these
-elements could, in principle, produce different outcomes on different
-runs. Carefully-written test cases should not manifest this kind of
+\sloppy It is also worth noting that, as in other languages, some
+elements in JS have non-deterministic behavior (\eg{},
+\mcodeid{Math.random} and \mcodeid{Date}). A test that make decisions
+based on these elements could, in principle, produce different
+outcomes on different runs. Carefully-written test cases should not
+manifest this kind of
 flakiness~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
-fuzzed test files are more likely to manifest them.
+fuzzed test files could are more likely, intuitively, to manifest
+them.
 
-\subsection{\Fix{Other}}
+As mentioned previously, all those aspects make testing \js\ engines
+more challenging.
 
-1) The stack depth in JS is often close to the real (native) C stack
-depth, nevertheless observable by JS through recursion. This causes
-differential behavior even on the same engine when JITs are enabled or
-disabled, as the stack frame sizes vary. LangFuzz in particular
-produces a lot of recursions and hits these problems even more often
-than jsfunfuzz.\Mar{ask C. Holler. it is unclear to me how the output
-  could be different.}
 
-\subsection{Bugs}
+%\subsection{Randomness}
 
-It is worth to recall that there is no formal specification for \es{};
-the specification is written in natural language. As such, differences
-in behavior from one engine to another, other than those mentioned
-above (Sections~\ref{sec:imp-dep-behavior}
-and~\ref{sec:undef-behavior}), can occur. But these discrepancies are
-not acceptable.
+
+%\subsection{\Fix{Other}}
+
+%% 1) The stack depth in JS is often close to the real (native) C stack
+%% depth, nevertheless observable by JS through recursion. This causes
+%% differential behavior even on the same engine when JITs are enabled or
+%% disabled, as the stack frame sizes vary. LangFuzz in particular
+%% produces a lot of recursions and hits these problems even more often
+%% than jsfunfuzz.\Mar{ask C. Holler. it is unclear to me how the output
+%%   could be different.}
 
 
 \section{Differential Testing Infrastructure}
@@ -239,14 +218,14 @@ not acceptable.
 \end{figure}
 
 Figure~\ref{fig:workflow} illustrates the infrastructure we used for
-differential testing.  The bug-finding process takes on input JS files
-from regression test suites of various JS engines and generates
-warnings on output. Boxes in the figure denote encapsulation; arrowed
-lines indicate data flow. The cycle icons denote repetition--the
-leftmost icon indicates that each file in the input list will be
-analyzed in separate whereas the rightmost icon shows that a single
-file will be fuzzed multiple times. The bug-finding process works as
-follows.
+differential testing, which is related to part of the study discussed
+in this paper.  The bug-finding process takes on input JS files from
+regression test suites of various JS engines and generates warnings on
+output. Boxes in the figure denote encapsulation; arrowed lines
+indicate data flow. The cycle icons denote repetition--the leftmost
+icon indicates that each file in the input list will be analyzed in
+separate whereas the rightmost icon shows that a single file will be
+fuzzed multiple times. The bug-finding process works as follows.
 
 New inputs are obtained for a given test input using some
 off-the-shelf input fuzzer~\cite{fuzz-testing-history}.\Comment{
