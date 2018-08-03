@@ -208,8 +208,17 @@ more challenging.
 \label{sec:design}
 
 
+Figure~\ref{fig:workflow} illustrates the infrastructure we used for
+differential testing, use in part of our study. The bug-finding
+process takes on input JS files from regression test suites of various
+JS engines and generates warnings on output. Boxes in the figure
+denote encapsulation; arrowed lines indicate data flow. The cycle
+icons denote repetition--the leftmost icon indicates that each file in
+the input list will be analyzed in separate whereas the rightmost icon
+shows that a single file will be fuzzed multiple times.
+
 %\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
-\begin{figure}[t]
+\begin{figure}[h]
   \centering
 %  \includegraphics[trim=20 350 200
 %    0,clip,width=0.35\textwidth]{google-awards-workflow}
@@ -217,20 +226,11 @@ more challenging.
   \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
 \end{figure}
 
-Figure~\ref{fig:workflow} illustrates the infrastructure we used for
-differential testing, which is related to part of the study discussed
-in this paper.  The bug-finding process takes on input JS files from
-regression test suites of various JS engines and generates warnings on
-output. Boxes in the figure denote encapsulation; arrowed lines
-indicate data flow. The cycle icons denote repetition--the leftmost
-icon indicates that each file in the input list will be analyzed in
-separate whereas the rightmost icon shows that a single file will be
-fuzzed multiple times. The bug-finding process works as follows.
-
-New inputs are obtained for a given test input using some
-off-the-shelf input fuzzer~\cite{fuzz-testing-history}.\Comment{
-  Several fuzzing methods have been proposed in the past, varying with
-  respect to how new inputs are
+The bug-finding process works as follows. New inputs are obtained for
+a given test input using some off-the-shelf input
+fuzzer~\cite{fuzz-testing-history}.\Comment{ Several fuzzing methods
+  have been proposed in the past, varying with respect to how new
+  inputs are
   generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
 Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 The oracle checks whether or not the output produced for the fuzzed
@@ -240,31 +240,36 @@ infrastructure discards the test. Otherwise, it considers the input as
 potentially fault-revealing; hence interesting for human
 inspection. Note that a number of reasons exist, other than a bug, to
 explain discrepancy (see Table~\ref{tab:false-positives}). We used the
-open-source eshost-cli project~\cite{eshost-cli} for checking output
-discrepancy. Microsoft uses that tool in the Chakra JS engine.
+open-source eshost-cli project~\cite{eshost-cli}, also used at
+Microsoft, for checking output discrepancy.
 
 %The checker can produce multiple warnings for a given input. 
 
-Recall that a warning can be results of various causes other than a
-bug (see Table~\ref{tab:false-positives}). To facilitate inspection,
-the infrastructure groups and prioritize these warnings. Considering
-prioritization, we classified warnings in two kinds, reflecting their
-likelihood to manifest a real bug. Warnings of the kind ``\hi{}'' are
-associated with the cases where the anomaly has been detected in the
-execution of the test code or its harness. The rationale is that the
-test in this group executed without violating any internal checks of
-the API. In constrast, warnings in the ``\lo{}'' group reflect the
-cases where the anomaly was observed during the execution of functions
-not related to the test itself. We found that different engines often
-check pre-conditions of those functions differently. It can happen,
-for example, that one engine enforces a weaker pre-condition compared
-to another and that is acceptable.\Mar{example!} In those cases, our
-infrastructure would observe a discrepancy that is more likely to be
-associated with an invalid input produced by the fuzzer, \ie{}, it is
-a bug in the test not the code. Although we did find real bugs from
-``\lo{}'' warnings, the proportion was much lower compared to
-``\hi{}'' warnings. Overall, only \Fix{12\%} of the reals bugs we
-found originated from ``\lo{}'' warnings.
+Recall that a warning can be manifested for reasons other than a bug
+and there is no clear way to distiguish those cases automatically (see
+Table~\ref{tab:false-positives}). A human needs to inspect the warning
+to diagnose the discrepancy. To facilitate inspection, the
+infrastructure prioritize these warnings and clusters them in
+groups. Considering prioritization, we classified warnings in two
+kinds, reflecting their likelihood to manifest a real bug. Warnings of
+the kind ``\hi{}'' are associated with the cases where the test code
+executed to completion without violating any internal checks but it
+violated assertions declared in the test itself or its harness. The
+rationale is that the input is valid--considering the checks declared
+in the API functions--but, still, it manifests discrepancy through
+violation of an assertion declared in the test.\Mar{example!} In constrast, warnings
+in the ``\lo{}'' group reflect the cases where the anomaly was
+observed during the execution of functions not related to the test
+itself. We found that different engines often check pre-conditions of
+those functions differently. It can happen, for example, that one
+engine enforces a weaker pre-condition on a function input compared to
+another engine and that is acceptable.\Mar{example!} In those cases, our infrastructure would
+observe a discrepancy that is more likely to be associated with an
+invalid input produced by the fuzzer, \ie{}, it is likely to be a bug
+in the test code not the engine (library or runtime) code. Although we
+did find real bugs from ``\lo{}'' warnings, the proportion was much
+lower compared to ``\hi{}'' warnings. Overall, only \Fix{12\%} of the
+reals bugs we found originated from ``\lo{}'' warnings.
 
 \Mar{explain what is a bucket (we refer to it later).} 
 
@@ -327,17 +332,22 @@ of the tests we found depend on external libraries, which not all
 engines we use support. We decided to discard those. For example, many
 tests we found required a Node.js runtime~\cite{node} for
 execution. The main source of test cases is the offical
-TC-39~\cite{tc39-github} conformance test suite for the ECMA262
+Test262~\cite{tc39-github} conformance test suite for the ECMA262
 specification~\cite{ecmas262-spec}. This test suite contains 87\% of
 all the tests we used. We also considered test suites of three of the
 four engines mentioned in Section~\ref{sec:methodology:engines} and
-four other engines. We did not consider tests from the \chakra{}
-repository because of their intensive use of Chakra-specific
-objects. Table~\ref{tab:test-suites} shows the breakdown of tests we
-considered. Overall, we found a total of \totfiles{} JS files.
+four other engines. Table~\ref{tab:test-suites} shows the breakdown of
+tests we considered. Overall, we found a total of \totfiles{} JS
+files. We did not consider tests from the \chakra{} repository because
+they depend on non-portable objects. Notice that the number of tests
+in \veight\ is low. That happens because many tests in \veight{} are
+inherited from Mozilla and \jsc{}; we discarded those to avoid
+repetition and to give credit where it is due. The \veight{} test
+suite contains other tests, but, as in \chakra{}, these tests use
+non-portable testing objects that we still did not mock.
 
-It is also worth mentioning that some engines use custom shell,
-including a harness with custom assertions, to run tests.  For these,
+It is also worth mentioning that some engines use a custom shell to
+run tests, including a harness with specific assertions.  For these,
 we needed to make small changes in the testing infrastructure to be
 able to run the tests uniformly across all engines. More precisely, we
 needed to mock non-portable harness functions, which are only
@@ -486,29 +496,39 @@ We used two black-box mutational fuzzers in this
 study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
 fuzzers require no instrumentation and domain-knowledge. They mutate
 \emph{existing} inputs randomly. The strenght of the approach is
-limited by the supported mutation operators, which are typically
-simple, and the quality of the test suite. We chose \radamsa\ and
-\quickfuzz\ \Fix{...elaborate...}
+limited by the quality of the test suite and the supported mutation
+operators, which are typically simple. We chose \radamsa\ and
+\quickfuzz\ \Fix{...elaborate...} \Mar{I mention below that these
+  fuzzers ``only make valid changes in literals of the
+  language''. Please confirm and explain that still this is
+  interesting!}
 
 
 \section{Results}
 \label{sec:results}
 
-Recall that the goal of our study is to assess reliability of
-\js\ engines by leveraging implementation diversity, which is
-specially rich in this domain. We report results in three
-parts. First, we report on the stability of the engines we analyzed
-using the Test262 standard conformance test suite for
-EcmaScript~\cite{ecma262-conformance-suite}. The intuition is that the
-bugs we discover throughout this study would have low relevance if the
-engines are too fragile. Second, we report results obtained with test
-transplantation. The hypothesis is that test cases written for one
-engine may reveal bugs in different engines. The rationale is that the
-domain of possible inputs is too large; consequently, we expect that
-test suites of a given engine cover scenarios and corner cases
-uncovered by another engine. Third, we analyzed the impact of using
-cross-engine differential testing to find bugs. The hypothesis is that
-even black-box fuzzers can expose important bugs.
+The goal of our study is to assess reliability of \js\ engines by
+leveraging implementation diversity, which is specially rich in this
+domain. We report results in three parts. First, we report on the
+stability of the engines we analyzed using the Test262 standard
+conformance test suite for EcmaScript~\cite{ecma262-conformance-suite}
+(Section~\ref{sec:stability}). The intuition is that the bugs we
+discover throughout this study would have low relevance if the engines
+are too fragile. Second, we report results obtained with test
+transplantation (Section~\ref{sec:transplantation}). The rationale is
+that the domain of possible inputs is too large; consequently, we
+expect that test suites written for a given engine cover scenarios and
+corner cases uncovered by another engine. To sum, we hope that that
+test cases written for one engine could reveal bugs in different
+engines as opposed to only manifesting false alarms such as those that
+could emerge from implementation-dependent behavior. Third, we
+analyzed the impact of using cross-engine differential testing to find
+bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
+rationale is that even black-box fuzzers that typicaly make valid
+changes only in literals of the language could expose important
+bugs. All in all, we want to assess the impact of simple approaches
+that leverage on diversity to find bugs in \js\ engines with the goal
+of assessing their reliability.
 
 \subsection{Stability of Engines}
 \label{sec:stability}
@@ -627,6 +647,7 @@ results. \Fix{...elaborate...}
 
 
 \subsection{Cross-Engine Differential Testing}
+\label{sec:cross-engine-diff-testing-results}
 
 \begin{figure}[t]
   \centering
