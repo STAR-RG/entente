@@ -362,16 +362,16 @@ available to certain engines.
     \toprule
     Name & Source & \# JS files \\
     \midrule
-    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
+    TC-39 (Test262) & \cite{ecma262-conformance-suite} & \Fix{31,276} \\
     \midrule
-    Mozilla & \cite{mozilla} & 2,633 \\
-    \veight{} & \cite{v8} & 74 \\
-    \jsc{} & \cite{webkit} & 1,031 \\
+    Mozilla & \cite{mozilla} & 2,116 \\
+    \veight{} & \cite{v8} & 57 \\
+    \jsc{} & \cite{webkit} & 1,021 \\
     \midrule    
-    Duktape & \cite{duktape} & 1,195 \\ 
-    JerryScript & \cite{jerryscript} & 1,950 \\
-    JSI & \cite{jsi} & 98 \\
-    Tiny-js & \cite{tinyjs} & 48 \\    
+    Duktape & \cite{duktape} & 921 \\ 
+    JerryScript & \cite{jerryscript} & 1,878 \\
+    JSI & \cite{jsi} & 63 \\
+    Tiny-js & \cite{tinyjs} & 37 \\    
     % Chakra & \cite{chakracore} & 2632 \\
     \midrule
      &  & \totalTestFiles{} \\
@@ -579,16 +579,15 @@ we observed that \Fix{...}
     \toprule
     test suite\textbackslash{}engine & \jsc{} & \veight{} & \smonkey{} & \chakra{}\\
     \midrule
-    \Fix{Versions (01.08)} & 234485 & 7.0.126 & 62.0b13 & 1.10.1 \\
-    \midrule
-    \jsc{} & \Fix{10} & 11 & 107 & 157   \\
+    % \Fix{Versions (03.08)} & 234555 & 7.0.158 & 62.0b14 & 1.10.1 \\
+    \jsc{} & \Fix{6} & 15 (-6) & 16 (-6) & 64 (-6)   \\
     \veight{} & 29 & \Fix{0} & 0 & 0  \\
 %    \chakra{} & - & - & - & -  \\
-    Mozilla & 741 & 286 & \Fix{178} & 476   \\
-    Duktape & 238 & 80 & 202 & 85   \\
-    JerryScript & 94 & 89 & 90 & 91   \\
-    JSI & 35 & 14 & 14 & 14   \\
-    Tiny-js & 11 & 11 & 11 & 11  \\
+    \smonkey{} & 275 (-57) & 163 (-56) & \Fix{58} & 334 (-55)   \\
+    Duktape & 0 & 4 & 4 & 1   \\
+    JerryScript & 23 & 25 & 22 & 23   \\
+    JSI & 0 & 0 & 0 & 0   \\
+    Tiny-js & 0 & 0 & 0 & 0  \\
     \bottomrule 
   \end{tabular}
 \end{table}  
