@@ -580,10 +580,16 @@ we observed that \Fix{...}
     test suite\textbackslash{}engine & \jsc{} & \veight{} & \smonkey{} & \chakra{}\\
     \midrule
     % \Fix{Versions (03.08)} & 234555 & 7.0.158 & 62.0b14 & 1.10.1 \\
-    \jsc{} & \Fix{6} & 15 (-6) & 16 (-6) & 64 (-6)   \\
-    \veight{} & 29 & \Fix{0} & 0 & 0  \\
+    \Comment{
+      Lembrar dos testes que os testes da propria engine falham:
+      V8 0 
+      JSC 6 
+      Spidermonkey 58
+    }
+    \jsc{} & - & 9 & 10 & 58   \\
+    \veight{} & 29 & - & 0 & 0  \\
 %    \chakra{} & - & - & - & -  \\
-    \smonkey{} & 275 (-57) & 163 (-56) & \Fix{58} & 334 (-55)   \\
+    \smonkey{} & 218 & 107 & - & 279 \\
     Duktape & 0 & 4 & 4 & 1   \\
     JerryScript & 23 & 25 & 22 & 23   \\
     JSI & 0 & 0 & 0 & 0   \\
