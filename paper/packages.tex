@@ -2,6 +2,14 @@
 \usepackage[english]{babel}
 \setlength{\emergencystretch}{2pt}
 %%%%%%%%%%% packages
+\usepackage{graphicx}
+\ifCLASSOPTIONcompsoc
+   \usepackage[caption=false, font=normalsize, labelfont=sf, textfont=sf]{subfig}
+\else
+   \usepackage[caption=false, font=footnotesize]{subfig}
+\fi
+
+
 \usepackage[lined,algonl,boxed]{algorithm2e}
 %\usepackage[small]{caption}
 \usepackage{caption}
@@ -9,7 +17,6 @@
 %\usepackage[sort&compress]{natbib}
 \usepackage{url}
 \usepackage[draft]{hyperref}
-\usepackage{subfigure}
 \usepackage{listings}
 \usepackage{enumitem}
 \usepackage{colortbl}
