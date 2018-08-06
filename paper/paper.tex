@@ -616,19 +616,60 @@ testing paid off in this case.
    \textbf{total} & 270 & 145 & 36 & 361 \\
     \bottomrule 
   \end{tabular}
-\end{table}  
+\end{table}
 
-%% Our infrastructure reported a total of \nofuzzAll{} buckets, including
-%% \lo{} and \hi{}, that resulted in \nofuzzBugs{} bug reports. Of the
-%% total of \nofuzzAll{} buckets, we found that \nofuzzDuplicates\ were
-%% duplicates and \nofuzzFalsePositives\ were false positives. Most of
-%% the cases of duplicates were related to the Test262 conformance test
-%% suite, which all \js{} should strive to pass but we found that it is
-%% not uncommon for the engines to fail on some of these. For example,
-%% \veight{} \nofuzzFalsePositives
+The piecharts from Figure~\ref{fig:piecharts-transplantation} show the
+false and true positives observed with test transplantation. The top
+piechart shows false alarms.  It is important to stress that all the
+``transplanted'' tests should have passed in these cases. The absolute
+number of tests is shown in parentheses to the right side of the
+explanation for the false positive. The sources of false alarm are as
+follows:
 
-We inspected each of those failures in detail according to the
-following methodology. \Fix{..elaborate..}
+\begin{itemize}
+  \item \textbf{Undefined.} Implementation-dependent behavior as per
+    ECMA262 specification~\cite{ecmas262-spec}. For example, \Fix{XXX}
+  \item \textbf{Timeout/OME\footnote{ome is for out of memory
+      error.}.} Because target engine does not optimize code as the
+    original engine did, test fails to finish at the time limit
+    specified in the test or runs out of memory. For example, we found
+    that only \jsc{} implements tail-call optimization to avoid tail
+    recursion.
+  \item \textbf{Not implemented.} Test fails because it covers
+    function in the spec which is yet to be implemented. For example,
+    at the time of writing, Chakra did not implement various
+    properties from the \mcodeid{Symbol} object. A test that refers to
+    this object will fail in \chakra{}.
+  \item \textbf{Future Feature.} Test fails because it uses a feature
+    that is available in the original engine, but still not standard,
+    and the target engine does not support that feature. For example,
+    \Fix{XXX}
+  \item \textbf{Error message mismatch.} Test fails because it
+    compares an error message, which is not portable across
+    engines. For example, \Fix{a test from the engine XXX compares the
+      string encapsulated in the object of type YYY. The engine ZZZ
+      fails because it produces the string AAA while expecting the
+      string BBB.}
+\end{itemize}  
+
+In summary, we observed that \Fix{...elaborate...}
+
+Considering true positives, \Fix{...elaborate...}
+
+
+\begin{figure}[h]
+  \centering
+  \subfloat[\label{fig:falsepositives}False Positives]{%
+    \includegraphics[trim=0 150 0 100,clip,width=0.4\textwidth]{R/piecharts/falsepositives}
+  }
+  \label{1a}\hfill
+  \subfloat[\label{fig:truepositives}True Positives]{%
+    \includegraphics[trim=0 150 0 150,clip,width=0.4\textwidth]{R/piecharts/truepositives}    
+  }
+  \label{1b}\\
+  \caption{\label{fig:piecharts-transplantation}False and True positives.}
+\end{figure}
+
 Figure~\ref{tab:test-transplantation-bugs} shows
 results. \Fix{...elaborate...}
 
@@ -742,27 +783,12 @@ group is higher, indicating that chances of filing a bug report for a
 
 Table~\ref{tab:false-positives} shows the distribution of false
 positives per source. A false positive is a bucket that did not lend
-itself in a bug report. We identified five sources of imprecision. The
-source ``not yet implemented'' indicates that the engine does not
-implement some part of the specification. For example, at the time of
-writing, Chakra does not implement various properties from the
-\CodeIn{Symbol} object. The source ``invalid input'' indicates that
-the test violated some part of the specification. For example, the
-test indirectly invoked some function with unexpected
-arguments\Fix{provide concrete example}. In all cases that we
-analyzed, that happened because fuzzing produced an invalid test
-input. The source ``timeout/ome''\footnote{ome is for out of memory
-  error.} indicates that the test times out (we used a 3s time budget)
-or runs out of memory. That happens because engines implement
-different optimizations. For example, we found that only \jsc{}
-implements tail-call optimization to avoid tail
-recursion. Consequently, for a certain input, \jsc{} finishes
-execution quickly whereas other engines time out. The source
-``implementation-dependent'' is as defined in
-Section~\ref{sec:imp-dep-behavior}.\Fix{provide concrete example} The
-source ``future feature'' corresponds to the case where a feature will
-be part of the spec but some engines already implemented it, making a
-test that uses the feature to pass only in those engines.
+itself in a bug report. The sources of imprecision are as defined in
+Section~\ref{sec:transplantation} with the addition of one, which
+emerges with fuzzing. The source ``invalid input'' indicates that the
+test violated some part of the specification. For example, the test
+indirectly invoked some function with unexpected arguments\Fix{provide
+  concrete example}. 
 
 \begin{table}[t]
   \centering
@@ -771,16 +797,12 @@ test that uses the feature to pass only in those engines.
   \begin{tabular}{crr}
     \toprule
     & \radamsa\ & \quickfuzz\ \\
-    %% not yet implemented & 8 & - & - \\
-    %% invalid input & 0 & - & - \\
-    %% timeout/ome & 13 & - & - \\
-    %% implementation-dependent & 3 & - & - \\
-    %% future feature & 3 & - & - \\
-    not yet implemented & - & - \\
-    invalid input & - & - \\
-    timeout/ome & - & - \\
-    implementation-dependent & - & - \\
-    future feature & - & - \\
+    Undefined & - & - \\
+    Timeout/OME & - & - \\
+    Not Implemented & - & - \\
+    Future Feature & - & - \\
+    Error Message Mismatch & - & - \\    
+    Invalid Input & - & - \\    
     \bottomrule     
   \end{tabular}
 \end{table}
