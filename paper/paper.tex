@@ -342,9 +342,9 @@ files. We did not consider tests from the \chakra{} repository because
 they depend on non-portable objects. Notice that the number of tests
 in \veight\ is low. That happens because many tests in \veight{} are
 inherited from Mozilla and \jsc{}; we discarded those to avoid
-repetition and to give credit where it is due. The \veight{} test
-suite contains other tests, but, as in \chakra{}, these tests use
-non-portable testing objects that we still did not mock.
+repetition and to give credit where it is due. For all engines engines
+we found test using non-portable functions that we detected by running
+the test on a different engine. We needed to discard those.
 
 It is also worth mentioning that some engines use a custom shell to
 run tests, including a harness with specific assertions.  For these,
@@ -352,6 +352,8 @@ we needed to make small changes in the testing infrastructure to be
 able to run the tests uniformly across all engines. More precisely, we
 needed to mock non-portable harness functions, which are only
 available to certain engines.
+
+
 
 \begin{table}[t]
   \centering
@@ -566,10 +568,26 @@ that \Fix{...} \Mar{justify regressions using the kangax report}
 \subsection{Test Transplantation}
 \label{sec:transplantation}
 
-This section reports results obtained with test
-transplantation. Table~\ref{tab:cross-testing} shows the number of
-failures that each engine produces on a different test suite. To sum,
-we observed that \Fix{...}
+This section reports the failures observed when running a test suites
+on an engine for which those tests were not run
+before. Table~\ref{tab:cross-testing} shows the number of failures for
+each pair of test suite and engine. The first column shows the test
+suites whereas the first row shows the engines. We use a dash (``-'')
+to indicate that we did not consider the combinations that associated
+a test suite with the engine that originated them; failures in those
+cases would either indicate regressions or flaky tests as opposed to
+an unknown bug for that engine. We also discarded such test cases from
+consideration in other engines as we wanted the test to pass on its
+originating engine; a failure in that case would be a stronger
+indicative of a bug.
+
+To sum, we observed that, considering this dataset, the Mozilla
+\smonkey\ was the engine that failed the least whereas the Microsoft
+engine \chakra\ failed the most. The \smonkey\ test suite also
+revealed more failures than any other, perhaps as expected,
+considering that it is the suite with more tests (see
+Table~\ref{tab:test-suites}). This suggests that the investiment in
+testing paid off in this case.
 
 \begin{table}[h]
   \centering
@@ -594,6 +612,8 @@ we observed that \Fix{...}
     JerryScript & 23 & 25 & 22 & 23   \\
     JSI & 0 & 0 & 0 & 0   \\
     Tiny-js & 0 & 0 & 0 & 0  \\
+    \midrule
+   \textbf{total} & 270 & 145 & 36 & 361 \\
     \bottomrule 
   \end{tabular}
 \end{table}  
