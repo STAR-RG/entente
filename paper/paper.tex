@@ -647,23 +647,45 @@ positive. The sources are as follows:
     number to a string, considering a given number of significant
     digits. The floating-point approximation of the real value is
     implementation-dependent, making the test to pass only in
-    \chakra\ for that test.
+    \chakra\ for that test. \Igor{ Several tests explores 
+    the error message from a function violation, due the error
+    message string is distinct and the type of Error is equal,
+    we considered these cases as undefined behavior too.
+    }
 
   \item \textbf{Timeout/OME\footnote{ome is for out of memory
       error.}.} False positives of this kind manifest when the target
     engine that runs the test do not optimize code as the original
     engine. For that, tests fail to finish at the time budget or runs
     out of memory.\Comment{For example, we found that only \jsc{} implements
-    tail-call optimization to avoid tail recursion.}\Mar{concrete example!}
+    tail-call optimization to avoid tail recursion.}
+    \Igor{
+      For example, a testcase from \jsc{} suite explores the tail call
+      to optimize the recursion, the test uses a recursive function that
+      should be executed multiple times (ie. \mcodeid{1e6}). In this case, 
+      only the \jsc{} supports tail-call optimization and the testcase 
+      passes without failures. Another case can be found in JerryScript suite
+      that uses a repetition statement to concatenate long strings 
+      exponentially, causing an out of memory error. The engines used 
+      supports the flags to increase memory, however we prefer to use 
+      the default engine build.
+    }
 
   \item \textbf{Not implemented.} False positives of this kind
     manifest when a test fails because it covers a function that is
     part of the official spec, but is not implemented in the target
     engine. For example, at the time of writing, Chakra does not
-    implement various properties from the \mcodeid{Symbol} object.
+    implement various properties from the \mcodeid{Symbol} object, 
+    \Igor{these implementation are in experimental mode 
+    (ie. activating with flag -ES6Experimental)}.
 
   \item \textbf{Unknown.} This source corresponds to the cases we were
     unable to confidently diagnose the failure.
+    \Igor{
+      We observed that some tests are not valid due
+      not corresponds to the ES6 specifications,
+      we skip these warnings.
+    }
 
   %% \item \textbf{Error message mismatch.} Test fails because it
   %%   compares an error message, which is not portable across
@@ -721,6 +743,8 @@ results. \Fix{...elaborate...}
    11 & 7/18 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & \Fix{x} & JerryScript\\
    12 & 8/07 & \crossmark & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5576}{\#5576}} & \Fix{x} & JerryScript\\
    13 & 8/07 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & \Fix{x} & JerryScript\\
+   14 & 8/07 & \crossmark & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5579}{\#5579}} & \Fix{x} & JerryScript\\
+   15 & 8/07 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & \Fix{x} & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
