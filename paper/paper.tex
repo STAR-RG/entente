@@ -643,13 +643,16 @@ follows:
   \item \textbf{Future Feature.} Test fails because it uses a feature
     that is available in the original engine, but still not standard,
     and the target engine does not support that feature. For example,
-    \Fix{XXX}
+    \Fix{XXX} \Igor{Creio que neste experimento, essa funcao nao vai 
+    aparecer. Identificamos isto em alguns testes da suite test262(nao estamos utilizando ela aqui).}
   \item \textbf{Error message mismatch.} Test fails because it
     compares an error message, which is not portable across
-    engines. For example, \Fix{a test from the engine XXX compares the
-      string encapsulated in the object of type YYY. The engine ZZZ
-      fails because it produces the string AAA while expecting the
-      string BBB.}
+    engines. For example, \Igor{
+      a test from the engine \jsc{} uses an assert function called
+      \CodeIn{shouldThrow} that expects an specific error message. In this test, 
+      all engines throws the Error as expected, however only the message 
+      on \jsc{} engine match with the string expected in the test case.
+    }
 \end{itemize}  
 
 In summary, we observed that \Fix{...elaborate...}
@@ -694,8 +697,10 @@ results. \Fix{...elaborate...}
    7 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & \Fix{x} & Mozilla\\
    8 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & \Fix{x} & \jsc{}\\
    9 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & \Fix{x} & JerryScript\\
-  10 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & \Fix{x} & Mozilla\\
+   10 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & \Fix{x} & Mozilla\\
    11 & 7/18 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & \Fix{x} & JerryScript\\
+   12 & 8/07 & \crossmark & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5576}{\#5576}} & \Fix{x} & JerryScript\\
+   13 & 8/07 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & \Fix{x} & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
