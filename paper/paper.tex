@@ -628,7 +628,13 @@ follows:
 
 \begin{itemize}
   \item \textbf{Undefined.} Implementation-dependent behavior as per
-    ECMA262 specification~\cite{ecmas262-spec}. For example, \Fix{XXX}
+    ECMA262 specification~\cite{ecmas262-spec}. For example, 
+    \Igor{a test from JerryScript suite uses a function \CodeIn{Number.toPrecision([precision])}
+    that returns a string representing the number object in
+    fixed-point or exponential notation rounded to precision. According to ES specifications(cite)
+    built-ins that involves Math functions are implementation-dependent 
+    approximation to the real value.
+    }
   \item \textbf{Timeout/OME\footnote{ome is for out of memory
       error.}.} Because target engine does not optimize code as the
     original engine did, test fails to finish at the time limit
