@@ -568,20 +568,24 @@ that \Fix{...} \Mar{justify regressions using the kangax report}
 \subsection{Test Transplantation}
 \label{sec:transplantation}
 
-This section reports the failures observed when running a test suites
-on an engine for which those tests were not run
-before. Table~\ref{tab:cross-testing} shows the number of failures for
-each pair of test suite and engine. The first column shows the test
-suites whereas the first row shows the engines. We use a dash (``-'')
-to indicate that we did not consider the combinations that associated
-a test suite with the engine that originated them; failures in those
-cases would either indicate regressions or flaky tests as opposed to
-an unknown bug for that engine. We also discarded such test cases from
-consideration in other engines as we wanted the test to pass on its
-originating engine; a failure in that case would be a stronger
-indicative of a bug.
+This section reports the results of test transplantion, \ie{}, we
+analyzed the failures observed when running a test suite on an engine
+other than the engine where the test suite
+originated.
 
-To sum, we observed that, considering this dataset, the Mozilla
+Table~\ref{tab:cross-testing} shows the number of failures for each
+pair of test suite and engine. The first column shows the test suites
+and the first row shows the engines that run those tests. We use a
+dash (``-'') to indicate that we did not consider the combinations
+that associated a test suite with its parent engine; failures in those
+cases would either indicate regressions or flaky tests as opposed to
+an unknown bug for that engine. We did not run the test cases that
+fail on its parent engine in any other engines; we wanted all tests to
+pass on their parent engine as a failure in that case would be a
+stronger indicative of a bug. In total, 64 test cases were discarded
+for that reason--6 from \jsc{} and 58 from \smonkey. In total, 7,029
+tests (\ie{}, 28369-31276-64) were considered in this experiment.  We
+observed from the table that, considering this dataset, the Mozilla
 \smonkey\ was the engine that failed the least whereas the Microsoft
 engine \chakra\ failed the most. The \smonkey\ test suite also
 revealed more failures than any other, perhaps as expected,
