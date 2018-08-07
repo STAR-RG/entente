@@ -647,45 +647,46 @@ positive. The sources are as follows:
     number to a string, considering a given number of significant
     digits. The floating-point approximation of the real value is
     implementation-dependent, making the test to pass only in
-    \chakra\ for that test. \Igor{ Several tests explores 
-    the error message from a function violation, due the error
-    message string is distinct and the type of Error is equal,
-    we considered these cases as undefined behavior too.
-    }
+    \chakra\ for that test. As another example, some tests from
+    \Fix{Y} use the implementation-dependent description message\Mar{what is the
+      name of the property?} encapsulated in an \CodeIn{Error} object
+    in assertions. As such, those tests fail in all engines but \Fix{Y}.
 
   \item \textbf{Timeout/OME\footnote{ome is for out of memory
-      error.}.} False positives of this kind manifest when the target
-    engine that runs the test do not optimize code as the original
-    engine. For that, tests fail to finish at the time budget or runs
-    out of memory.\Comment{For example, we found that only \jsc{} implements
-    tail-call optimization to avoid tail recursion.}
-    \Igor{
-      For example, a testcase from \jsc{} suite explores the tail call
-      to optimize the recursion, the test uses a recursive function that
-      should be executed multiple times (ie. \mcodeid{1e6}). In this case, 
-      only the \jsc{} supports tail-call optimization and the testcase 
-      passes without failures. Another case can be found in JerryScript suite
-      that uses a repetition statement to concatenate long strings 
-      exponentially, causing an out of memory error. The engines used 
-      supports the flags to increase memory, however we prefer to use 
-      the default engine build.
-    }
+      error.}.} False positives of this kind manifest because the
+    engine that runs the test does not optimize the code as the
+    original engine and that has an effect in the test outcome.  The
+    test may fail to finish at the time budget or runs out of
+    memory. For example, a test case from \jsc{} defines a function
+    with a tail-call recursion. The test fails in all engines but
+    \jsc{}, which implements tail-call optimization.
+
+    %% \Igor{
+    %%   For example, a testcase from \jsc{} suite explores the tail call
+    %%   to optimize the recursion, the test uses a recursive function that
+    %%   should be executed multiple times (ie. \mcodeid{1e6}). In this case, 
+    %%   only the \jsc{} supports tail-call optimization and the testcase 
+    %%   passes without failures. Another case can be found in JerryScript suite
+    %%   that uses a repetition statement to concatenate long strings 
+    %%   exponentially, causing an out of memory error. The engines used 
+    %%   supports the flags to increase memory, however we prefer to use 
+    %%   the default engine build.
+    %% }
 
   \item \textbf{Not implemented.} False positives of this kind
     manifest when a test fails because it covers a function that is
     part of the official spec, but is not implemented in the target
     engine. For example, at the time of writing, Chakra does not
-    implement various properties from the \mcodeid{Symbol} object, 
-    \Igor{these implementation are in experimental mode 
-    (ie. activating with flag -ES6Experimental)}.
+    implement by default various properties from the \mcodeid{Symbol}
+    object. These properties are only available activating ES6
+    experimental mode with the flag \CodeIn{-ES6Experimental}.
 
-  \item \textbf{Unknown.} This source corresponds to the cases we were
-    unable to confidently diagnose the failure.
-    \Igor{
-      We observed that some tests are not valid due
-      not corresponds to the ES6 specifications,
-      we skip these warnings.
-    }
+  \item \textbf{Unknown.} This category corresponds to the cases we
+    were unable to confidently diagnose the failure.  \Igor{ We
+      observed that some tests are not valid due not corresponds to
+      the ES6 specifications, we skip these warnings.  }\Mar{Igor,
+      this is not well-formed english and I don't understand what you
+      want to say.}
 
   %% \item \textbf{Error message mismatch.} Test fails because it
   %%   compares an error message, which is not portable across
