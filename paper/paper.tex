@@ -718,6 +718,15 @@ Considering true positives, \Fix{...elaborate...}
 Figure~\ref{tab:test-transplantation-bugs} shows
 results. \Fix{...elaborate...}
 
+\Igor{
+  To generate our priority between engines we classified our bugs confirmed 
+  based on the priority that the devs of the bug trackers that we explore. 
+  We defined 3 levels of priority called P1, P2 and P3. P1 is related to
+  the engine cores that involves crashes and parsers errors. P2 is related
+  to ES spec conformance and P3 refer to bugs related to bugs in general, for example
+  invalid message outputs, Automatic Semicolon Insertion(ASI) and compatibility issues.
+}
+
 \begin{table*}[t]
   \vspace{-3ex}
 %  \scriptsize
@@ -725,26 +734,28 @@ results. \Fix{...elaborate...}
   \caption{List of bug reports issued as result of test transplantation.}
   \label{tab:test-transplantation-bugs}
   \begin{tabular}{cccccccc}
-    \toprule Issue\#    & Date & Fuzz & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
+    \toprule Issue\#    & Date & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
     \midrule    
-    1  & 4/18 & \crossmark & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & \Fix{x} & JerryScript      \\
-   2  & 4/23 & \crossmark & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & \Fix{x} & Mozilla      \\
-   3  & 4/29 & \crossmark & Chakra  & \textbf{Confirmed}   &
+    1  & 4/18  & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & \Fix{x} & JerryScript      \\
+   2  & 4/23 & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & \Fix{x} & Mozilla      \\
+   3  & 4/29 & Chakra  & \textbf{Confirmed}   &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}} & \Fix{x} & Mozilla \\
-   \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} &  \multirow{2}{*}{\crossmark} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & \multirow{2}{*}{\Fix{x}} & \multirow{2}{*}{Mozilla}\\
-                       &  &                       &
+   \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & \multirow{2}{*}{\Fix{x}} & \multirow{2}{*}{Mozilla}\\
+                       &  &
     JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &   & \\
-   5 & 5/02 & \crossmark & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & \Fix{x} & Mozilla \\
-   6 & 5/17 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187}} & \Fix{x} & \jsc{}\\
-   7 & 5/21 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & \Fix{x} & Mozilla\\
-   8 & 6/28 & \crossmark & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & \Fix{x} & \jsc{}\\
-   9 & 7/10 & \crossmark & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & \Fix{x} & JerryScript\\
-   10 & 7/18 & \crossmark & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & \Fix{x} & Mozilla\\
-   11 & 7/18 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & \Fix{x} & JerryScript\\
-   12 & 8/07 & \crossmark & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5576}{\#5576}} & \Fix{x} & JerryScript\\
-   13 & 8/07 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & \Fix{x} & JerryScript\\
-   14 & 8/07 & \crossmark & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5579}{\#5579}} & \Fix{x} & JerryScript\\
-   15 & 8/07 & \crossmark & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & \Fix{x} & JerryScript\\
+   5 & 5/02  & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & \Fix{x} & Mozilla \\
+   6 & 5/17  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187}} & \Fix{x} & \jsc{}\\
+   7 & 5/21  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & \Fix{x} & Mozilla\\
+   8 & 6/28  & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & \Fix{x} & \jsc{}\\
+   9 & 7/10  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & \Fix{x} & JerryScript\\
+   10 & 7/18  & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & \Fix{x} & Mozilla\\
+   11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & \Fix{x} & JerryScript\\
+   12 & 8/07  & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5576}{\#5576}} & \Fix{x} & JerryScript\\
+   13 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & \Fix{x} & JerryScript\\
+   14 & 8/07  & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5579}{\#5579}} & \Fix{x} & JerryScript\\
+   15 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & \Fix{x} & JerryScript\\
+   16 & 8/08  & V8 & New & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & \Fix{x} & JerryScript\\
+   15 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & \Fix{x} & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
