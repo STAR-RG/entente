@@ -737,18 +737,20 @@ results. \Fix{...elaborate...}
     \toprule Issue\#    & Date & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
     \midrule    
     1  & 4/18  & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & - & JerryScript      \\
-   2  & 4/23 & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & 2 & Mozilla      \\
+   2  & 4/23 & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & 2 & \smonkey{}      \\
    3  & 4/29 & Chakra  & \textbf{Confirmed}   &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}} & 2 & Mozilla \\
-   \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & \multirow{2}{*}{2} & \multirow{2}{*}{Mozilla}\\
+    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}} & 2 & \smonkey{} \\
+   \midrule
+    \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & 2 & \multirow{2}{*}{\smonkey{}}\\
                        &  &
-    JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &   & \\
-   5 & 5/02  & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & Mozilla \\
+    JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &  -  & \\
+   \midrule
+   5 & 5/02  & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
    6 & 5/17  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187}} & 2 & \jsc{}\\
-   7 & 5/21  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & 2 & Mozilla\\
+   7 & 5/21  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & 2 & \smonkey{}\\
    8 & 6/28  & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & 2 & \jsc{}\\
    9 & 7/10  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & 2 & JerryScript\\
-   10 & 7/18  & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & 2 & Mozilla\\
+   10 & 7/18  & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & 2 & \smonkey{}\\
    11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & JerryScript\\
    12 & 8/07  & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5576}{\#5576}} & - & JerryScript\\
    13 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & - & JerryScript\\
@@ -910,52 +912,54 @@ the target engine does not support that feature. For example,
   \begin{tabular}{ccccccccc}
     \toprule
     Issue\#    & Date & Fuzz & Engine  & Status  &
-    \multicolumn{1}{c}{Url}  & Severity & Priority & Seed \\
+    \multicolumn{1}{c}{Url}  & Severity & Priority & Suite \\
     \midrule    
     1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}}
-    & \Fix{x} & LO & WebKit \\ 
+    & 2 & LO & \jsc{} \\ 
     2  & 4/12 & radamsa & Chakra   & Rejected  &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}}
-    & \Fix{x} & HI & WebKit \\
+    & - & HI & \jsc{} \\
     3  & 4/14 & radamsa & JavascriptCore  & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
-    } & \Fix{x}  & HI & WebKit    \\
+    } & -  & HI & \jsc{}    \\
     4  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}}
-    & \Fix{x} & HI & JerryScript   \\
+    & 2 & HI & JerryScript   \\
     5  & 4/29 & radamsa & JavascriptCore  & New  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
-    } & \Fix{x}  & HI  & JerryScript\\
+    } & -  & HI  & JerryScript\\
+    \midrule
     \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
     \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076}}
-    & \Fix{x} & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
+    & 2 & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
                         &                        &        &
     JavascriptCore & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
-    & \Fix{x} &  & \\
+    & - &  & \\
+    \midrule
     7 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
-    & \Fix{x} & LO & Mozilla \\
+    & 2 & LO & \smonkey{} \\
     8 & 5/10 & radamsa & Chakra & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128}}
-    & \Fix{x} & HI & JerryScript \\
+    & 3 & HI & JerryScript \\
     9 & 5/17 & radamsa & Chakra & \textbf{Fixed} &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182}}
-    & \Fix{x} & HI & V8\\
+    & 2 & HI & \veight{}\\
     10 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
-    & \Fix{x} & HI & Webkit\\
+    & 2 & HI & \jsc{}\\
     11 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
-    & \Fix{x} & HI & JerryScript\\
+    & 2 & HI & JerryScript\\
     12 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
-    & \Fix{x} & HI & JerryScript\\
+    & 2 & HI & JerryScript\\
     13 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  &
     \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443}}
-    & \Fix{x} & HI & JerryScript\\
+    & 2 & HI & JerryScript\\
    \bottomrule
   \end{tabular}
 \end{table*}
