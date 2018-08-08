@@ -209,76 +209,6 @@ more challenging.
 %% than jsfunfuzz.\Mar{ask C. Holler. it is unclear to me how the output
 %%   could be different.}
 
-
-\section{Differential Testing Infrastructure}
-\label{sec:design}
-
-
-Figure~\ref{fig:workflow} illustrates the infrastructure we used for
-differential testing, use in part of our study. The bug-finding
-process takes on input JS files from regression test suites of various
-JS engines and generates warnings on output. Boxes in the figure
-denote encapsulation; arrowed lines indicate data flow. The cycle
-icons denote repetition--the leftmost icon indicates that each file in
-the input list will be analyzed in separate whereas the rightmost icon
-shows that a single file will be fuzzed multiple times.
-
-%\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
-\begin{figure}[h]
-  \centering
-%  \includegraphics[trim=20 350 200
-%    0,clip,width=0.35\textwidth]{google-awards-workflow}
-  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
-\end{figure}
-
-The bug-finding process works as follows. New inputs are obtained for
-a given test input using some off-the-shelf input
-fuzzer~\cite{fuzz-testing-history}.\Comment{ Several fuzzing methods
-  have been proposed in the past, varying with respect to how new
-  inputs are
-  generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
-Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
-The oracle checks whether or not the output produced for the fuzzed
-file is consistent across all engines. In case the test passes in all
-engines or fails in all engines (\ie{}, the output is consistent), the
-infrastructure discards the test. Otherwise, it considers the input as
-potentially fault-revealing; hence interesting for human
-inspection. Note that a number of reasons exist, other than a bug, to
-explain discrepancy (see Table~\ref{tab:false-positives}). We used the
-open-source eshost-cli project~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy.
-
-%The checker can produce multiple warnings for a given input. 
-
-Recall that a warning can be manifested for reasons other than a bug
-and there is no clear way to distiguish those cases automatically (see
-Table~\ref{tab:false-positives}). A human needs to inspect the warning
-to diagnose the discrepancy. To facilitate inspection, the
-infrastructure prioritize these warnings and clusters them in
-groups. Considering prioritization, we classified warnings in two
-kinds, reflecting their likelihood to manifest a real bug. Warnings of
-the kind ``\hi{}'' are associated with the cases where the test code
-executed to completion without violating any internal checks but it
-violated assertions declared in the test itself or its harness. The
-rationale is that the input is valid--considering the checks declared
-in the API functions--but, still, it manifests discrepancy through
-violation of an assertion declared in the test.\Mar{example!} In constrast, warnings
-in the ``\lo{}'' group reflect the cases where the anomaly was
-observed during the execution of functions not related to the test
-itself. We found that different engines often check pre-conditions of
-those functions differently. It can happen, for example, that one
-engine enforces a weaker pre-condition on a function input compared to
-another engine and that is acceptable.\Mar{example!} In those cases, our infrastructure would
-observe a discrepancy that is more likely to be associated with an
-invalid input produced by the fuzzer, \ie{}, it is likely to be a bug
-in the test code not the engine (library or runtime) code. Although we
-did find real bugs from ``\lo{}'' warnings, the proportion was much
-lower compared to ``\hi{}'' warnings. Overall, only \Fix{12\%} of the
-reals bugs we found originated from ``\lo{}'' warnings.
-
-\Mar{explain what is a bucket (we refer to it later).} 
-
 \section{Objects of Study}
 \label{sec:methodology}
 
@@ -512,6 +442,77 @@ operators, which are typically simple. We chose \radamsa\ and
   interesting!}
 
 
+\subsubsection{Differential Testing Infrastructure}
+\label{sec:design}
+
+
+Figure~\ref{fig:workflow} illustrates the infrastructure we used for
+differential testing, use in part of our study. The bug-finding
+process takes on input JS files from regression test suites of various
+JS engines and generates warnings on output. Boxes in the figure
+denote encapsulation; arrowed lines indicate data flow. The cycle
+icons denote repetition--the leftmost icon indicates that each file in
+the input list will be analyzed in separate whereas the rightmost icon
+shows that a single file will be fuzzed multiple times.
+
+%\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
+\begin{figure}[t!]
+  \centering
+%  \includegraphics[trim=20 350 200
+%    0,clip,width=0.35\textwidth]{google-awards-workflow}
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
+  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+\end{figure}
+
+The bug-finding process works as follows. New inputs are obtained for
+a given test input using some off-the-shelf input
+fuzzer~\cite{fuzz-testing-history}.\Comment{ Several fuzzing methods
+  have been proposed in the past, varying with respect to how new
+  inputs are
+  generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
+Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+The oracle checks whether or not the output produced for the fuzzed
+file is consistent across all engines. In case the test passes in all
+engines or fails in all engines (\ie{}, the output is consistent), the
+infrastructure discards the test. Otherwise, it considers the input as
+potentially fault-revealing; hence interesting for human
+inspection. Note that a number of reasons exist, other than a bug, to
+explain discrepancy (see Table~\ref{tab:false-positives}). We used the
+open-source eshost-cli project~\cite{eshost-cli}, also used at
+Microsoft, for checking output discrepancy.
+
+%The checker can produce multiple warnings for a given input. 
+
+Recall that a warning can be manifested for reasons other than a bug
+and there is no clear way to distiguish those cases automatically (see
+Table~\ref{tab:false-positives}). A human needs to inspect the warning
+to diagnose the discrepancy. To facilitate inspection, the
+infrastructure prioritize these warnings and clusters them in
+groups. Considering prioritization, we classified warnings in two
+kinds, reflecting their likelihood to manifest a real bug. Warnings of
+the kind ``\hi{}'' are associated with the cases where the test code
+executed to completion without violating any internal checks but it
+violated assertions declared in the test itself or its harness. The
+rationale is that the input is valid--considering the checks declared
+in the API functions--but, still, it manifests discrepancy through
+violation of an assertion declared in the test.\Mar{example!} In constrast, warnings
+in the ``\lo{}'' group reflect the cases where the anomaly was
+observed during the execution of functions not related to the test
+itself. We found that different engines often check pre-conditions of
+those functions differently. It can happen, for example, that one
+engine enforces a weaker pre-condition on a function input compared to
+another engine and that is acceptable.\Mar{example!} In those cases, our infrastructure would
+observe a discrepancy that is more likely to be associated with an
+invalid input produced by the fuzzer, \ie{}, it is likely to be a bug
+in the test code not the engine (library or runtime) code. Although we
+did find real bugs from ``\lo{}'' warnings, the proportion was much
+lower compared to ``\hi{}'' warnings. Overall, only \Fix{12\%} of the
+reals bugs we found originated from ``\lo{}'' warnings.
+
+\Mar{explain what is a bucket (we refer to it later).} 
+
+
+
 \section{Results}
 \label{sec:results}
 
@@ -638,10 +639,10 @@ Table~\ref{tab:test-suites}).
 
 The piecharts from Figure~\ref{fig:piecharts-transplantation} show the
 false and true positives observed with test transplantation. The top
-piechart shows false alarms.  It is important to stress that all the
+piechart shows false alarms, which means that all
 ``transplanted'' tests should have passed in these cases. The absolute
 number of tests in each category is shown in parentheses to the
-right-side of the label of a slice, nameing the source of false
+right-side of each slice label, naming the source of false
 positive. The sources are as follows:
 
 \begin{itemize}
@@ -688,11 +689,7 @@ positive. The sources are as follows:
     experimental mode with the flag \CodeIn{-ES6Experimental}.
 
   \item \textbf{Unknown.} This category corresponds to the cases we
-    were unable to confidently diagnose the failure.  \Igor{ We
-      observed that some tests are not valid due not corresponds to
-      the ES6 specifications, we skip these warnings.  }\Mar{Igor,
-      this is not well-formed english and I don't understand what you
-      want to say.}
+    were unable to confidently diagnose the failure.
 
   %% \item \textbf{Error message mismatch.} Test fails because it
   %%   compares an error message, which is not portable across
@@ -704,10 +701,13 @@ positive. The sources are as follows:
   %%   }
 \end{itemize}  
 
-In summary, we observed that \Fix{...elaborate...}
-
-Considering true positives, \Fix{...elaborate...}
-
+We observed that the sources of false positives were relatively
+uniformly distributed, with the categories ``Unknown'' and
+``Undefined'' holding more representation with \Fix{X and Y} reports,
+respectively. Considering the true positives, we found a reasonable
+number of duplicate reports, but not enough high to justify attempting
+to automate the detection of duplicates. Section~\ref{sec:bugs}
+exemplifies cases of false and true positives.
 
 \begin{figure}[h]
   \centering
@@ -721,17 +721,6 @@ Considering true positives, \Fix{...elaborate...}
   \label{1b}\\
   \caption{\label{fig:piecharts-transplantation}False and True positives.}
 \end{figure}
-
-Figure~\ref{tab:test-transplantation-bugs} shows
-results. \Fix{...elaborate...}
-
-\Igor{
-  JSC Severity doc \url{https://webkit.org/bug-prioritization/}
-  Chakra usa label para definir prioridades, porem neste doc nao ha explicacao das severidades
-  \url{https://github.com/Microsoft/ChakraCore/wiki/Label-Glossary}. Contudo, se clicar nessas 
-  labels vai direcionar para as issues e la pode-se ver a severidade de cada.
-  V8 guidelines \url{https://www.chromium.org/for-testers/bug-reporting-guidelines/chromium-bug-labels}
-}
 
 \begin{table*}[t]
   \vspace{-3ex}
@@ -768,16 +757,39 @@ results. \Fix{...elaborate...}
   \end{tabular}
 \end{table*}
 
+Figure~\ref{tab:test-transplantation-bugs} lists all bugs we found
+with test transplantation. The first column shows the identifier we
+assigned to the bug, column ``Date'' shows the date the bug was
+reported in the format ``m/dd'', column ``Engine'' shows the affected
+engine, column ``Status'' indicates the status of the bug report at
+the time of the writing (\eg{},``New'', ``Rejected'', ``Confirmed'',
+''Fixed''), column ``Url'' shows the web address for the corresponding
+post in the bug tracking system where the discussion thread with
+engine developers can be found (de-anonymized upon request), column
+``Severity'' shows the severity level for confirmed bugs, and,
+finally, column ``Suite'' shows the name of the engine that originated
+the test. Considering severity levels, it is important to note that
+\jsc{} uses five different severity levels~\cite{jsc-severity} whereas
+Chakra~\cite{chakra-severity} and \smonkey{}~\cite{mozilla-severity}
+use only two. As usual, the smallest the severity value the highest
+the severity of the bug. We use a dash (``-'') as the severity level
+for bugs with pending confirmation.
+
+Of the \Fix{17} bugs we reported with test transplantation, \Fix{9}
+were analyzed and moved from the status ``New'' to ``Confirmed''
+(\ie{}, no bug we reported was rejected). Of these, \Fix{8} of them
+are severity-2 bugs.  \chakra{} was the engine with the highest number
+of confirmed bugs, \Fix{8} in total, with \Fix{1} bug
+fixed. Considering the remaining engines, \veight{} confirmed one
+bug. Curiously, Google engineers confirmed that report in a few
+hours. Athough we did not find any showstopper critical bugs, most of
+the bugs are seemingly important as per the categorization given by
+engineers. Analyzing the issue tracker of \chakra, we found that
+severity-1 bugs are rare.
+
 
 \subsection{Cross-Engine Differential Testing}
 \label{sec:cross-engine-diff-testing-results}
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[trim=0 0 0 0,clip,width=0.40\textwidth]{R/histograms/histograms.pdf}  
-  \caption{\label{fig:distribution}Distribution of lo and hi warnings
-   in buckets.}
-\end{figure}
 
 This section reports the results obtained by fuzzing inputs, running
 those inputs on different engines, and checking the outcomes with a
@@ -815,6 +827,14 @@ suspicious. In some cases, we used the Mozila lithium
 tool~\cite{lithium} to minimize the test case. For the cases of false
 positives, we identified the source of false positive and moved to the
 next bucket.
+
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.40\textwidth]{R/histograms/histograms.pdf}  
+  \caption{\label{fig:distribution}Distribution of lo and hi warnings
+   in buckets.}
+\end{figure}
 
 
 \subsubsection{Results}
@@ -1084,18 +1104,6 @@ if (!test())
 %   \caption{Bug caught by our environment as LO priority.}
 %   \label{fig:lo-priority}
 %   \end{figure}
-
-\section{Discussion}
-
-It is important to highlight that our treatment on both dimensions of
-analysis--test mining and fuzzing--could be improved by selecting more
-test cases or using more advanced fuzzing tools. The main rationale is
-that if these techinques perform well with the objects we used
-(Section~\ref{sec:methodology}) then the approach would perform even
-better with more elaborate objects.
-
-\Fix{...}
-
 
 \section{Related Work}
 
