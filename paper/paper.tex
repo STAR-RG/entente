@@ -329,20 +329,20 @@ available to certain engines.
                                &         & original & compile-in-all &  no-fail-in-all \\
     \midrule
     TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 &
-    29,846 & - \\
+    29,846 & 18,943 \\
     \midrule
-    \jsc{} & \cite{webkit} & 1,031 & 1,021 & -\\
-    \smonkey\ & \cite{mozilla} & 2,634 & 2,116 & -\\
-    \veight{} & \cite{v8} & 75 & 57 & -\\
-    \midrule    
-    Duktape & \cite{duktape} & 1,195 & 921 & -\\ 
-    \jerry{} & \cite{jerryscript} & 1,951 & 1,878 & -\\
-    JSI & \cite{jsi} & 99 & 63 & -\\
-    Tiny-js & \cite{tinyjs} & 49 & 37 & -\\    
+    \jsc{} & \cite{webkit} & 1,031 & 1,021 & 955\\
+    \smonkey\ & \cite{mozilla} & 2,634 & 2,116 & 1,686\\
+    \veight{} & \cite{v8} & 75 & 57 & 57\\
+    \midrule
+    Duktape & \cite{duktape} & 1,195 & 921 & 915\\ 
+    \jerry{} & \cite{jerryscript} & 1,951 & 1,878 & 1,837\\
+    JSI & \cite{jsi} & 99 & 63 & 63\\
+    Tiny-js & \cite{tinyjs} & 49 & 37 & 37\\
     % \chakra{} & \cite{chakracore} & 2632 \\
     \midrule
-     &  & \totalTestFiles{} & \totalTestFilesFilter{} & -\\
-   \bottomrule     
+     &  & \totalTestFiles{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
+   \bottomrule 
   \end{tabular}
 \end{table}
 
