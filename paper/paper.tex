@@ -44,17 +44,22 @@
 %% JavaScript (\js{}) is a popular programming language for the
 %% web. Finding errors in JS runtime engines is an important problem.
 \begin{abstract}
-JavaScript is a very popular programming language today. Checking
-reliability of JavaScript engines is therefore an important
-problem. This paper reports on a study to assess reliability of
-JavaScript engines by leveraging the rich diversity of open-source
-implementations. We explored two methods for that---test
+JavaScript is a very popular programming language today, permeating
+different domains of application. Several JavaScript engines compete
+for dominance and bugs on these engines are not rare. One important
+reason for that is the language specification, which is incomplete and
+evolves frequently.
+
+This paper reports on a study to assess reliability
+of JavaScript engines by leveraging the rich diversity of open-source
+implementations. For that, we explored two methods---test
 transplantation and cross-engine differential testing. Test
-transplatation evaluates the effects of running test suites of a given
+transplantation evaluates the effects of running test suites of a given
 engine in another engine. Cross-engine differential testing evaluates
 the effects of fuzzing existing inputs and then comparing the output
-produced by different engines with a differential oracle. Our results
-indicate that \Fix{...}
+produced by different engines with a differential oracle.
+
+Our results indicate that \Fix{...}
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -71,24 +76,28 @@ Things~(IoT)~\cite{simply-technologies}. The interest of the community
 for the language encourages constant improvements in its specification
 and implementations. It is natural to expect that such improvements
 lead to sensible implementation changes. Even small changes can have
-high impact. For example, in October 2014 a new attribute added to
-Array objects caused a bug in the MS Outlook Calendar web app under
+high practical impact. For example, in October 2014 a new attribute
+added to Array objects resulted in the MS Outlook Calendar web app
+stop working under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
+Intuitively, developing reliable engines is difficult because
+specifications are incomplete and evolve frequently.
+
 
 Finding bugs in \js\ engines is an important problem given the range
-of applications that could be affected with those bugs. It is also
-challenging as specifications are incomplete and evolve
-frequently. Consequently, it is often non-trivial to assess if a test
-fails because of a bug or because of some other reason. For example, a
-test may fail because the engine does not fully implement some
-feature. The publicly-available Kangax compatibility
-table~\cite{kangax} highlights this problem--it relates features of
-\js\ with the engines that support them. As another example of a
-failure that is not caused by a bug, a test that passes in one engine
-could legitimately fail in another engines because of some undefined
+of applications that could be affected with those
+bugs. It\Comment{Finding bugs in \js\ engines} is also
+challenging. For example, a test that passes in one engine could
+legitimately fail in a different engine because of some undefined
 behavior in the spec\footnote{These cases of undefined behavior can be
   localized by searching for the string ``implementation-dependent''
-  in the ES6 spec document~\cite{ecmas262-spec}.}.
+  in the ES6 spec document~\cite{ecmas262-spec}.}. As another example,
+a test may fail because the engine does not fully implement some
+feature. The publicly-available Kangax compatibility
+table~\cite{kangax} relates features of \js\ with the engines that
+support them. To sum, it is often non-trivial to assess if a test
+fails because of a bug or because of some other reason making test
+automation more challenging.
 
 %% when a bug is found in some engine a test case is created and added to
 %% the regression suite. Those test inputs often check interesting
@@ -98,8 +107,7 @@ behavior in the spec\footnote{These cases of undefined behavior can be
 %% WHAT WE DID
 The goal of this paper is to assess reliability of popular
 \js\ engines. The paper reports the results of a study that evaluates
-the effectiveness of two complementary diversity-aware techniques to
-find bugs in \js\ engines. \emph{Test transplantation} leverages
+the effectiveness of two complementary diversity-aware testing techniques. \emph{Test transplantation} leverages
 diversity of test cases to find bugs. It evaluates the effects that
 running \js{} test files from a given engine have in detecting bugs in
 other engines. The intuition is that developers design test cases
@@ -118,7 +126,7 @@ of a system exist. DT leverages the diversity across system's
 implementations to detect anomalous behavior. For example, Mozilla
 runs JS files\footnote{These files are created with the grammar-based fuzzer
   jsfunfuzz~\cite{jsfunfuzz}. Look for option ``compare\_jit'' from funfuzz.} against different configurations of their
-SpiderMonkey engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
+\smonkey{} engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
 across different configurations of the same build (\eg{}, enabling or
 not eager JIT compilation). They use this technique since 2002 and
 have been able to find over 270 bugs since
@@ -250,7 +258,7 @@ reporting old and already-fixed bugs to developers.
     \midrule
     Apple & \jsc{} (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{3300+} \\
     Google & \veight{} & \cite{v82018repo} & 9800+ \\
-%    JerryScript & JerryScript & \cite{jerryscript2018repo} & 3100+ \\
+%    \jerry{} & \jerry{} & \cite{jerryscript2018repo} & 3100+ \\
     Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ \\
 %    Moddable & XS & \cite{xs2018repo} & 140+ \\
     %% \midrule
@@ -267,7 +275,7 @@ using the GitHub REST API~\cite{github-rest-api}. We noticed that some
 of the tests we found depend on external libraries, which not all
 engines we use support. We decided to discard those. For example, many
 tests we found required a Node.js runtime~\cite{node} for
-execution. The main source of test cases is the offical
+execution. The main source of test cases is the official
 Test262~\cite{tc39-github} conformance test suite for the ECMA262
 specification~\cite{ecmas262-spec}. This test suite contains 87\% of
 all the tests we used. We also considered test suites of three of the
@@ -307,17 +315,17 @@ available to certain engines.
     \veight{} & \cite{v8} & 57 \\
     \midrule    
     Duktape & \cite{duktape} & 921 \\ 
-    JerryScript & \cite{jerryscript} & 1,878 \\
+    \jerry{} & \cite{jerryscript} & 1,878 \\
     JSI & \cite{jsi} & 63 \\
     Tiny-js & \cite{tinyjs} & 37 \\    
-    % Chakra & \cite{chakracore} & 2632 \\
+    % \chakra{} & \cite{chakracore} & 2632 \\
     \midrule
      &  & \totalTestFiles{} \\
    \bottomrule     
   \end{tabular}
 \end{table}
 
-% For example to run the JerryScript tests it was necessary 
+% For example to run the \jerry{} tests it was necessary 
 % use the unit-test package to run it, but with our changes we added the assertion
 % does not have an assertion in the test file
 % \Fix{add code to explain}
@@ -352,13 +360,13 @@ Megadeth, we were able to produce \Fix{Y, Y$>$Y?}  valid inputs as it
 contains some heuristics to circumvent violations of certain type
 rules such as \Fix{variable used must be defined?}. Nonetheless,
 running those inputs in our infrastructure we were unable to find
-discrepancies. Inpecting those inputs, we realized that they reflected
+discrepancies. Inspecting those inputs, we realized that they reflected
 very simple scenarios. To sum, a high percentage of inputs that
 Grammarinator and Megadeth generated were semantically-invalid that we
 needed to discard whereas the valid inputs manifested no
 discrepancies. Considering jsfunfuzz~\cite{jsfunfuzz}, we noticed
 that, in addition to the issues mentioned above, it produces inputs
-that use functions that are only available in the SpiderMonkey
+that use functions that are only available in the \smonkey{}
 engine. We would need either to mock those functions in other engines
 or to discard those tests. Considering
 LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, the tool is not
@@ -402,7 +410,7 @@ mutational fuzzers are typically coverage-based. American Fuzz Loop
 (AFL)~\cite{afl} and libFuzzer~\cite{libfuzzer} are examples of this
 kind of fuzzers. These fuzzers run tests inputs against instrumented
 versions of the program under testing with the typical goal of finding
-univeral errors like crashes and buffer overflows. The instrumentation
+universal errors like crashes and buffer overflows. The instrumentation
 adds code to collect branch coverage and to monitor specific
 properties\footnote{There are options in the clang toolchain to build
   programs with fuzzing instrumentation~\cite{libfuzzer}. clang
@@ -433,7 +441,7 @@ reasons, coverage-based fuzzers were not considered in this study.
 We used two black-box mutational fuzzers in this
 study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
 fuzzers require no instrumentation and domain-knowledge. They mutate
-\emph{existing} inputs randomly. The strenght of the approach is
+\emph{existing} inputs randomly. The strength of the approach is
 limited by the quality of the test suite and the supported mutation
 operators, which are typically simple. We chose \radamsa\ and
 \quickfuzz\ \Fix{...elaborate...} \Mar{I mention below that these
@@ -441,8 +449,7 @@ operators, which are typically simple. We chose \radamsa\ and
   language''. Please confirm and explain that still this is
   interesting!}
 
-
-\subsubsection{Differential Testing Infrastructure}
+\section{Differential Testing Infrastructure}
 \label{sec:design}
 
 
@@ -484,7 +491,7 @@ Microsoft, for checking output discrepancy.
 %The checker can produce multiple warnings for a given input. 
 
 Recall that a warning can be manifested for reasons other than a bug
-and there is no clear way to distiguish those cases automatically (see
+and there is no clear way to distinguish those cases automatically (see
 Table~\ref{tab:false-positives}). A human needs to inspect the warning
 to diagnose the discrepancy. To facilitate inspection, the
 infrastructure prioritize these warnings and clusters them in
@@ -495,7 +502,7 @@ executed to completion without violating any internal checks but it
 violated assertions declared in the test itself or its harness. The
 rationale is that the input is valid--considering the checks declared
 in the API functions--but, still, it manifests discrepancy through
-violation of an assertion declared in the test.\Mar{example!} In constrast, warnings
+violation of an assertion declared in the test.\Mar{example!} In contrast, warnings
 in the ``\lo{}'' group reflect the cases where the anomaly was
 observed during the execution of functions not related to the test
 itself. We found that different engines often check pre-conditions of
@@ -533,7 +540,7 @@ engines as opposed to only manifesting false alarms such as those that
 could emerge from implementation-dependent behavior. Third, we
 analyzed the impact of using cross-engine differential testing to find
 bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
-rationale is that even black-box fuzzers that typicaly make valid
+rationale is that even black-box fuzzers that typically make valid
 changes only in literals of the language could expose important
 bugs. All in all, we want to assess the impact of simple approaches
 that leverage on diversity to find bugs in \js\ engines with the goal
@@ -552,7 +559,7 @@ highlight that all engines we analyzed, but \chakra{}, use some
 variant of the Test262 suite as part of their regression
 process\Mar{with fewer tests?}. We used the official version
 instead\Mar{, which updates tests regularly?}. To sum, we observed
-that \Fix{...} \Mar{justify regressions using the kangax report}
+that \Fix{...} \Mar{justify regressions using the Kangax report}
 
 \begin{table}[h]
   \centering
@@ -575,7 +582,7 @@ that \Fix{...} \Mar{justify regressions using the kangax report}
 \subsection{Test Transplantation}
 \label{sec:transplantation}
 
-This section reports the results of test transplantion, \ie{}, we
+This section reports the results of test transplantation, \ie{}, we
 analyzed the failures observed when running a test suite on an engine
 other than the engine where the test suite
 originated.
@@ -628,7 +635,7 @@ Table~\ref{tab:test-suites}).
 %    \chakra{} & - & - & - & -  \\
     \smonkey{} & 218 & 107 & - & 279 \\
     Duktape & 0 & 4 & 4 & 1   \\
-    JerryScript & 23 & 25 & 22 & 23   \\
+    \jerry{} & 23 & 25 & 22 & 23   \\
     JSI & 0 & 0 & 0 & 0   \\
     Tiny-js & 0 & 0 & 0 & 0  \\
     \midrule
@@ -673,7 +680,7 @@ positive. The sources are as follows:
     %%   to optimize the recursion, the test uses a recursive function that
     %%   should be executed multiple times (ie. \mcodeid{1e6}). In this case, 
     %%   only the \jsc{} supports tail-call optimization and the testcase 
-    %%   passes without failures. Another case can be found in JerryScript suite
+    %%   passes without failures. Another case can be found in \jerry{} suite
     %%   that uses a repetition statement to concatenate long strings 
     %%   exponentially, causing an out of memory error. The engines used 
     %%   supports the flags to increase memory, however we prefer to use 
@@ -683,7 +690,7 @@ positive. The sources are as follows:
   \item \textbf{Not implemented.} False positives of this kind
     manifest when a test fails because it covers a function that is
     part of the official spec, but is not implemented in the target
-    engine. For example, at the time of writing, Chakra does not
+    engine. For example, at the time of writing, \chakra{} does not
     implement by default various properties from the \mcodeid{Symbol}
     object. These properties are only available activating ES6
     experimental mode with the flag \CodeIn{-ES6Experimental}.
@@ -731,28 +738,28 @@ exemplifies cases of false and true positives.
   \begin{tabular}{cccccccc}
     \toprule Issue\#    & Date & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
     \midrule    
-    1  & 4/18  & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & - & JerryScript      \\
-   2  & 4/23 & Chakra  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5033}{\#5033}} & 2 & \smonkey{}      \\
-   3  & 4/29 & Chakra  & \textbf{Confirmed}   &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5065}{\#5065}} & 2 & \smonkey{} \\
+    1  & 4/18  & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & - & \jerry{}      \\
+   2  & 4/23 & \chakra{}  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5033}{\#5033}} & 2 & \smonkey{}      \\
+   3  & 4/29 & \chakra{}  & \textbf{Confirmed}   &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5065}{\#5065}} & 2 & \smonkey{} \\
    \midrule
-    \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} & Chakra & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5067}{\#5067}} & 2 & \multirow{2}{*}{\smonkey{}}\\
+    \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} & \chakra{} & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5067}{\#5067}} & 2 & \multirow{2}{*}{\smonkey{}}\\
                        &  &
     JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &  -  & \\
    \midrule
    5 & 5/02  & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
-   6 & 5/17  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5187}{\#5187}} & 2 & \jsc{}\\
-   7 & 5/21  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5203}{\#5203}} & 2 & \smonkey{}\\
-   8 & 6/28  & Chakra & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5388}{\#5388}} & 2 & \jsc{}\\
-   9 & 7/10  & Chakra & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5442}{\#5442}} & 2 & JerryScript\\
-   10 & 7/18  & Chakra & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5478}{\#5478}} & 2 & \smonkey{}\\
-   11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & JerryScript\\
-   12 & 8/07  & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5576}{\#5576}} & - & JerryScript\\
-   13 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & - & JerryScript\\
-   14 & 8/07  & Chakra & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5579}{\#5579}} & - & JerryScript\\
-   15 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & - & JerryScript\\
-   16 & 8/08  & V8 & \textbf{Confirmed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & JerryScript\\
-   17 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & JerryScript\\
+   6 & 5/17  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}} & 2 & \jsc{}\\
+   7 & 5/21  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
+   8 & 6/28  & \chakra{} & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}} & 2 & \jsc{}\\
+   9 & 7/10  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}} & 2 & \jerry{}\\
+   10 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
+   11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
+   12 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
+   13 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & - & \jerry{}\\
+   14 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
+   15 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & - & \jerry{}\\
+   16 & 8/08  & V8 & \textbf{Confirmed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
+   17 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
    \bottomrule
   \end{tabular}
 \end{table*}
@@ -770,7 +777,7 @@ engine developers can be found (de-anonymized upon request), column
 finally, column ``Suite'' shows the name of the engine that originated
 the test. Considering severity levels, it is important to note that
 \jsc{} uses five different severity levels~\cite{jsc-severity} whereas
-Chakra~\cite{chakra-severity} and \smonkey{}~\cite{mozilla-severity}
+\chakra{}~\cite{chakra-severity} and \smonkey{}~\cite{mozilla-severity}
 use only two. As usual, the smallest the severity value the highest
 the severity of the bug. We use a dash (``-'') as the severity level
 for bugs with pending confirmation.
@@ -782,7 +789,7 @@ are severity-2 bugs.  \chakra{} was the engine with the highest number
 of confirmed bugs, \Fix{8} in total, with \Fix{1} bug
 fixed. Considering the remaining engines, \veight{} confirmed one
 bug. Curiously, Google engineers confirmed that report in a few
-hours. Athough we did not find any showstopper critical bugs, most of
+hours. Although we did not find any showstopper critical bugs, most of
 the bugs are seemingly important as per the categorization given by
 engineers. Analyzing the issue tracker of \chakra, we found that
 severity-1 bugs are rare.
@@ -823,7 +830,7 @@ related to the problem and, if still suspicious, we looked on the bug
 tracker of the affected engine for potential duplicates. If none was
 reported, we filed a bug report including the test input that
 manifested the potential problem and explaining the reasons we were
-suspicious. In some cases, we used the Mozila lithium
+suspicious. In some cases, we used the Mozilla lithium
 tool~\cite{lithium} to minimize the test case. For the cases of false
 positives, we identified the source of false positive and moved to the
 next bucket.
@@ -940,25 +947,25 @@ the target engine does not support that feature. For example,
     Issue\#    & Date & Fuzz & Engine  & Status  &
     \multicolumn{1}{c}{Url}  & Severity & Priority & Suite \\
     \midrule    
-    1  & 4/12 & radamsa & Chakra   & \textbf{Fixed}  &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4978}{\#4978}}
+    1  & 4/12 & radamsa & \chakra{}   & \textbf{Fixed}  &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4978}{\#4978}}
     & 2 & LO & \jsc{} \\ 
-    2  & 4/12 & radamsa & Chakra   & Rejected  &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/4979}{\#4979}}
+    2  & 4/12 & radamsa & \chakra{}   & Rejected  &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4979}{\#4979}}
     & - & HI & \jsc{} \\
     3  & 4/14 & radamsa & JavascriptCore  & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
     } & -  & HI & \jsc{}    \\
-    4  & 4/25 & radamsa & Chakra  & \textbf{Fixed}     &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5038}{\#5038}}
-    & 2 & HI & JerryScript   \\
+    4  & 4/25 & radamsa & \chakra{}  & \textbf{Fixed}     &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5038}{\#5038}}
+    & 2 & HI & \jerry{}   \\
     5  & 4/29 & radamsa & JavascriptCore  & New  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
-    } & -  & HI  & JerryScript\\
+    } & -  & HI  & \jerry{}\\
     \midrule
     \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
-    \multirow{2}{*}{radamsa} & Chakra & \textbf{Confirmed} &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5076}{\#5076}}
+    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}
     & 2 & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
                         &                        &        &
     JavascriptCore & New &
@@ -968,24 +975,24 @@ the target engine does not support that feature. For example,
     7 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
     & 2 & LO & \smonkey{} \\
-    8 & 5/10 & radamsa & Chakra & \textbf{Confirmed} &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5128}{\#5128}}
-    & 3 & HI & JerryScript \\
-    9 & 5/17 & radamsa & Chakra & \textbf{Fixed} &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5182}{\#5182}}
+    8 & 5/10 & radamsa & \chakra{} & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}
+    & 3 & HI & \jerry{} \\
+    9 & 5/17 & radamsa & \chakra{} & \textbf{Fixed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}
     & 2 & HI & \veight{}\\
     10 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
     & 2 & HI & \jsc{}\\
     11 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
-    & 2 & HI & JerryScript\\
-    12 & 7/10 & quickfuzz & JavaScriptCore & \textbf{Fixed}  &
+    & 2 & HI & \jerry{}\\
+    12 & 7/10 & quickfuzz & \jsc{} & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
-    & 2 & HI & JerryScript\\
-    13 & 7/10 & quickfuzz & Chakra & \textbf{Confirmed}  &
-    \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5443}{\#5443}}
-    & 2 & HI & JerryScript\\
+    & 2 & HI & \jerry{}\\
+    13 & 7/10 & quickfuzz & \chakra{} & \textbf{Confirmed}  &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}
+    & 2 & HI & \jerry{}\\
    \bottomrule
   \end{tabular}
 \end{table*}
@@ -1001,14 +1008,14 @@ manifested an expected incompatibility across engine
 implementations.
 Note from the table that all bug
 reports still waiting for confirmation are associated with the
-JavaScriptCore engine (JSC). A closer look at the JSC issue tracker
+\jsc{} engine (JSC). A closer look at the JSC issue tracker
 showed that the triage process is very slow for that engine. 
 \Igor{
-The bugs reported on Chakra's bug tracker was defined as confirmed, 
+The bugs reported on \chakra{}'s bug tracker was defined as confirmed, 
 however the bugs are included on a milestone for the next release
 following an internal priority.
 }
-As of now, we did not find any new bug on SpiderMonkey and V8; 
+As of now, we did not find any new bug on \smonkey{} and V8; 
 the bugs we found were duplicates and were not reported. Finally, it is
 worth noting that \Fix{11 of the 19} JS files that manifested
 discrepancies were \emph{not} produced with fuzzing (column
@@ -1021,7 +1028,7 @@ source engines, including a total of 30K test files.
 
 \vspace{1ex}\noindent\textbf{Bug \# 6.} The JS code \CodeIn{var a = \{valueOf:~function()\{return
   ``\textbackslash{}x00''\}\} assert(+a === 0)\}} 
-manifested a bug in the \js{} engine Chakra.  The object
+manifested a bug in the \js{} engine \chakra{}.  The object
 property \CodeIn{valueOf} stores a function that returns a primitive
 value identifying the target object~\cite{valueof}. The original
 version of this code returns an empty string whereas the version of
@@ -1030,19 +1037,19 @@ representation of a null character (called \CodeIn{NUL} in ascii). The
 unary plus expression ``\CodeIn{+a}", appearing in the assertion, is
 equivalent to the abstract operation \CodeIn{ToNumber(a.valueOf())}
 that converts a string to a number, otherwise the operation returns
-NaN (Not a Number)\cite{unary-plus}. For this case, Chakra evaluates
+NaN (Not a Number)\cite{unary-plus}. For this case, \chakra{} evaluates
 the unary plus to NaN as expected, as the null character cannot be
-converted. As result, the test fails as expected. Chakra, in contrast,
+converted. As result, the test fails as expected. \chakra{}, in contrast,
 incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
-Chakra team fixed the issue soon after we reported the problem.
+\chakra{} team fixed the issue soon after we reported the problem.
 
 \subsection{False Positives}
 
 An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
 This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
 initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
-integer 3 to a big integer number. We reported this case in chakra due a core dumps that occurs
+integer 3 to a big integer number. We reported this case in \chakra{} due a core dumps that occurs
 during the runtime, however this case was rejected due \CodeIn{incompatibility by design} that
 this is an intentional behavior of engine that crash the process if it runs out of memory.
 
@@ -1072,13 +1079,13 @@ if (!test())
 % \subsection{LO bugs}
 % 
 % \Igor{For example, a bug caught by our environment and reported as LO priority was reported 
-% on Chakra engine, the JS code can be found in Figure~\ref{fig:lo-priority}. In this case,
+% on \chakra{} engine, the JS code can be found in Figure~\ref{fig:lo-priority}. In this case,
 % this is a seed from Mozilla suite (\CodeIn{mozilla/non262/statements/for-in-with-assignments.js}),
 % the warning was not caught by the \CodeIn{assertEq} function that compares if two arguments are equals, 
 % the bug appears inside the generator function\footnote{Generators \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*}}
 % at line 2. According to ES6 specification\footnote{ES6 YieldExpression \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#prod-YieldExpression}},
 % it is allowed the use of \CodeIn{yield in} in a \CodeIn{for} loop. In our infrastructure,
-% only Chakra engine fails with an error output \CodeIn{SyntaxError: Syntax error}, due
+% only \chakra{} engine fails with an error output \CodeIn{SyntaxError: Syntax error}, due
 % the output does not shows nothing related with assertions, we considered this one as a warning from LO group.
 % Until now, the issue was confirmed and waiting for merge/closed.
 % \Fix{checar ate o prazo de submissao. Essa issue esta confirmada e com commits, falta apenas o merge.}
@@ -1127,4 +1134,13 @@ RFC-Directed Differential Testing of Certificate Validation in SSL/TLS Implement
 
 \end{document}
 
-%%  LocalWords:  bytecodes JScript Ecma ome
+%%  LocalWords:  bytecodes JScript Ecma ome IoT Kangax DT JS fuzzer
+%%  LocalWords:  jsfunfuzz jit funfuzz \smonkey{} toPrecision JSVU
+%%  LocalWords:  GoogleChromeLab's cccr js runtime Fuzzers Radamsa de
+%%  LocalWords:  QuickFuzz fuzzers Grammarinator LangFuzz Megadeth
+%%  LocalWords:  AFL libFuzzer toolchain sanitizers arrowed eshost
+%%  LocalWords:  cli pre EcmaScript dataset piecharts piechart \chakra{}
+%%  LocalWords:  JavascriptCore Url radamsa TinyJS \jerry{} JSC
+%%  LocalWords:  quickfuzz \jsc{} \chakra{}'s valueOf NUL ascii
+%%  LocalWords:  unary ToNumber NaN testcase WebKit typeof foofoofoo
+%%  LocalWords:  SSL TLS ICSE
