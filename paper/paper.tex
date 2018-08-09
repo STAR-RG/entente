@@ -304,23 +304,23 @@ available to certain engines.
   \caption{\label{tab:test-suites}Test Suites. The sections of the
     table show, respectively, the TC-39 conformance test suite, suites
     from engines we analyzed, and suites from other engines.}
-  \begin{tabular}{ccr}
+  \begin{tabular}{ccrc}
     \toprule
-    Name & Source & \# JS files \\
+    Name & Source & \# JS files & \# JS files final \\
     \midrule
-    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 \\
+    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 & 29,846\\
     \midrule
-    \jsc{} & \cite{webkit} & 1,021 \\
-    \smonkey\ & \cite{mozilla} & 2,116 \\
-    \veight{} & \cite{v8} & 57 \\
+    \jsc{} & \cite{webkit} & 1,031 & 1,021 \\
+    \smonkey\ & \cite{mozilla} & 2,634 & 2,116 \\
+    \veight{} & \cite{v8} & 75 & 57 \\
     \midrule    
-    Duktape & \cite{duktape} & 921 \\ 
-    \jerry{} & \cite{jerryscript} & 1,878 \\
-    JSI & \cite{jsi} & 63 \\
-    Tiny-js & \cite{tinyjs} & 37 \\    
+    Duktape & \cite{duktape} & 1,195 & 921\\ 
+    \jerry{} & \cite{jerryscript} & 1,951 & 1,878\\
+    JSI & \cite{jsi} & 99 & 63 \\
+    Tiny-js & \cite{tinyjs} & 49 & 37 \\    
     % \chakra{} & \cite{chakracore} & 2632 \\
     \midrule
-     &  & \totalTestFiles{} \\
+     &  & \totalTestFiles{} & \totalTestFilesFilter{} \\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -517,8 +517,6 @@ lower compared to ``\hi{}'' warnings. Overall, only \Fix{12\%} of the
 reals bugs we found originated from ``\lo{}'' warnings.
 
 \Mar{explain what is a bucket (we refer to it later).} 
-
-
 
 \section{Results}
 \label{sec:results}
@@ -757,7 +755,7 @@ exemplifies cases of false and true positives.
    12 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
    13 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & - & \jerry{}\\
    14 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
-   15 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & - & \jerry{}\\
+   15 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & - & \jerry{}\\
    16 & 8/08  & V8 & \textbf{Confirmed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
    17 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
    \bottomrule
