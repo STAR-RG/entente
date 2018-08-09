@@ -251,7 +251,7 @@ reporting old and already-fixed bugs to developers.
 
 \begin{table}[t]
   \centering
-  \caption{\label{tab:engines}Engines Analyzed.}
+  \caption{\label{tab:engines}Engines analyzed.}
   \begin{tabular}{cccr}
     \toprule
     Team & Name & URL & \# Stars \\
@@ -281,14 +281,25 @@ specification~\cite{ecmas262-spec}. This test suite contains 87\% of
 all the tests we used. We also considered test suites of three of the
 four engines mentioned in Section~\ref{sec:methodology:engines} and
 four other engines. Table~\ref{tab:test-suites} shows the breakdown of
-tests we considered. Overall, we found a total of \totfiles{} JS
-files. We did not consider tests from the \chakra{} repository because
-they depend on non-portable objects. Notice that the number of tests
-in \veight\ is low. That happens because many tests in \veight{} are
+tests we considered. Column ``original'' shows the test cases for each
+test suite. Overall, we found a total of \totfiles{} JS files. We did
+not consider tests from the \chakra{} repository because they depend
+on non-portable objects. Notice that the number of tests in
+\veight\ is low. That happens because many tests in \veight{} are
 inherited from Mozilla and \jsc{}; we discarded those to avoid
-repetition and to give credit where it is due. For all engines engines
-we found test using non-portable functions that we detected by running
-the test on a different engine. We needed to discard those.
+repetition and to give credit where it is due. Column
+``compile-in-all'' shows the number of test cases for which all four
+engines we analyzed do not throw compile-time error. We discarded
+tests that manifest compile errors as they clearly indicate missing
+features; these tests use non-portable names (\eg{}, \jsc{}'s
+\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
+or use functions that, although being part of the spec, not all
+engines currently support. Finally, column ``no-fail-in-all'' shows
+the tests for which all engines
+pass. Section~\ref{sec:transplantation} discusses these failures, some
+of which are indicative of bugs. The tests under this column will be
+used to create new, potentially fault-revealing, tests. For that, it
+is important to assure that all of them pass.
 
 It is also worth mentioning that some engines use a custom shell to
 run tests, including a harness with specific assertions.  For these,
@@ -297,30 +308,40 @@ able to run the tests uniformly across all engines. More precisely, we
 needed to mock non-portable harness functions, which are only
 available to certain engines.
 
-
+ %% The table shows the
+ %%    number of test cases in each test suite considered: TC-39
+ %%    conformance test suite, suites from engines we analyzed, and
+ %%    suites from other engines.
 
 \begin{table}[t]
   \centering
-  \caption{\label{tab:test-suites}Test Suites. The sections of the
-    table show, respectively, the TC-39 conformance test suite, suites
-    from engines we analyzed, and suites from other engines.}
-  \begin{tabular}{ccrc}
+  \caption{\label{tab:test-suites}Number of test cases per
+    suite. Column ``original'' shows the original size of the test
+    suite, column ``compile-in-all'' shows the number of test cases
+    for which engines do not throw compile error (\eg{}, undefined
+    name), and column ``no-fail-all'' shows the number of test cases
+    that pass in all four engines we analyzed.}
+  \begin{tabular}{ccrrr}
     \toprule
-    Name & Source & \# JS files & \# JS files final \\
+    \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
+    \multicolumn{3}{c}{\# JS files} \\
+    \cline{3-5}
+                               &         & original & compile-in-all &  no-fail-in-all \\
     \midrule
-    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 & 29,846\\
+    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 &
+    29,846 & - \\
     \midrule
-    \jsc{} & \cite{webkit} & 1,031 & 1,021 \\
-    \smonkey\ & \cite{mozilla} & 2,634 & 2,116 \\
-    \veight{} & \cite{v8} & 75 & 57 \\
+    \jsc{} & \cite{webkit} & 1,031 & 1,021 & -\\
+    \smonkey\ & \cite{mozilla} & 2,634 & 2,116 & -\\
+    \veight{} & \cite{v8} & 75 & 57 & -\\
     \midrule    
-    Duktape & \cite{duktape} & 1,195 & 921\\ 
-    \jerry{} & \cite{jerryscript} & 1,951 & 1,878\\
-    JSI & \cite{jsi} & 99 & 63 \\
-    Tiny-js & \cite{tinyjs} & 49 & 37 \\    
+    Duktape & \cite{duktape} & 1,195 & 921 & -\\ 
+    \jerry{} & \cite{jerryscript} & 1,951 & 1,878 & -\\
+    JSI & \cite{jsi} & 99 & 63 & -\\
+    Tiny-js & \cite{tinyjs} & 49 & 37 & -\\    
     % \chakra{} & \cite{chakracore} & 2632 \\
     \midrule
-     &  & \totalTestFiles{} & \totalTestFilesFilter{} \\
+     &  & \totalTestFiles{} & \totalTestFilesFilter{} & -\\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -579,6 +600,8 @@ that \Fix{...} \Mar{justify regressions using the Kangax report}
 
 \subsection{Test Transplantation}
 \label{sec:transplantation}
+
+\Mar{remember to say that we use dataset Table II''compile-in-all''.}
 
 This section reports the results of test transplantation, \ie{}, we
 analyzed the failures observed when running a test suite on an engine
