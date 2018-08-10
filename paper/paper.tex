@@ -501,37 +501,38 @@ file is consistent across all engines. In case the test passes in all
 engines or fails in all engines (\ie{}, the output is consistent), the
 infrastructure discards the test. Otherwise, it considers the input as
 potentially fault-revealing; hence interesting for human
-inspection. Note that a number of reasons exist, other than a bug, to
-explain discrepancy (see Table~\ref{tab:false-positives}). We used the
-open-source eshost-cli project~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy.
+inspection. The infrastructure uses the
+open-source tool eshost-cli~\cite{eshost-cli}, also used at
+Microsoft, for checking output discrepancy. 
 
 %The checker can produce multiple warnings for a given input. 
 
-Recall that a warning can be manifested for reasons other than a bug
-and there is no clear way to distinguish those cases automatically (see
-Table~\ref{tab:false-positives}). A human needs to inspect the warning
-to diagnose the discrepancy. To facilitate inspection, the
-infrastructure prioritize these warnings and clusters them in
-groups.
+Note that a number of reasons exist, other than a bug, to explain
+discrepancy (see Table~\ref{tab:false-positives}) and there is no
+clear way to distinguish false and true positives automatically. As
+such, a human needs to inspect the warning to classify the issue. To
+facilitate inspection, we prioritized warnings and clustered them in
+groups. We describe these strategies in the following.
 
 \subsection{Prioritization}
 
 Considering prioritization, we classified warnings in two kinds,
-reflecting their likelihood to manifest a real bug. Warnings of the
+reflecting their likelihood of manifesting a real bug. Warnings of the
 kind ``\hi{}'' are associated with the cases where the test code
-executed to completion without violating any internal checks but it
+executed to completion without violating any internal checks, but it
 violated assertions declared in the test itself or its harness. The
 rationale is that the input is more likely to be valid as it it did
 not raise exceptions during the execution of the application code,
 but, it manifests discrepancy through violation of an assertion
 declared in the test. In contrast, warnings in the ``\lo{}'' group are
 more likely to be asssociated with invalid inputs. They reflect the
-cases where the anomaly is observed during the execution of functions
-not related to the test itself. We found that different engines often
+cases where the anomaly is observed during the execution of functions,
+which are part of the application. We found that different engines often
 check pre-conditions of those functions differently. It can happen,
 for example, that one engine enforces a weaker pre-condition on a
-function input compared to another engine and that is acceptable. In
+function input compared to another engine and that is acceptable. For
+instance, it is acceptable to pass values greater than \Fix{x} to
+function \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}. In
 those cases, the infrastructure would observe a discrepancy that is
 more likely to be associated with an invalid input produced by the
 fuzzer, \ie{}, it is likely to be a bug in the test code not the
