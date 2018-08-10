@@ -536,6 +536,46 @@ in the test code not the engine (library or runtime) code. Although we
 did find real bugs from ``\lo{}'' warnings, the proportion was much
 lower compared to ``\hi{}'' warnings. Overall, only \Fix{12\%} of the
 reals bugs we found originated from ``\lo{}'' warnings.
+\Igor{
+  Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
+  casos reportados como LO tambem podem ser considerados como um true positive.
+  Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
+  se um teste falha antes da linha em que ha uma assercao, entao a falha
+  ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
+  possivel observar um caso de bug obtido em um bucket classificado como LO.
+  Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
+  posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
+  maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
+  de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
+  lancar Offset is outside the bounds.
+
+  Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
+  Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
+  correto seria usar um levantar um erro
+}
+
+\begin{figure}[!h]
+  \centering
+  \begin{lstlisting}
+    var buffer = new ArrayBuffer(64);
+    var view = new DataView(buffer);
+    view.setInt8(0,0x80);
+    assert(view.getInt8(-1770523502845470856) === -0x80);
+
+    Outputs:
+    #### V8
+    RangeError: Offset is outside the bounds of the DataView
+    #### Chakra
+    RangeError: DataView operation access beyond specified buffer length
+    #### SpiderMonkey
+    RangeError: invalid or out-of-range index
+    #### JavaScriptCore
+    RangeError: byteOffset cannot be negative
+  \end{lstlisting}
+  \caption{\label{fig:lo-truepositive}True positive example in LO warnings.}
+\end{figure}
+
+
 
 \Mar{explain what is a bucket (we refer to it later).} 
 
