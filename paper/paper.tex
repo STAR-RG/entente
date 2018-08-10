@@ -281,10 +281,10 @@ specification~\cite{ecmas262-spec}. This test suite contains 87\% of
 all the tests we used. We also considered test suites of three of the
 four engines mentioned in Section~\ref{sec:methodology:engines} and
 four other engines. Table~\ref{tab:test-suites} shows the breakdown of
-tests we considered. Column ``original'' shows the test cases for each
-test suite. Overall, we found a total of \totfiles{} JS files. We did
-not consider tests from the \chakra{} repository because they depend
-on non-portable objects. Notice that the number of tests in
+tests we considered. Overall, we found a total of \totfiles{} JS
+files. Column ``original'' shows the test cases for each
+test suite. We did not consider tests from the \chakra{} repository because they depend
+on non-portable objects and notice that the number of tests in
 \veight\ is low. That happens because many tests in \veight{} are
 inherited from Mozilla and \jsc{}; we discarded those to avoid
 repetition and to give credit where it is due. Column
@@ -473,16 +473,6 @@ operators, which are typically simple. We chose \radamsa\ and
 \section{Differential Testing Infrastructure}
 \label{sec:design}
 
-
-Figure~\ref{fig:workflow} illustrates the infrastructure we used for
-differential testing, use in part of our study. The bug-finding
-process takes on input JS files from regression test suites of various
-JS engines and generates warnings on output. Boxes in the figure
-denote encapsulation; arrowed lines indicate data flow. The cycle
-icons denote repetition--the leftmost icon indicates that each file in
-the input list will be analyzed in separate whereas the rightmost icon
-shows that a single file will be fuzzed multiple times.
-
 %\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
 \begin{figure}[t!]
   \centering
@@ -492,6 +482,13 @@ shows that a single file will be fuzzed multiple times.
   \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
 \end{figure}
 
+Figure~\ref{fig:workflow} illustrates the infrastructure for
+differential testing, which is used in part of this study. It takes on
+input a list of JS files and generates warnings on output. Boxes in
+the figure denote encapsulation, arrowed lines denote data flow, and
+the cycle icons denote repetition--the leftmost icon indicates that
+each file in the input list will be analyzed in separate whereas the
+rightmost icon shows that a single file will be fuzzed multiple times.
 The bug-finding process works as follows. New inputs are obtained for
 a given test input using some off-the-shelf input
 fuzzer~\cite{fuzz-testing-history}.\Comment{ Several fuzzing methods
@@ -516,28 +513,52 @@ and there is no clear way to distinguish those cases automatically (see
 Table~\ref{tab:false-positives}). A human needs to inspect the warning
 to diagnose the discrepancy. To facilitate inspection, the
 infrastructure prioritize these warnings and clusters them in
-groups. Considering prioritization, we classified warnings in two
-kinds, reflecting their likelihood to manifest a real bug. Warnings of
-the kind ``\hi{}'' are associated with the cases where the test code
+groups.
+
+\subsection{Prioritization}
+
+Considering prioritization, we classified warnings in two kinds,
+reflecting their likelihood to manifest a real bug. Warnings of the
+kind ``\hi{}'' are associated with the cases where the test code
 executed to completion without violating any internal checks but it
 violated assertions declared in the test itself or its harness. The
-rationale is that the input is valid--considering the checks declared
-in the API functions--but, still, it manifests discrepancy through
-violation of an assertion declared in the test.\Mar{example!} In contrast, warnings
-in the ``\lo{}'' group reflect the cases where the anomaly was
-observed during the execution of functions not related to the test
-itself. We found that different engines often check pre-conditions of
-those functions differently. It can happen, for example, that one
-engine enforces a weaker pre-condition on a function input compared to
-another engine and that is acceptable.\Mar{example!} In those cases, our infrastructure would
-observe a discrepancy that is more likely to be associated with an
-invalid input produced by the fuzzer, \ie{}, it is likely to be a bug
-in the test code not the engine (library or runtime) code. Although we
-did find real bugs from ``\lo{}'' warnings, the proportion was much
-lower compared to ``\hi{}'' warnings. Overall, only \Fix{12\%} of the
-reals bugs we found originated from ``\lo{}'' warnings.
+rationale is that the input is more likely to be valid as it it did
+not raise exceptions during the execution of the application code,
+but, it manifests discrepancy through violation of an assertion
+declared in the test. In contrast, warnings in the ``\lo{}'' group are
+more likely to be asssociated with invalid inputs. They reflect the
+cases where the anomaly is observed during the execution of functions
+not related to the test itself. We found that different engines often
+check pre-conditions of those functions differently. It can happen,
+for example, that one engine enforces a weaker pre-condition on a
+function input compared to another engine and that is acceptable. In
+those cases, the infrastructure would observe a discrepancy that is
+more likely to be associated with an invalid input produced by the
+fuzzer, \ie{}, it is likely to be a bug in the test code not the
+engine (library or runtime) code. Although we did find real bugs from
+``\lo{}'' warnings, the proportion was much lower compared to
+``\hi{}'' warnings. Overall, only \Fix{12\%} of the reals bugs we
+found with fuzzing originated from ``\lo{}'' warnings. \Fix{quickly
+  explain why LO can still be a bug.}
 
-\Mar{explain what is a bucket (we refer to it later).} 
+\subsection{Clusterization}
+
+\Mar{explain what is a bucket (we refer to it later).}
+
+Figure~\ref{fig:err-messages} shows the error messages produced by a
+\lo warning. Note that all message appear to be related to the same
+problem.
+
+\begin{figure}[h]
+\begin{tabular}{ll}
+\veight{} & ``Unexpected end of input''\\
+\jsc{} & ``Unexpected end of script''\\
+\smonkey{} & ``Expected expression, got end of script''
+\end{tabular}
+\caption{\label{fig:err-messages}Example error messages associated
+  with a \lo{} warning. In this case, the test passes in \chakra.}
+\end{figure}
+
 
 \section{Results}
 \label{sec:results}
