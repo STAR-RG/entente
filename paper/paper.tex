@@ -527,20 +527,46 @@ but, it manifests discrepancy through violation of an assertion
 declared in the test. In contrast, warnings in the ``\lo{}'' group are
 more likely to be asssociated with invalid inputs. They reflect the
 cases where the anomaly is observed during the execution of functions,
-which are part of the application. We found that different engines often
-check pre-conditions of those functions differently. It can happen,
-for example, that one engine enforces a weaker pre-condition on a
-function input compared to another engine and that is acceptable. For
-instance, it is acceptable to pass values greater than \Fix{x} to
-function \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}. In
-those cases, the infrastructure would observe a discrepancy that is
-more likely to be associated with an invalid input produced by the
-fuzzer, \ie{}, it is likely to be a bug in the test code not the
-engine (library or runtime) code. Although we did find real bugs from
-``\lo{}'' warnings, the proportion was much lower compared to
-``\hi{}'' warnings. Overall, only \Fix{12\%} of the reals bugs we
-found with fuzzing originated from ``\lo{}'' warnings. \Fix{quickly
-  explain why LO can still be a bug.}
+which are part of the application. We found that different engines
+often check pre-conditions of those functions differently. It can
+happen, for example, that one engine enforces a weaker pre-condition
+on a function input compared to another engine and that is
+acceptable. For instance, it is acceptable to pass values greater than
+\Fix{x} to function \CodeIn{\Fix{WWW}} in \Fix{y} but not in
+\Fix{z}. In those cases, the infrastructure would observe a
+discrepancy that is more likely to be associated with an invalid input
+produced by the fuzzer, \ie{}, it is likely to be a bug in the test
+code not the engine (library or runtime) code. It is worth noting that
+``\lo'' warnings can be bug
+revealing. Figure~\ref{fig:lo-truepositive} shows one of these
+cases. In this example, the test instantiates an \CodeIn{ArrayBuffer}
+object and stores an 8-bit integer at the 0 position. According to the
+specification~\cite{ecmas262-getviewvalue}, a \CodeIn{RangeError}
+exception should be thrown if a negative value is passed to the
+function \CodeIn{ToIndex}, indirectly called by the test case. In this
+case, however, the \chakra{} engine did not throw any exception, which
+violates the spec. This bug was fixed by developers after our bug
+report and is no longer present in the most recent release of
+\chakra. Despite that counter-example, most bugs we found emerged from
+``\hi{}'' warnings.
+
+%% \Igor{
+%%   Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
+%%   casos reportados como LO tambem podem ser considerados como um true positive.
+%%   Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
+%%   se um teste falha antes da linha em que ha uma assercao, entao a falha
+%%   ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
+%%   possivel observar um caso de bug obtido em um bucket classificado como LO.
+%%   Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
+%%   posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
+%%   maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
+%%   de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
+%%   lancar Offset is outside the bounds.
+
+%%   Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
+%%   Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
+%%   correto seria usar um levantar um erro
+%% }
 
 \subsection{Clusterization}
 
@@ -550,56 +576,32 @@ Figure~\ref{fig:err-messages} shows the error messages produced by a
 \lo warning. Note that all message appear to be related to the same
 problem.
 
-\begin{figure}[h]
-\begin{tabular}{ll}
-\veight{} & ``Unexpected end of input''\\
-\jsc{} & ``Unexpected end of script''\\
-\smonkey{} & ``Expected expression, got end of script''
-\end{tabular}
-\caption{\label{fig:err-messages}Example error messages associated
-  with a \lo{} warning. In this case, the test passes in \chakra.}
-\end{figure}
-
-\Igor{
-  Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
-  casos reportados como LO tambem podem ser considerados como um true positive.
-  Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
-  se um teste falha antes da linha em que ha uma assercao, entao a falha
-  ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
-  possivel observar um caso de bug obtido em um bucket classificado como LO.
-  Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
-  posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
-  maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
-  de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
-  lancar Offset is outside the bounds.
-
-  Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
-  Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
-  correto seria usar um levantar um erro
-}
+%% \begin{figure}[h]
+%% \begin{tabular}{ll}
+%% \veight{} & ``Unexpected end of input''\\
+%% \jsc{} & ``Unexpected end of script''\\
+%% \smonkey{} & ``Expected expression, got end of script''
+%% \end{tabular}
+%% \caption{\label{fig:err-messages}Example error messages associated
+%%   with a \lo{} warning. In this case, the test passes in \chakra.}
+%% \end{figure}
 
 \begin{figure}[!h]
   \centering
   \begin{lstlisting}
-    var buffer = new ArrayBuffer(64);
-    var view = new DataView(buffer);
-    view.setInt8(0,0x80);
-    assert(view.getInt8(-1770523502845470856) === -0x80);
+var buffer = new ArrayBuffer(64);
+var view = new DataView(buffer);
+view.setInt8(0,0x80);
+assert(view.getInt8(-1770523502845470856) === -0x80);
 
-    Outputs:
-    #### V8
-    RangeError: Offset is outside the bounds of the DataView
-    #### Chakra
-    RangeError: DataView operation access beyond specified buffer length
-    #### SpiderMonkey
-    RangeError: invalid or out-of-range index
-    #### JavaScriptCore
-    RangeError: byteOffset cannot be negative
+Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
+1. RangeError: Offset is outside the bounds of the DataView
+2. RangeError: byteOffset cannot be negative
+3. RangeError: invalid or out-of-range index
   \end{lstlisting}
-  \caption{\label{fig:lo-truepositive}True positive example in LO warnings.}
+  \caption{\label{fig:lo-truepositive}True positive example of LO
+    warnings.}
 \end{figure}
-
-
 
 \section{Results}
 \label{sec:results}
