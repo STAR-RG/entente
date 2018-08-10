@@ -560,6 +560,46 @@ problem.
   with a \lo{} warning. In this case, the test passes in \chakra.}
 \end{figure}
 
+\Igor{
+  Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
+  casos reportados como LO tambem podem ser considerados como um true positive.
+  Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
+  se um teste falha antes da linha em que ha uma assercao, entao a falha
+  ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
+  possivel observar um caso de bug obtido em um bucket classificado como LO.
+  Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
+  posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
+  maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
+  de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
+  lancar Offset is outside the bounds.
+
+  Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
+  Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
+  correto seria usar um levantar um erro
+}
+
+\begin{figure}[!h]
+  \centering
+  \begin{lstlisting}
+    var buffer = new ArrayBuffer(64);
+    var view = new DataView(buffer);
+    view.setInt8(0,0x80);
+    assert(view.getInt8(-1770523502845470856) === -0x80);
+
+    Outputs:
+    #### V8
+    RangeError: Offset is outside the bounds of the DataView
+    #### Chakra
+    RangeError: DataView operation access beyond specified buffer length
+    #### SpiderMonkey
+    RangeError: invalid or out-of-range index
+    #### JavaScriptCore
+    RangeError: byteOffset cannot be negative
+  \end{lstlisting}
+  \caption{\label{fig:lo-truepositive}True positive example in LO warnings.}
+\end{figure}
+
+
 
 \section{Results}
 \label{sec:results}
@@ -798,10 +838,10 @@ exemplifies cases of false and true positives.
    10 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
    11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
    12 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
-   13 & 8/07  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & - & \jerry{}\\
+   13 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & - & \jerry{}\\
    14 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
    15 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & - & \jerry{}\\
-   16 & 8/08  & V8 & \textbf{Confirmed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
+   16 & 8/08  & V8 & \textbf{Assigned} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
    17 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
    \bottomrule
   \end{tabular}
