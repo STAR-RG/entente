@@ -516,38 +516,39 @@ groups. We describe these strategies in the following.
 
 \subsection{Prioritization}
 
-Considering prioritization, we classified warnings in two kinds,
+We classified warnings in two types,
 reflecting their likelihood of manifesting a real bug. Warnings of the
 kind ``\hi{}'' are associated with the cases where the test code
 executed to completion without violating any internal checks, but it
 violated assertions declared in the test itself or its harness. The
 rationale is that the input is more likely to be valid as it it did
 not raise exceptions during the execution of the application code,
-but, it manifests discrepancy through violation of an assertion
-declared in the test. In contrast, warnings in the ``\lo{}'' group are
+but, it manifested discrepancy through the violation of an assertion
+declared in the test. In contrast, warnings of type ``\lo{}'' are
 more likely to be asssociated with invalid inputs. They reflect the
 cases where the anomaly is observed during the execution of functions,
 which are part of the application. We found that different engines
 often check pre-conditions of those functions differently. It can
 happen, for example, that one engine enforces a weaker pre-condition
 on a function input compared to another engine and that is
-acceptable. For instance, it is acceptable to pass values greater than
+acceptable.\Comment{ For instance, it is acceptable to pass values greater than
 \Fix{x} to function \CodeIn{\Fix{WWW}} in \Fix{y} but not in
-\Fix{z}. In those cases, the infrastructure would observe a
+\Fix{z}.} In those cases, the infrastructure would observe a
 discrepancy that is more likely to be associated with an invalid input
 produced by the fuzzer, \ie{}, it is likely to be a bug in the test
-code not the engine (library or runtime) code. It is worth noting that
-``\lo'' warnings can be bug
-revealing. Figure~\ref{fig:lo-truepositive} shows one of these
+code not the engine (library or runtime) code. However, as expected, our heuristic
+is not precise---``\lo'' warnings can 
+reveal bugs. Figure~\ref{fig:lo-truepositive} shows one of these
 cases. In this example, the test instantiates an \CodeIn{ArrayBuffer}
 object and stores an 8-bit integer at the 0 position. According to the
 specification~\cite{ecmas262-getviewvalue}, a \CodeIn{RangeError}
 exception should be thrown if a negative value is passed to the
 function \CodeIn{ToIndex}, indirectly called by the test case. In this
 case, however, the \chakra{} engine did not throw any exception, which
-violates the spec. This bug was fixed by developers after our bug
+violates the spec. This case of undocumented precondition, reported
+and handled by developers as a bug, was fixed by developers after our bug
 report and is no longer present in the most recent release of
-\chakra. Despite that counter-example, most bugs we found emerged from
+\chakra. Despite that case, most bugs we found emerged from
 ``\hi{}'' warnings.
 
 %% \Igor{
