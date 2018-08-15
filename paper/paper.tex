@@ -1207,7 +1207,8 @@ contribution is analytical whereas our main contribution is
 empirical--we aim at assessing reliability of \js\ engines and find
 bugs on them using simple approaches, such as test transplantation.
 
-Several fuzzing techniques have been proposed recently\Fix{...elaborate...}
+Several fuzzing techniques have been proposed
+recently\Fix{...elaborate...}
 
 
 \subsection{Differential Testing}
@@ -1228,14 +1229,16 @@ application of differential testing that received most attention to
 date was compiler testing. In 1972, Purdom~\cite{Purdom1972} proposed
 the use of a generator of sentences from grammars to test correctness
 of automatically generated parsers. After that, significant progress
-has been made. Yang and
-colleagues~\cite{Yang:2011:FUB:1993498.1993532} have proposed CSmith
-to randomly create C programs from a grammar, for a subset of C, and
-then check the output of these programs in different compilers (\eg{},
-GCC and LLVM). Le and colleagues~\cite{Le:2014:CVV:2594291.2594334}
-proposed the idea of ``equivalence modulo inputs'', which creates
-variants of program which should have equivalent behavior compared to
-the original, but for which the compiler manifests
+has been made. Lammel and Shulte proposed Geno to cross-check XPath
+implementations using grammar-based testing with controllable
+combinatorial coverage~\cite{10.1007/11754008_2}. Yang and
+colleagues~\cite{Yang:2011:FUB:1993498.1993532} proposed CSmith to
+randomly create C programs from a grammar, for a subset of C, and then
+check the output of these programs in different compilers (\eg{}, GCC
+and LLVM). Le and colleagues~\cite{Le:2014:CVV:2594291.2594334}
+proposed ``equivalence modulo inputs'', which creates variants of
+program which should have equivalent behavior compared to the
+original, but for which the compiler manifests
 discrepancy. Differential testing has also been applied to test
 refactoring engines~\cite{Daniel:2007:ATR:1287624.1287651}, to test
 symbolic engine implementations~\cite{Kapus:2017:ATS:3155562.3155636},
@@ -1247,9 +1250,13 @@ differential testing of \js\ engines. Mozilla uses differential
 testing to look for discrepanices across different configurations of
 the same version of its \smonkey\ engine (using the ``compare\_jit''
 flag of jsfunfuzz~\cite{jsfunfuzz}) whereas we focus on discrepancy
-across engines. Patra and Pradel evaluated their fuzzing strategy on
-different browsers~\cite{patra2016learning} (see
-Section~\ref{sec:testing-js-engines}).
+across engines. Patra and Pradel evaluated their language-agnostic
+fuzzing strategy using differential testing. Their focuses on finding
+differential bugs across multiple
+browsers~\cite{patra2016learning}. As such they specialized their
+fuzzer to HTML and JS (see Section~\ref{sec:testing-js-engines}). In
+contrast to Patra and Pradel, we did not propose new techniques; our
+contribution was empirical.
 
 \subsection{Testing \js\ Programs}
 Patra and colleagues~\cite{Patra:2018:CFU:3180155.3180184} proposed a
