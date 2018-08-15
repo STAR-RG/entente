@@ -1,0 +1,32 @@
+JavaScript is a popular programming language today. Several engine
+implementations compete for market dominance. Although a specification
+and a conformance test suite exist to guide engine development, bugs
+occur and have important consequences given the language
+popularity. One reason for the difficulty in implementing correct
+engines stems from the fact that the specification is incomplete and
+evolves frequently.
+
+This paper reports on a study we ran to evaluate the importance of
+diversity in finding bugs on this domain. For that, we explored two
+simple diversity-aware methods---test transplantation and cross-engine
+differential testing. Test transplantation evaluates the effects of
+running test suites of a given engine in another engine. Cross-engine
+differential testing evaluates the effects of fuzzing existing inputs
+and then comparing the output produced by different engines with a
+differential oracle.
+
+We considered engines from four major players in our
+experiments--Apple, Google, Microsoft, and Mozilla. Our results
+indicate that both techniques revealed several bugs, most of which
+confirmed by developers. Test transplantation
+revealed \noBugsTransplantation{} bugs
+(\noBugsTransplantationConfirmed{} confirmed) and differential testing
+revealed \noBugsDifferentialTesting{} bugs
+(\noBugsDifferentialTestingConfirmed{}). Furthermore, results indicate
+that most of these bugs affected only two engines--Apple's
+\jsc{} (\percJSC{}) and Microsoft's \chakra{} (\percChakra{}); we found
+only one bug in Google \veight{} and none in Mozilla's
+\smonkey{}. Although our experience indicates that more research needs
+be done to automate parts of the inspection process, our results show
+that exploring diversity is a valuable help to find bugs in JavaScript
+engines.
