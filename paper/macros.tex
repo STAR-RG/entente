@@ -115,7 +115,13 @@
 
 %% anonymize
 
+\ifdraftmode
+\newcommand{\anonym}[1]{{\tiny\colorbox{black}{xxx}}}
+\else
 \newcommand{\anonym}[1]{{\tiny\colorbox{black}{#1}}}
+\fi
+
+
 
 %% names
 \newcommand{\radamsa}{radamsa}
