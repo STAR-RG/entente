@@ -54,16 +54,15 @@ JavaScript; Diversity; Software Testing
 \section{Introduction}
 
 JavaScript (\js{}) is today one of the most popular programming
-languages around~\cite{business-insider,stackify}, with significant
-penetration in various segments including, web development, mobile,
-and, more recently, the Internet of
-Things~(IoT)~\cite{simply-technologies}. The interest of the community
-for the language encourages constant improvements in its specification
-and implementations. It is natural to expect that such improvements
-lead to sensible implementation changes. Even small changes can have
-high practical impact. For example, in October 2014 a new attribute
-added to Array objects resulted in the MS Outlook Calendar web app
-stop working under
+languages around~\cite{business-insider,stackify}, with penetration in
+various segments including, web development, mobile, and, more
+recently, the Internet of Things~(IoT)~\cite{simply-technologies}. The
+interest of the community for the language encourages constant
+improvements in its specification and implementations. It is natural
+to expect that such improvements lead to sensible changes in engine
+implementation. Even small changes can have high practical impact. For
+example, in October 2014 a new attribute added to Array objects
+resulted in the MS Outlook Calendar web app stop working under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
 Intuitively, developing reliable engines is difficult because
 specifications are incomplete and evolve frequently.
@@ -79,7 +78,7 @@ behavior in the spec\footnote{These cases of undefined behavior can be
   in the ES6 spec document~\cite{ecmas262-spec}.}. As another example,
 a test may fail because the engine does not fully implement some
 feature. The publicly-available Kangax compatibility
-table~\cite{kangax} relates features of \js\ with the engines that
+table~\cite{kangax} relates \js\ features with the engines that
 support them. To sum, it is often non-trivial to assess if a test
 fails because of a bug or because of some other reason making test
 automation more challenging.
@@ -90,48 +89,85 @@ automation more challenging.
 %% implementations. 
 
 %% WHAT WE DID
-The goal of this paper is to assess reliability of popular
-\js\ engines. The paper reports the results of a study that evaluates
-the effectiveness of two complementary diversity-aware testing techniques. \emph{Test transplantation} leverages
-diversity of test cases to find bugs. It evaluates the effects that
-running \js{} test files from a given engine have in detecting bugs in
-other engines. The intuition is that developers design test cases
-differently; hence replaying the test in a different engine may reveal
-unanticipated problems. \emph{Cross-engine differential testing}
-evaluates the ability of leveraging diversity of engine
-implementations to find bugs. More precisely, it fuzzes existing test
+This paper reports on a study we ran to evaluate the importance of
+diversity in finding bugs on JavaScript engines. We evaluated
+effectiveness of two complementary diversity-aware testing
+techniques. \emph{Test transplantation} leverages diversity of test
+cases to find bugs. It evaluates the effects that running \js{} test
+files from a given engine have in detecting bugs in other engines. The
+intuition is that developers design test cases differently; hence
+replaying the test in a different engine may reveal unanticipated
+problems. \emph{Cross-engine differential testing} evaluates the
+ability of leveraging diversity of engine implementations to find
+bugs. More precisely, it fuzzes existing test
 inputs~\cite{fuzz-testing-history} and then compares the output
 produced by different engines using a differential oracle. One of
-various causes of output discrepancy is a bug. It is worth noting that
-Differential Testing~\cite{Brumley-etal-ss07} (DT) has been applied in
-a variety of contexts to find
-bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}. It
-automates test generation in scenarios where multiple implementations
-of a system exist. DT leverages the diversity across system's
-implementations to detect anomalous behavior. For example, Mozilla
-runs JS files\footnote{These files are created with the grammar-based fuzzer
-  jsfunfuzz~\cite{jsfunfuzz}. Look for option ``compare\_jit'' from funfuzz.} against different configurations of their
-\smonkey{} engine~\cite{jsfunfuzz-mozilla-bug} to find discrepancies
-across different configurations of the same build (\eg{}, enabling or
-not eager JIT compilation). They use this technique since 2002 and
-have been able to find over 270 bugs since
-then~\cite{jsfunfuzz-at-mozilla}, including security bugs.  In
-contrast, cross-engine differential testing--the technique used in
-this work--checks functional correctness by comparing the output
-produced by \emph{different engines} on a fuzzed
-input~\cite{patra2016learning} as opposed to different builds of the
-same engine. This approach has not been
-popularized, certainly, because it is still not practical to fully automate--a
-number of legitimate reasons exist, other than a bug, for a test
-execution to manifest discrepancy (see
-Table~\ref{tab:false-positives}). This study quantifies human effort
-to find these bugs using this method.
+various causes of output discrepancy is a bug.
 
-%% WHAT WE FOUND
-To sum, we found that \Fix{...}
+%% It automates test generation in scenarios where multiple
+%% implementations of a system exist. DT leverages diversity across
+%% system's implementations to detect anomalous behavior. 
+
+\emph{Related Ideas.}  It is worth noting that Differential
+Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
+contexts to find
+bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
+It has shown to be specially practical in scenarios where the
+observation of difference gives a strong signal of a real problem. For
+example, Mozilla runs JS files\footnote{These files are created with
+  the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
+  ``compare\_jit'' from funfuzz.} against different configurations of
+a given build of their \smonkey\ engine (\eg{}, trying to enable or
+not eager JIT compilation). In that setting, test outcomes are
+expected to be identical. Mozilla uses this approach since 2002 and
+have been able to find over 270 bugs since
+then~\cite{jsfunfuzz-at-mozilla}, including security
+bugs. Cross-engine differential testing, in contrast, has not been
+popularized to similar extent. One possible reason is that it is still
+not practical to fully automate the technique. In contrast to other
+applications of differential testing, a number of legitimate reasons
+exist, other than a bug, for a test execution to manifest discrepancy
+(see Table~\ref{tab:false-positives}). Recently, Patra and
+Pradel~\cite{patra2016learning} explored the idea. They proposed a
+language-agnostic fuzzer to find cross-browser HTML+JS
+discrepancies. Their main contribution is analytical whereas our main
+contribution is empirical--goal is to evaluate ability and cost of
+simple diversity-aware approaches to find bugs in \js\ engines.
+
+\emph{Results.}~\Fix{REVISE}We considered engines from four major players--Apple,
+Google, Microsoft, and Mozilla. Our results indicate that both
+techniques revealed several bugs, most of which confirmed by
+developers. Test transplantation revealed \noBugsTransplantation{}
+bugs (\noBugsTransplantationConfirmed{} confirmed) and differential
+testing revealed \noBugsDifferentialTesting{} bugs
+(\noBugsDifferentialTestingConfirmed{}). Furthermore, results indicate
+that most of these bugs affected only two engines--Apple's \jsc{}
+(\percJSC{}) and Microsoft's \chakra{} (\percChakra{}); we found only
+one bug in Google \veight{} and none in Mozilla's \smonkey{}. Although
+our experience indicates that more research needs be done to automate
+parts of the inspection process, our results show that exploring
+diversity is a valuable help to find bugs in JavaScript engines.
+
 
 %% LIST OF CONTRIBUTIONS
-This paper makes the following contributions \Fix{...}
+This paper makes the following contributions.
+\begin{itemize}
+  \item We ran a comprehensive study to analyze the effectiveness of
+    simple diversity-aware techniques to find bugs in highly-popular
+    \js\ engines. 
+    
+  \item We reported more than \Fix{50} bugs on these engines over a
+    period of 5 months.
+
+  \item We offered insights on how to reduce cost of analyzing
+    warnings reported by diversity-aware techniques and make the
+    approach more practical.
+    
+  \item We made our testing infrastructure, results, and experimental
+    scripts available to the public. (upon request for anonimity.)
+\end{itemize}
+
+
 
 \section{JavaScript}
 \label{sec:es6-design}
@@ -595,17 +631,15 @@ are too fragile. Second, we report results obtained with test
 transplantation (Section~\ref{sec:transplantation}). The rationale is
 that the domain of possible inputs is too large; consequently, we
 expect that test suites written for a given engine cover scenarios and
-corner cases uncovered by another engine. To sum, we hope that that
+corner cases uncovered by another engine. To sum, we conjecture that
 test cases written for one engine could reveal bugs in different
-engines as opposed to only manifesting false alarms such as those that
-could emerge from implementation-dependent behavior. Third, we
+engines as opposed to only manifesting false alarms. Third, we
 analyzed the impact of using cross-engine differential testing to find
 bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
 rationale is that even black-box fuzzers that typically make valid
 changes only in literals of the language could expose important
-bugs. All in all, we want to assess the impact of simple approaches
-that leverage on diversity to find bugs in \js\ engines with the goal
-of assessing their reliability.
+bugs. All in all, we want to assess the impact of practical approaches
+that leverage diversity to find bugs in \js\ engines.
 
 \subsection{Stability of Engines}
 \label{sec:stability}
@@ -699,8 +733,8 @@ Table~\ref{tab:test-suites}).
     \smonkey{} & 218 & 107 & - & 279 \\
     Duktape & 0 & 4 & 4 & 1   \\
     \jerry{} & 23 & 25 & 22 & 23   \\
-    JSI & 0 & 0 & 0 & 0   \\
-    Tiny-js & 0 & 0 & 0 & 0  \\
+    JSI & 0 & 0 & 0 & 0   \\ 
+   Tiny-js & 0 & 0 & 0 & 0  \\
     \midrule
    \textbf{total} & 270 & 145 & 36 & 361 \\
     \bottomrule 
@@ -714,6 +748,20 @@ piechart shows false alarms, which means that all
 number of tests in each category is shown in parentheses to the
 right-side of each slice label, naming the source of false
 positive. The sources are as follows:
+
+\begin{figure}[h]
+  \centering
+  \subfloat[\label{fig:falsepositives}False Positives]{%
+    \includegraphics[trim=0 150 0 100,clip,width=0.4\textwidth]{R/piecharts/falsepositives}
+  }
+  \label{1a}\hfill
+  \subfloat[\label{fig:truepositives}True Positives]{%
+    \includegraphics[trim=0 150 0 150,clip,width=0.4\textwidth]{R/piecharts/truepositives}    
+  }
+  \label{1b}\\
+  \caption{\label{fig:piecharts-transplantation}False and True positives.}
+\end{figure}
+
 
 \begin{itemize}
   \item \textbf{Undefined Behavior.} False positives of this kind are
@@ -779,24 +827,14 @@ number of duplicate reports, but not enough high to justify attempting
 to automate the detection of duplicates. Section~\ref{sec:bugs}
 exemplifies cases of false and true positives.
 
-\begin{figure}[h]
-  \centering
-  \subfloat[\label{fig:falsepositives}False Positives]{%
-    \includegraphics[trim=0 150 0 100,clip,width=0.4\textwidth]{R/piecharts/falsepositives}
-  }
-  \label{1a}\hfill
-  \subfloat[\label{fig:truepositives}True Positives]{%
-    \includegraphics[trim=0 150 0 150,clip,width=0.4\textwidth]{R/piecharts/truepositives}    
-  }
-  \label{1b}\\
-  \caption{\label{fig:piecharts-transplantation}False and True positives.}
-\end{figure}
 
-\begin{table*}[t]
-  \vspace{-3ex}
+\begin{table}[t!]
+\setlength{\tabcolsep}{2pt}    
+%  \vspace{-3ex}
 %  \scriptsize
   \centering
-  \caption{List of bug reports issued as result of test transplantation.}
+  \caption{List of bug reports issued as result of test
+    transplantation. Url columns anonymized.}
   \label{tab:test-transplantation-bugs}
   \begin{tabular}{cccccccc}
     \toprule Issue\#    & Date & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
@@ -825,9 +863,9 @@ exemplifies cases of false and true positives.
    17 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
    \bottomrule
   \end{tabular}
-\end{table*}
+\end{table}
 
-Figure~\ref{tab:test-transplantation-bugs} lists all bugs we found
+Table~\ref{tab:test-transplantation-bugs} lists all bugs we found
 with test transplantation. The first column shows the identifier we
 assigned to the bug, column ``Date'' shows the date the bug was
 reported in the format ``m/dd'', column ``Engine'' shows the affected
