@@ -675,7 +675,7 @@ an unknown bug for that engine. We did not run the test cases that
 fail on its parent engine in any other engines; we wanted all tests to
 pass on their parent engine as a failure in that case would be a
 stronger indicative of a bug. In total, 64 test cases were discarded
-for that reason--6 from \jsc{} and 58 from \smonkey. In total, 7,029
+for that reason--6 from \jsc{} and 57 from \smonkey. In total, 7,029
 test files (\ie{}, 38369-31276-64) were considered in this experiment,
 which involved 24,922 test runs (\ie, (7029*4)-1021-57-2116).  Of
 these, 812 failures were observed (3.25\% of the runs) across
@@ -711,7 +711,7 @@ Table~\ref{tab:test-suites}).
     \jsc{} & - & 9 & 10 & 58   \\
     \veight{} & 29 & - & 0 & 0  \\
 %    \chakra{} & - & - & - & -  \\
-    \smonkey{} & 218 & 107 & - & 279 \\
+    \smonkey{} & 217 & 106 & - & 278 \\
     Duktape & 0 & 4 & 4 & 1   \\
     \jerry{} & 23 & 25 & 22 & 23   \\
     JSI & 0 & 0 & 0 & 0   \\
@@ -827,17 +827,18 @@ exemplifies cases of false and true positives.
    \midrule
    5 & 5/02  & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
    6 & 5/17  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}} & 2 & \jsc{}\\
-   7 & 5/21  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
+   7 & 5/21  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
    8 & 6/28  & \chakra{} & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}} & 2 & \jsc{}\\
    9 & 7/10  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}} & 2 & \jerry{}\\
    10 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
    11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
-   12 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
-   13 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
-   14 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
-   15 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
-   16 & 8/08  & V8 & \textbf{Assigned} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
-   17 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
+   12 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5549}{\#5549}} & 2 & \jerry{}\\
+   13 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
+   14 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
+   15 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
+   16 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
+   17 & 8/08  & V8 & \textbf{Fixed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
+   18 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
    \bottomrule
   \end{tabular}
 \end{table*}
