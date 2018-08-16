@@ -964,6 +964,8 @@ given engine, analyzed these warnings, and moved to the group of
 warnings associated with the next engine.
 
 \subsubsection{Results}
+\Mar{revise text...}
+\Fix{
 Table~\ref{tab:summary-of-results} summarizes our results. It shows,
 for each fuzzer and kind of bucket (\ie{}, hi or lo), the total number
 of files involved, the number of buckets reported by our
@@ -973,24 +975,32 @@ report. The difference between the last two columns corresponds to the
 number of duplicates, \ie{}, the cases of bugs already reported in the
 corresponding issue tracker. As expected, the hit ratio for the ``hi''
 group is higher, indicating that chances of filing a bug report for a
-``hi'' warning is higher.
+``hi'' warning is higher.}
+
 
 \begin{table}[h]
   \centering
-  \caption{\label{tab:summary-of-results}Summary of results.}
-  \begin{tabular}{ccrrrr}
+  \caption{\label{tab:summary-lo}Summary of \lo\ warning reports.}
+  \begin{tabular}{crr}
     \toprule
-    \multirow{2}{*}{mode} & \multirow{2}{*}{type} & \multirow{2}{*}{\# files} &  \multicolumn{3}{c}{buckets} \\
-    \cline{4-6}    
-    & & & \multicolumn{1}{c}{\#} & \multicolumn{1}{c}{\# pos.} &
-    \multicolumn{1}{c}{\# pos. filed} \\
+    & \# buckets & avg. \# files per bucket \\
     \midrule
-    %% \multirow{2}{*}{nofuzz} & lo & \nofuzzFilesLO{} &  \nofuzzLOTotal{} & \Fix{.} & 11 (34) \\
-    %% & hi & \nofuzzFilesHI{} & \nofuzzHITotal{} & \Fix{.} & \Fix{108 (-)} \\
-    \multirow{2}{*}{\radamsa} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
-    & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
-    \multirow{2}{*}{\quickfuzz} & lo & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\
-                             & hi & \Fix{.} & \Fix{.} & \Fix{.} & \Fix{.} \\    
+    \radamsa{} & & \\
+    \quickfuzz{} & & \\    
+    \bottomrule     
+  \end{tabular}
+\end{table}
+
+\begin{table}[h]
+  \centering
+  \caption{\label{tab:summary-hi}Number of \hi\ warning
+    reports per engine.}
+  \begin{tabular}{crrrr}
+    \toprule
+    fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey \\
+    \midrule
+    \radamsa{} & & \\
+    \quickfuzz{} & & \\    
     \bottomrule     
   \end{tabular}
 \end{table}
