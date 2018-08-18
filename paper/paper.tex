@@ -621,11 +621,11 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
 \section{Results}
 \label{sec:results}
 
-The goal of our study is to assess reliability of \js\ engines by
-leveraging implementation diversity, which is specially rich in this
-domain. We report results in three parts. First, we report on the
-stability of the engines we analyzed using the Test262 standard
-conformance test suite for EcmaScript~\cite{ecma262-conformance-suite}
+\Mar{REVISE}The goal of our study is to assess reliability of \js\ engines by
+leveraging implementation diversity. We organized our study in three
+parts. First, we report on the stability of the engines we analyzed
+using the Test262 standard conformance test suite for
+EcmaScript~\cite{ecma262-conformance-suite}
 (Section~\ref{sec:stability}). The intuition is that the bugs we
 discover throughout this study would have low relevance if the engines
 are too fragile. Second, we report results obtained with test
@@ -639,13 +639,25 @@ analyzed the impact of using cross-engine differential testing to find
 bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
 rationale is that even black-box fuzzers that typically make valid
 changes only in literals of the language could expose important
-bugs. All in all, we want to assess the impact of practical approaches
-that leverage diversity to find bugs in \js\ engines.
+bugs.
 
-\subsection{Stability of Engines}
+\subsection{Summary of Results}
+\label{sec:summary}
+
+Figure~\ref{fig:summary}...
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[trim=0 120 0 150,clip,width=0.4\textwidth,scale=0.3]{R/stackedbar/stacked}  
+  \caption{\label{fig:summary}Summary of results.}
+\end{figure}
+
+
+\subsection{Test Transplantation}
+\label{sec:transplantation}
 \label{sec:stability}
 
-We evaluated stability with Test262~\cite{ecma262-conformance-suite},
+\Mar{REVISE}We evaluated stability with Test262~\cite{ecma262-conformance-suite},
 the official \js{} conformance test suite for the ECMA262
 specification. We ran this suite once a day for seven consecutive
 days. Table~\ref{tab:test262} shows the number of failures over this
@@ -673,10 +685,6 @@ that \Fix{...} \Mar{justify regressions using the Kangax report}
   \end{tabular}
 \end{table}
 
-
-
-\subsection{Test Transplantation}
-\label{sec:transplantation}
 
 \Mar{remember to say that we use dataset Table II''compile-in-all''.}
 
@@ -963,20 +971,11 @@ Aug. 22, 2018. We sampled five warnings associated with the group of a
 given engine, analyzed these warnings, and moved to the group of
 warnings associated with the next engine.
 
-\subsubsection{Results}
-\Mar{revise text...}
-\Fix{
-Table~\ref{tab:summary-of-results} summarizes our results. It shows,
-for each fuzzer and kind of bucket (\ie{}, hi or lo), the total number
-of files involved, the number of buckets reported by our
-infrastructure, the number of those that we classified as
-bug-revealing (positive), and the number of those that we filed a bug
-report. The difference between the last two columns corresponds to the
-number of duplicates, \ie{}, the cases of bugs already reported in the
-corresponding issue tracker. As expected, the hit ratio for the ``hi''
-group is higher, indicating that chances of filing a bug report for a
-``hi'' warning is higher.}
-
+\subsubsection{Results} Table~\ref{tab:summary-lo} shows statistics of \lo\ warnings obtained
+when fuzzing inputs with different tools. Column ``\# buckets'' show
+the number of buckets associated with ``\lo'' warnings whereas column
+``avg. \# files per bucket'' show the average number of files per
+bucket. Note that \Fix{...}
 
 \begin{table}[h]
   \centering
@@ -990,6 +989,10 @@ group is higher, indicating that chances of filing a bug report for a
     \bottomrule     
   \end{tabular}
 \end{table}
+
+Table~\ref{tab:summary-hi} shows the number of \hi\ warnings reported
+per engine. Recall that we did not cluster \hi\ warnings as there was
+not clear clustering criteria to use for that. Note that \Fix{...}
 
 \begin{table}[h]
   \centering
@@ -1035,34 +1038,37 @@ the target engine does not support that feature. For example,
   \end{tabular}
 \end{table}
 
-% \Igor{
-%   Para realizar nossos experimentos, tivemos que decidir qual as 
-%   melhores abordagens para aumentar a efetividade dos fuzzers.
-%   Os fuzzers mutacionais se mostraram mais eficientes em relacao
-%   aos fuzzers geracionais, entao focamos neste ponto.
-%   Utilizamos os fuzzers radamsa, QuickFuzz e \Fix{others} nas suas configuracoes
-%   default para realizar a mutacao em arquivos existentes.
-%   O fuzzer radamsa eh um fuzzer mutacional agnostico de linguagem e possui algumas
-%   deficiencias para a nossa infraestrutura como a falta de uma gramatica para guiar a suas mutacoes, 
-%   pois muitas das vezes a unica mutacao ocorre em uma palavra dentro de um comentario por exemplo.
-%   O fuzzer QuickFuzz tem uma gramatica JS integrada e sua mutacao ocorre de forma mais robusta que o 
-%   radamsa, gerando arquivos mais relevantes.
-%   Nossa infraestrutura usa a library Esprima\footnote{cite esprima url} para garantir que o arquivo fuzzado
-%   é um arquivo de teste relevante, seguindo estes requisitos:
-%   \begin{itemize}
-%     \item it contains only unicode text
-%     \item it is parseable (i.e., it is structurally well-formed)
-%     \item it does not contain engine-specific functions  
-%     \item it does not empty
-%   \end{itemize}
+Table~\ref{tab:bugs} shows the list of bugs we reported with
+differential testing across five months of analysis. The table is
+organized in two sections. The top section shows results obtained
+during the exploratory phase of the study and the bottom section shows
+the results obtained during the non-exploratory phase. The table shows
+the date the bug was reported (``Date''), the fuzzing tool used to
+detect the bug (``Fuzz''), the \js\ engine affected (``Engine''), the
+status of the bug report as of Aug. 24, 2018 (``Status''), the Url of
+the bug report (``Url''), the severity of the bug report
+(``Severity''), the priority that we assigned to the warning that
+revealed the bug (``Priority''), and the test suite from the original
+test input (``Suite'').
 
-% }
-
-\section{Bugs Found}
-\label{sec:bugs}
-
-%% Although there are many features yet to implement in our
-%% infrastructure,
+\Mar{REVISE}So far, ten of the bugs we
+reported were confirmed, two of which were fixed. One bug report we
+submitted was rejected on the basis that the offending JS file
+manifested an expected incompatibility across engine implementations.
+Note from the table that all bug reports still waiting for
+confirmation are associated with the \jsc{} engine (JSC). A closer
+look at the JSC issue tracker showed that the triage process is very
+slow for that engine.  \Igor{ The bugs reported on \chakra{}'s bug
+  tracker was defined as confirmed, however the bugs are included on a
+  milestone for the next release following an internal priority.  } As
+of now, we did not find any new bug on \smonkey{} and V8; the bugs we
+found were duplicates and were not reported. Finally, it is worth
+noting that \Fix{11 of the 19} JS files that manifested discrepancies
+were \emph{not} produced with fuzzing (column ``Fuzz''). These are
+test files from suites of different engines. This observation
+emphasizes the importance of continuously collecting test suites from
+multiple sources; today, we use test suites from seven different open
+source engines, including a total of 30K test files.
 
 \begin{table*}[h!]
   \vspace{-3ex}
@@ -1132,48 +1138,30 @@ the target engine does not support that feature. For example,
 \end{table*}
 
 
-This section shows results obtained with our
-infrastructure. Table~\ref{tab:bugs} shows the list of bugs we
-reported on issue trackers of different engines in the period of 42
-days. So far, ten of the bugs we reported
-were confirmed, two of which were fixed. One bug report we
-submitted was rejected on the basis that the offending JS file
-manifested an expected incompatibility across engine
-implementations.
-Note from the table that all bug
-reports still waiting for confirmation are associated with the
-\jsc{} engine (JSC). A closer look at the JSC issue tracker
-showed that the triage process is very slow for that engine. 
-\Igor{
-The bugs reported on \chakra{}'s bug tracker was defined as confirmed, 
-however the bugs are included on a milestone for the next release
-following an internal priority.
-}
-As of now, we did not find any new bug on \smonkey{} and V8; 
-the bugs we found were duplicates and were not reported. Finally, it is
-worth noting that \Fix{11 of the 19} JS files that manifested
-discrepancies were \emph{not} produced with fuzzing (column
-``Fuzz''). These are test files from suites of different engines. This
-observation emphasizes the importance of continuously collecting test suites from
-multiple sources; today, we use test suites from seven different open
-source engines, including a total of 30K test files.
+\section{Bugs Found}
+\label{sec:bugs}
+
+
+
 
 \Mar{justify why we discuss these bugs} \Mar{discuss other bugs}
 
-\vspace{1ex}\noindent\textbf{Bug \# 6.} The JS code \CodeIn{var a = \{valueOf:~function()\{return
-  ``\textbackslash{}x00''\}\} assert(+a === 0)\}} 
-manifested a bug in the \js{} engine \chakra{}.  The object
-property \CodeIn{valueOf} stores a function that returns a primitive
-value identifying the target object~\cite{valueof}. The original
-version of this code returns an empty string whereas the version of
-the code modified by the Radamsa fuzzer~\cite{radamsa} returns a string
-representation of a null character (called \CodeIn{NUL} in ascii). The
-unary plus expression ``\CodeIn{+a}", appearing in the assertion, is
-equivalent to the abstract operation \CodeIn{ToNumber(a.valueOf())}
-that converts a string to a number, otherwise the operation returns
-NaN (Not a Number)\cite{unary-plus}. For this case, \chakra{} evaluates
-the unary plus to NaN as expected, as the null character cannot be
-converted. As result, the test fails as expected. \chakra{}, in contrast,
+\sloppy
+\vspace{1ex}\noindent\textbf{Bug \# \Fix{6}.} The JS code \CodeIn{\{var a =
+  \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
+  assert(+a === 0)\}} manifested a bug in the \js{} engine \chakra{}.
+The object property \CodeIn{valueOf} stores a function that returns a
+primitive value identifying the target object~\cite{valueof}. The
+original version of this code returns an empty string whereas the
+version of the code modified by the Radamsa fuzzer~\cite{radamsa}
+returns a string representation of a null character (\CodeIn{NUL} in ascii). The unary plus expression ``\CodeIn{+a}",
+used in the assertion, is equivalent to the operation
+\CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
+otherwise the operation returns NaN (Not a
+Number)\cite{unary-plus}. For this case, \chakra{}\Mar{\chakra? if
+  chakra did that it would be fine, no?} evaluates the unary
+plus to NaN as expected, as the null character cannot be converted. As
+result, the test fails as expected. \chakra{}, in contrast,
 incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 \chakra{} team fixed the issue soon after we reported the problem.
