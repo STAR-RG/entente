@@ -621,75 +621,91 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
 \section{Results}
 \label{sec:results}
 
-\Mar{REVISE}The goal of our study is to assess reliability of \js\ engines by
+The goal of our study is to assess reliability of \js\ engines by
 leveraging implementation diversity. We organized our study in three
 parts. First, we report on the stability of the engines we analyzed
-using the Test262 standard conformance test suite for
+using the official Test262 conformance test suite for
 EcmaScript~\cite{ecma262-conformance-suite}
-(Section~\ref{sec:stability}). The intuition is that the bugs we
-discover throughout this study would have low relevance if the engines
-are too fragile. Second, we report results obtained with test
-transplantation (Section~\ref{sec:transplantation}). The rationale is
-that the domain of possible inputs is too large; consequently, we
-expect that test suites written for a given engine cover scenarios and
-corner cases uncovered by another engine. To sum, we conjecture that
-test cases written for one engine could reveal bugs in different
-engines as opposed to only manifesting false alarms. Third, we
-analyzed the impact of using cross-engine differential testing to find
-bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
-rationale is that even black-box fuzzers that typically make valid
-changes only in literals of the language could expose important
-bugs.
+(Section~\ref{sec:stability}). In the limit, bugs would have low
+relevance if the engines are too unreliable. Second, we report results
+obtained with test transplantation
+(Section~\ref{sec:transplantation}). The rationale is that the domain
+of possible inputs is too large; consequently, we expect that test
+suites written for a given engine cover scenarios and corner cases
+uncovered by another engine. To sum, we conjecture that test cases
+written for one engine could reveal bugs in different engines as
+opposed to only manifesting false alarms. Third, we analyzed the
+impact of using cross-engine differential testing to find bugs
+(Section~\ref{sec:cross-engine-diff-testing-results}). The rationale
+is that black-box fuzzers could expose important bugs.
 
-\subsection{Summary of Results}
-\label{sec:summary}
-
-Figure~\ref{fig:summary}...
+\vspace{1ex}
+\noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows a
+summary of the bugs we reported. The figure shows the distribution of
+status of bug reports per engine. Note that several of these reports
+were not reviewed yet, \ie, they did not receive a label ``confirmed''
+or ``rejected'' from the development team. Note also that we did not
+find bugs in the Mozilla \smonkey\ engine and that several of the bugs
+we reported were already fixed and incorporated to the latest release
+of corresponding engines.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[trim=0 120 0 150,clip,width=0.4\textwidth,scale=0.3]{R/stackedbar/stacked}  
-  \caption{\label{fig:summary}Summary of results.}
+  \includegraphics[trim=0 120 0 150,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked}  
+  \caption{\label{fig:summary}Summary of bug reports per engine and status.}
 \end{figure}
 
+\subsection{Conformance}
+\label{sec:stability}
+
+\begin{wraptable}[12]{r}{0.25\textwidth}  
+  \centering
+  \caption{\label{tab:test262}Percentage of passing tests on
+    the Test262 conformance suite.\Mar{Please, use percentages.}}
+  \small
+  \begin{tabular}{crr}
+    \toprule
+    engine & \% passing \\
+    \midrule
+    \jsc{} & \Fix{2278}\\
+    \veight{} & \Fix{1213} \\
+    \chakra{} & \Fix{7041} \\
+    \smonkey{} & \Fix{1761} \\
+    \bottomrule 
+  \end{tabular}
+  \normalsize
+\end{wraptable}
+
+We used the official conformance test suite
+Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
+engines to the \js\ standard. We ran the suite once a day for seven
+consecutive days from the period of 16 to 22 of August,
+2018. Table~\ref{tab:test262} shows the average number of passing
+tests over this period. It is important to note that failures are
+expected as it takes time for engines to adjust to the
+spec.\Mar{...mention the variance was negligible...} We noticed that
+all four engines we analyzed but \chakra{} use some variant of the
+Test262 suite as part of their regression process, but we used the
+same version in this experiment, the one available from the Test262
+web site~\cite{ecma262-conformance-suite}. Results show that there are
+still many unsupported cases as can be observed from the percentages
+in the table, but the number of passing tests is high, with
+\veight\ and \jsc\ performing better compared to others and
+\chakra\ performing well worse than others. It is important to
+highlight that failures in this test suite indicates missing features
+as opposed to bugs. However, note that \chakra\ is both the engine
+that has the lowest passing ratio in the conformance test suite and
+the one we were able to find more confirmed bugs (as per
+Figure~\ref{fig:summary}). We conjecture that the development age of
+the engine--Chakra is the newest engine\Fix{find DOB of
+  Chakra}--justify both observations.
+
+%% The rationale is that lack of support
+%% to features (as measured by conformance testing) and reliability of
+%% engines (as measured in this study) may have some relationship. 
 
 \subsection{Test Transplantation}
 \label{sec:transplantation}
-\label{sec:stability}
-\Igor{
-  Marcelo, de acordo com os resultados obtidos, prefiro retirar
-  esse paragrafo e tabela, nao houve perda/aumento de falhas nesses
-  ultimos 7 dias, acho que valeria a pena se fizessemos isso 1 vez por semana
-  durante os ultimos meses.
-}
-\Mar{REVISE}We evaluated stability with Test262~\cite{ecma262-conformance-suite},
-the official \js{} conformance test suite for the ECMA262
-specification. We ran this suite once a day for seven consecutive
-days. Table~\ref{tab:test262} shows the number of failures over this
-period. It is important to note that failures are expected as it takes
-time for engines to adjust to the spec. It is also important to
-highlight that all engines we analyzed, but \chakra{}, use some
-variant of the Test262 suite as part of their regression
-process\Mar{with fewer tests?}. We used the official version
-instead\Mar{, which updates tests regularly?}. To sum, we observed
-that \Fix{...} \Mar{justify regressions using the Kangax report}
-
-\begin{table}[h]
-  \centering
-  \caption{\label{tab:test262}Number of failures in Test262 over
-    a 7-day period.}
-  \begin{tabular}{crrrrrrr}
-    \toprule
-    engine\textbackslash{}day& 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-    \midrule
-    \jsc{} & 2278 & 2278 & 2278 & 2278 & 2278 & 2278 & - \\
-    \veight{} & 1213 & 1213 & 1213 & 1213 & 1213 & 1213 & - \\
-    \chakra{} & 7041 & 7041 & 7041 & 7041 & 7041 & 7041 & - \\
-    \smonkey{} & 1761 & 1761 & 1761 & 1761 & 1761 & 1761 & - \\
-    \bottomrule 
-  \end{tabular}
-\end{table}
-
 
 \Mar{remember to say that we use dataset Table II''compile-in-all''.}
 
@@ -725,7 +741,6 @@ Table~\ref{tab:test-suites}).
 
 %% This suggests that the investiment in
 %% testing paid off in this case.
-
 \begin{table}[h]
   \centering
   \caption{\label{tab:cross-testing}Number of failures observed exchanging

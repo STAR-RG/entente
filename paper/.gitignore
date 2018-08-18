@@ -5,3 +5,5 @@
 *.fls
 *.out
 paper.pdf
+.RData
+.Rhistory
