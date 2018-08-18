@@ -656,7 +656,12 @@ Figure~\ref{fig:summary}...
 \subsection{Test Transplantation}
 \label{sec:transplantation}
 \label{sec:stability}
-
+\Igor{
+  Marcelo, de acordo com os resultados obtidos, prefiro retirar
+  esse paragrafo e tabela, nao houve perda/aumento de falhas nesses
+  ultimos 7 dias, acho que valeria a pena se fizessemos isso 1 vez por semana
+  durante os ultimos meses.
+}
 \Mar{REVISE}We evaluated stability with Test262~\cite{ecma262-conformance-suite},
 the official \js{} conformance test suite for the ECMA262
 specification. We ran this suite once a day for seven consecutive
@@ -677,10 +682,10 @@ that \Fix{...} \Mar{justify regressions using the Kangax report}
     \toprule
     engine\textbackslash{}day& 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
     \midrule
-    \jsc{} & 2278 & 2278 & - & - & - & - & - \\
-    \veight{} & 1213 & 1213 & - & - & - & - & - \\
-    \chakra{} & 7041 & 7041 & - & - & - & - & - \\
-    \smonkey{} & 1761 & 1761 & - & - & - & - & - \\
+    \jsc{} & 2278 & 2278 & 2278 & 2278 & 2278 & 2278 & - \\
+    \veight{} & 1213 & 1213 & 1213 & 1213 & 1213 & 1213 & - \\
+    \chakra{} & 7041 & 7041 & 7041 & 7041 & 7041 & 7041 & - \\
+    \smonkey{} & 1761 & 1761 & 1761 & 1761 & 1761 & 1761 & - \\
     \bottomrule 
   \end{tabular}
 \end{table}
