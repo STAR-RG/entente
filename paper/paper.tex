@@ -1018,7 +1018,7 @@ not clear clustering criteria to use for that. Note that \Fix{...}
     \toprule
     fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & 2+\\
     \midrule
-    \radamsa{} & 30 & 8 & 121 & 5 & \\
+    \radamsa{} & 30 & 4 & 121 & 3 & 143\\
     \quickfuzz{} & & & & & \\    
     \bottomrule     
   \end{tabular}
@@ -1044,12 +1044,12 @@ the target engine does not support that feature. For example,
   \begin{tabular}{crr}
     \toprule
     & \radamsa\ & \quickfuzz\ \\
-    Undefined & - & - \\
-    Timeout/OME & - & - \\
-    Not Implemented & - & - \\
+    Undefined & 18 & - \\
+    Timeout/OME & 23 & - \\
+    Not Implemented & 19 & - \\
     Upcoming Feature & - & - \\
-    Error Message Mismatch & - & - \\    
-    Invalid Input & - & - \\    
+    Error Message Mismatch & 3 & - \\    
+    Invalid Input & 10 & - \\    
     \bottomrule     
   \end{tabular}
 \end{table}
