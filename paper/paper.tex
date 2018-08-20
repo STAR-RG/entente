@@ -978,12 +978,14 @@ similar discipline as before. However, the set of warnings inspected
 and the order of inspection changed. We restricted our analysis to
 \hi\ warnings and, aware that we would be unable to analyze each and
 every warning reported, we grouped those warnings per engine,
-analyzing each group in a round-robin fashion. The rationale was to
-give attention to each engine more uniformly, enabling more fair
-comparison across engines. We repeated the following routine until
-Aug. 22, 2018. We sampled five warnings associated with the group of a
-given engine, analyzed these warnings, and moved to the group of
-warnings associated with the next engine.
+analyzing each group in a round-robin fashion.  At each iteration, we
+analyzed \Fix{five} warnings in each group. A warning belongs to the
+group of a given engine if only that engine manifests distinct
+behavior, \ie{}, it produces a distinct output compared to others. We
+separated in a distinct group the warnings for which two engines
+diverge. The rationale for this methodology was to give attention to
+each engine more uniformly, enabling more fair comparison across
+engines.
 
 \subsubsection{Results} Table~\ref{tab:summary-lo} shows statistics of \lo\ warnings obtained
 when fuzzing inputs with different tools. Column ``\# buckets'' show
