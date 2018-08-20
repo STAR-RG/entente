@@ -60,13 +60,10 @@ recently, the Internet of Things~(IoT)~\cite{simply-technologies}. The
 interest of the community for the language encourages constant
 improvements in its specification and implementations. It is natural
 to expect that such improvements lead to sensible changes in engine
-implementation. Even small changes can have high practical impact. For
+implementation. In fact, even small changes can have high practical impact. For
 example, in October 2014 a new attribute added to Array objects
 resulted in the MS Outlook Calendar web app stop working under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
-Intuitively, developing reliable engines is difficult because
-specifications are incomplete and evolve frequently.
-
 
 Finding bugs in \js\ engines is an important problem given the range
 of applications that could be affected with those
@@ -81,12 +78,9 @@ feature. The publicly-available Kangax compatibility
 table~\cite{kangax} relates \js\ features with the engines that
 support them. To sum, it is often non-trivial to assess if a test
 fails because of a bug or because of some other reason making test
-automation more challenging.
-
-%% when a bug is found in some engine a test case is created and added to
-%% the regression suite. Those test inputs often check interesting
-%% scenarios that could reveal bugs in different engine
-%% implementations. 
+automation more challenging. Intuitively, developing reliable engines
+is difficult because specifications are intentionally incomplete--for
+development flexibility--and evolve frequently.
 
 %% WHAT WE DID
 This paper reports on a study we ran to evaluate the importance of
@@ -118,7 +112,7 @@ example, Mozilla runs JS files\footnote{These files are created with
   the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
   ``compare\_jit'' from funfuzz.} against different configurations of
 a given build of their \smonkey\ engine (\eg{}, trying to enable or
-not eager JIT compilation). In that setting, test outcomes are
+not eager JIT compilation). As the same engine is used, test outcomes are
 expected to be identical. Mozilla uses this approach since 2002 and
 have been able to find over 270 bugs since
 then~\cite{jsfunfuzz-at-mozilla}, including security
