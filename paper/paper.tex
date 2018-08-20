@@ -1004,9 +1004,9 @@ bucket. Note that \Fix{...}
     \toprule
     & \# buckets & avg. \# files per bucket \\
     \midrule
-    \radamsa{} & \Fix{62} & \Fix{1.62 (101/62)}\\
-    \quickfuzz{} & & \\    
-    \bottomrule     
+    \radamsa{} & \Fix{82} & \Fix{3 (241/82)}\\
+    \quickfuzz{} & \Fix{38} & \Fix{2 (87/38)} \\
+    \bottomrule
   \end{tabular}
 \end{table}
 
@@ -1018,12 +1018,12 @@ not clear clustering criteria to use for that. Note that \Fix{...}
   \centering
   \caption{\label{tab:summary-hi}Number of \hi\ warning
     reports per engine.}
-  \begin{tabular}{crrrr}
+  \begin{tabular}{crrrrr}
     \toprule
-    fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey \\
+    fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & 2+\\
     \midrule
-    \radamsa{} & & \\
-    \quickfuzz{} & & \\    
+    \radamsa{} & 30 & 8 & 121 & 5 & \\
+    \quickfuzz{} & & & & & \\    
     \bottomrule     
   \end{tabular}
 \end{table}
