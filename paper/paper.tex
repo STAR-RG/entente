@@ -18,22 +18,11 @@
 %Should I Fuzz my Inputs or Improve my Tests? 
 \title{Leveraging Diversity to Find Bugs\\ in JavaScript Engines}
 
-%% \author{
-%% \IEEEauthorblockN{Sabrina Souto}
-%% \IEEEauthorblockA{State University of Para\'iba\\
-%% Para\'iba, Brazil\\
-%% sabrinadfs@gmail.com}
-%% \and
-%% \IEEEauthorblockN{Marcelo d'Amorim}
-%% \IEEEauthorblockA{Federal University of Pernambuco\\
-%%   Pernambuco, Brazil\\
-%%   damorim@cin.ufpe.br}
-%% \and
-%% \IEEEauthorblockN{Rohit Gheyi}
-%% \IEEEauthorblockA{Federal University of Campina Grande\\
-%%   Para\'iba, Brazil\\
-%%   rohit@dsc.ufcg.edu.br}
-%% }
+\author{
+\IEEEauthorblockN{Igor Sim\~oes\qquad{}Marcelo d'Amorim}
+\IEEEauthorblockA{Federla University of Pernambuco, Brazil\\
+\{isol2,damorim\}@cin.ufpe.br}
+}
 
 \maketitle
 
@@ -617,7 +606,7 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
 
 The goal of our study is to assess reliability of \js\ engines by
 leveraging implementation diversity. We organized our study in three
-parts. First, we report on the stability of the engines we analyzed
+parts. First, we report on the conformance of the engines we analyzed
 using the official Test262 conformance test suite for
 EcmaScript~\cite{ecma262-conformance-suite}
 (Section~\ref{sec:stability}). In the limit, bugs would have low
@@ -626,22 +615,26 @@ obtained with test transplantation
 (Section~\ref{sec:transplantation}). The rationale is that the domain
 of possible inputs is too large; consequently, we expect that test
 suites written for a given engine cover scenarios and corner cases
-uncovered by another engine. To sum, we conjecture that test cases
-written for one engine could reveal bugs in different engines as
-opposed to only manifesting false alarms. Third, we analyzed the
+uncovered by another engine.\Comment{ To sum, we conjecture that test
+  cases written for one engine could reveal bugs in different engines
+  as opposed to only manifesting false alarms.} Third, we analyzed the
 impact of using cross-engine differential testing to find bugs
-(Section~\ref{sec:cross-engine-diff-testing-results}). The rationale
-is that black-box fuzzers could expose important bugs.
+(Section~\ref{sec:cross-engine-diff-testing-results}). Differential
+testing has been used in several contexts to address the oracle
+problem~\cite{barr-etal-tse2015}. Intuitively, using differential
+testing to find functional bugs across engine implementation could be
+promising.
 
 \vspace{1ex}
 \noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows a
 summary of the bugs we reported. The figure shows the distribution of
 status of bug reports per engine. Note that several of these reports
-were not reviewed yet, \ie, they did not receive a label ``confirmed''
-or ``rejected'' from the development team. Note also that we did not
-find bugs in the Mozilla \smonkey\ engine and that several of the bugs
-we reported were already fixed and incorporated to the latest release
-of corresponding engines.
+hold the status ``new'', which indicates that they were not reviewed
+yet by the development team. Note also that we did not find bugs in
+the Mozilla \smonkey\ engine and that several of the bugs we reported
+were already fixed and incorporated in the latest release of
+corresponding engines. Overall, discarding bug report with the ``new''
+label, we reported \noBugsTotalConfirmed{} bugs.
 
 \begin{figure}[h]
   \centering
@@ -670,29 +663,41 @@ of corresponding engines.
   \normalsize
 \end{wraptable}
 
+%% It is important to note that failures are
+%% expected as it takes time for engines to adjust to the
+%% spec.
+
 We used the official conformance test suite
 Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
-engines to the \js\ standard. We ran the suite once a day for seven
+engines to the \js\ current standard. As it is acceptable to release
+engines fulfilling the specification only partially~\cite{kangax}, it
+is expected that engines do not fully pass this test. However, we
+expect that results provide indication of engine's maturity. In the
+limit, it is not desirable to flood bug reports on engines at early
+stages of development. We ran the suite once a day for seven
 consecutive days from the period of 16 to 22 of August,
 2018. Table~\ref{tab:test262} shows the average number of passing
-tests over this period. It is important to note that failures are
-expected as it takes time for engines to adjust to the
-spec.\Mar{...mention the variance was negligible...} We noticed that
-all four engines we analyzed but \chakra{} use some variant of the
-Test262 suite as part of their regression process, but we used the
-same version in this experiment, the one available from the Test262
-web site~\cite{ecma262-conformance-suite}. Results show that there are
+tests over this period. The variance of results was negligible; for
+that reasons, we omited standard deviations. We noticed that all four
+engines we analyzed but \chakra{} use some variant of the Test262
+suite as part of their regression process, but we used the same
+version in this experiment; the one available from the Test262 web
+site~\cite{ecma262-conformance-suite}. Results show that there are
 still many unsupported cases as can be observed from the percentages
 in the table, but the number of passing tests is high, with
-\veight\ and \jsc\ performing better compared to others and
+\veight\ and \smonkey\ performing better compared to others and
 \chakra\ performing well worse than others. It is important to
-highlight that failures in this test suite indicates missing features
-as opposed to bugs. However, note that \chakra\ is both the engine
-that has the lowest passing ratio in the conformance test suite and
-the one we were able to find more confirmed bugs (as per
-Figure~\ref{fig:summary}). We conjecture that the development age of
-the engine--Chakra is the newest engine\Fix{find DOB of
-  Chakra}--justify both observations.
+highlight that failures in this conformance test suite indicates
+missing features as opposed to bugs. However, note that \chakra\ is
+both the engine that has the lowest passing ratio in the conformance
+test suite and the one we were able to find more bugs. Although it is
+possible to find correlation between the percentage of passing tests
+in Test262 (as per Table~\ref{tab:test262}) and reliability as
+measured by the number of bugs found (as per
+Figure~\ref{fig:summary}), we do not not expect causality. We
+conjecture that the development age of the engine--Chakra is the
+newest engine\Fix{find DOB of Chakra}--justify the incidental
+correlation.
 
 %% The rationale is that lack of support
 %% to features (as measured by conformance testing) and reliability of
@@ -701,30 +706,37 @@ the engine--Chakra is the newest engine\Fix{find DOB of
 \subsection{Test Transplantation}
 \label{sec:transplantation}
 
-\Mar{remember to say that we use dataset Table II''compile-in-all''.}
+This section reports results of test transplantation. We analyzed the
+failures observed when running a test suite original from a given
+engine in another engine. Intuitively, we want to assess how promising
+is to use knowledge of developers of a given engine to find bugs in a
+different engine.
 
-This section reports the results of test transplantation, \ie{}, we
-analyzed the failures observed when running a test suite on an engine
-other than the engine where the test suite
-originated.
+Table~\ref{tab:cross-testing} shows the number of failures observed
+for each pair of test suite and engine. The first column shows the
+test suites and the first row shows the engines that run those
+tests. We use a dash (``-'') to indicate that we did not consider the
+combinations that associate a test suite with its parent engine;
+failures in those cases would either indicate regressions or flaky
+tests as opposed to unknown bugs for that engine. We did not run test
+cases that fail on its parent engine in any other engines; we wanted
+all tests to pass on their parent engine as that would indicate that
+the test case is coherent and can be used. In total, 64 test cases
+were discarded for that reason--6 from \jsc{} and 57 from
+\smonkey. Furthermore, we required that a test does not manifest
+compile errors as we want to focus on bugs in code not in tests. For
+that reason, we used the tests listed under the column
+``compile-in-all'' from Table~\ref{tab:test-suites}, totalling
+\totalTestFilesCompileInAll{} cases. \Mar{can you confirm that we used
+  ``compile-in-all'' and not ``origina'' as these numbers
+  suggest?}\Fix{In total, 7,029 test files (\ie{}, 38369-31276-64)
+  were considered in this experiment, which involved 24,922 test runs
+  (\ie, (7029*4)-1021-57-2116).}  Of these, 812 failures were observed
+(3.25\% of the runs) across \textbf{543} distinct files (7.72\% of the
+files). We analyzed each of these files in separate as to classify if
+the failure was fault-revealing or a false positive.
 
-Table~\ref{tab:cross-testing} shows the number of failures for each
-pair of test suite and engine. The first column shows the test suites
-and the first row shows the engines that run those tests. We use a
-dash (``-'') to indicate that we did not consider the combinations
-that associated a test suite with its parent engine; failures in those
-cases would either indicate regressions or flaky tests as opposed to
-an unknown bug for that engine. We did not run the test cases that
-fail on its parent engine in any other engines; we wanted all tests to
-pass on their parent engine as a failure in that case would be a
-stronger indicative of a bug. In total, 64 test cases were discarded
-for that reason--6 from \jsc{} and 57 from \smonkey. In total, 7,029
-test files (\ie{}, 38369-31276-64) were considered in this experiment,
-which involved 24,922 test runs (\ie, (7029*4)-1021-57-2116).  Of
-these, 812 failures were observed (3.25\% of the runs) across
-\textbf{543} distinct files (7.72\% of the files). We analyzed each of
-these file in separate to identify if the failure was fault-revealing
-or a false positive.
+\Mar{-------------------- estou aqui}
 
 We observed from the table that, considering this dataset, the Mozilla
 \smonkey\ was the engine that failed the least whereas the Microsoft
