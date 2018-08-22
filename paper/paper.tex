@@ -731,19 +731,16 @@ that reason, we used the tests listed under the column
   ``compile-in-all'' and not ``origina'' as these numbers
   suggest?}\Fix{In total, 7,029 test files (\ie{}, 38369-31276-64)
   were considered in this experiment, which involved 24,922 test runs
-  (\ie, (7029*4)-1021-57-2116).}  Of these, 812 failures were observed
-(3.25\% of the runs) across \textbf{543} distinct files (7.72\% of the
-files). We analyzed each of these files in separate as to classify if
-the failure was fault-revealing or a false positive.
-
-\Mar{-------------------- estou aqui}
-
-We observed from the table that, considering this dataset, the Mozilla
-\smonkey\ was the engine that failed the least whereas the Microsoft
-engine \chakra\ failed the most. The \smonkey\ test suite also
-revealed more failures than any other, perhaps as expected,
-considering that it is the suite with more tests (see
-Table~\ref{tab:test-suites}).
+  (\ie, (7029*4)-1021-57-2116).}  Of these, 812 failures were
+manifested (3.25\% of the runs) across \textbf{543} distinct files
+(7.72\% of the files). A developer with experience in \js\ analyzed
+each of these files in separate as to classify if the failure was
+fault-revealing or not (\ie{}, a false positive).  We observed from
+the table that, considering this dataset, the Mozilla \smonkey\ was
+the engine that failed the least whereas the Microsoft engine
+\chakra\ failed the most. The \smonkey\ test suite also revealed more
+failures than any other, as expected, considering that it is the suite
+with more tests (see Table~\ref{tab:test-suites}).
 
 %% This suggests that the investiment in
 %% testing paid off in this case.
@@ -777,12 +774,11 @@ Table~\ref{tab:test-suites}).
 \end{table}
 
 The piecharts from Figure~\ref{fig:piecharts-transplantation} show the
-false and true positives observed with test transplantation. The top
-piechart shows false alarms, which means that all
-``transplanted'' tests should have passed in these cases. The absolute
-number of tests in each category is shown in parentheses to the
-right-side of each slice label, naming the source of false
-positive. The sources are as follows:
+distribution of false and true positives in this experiment. The
+piechart at the top shows false alarms. The absolute number of tests
+in each category is shown in parentheses to the right-side of each
+slice label, which names the source of false positive. The sources of
+false positives are as follows:
 
 \begin{figure}[h]
   \centering
@@ -816,51 +812,31 @@ positive. The sources are as follows:
       error.}.} False positives of this kind manifest because the
     engine that runs the test does not optimize the code as the
     original engine and that has an effect in the test outcome.  The
-    test may fail to finish at the time budget or runs out of
-    memory. For example, a test case from \jsc{} defines a function
-    with a tail-call recursion. The test fails in all engines but
-    \jsc{}, which implements tail-call optimization.
-
-    %% \Igor{
-    %%   For example, a testcase from \jsc{} suite explores the tail call
-    %%   to optimize the recursion, the test uses a recursive function that
-    %%   should be executed multiple times (ie. \mcodeid{1e6}). In this case, 
-    %%   only the \jsc{} supports tail-call optimization and the testcase 
-    %%   passes without failures. Another case can be found in \jerry{} suite
-    %%   that uses a repetition statement to concatenate long strings 
-    %%   exponentially, causing an out of memory error. The engines used 
-    %%   supports the flags to increase memory, however we prefer to use 
-    %%   the default engine build.
-    %% }
+    test may fail to finish at the specified time budget or it exceeds
+    the memory budget. For example, a test case from the \jsc{} suite
+    defines a function with a tail-call recursion. The test fails in
+    all engines but \jsc{}, which implements tail-call optimization,
+    which enables the test to finish execution fast.
 
   \item \textbf{Not implemented.} False positives of this kind
     manifest when a test fails because it covers a function that is
     part of the official spec, but is not implemented in the target
-    engine. For example, at the time of writing, \chakra{} does not
-    implement by default various properties from the \mcodeid{Symbol}
-    object. These properties are only available activating ES6
-    experimental mode with the flag \CodeIn{-ES6Experimental}.
+    engine yet. For example, at the time of writing, \chakra{} does
+    not implement by default various properties from the
+    \mcodeid{Symbol} object. These properties are only available
+    activating the ES6 experimental mode with the flag
+    \CodeIn{-ES6Experimental}.
 
-  \item \textbf{Unknown.} This category corresponds to the cases we
-    were unable to confidently diagnose the failure.
+  \item \textbf{Unknown.} This category includes the cases we were
+    unable to confidently diagnose the failure but we suspected it was
+    a false alarm.
 
-  %% \item \textbf{Error message mismatch.} Test fails because it
-  %%   compares an error message, which is not portable across
-  %%   engines. For example, \Igor{
-  %%     a test from the engine \jsc{} uses an assert function called
-  %%     \CodeIn{shouldThrow} that expects an specific error message. In this test, 
-  %%     all engines throws the Error as expected, however only the message 
-  %%     on \jsc{} engine match with the string expected in the test case.
-  %%   }
 \end{itemize}  
 
-We observed that the sources of false positives were relatively
-uniformly distributed, with the categories ``Unknown'' and
-``Undefined'' holding more representation with \Fix{X and Y} reports,
-respectively. Considering the true positives, we found a reasonable
-number of duplicate reports, but not enough high to justify attempting
-to automate the detection of duplicates. Section~\ref{sec:bugs}
-exemplifies cases of false and true positives.
+We observed that ``Unknown'' and ``Undefined'' were the most
+predominant sources of false positives. Considering true positives, we
+found a reasonable number of duplicate reports, but not enough high to
+justify attempting to automate the detection of duplicates. 
 
 
 \begin{table}[t!]
@@ -907,29 +883,40 @@ assigned to the bug, column ``Date'' shows the date the bug was
 reported in the format ``m/dd'', column ``Engine'' shows the affected
 engine, column ``Status'' indicates the status of the bug report at
 the time of the writing (\eg{},``New'', ``Rejected'', ``Confirmed'',
-''Fixed''), column ``Url'' shows the web address for the corresponding
-post in the bug tracking system where the discussion thread with
-engine developers can be found (de-anonymized upon request), column
+''Fixed''), column ``Url'' shows the web address for the
+bug report entry in the bug tracking system (de-anonymized upon request), column
 ``Severity'' shows the severity level for confirmed bugs, and,
 finally, column ``Suite'' shows the name of the engine that originated
-the test. Considering severity levels, it is important to note that
-\jsc{} uses five different severity levels~\cite{jsc-severity} whereas
-\chakra{}~\cite{chakra-severity} and \smonkey{}~\cite{mozilla-severity}
-use only two. As usual, the smallest the severity value the highest
-the severity of the bug. We use a dash (``-'') as the severity level
-for bugs with pending confirmation.
+the test.
 
-Of the \Fix{17} bugs we reported with test transplantation, \Fix{9}
-were analyzed and moved from the status ``New'' to ``Confirmed''
-(\ie{}, no bug we reported was rejected). Of these, \Fix{8} of them
-are severity-2 bugs.  \chakra{} was the engine with the highest number
-of confirmed bugs, \Fix{8} in total, with \Fix{1} bug
+Considering severity levels, it is important to note that \jsc{} uses
+five levels~\cite{jsc-severity} whereas
+\chakra{}~\cite{chakra-severity} and
+\smonkey{}~\cite{mozilla-severity} use only two. As usual, the
+smallest the severity value the highest the severity of the bug. We
+use a dash (``-'') as the severity level for bugs with pending
+confirmation.  No bug we reported in this experiment was rejected.  Of
+the \Fix{17} bugs we reported in this experiment, \Fix{9} were
+analyzed and moved from the status ``New'' to ``Confirmed''. Of these,
+\Fix{8} are severity-2 bugs.  \chakra{} was the engine with the
+highest number of confirmed bugs, \Fix{8} in total, with \Fix{1} bug
 fixed. Considering the remaining engines, \veight{} confirmed one
 bug. Curiously, Google engineers confirmed that report in a few
-hours. Although we did not find any showstopper critical bugs, most of
-the bugs are seemingly important as per the categorization given by
-engineers. Analyzing the issue tracker of \chakra, we found that
-severity-1 bugs are rare.
+hours. We found that development teams of other engines, specially
+\jsc\, took much longer to analyze bug reports as can be observed by
+some pending reports from April 2018. Although we did not find any
+showstopper critical bugs, most of the bugs are seemingly important as
+per the categorization given by engineers. Analyzing the issue tracker
+of \chakra, we found that severity-1 bugs are rare.
+
+Overall, we found these results promising given that precision (\ie{}
+the ratio of true positives over all reports) needs to take into
+account the cost of inspecting the warning~\cite{harman-ohearn-2018};
+it took a week for the developer to inspect the set of warnings
+entirely. The precision for \jsc\ was \Fix{X\%} (\ie, XX/270), which
+seems a low rate, but it took approximately \Fix{x} days to find
+\Fix{y} real bugs on this engine. Section~\ref{sec:bugs} show samples
+of false and true positives.
 
 
 \subsection{Cross-Engine Differential Testing}
@@ -938,47 +925,56 @@ severity-1 bugs are rare.
 This section reports the results obtained with differential
 testing. More precisely, we report results obtained by fuzzing test
 inputs, running those inputs on different engines, and checking the
-outcomes with a differential oracle (see Figure~\ref{fig:workflow}).
+outcomes with a differential oracle.  We configured our infrastructure
+(see Figure~\ref{fig:workflow}) to produce 20 well-formed fuzzed files
+per input file, \ie{}, the number of fuzzing iterations can exceed the
+number above as we discard syntactically invalid files.
 
 \subsubsection{Methodology}
-The methodology we used to assess the effectiveness of cross-engine
-differential testing is as follows. To avoid experimental noise, we
-only fuzz test files that pass in all engines. The intuition is that
-we wanted to avoid the scenario where fuzzing produces a
-fault-revealing input based on a test that was already
-fault-revealing. This decision ensures that we can establish
-cause-effect relationship between fuzzing and the observation of
-discrepancy. Column ``no-fail-in-all'' from
-Table~\ref{tab:test-suites} shows that a total of
-\totalTestFilesPassInAll\ tests satisfy this restriction.
+The methodology we used to assess effectiveness of this technique is
+as follows. To avoid experimental noise, we only fuzz test files that
+pass in all engines.  This corresponds to the tests appearing under
+the column ``no-fail-in-all'' from Table~\ref{tab:test-suites}--a
+total of \totalTestFilesPassInAll\ tests satisfy this restriction.
+The intuition is that we wanted to avoid the scenario where fuzzing
+produces a fault-revealing input based on a test that was already
+revealing failures on some engine. This decision ensures that we can
+establish cause-effect relationship between fuzzing and the
+observation of discrepancy. 
 
 \vspace{1ex}
 \noindent\textbf{Exploratory Phase.} For the first three months of the
-study, our inspection process was exploratory.  Our goal in this phase
-was to learn the extent to which \lo\ warnings could reveal bugs. We
-realized that if we found that the ratio of bugs from \lo\ warnings
-was rather low, we could focus our inspection efforts only on
-\hi\ warnings. That finding would be important to reduce inspection
-cost and guide future developments of this approach. To run this
-experiment, we trained eight students in analyzing the warnings that
-our infrastructure produces. The students were enrolled in a
+study, our inspection process was exploratory.  In this phase, we
+wanted to learn whether or not black-box fuzzers could reveal real
+bugs and how effective \lo\ warnings were relative to
+\hi\ warnings. Considering the choice of fuzzers, we did find several
+bugs with \radamsa\, but only some with \quickfuzz. The rationale for
+studying the the \hi\ and \lo\ warning classification was that if we
+found that the ratio of bugs from \lo\ warnings was rather low, we
+could focus our inspection efforts only on \hi\ warnings as we
+expected the number of warnings to increase dramatically compared to
+the previous experiment. That finding would be important to reduce
+inspection cost and guide future developments of this approach. To run
+this experiment, we trained eight students in analyzing the warnings
+that our infrastructure produces. The students were enrolled in a
 graduate-level testing class. We listed warnings in a spreadsheet and
-requested students to update an ``owner'' column indicating who was
-working on it, but we did not enforce an order on the warnings the
-students should inspect. Recall from Section~\ref{sec:clusterization}
-that we clustered \lo\ warnings in buckets. For that reason, we only
-listed one \lo\ warning per representative class/bucket in the
-spreadsheet. First, we explained the possible sources of false alarms
-with examples and then we asked the students to use the following
-procedure when finding a suspicious warning. Analyze the parts of the
-spec related to the problem and, if still suspicious, look for
-potential duplicates on the bug tracker of the affected engine using
-related keywords. If none was reported, indicate in the spreadsheet
-that that warning is potentially fault-revealing. We encouraged
-students to use lithium~\cite{lithium} to minimize long test cases;
-the tests from the Mozilla suite are often longer than others. Only
-after the co-authors checked the potential bugs, a bug report was
-filed.
+requested the students to update an ``owner'' column indicating who
+was working on it, but we did not enforce a strict order on the
+warnings the students should inspect. Recall from
+Section~\ref{sec:clusterization} that we clustered \lo\ warnings in
+buckets. For that reason, we only listed one \lo\ warning per
+representative class/bucket in the spreadsheet. First, we explained,
+through examples, the possible sources of false alarms they could find
+and then we asked the students to use the following procedure when
+finding a suspicious warning. Analyze the parts of the spec related to
+the problem and, if still suspicious, look for potential duplicates on
+the bug tracker of the affected engine using related keywords. If none
+was reported, indicate in the spreadsheet that that warning is
+potentially fault-revealing. We encouraged students to use
+lithium~\cite{lithium} to minimize long test cases; the tests from the
+Mozilla suite are often longer than others. Only after the co-authors
+checked the potential bugs, a bug report was filed. Each student found
+at least one bug using this methodology.
 
 \vspace{1ex}
 \noindent\textbf{Non-Exploratory Phase.} Results obtained in the
@@ -999,28 +995,40 @@ diverge. The rationale for this methodology was to give attention to
 each engine more uniformly, enabling more fair comparison across
 engines.
 
-\subsubsection{Results} Table~\ref{tab:summary-lo} shows statistics of \lo\ warnings obtained
-when fuzzing inputs with different tools. Column ``\# buckets'' show
-the number of buckets associated with ``\lo'' warnings whereas column
-``avg. \# files per bucket'' show the average number of files per
-bucket. Note that \Fix{...}
+\subsubsection{Results} In this section we discuss results obtained
+across these two phases of the experiment. Table~\ref{tab:summary-lo}
+shows statistics of \lo\ warnings obtained when fuzzing inputs with
+different tools. Column ``\# buckets'' shows the number of buckets
+associated with ``\lo'' warnings, column ``\# files'' shows the total
+number of files involved in these warnings, and column ``avg. \# files
+per bucket'' show the average number of files per bucket. Note that
+the difference of files per bucket across fuzzers was not very
+significant.
 
 \begin{table}[h]
   \centering
   \caption{\label{tab:summary-lo}Summary of \lo\ warning reports.}
-  \begin{tabular}{crr}
+  \begin{tabular}{crrr}
     \toprule
-    & \# buckets & avg. \# files per bucket \\
+    & \# buckets & \# files & avg. \# files per bucket \\
     \midrule
-    \radamsa{} & \Fix{82} & \Fix{3 (241/82)}\\
-    \quickfuzz{} & \Fix{38} & \Fix{2 (87/38)} \\
+    \radamsa{} & 82 & 241 & 2.9 \\
+    \quickfuzz{} & 38 & 87 & 2.3 \\
     \bottomrule
   \end{tabular}
 \end{table}
 
-Table~\ref{tab:summary-hi} shows the number of \hi\ warnings reported
-per engine. Recall that we did not cluster \hi\ warnings as there was
-not clear clustering criteria to use for that. Note that \Fix{...}
+Table~\ref{tab:summary-hi} shows statistics for \hi\ warnings; recall
+from Section~\ref{sec:clusterization} that we do not cluster
+\hi\ warnings\Comment{ as there was no clear clustering criteria to
+  use for that}. This table breaks down \hi\ warning by the affected
+engine, \ie, the engine manifesting a distinct output among those
+analyzed. Column ``+1'' show the cases where more than one engine
+disagree on the output. Note that the ordering of engines considering
+this metric is consistent with the one observed on
+Table~\ref{tab:cross-testing}, with \chakra\ and then \jsc\ associated
+with more warnings/failures compared to other engines.
+%\veight\ and \smonkey. 
 
 \begin{table}[h]
   \centering
@@ -1028,7 +1036,7 @@ not clear clustering criteria to use for that. Note that \Fix{...}
     reports per engine.}
   \begin{tabular}{crrrrr}
     \toprule
-    fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & 2+\\
+    fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
     \midrule
     \radamsa{} & 30 & 4 & 121 & 3 & 143\\
     \quickfuzz{} & & & & & \\    
@@ -1049,7 +1057,7 @@ is available in the original engine, but it is still not standard, and
 the target engine does not support that feature. For example,
 \Fix{provide concrete example} 
 
-\begin{table}[t]
+\begin{table}[h]
   \centering
   \caption{\label{tab:false-positives}Distribution of false
     positives buckets per source.}
