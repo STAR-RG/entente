@@ -653,10 +653,10 @@ label, we reported \noBugsTotalConfirmed{} bugs.
     \toprule
     engine & \% passing \\
     \midrule
-    \jsc{} & \Fix{2278}\\
-    \veight{} & \Fix{1213} \\
-    \chakra{} & \Fix{7041} \\
-    \smonkey{} & \Fix{1761} \\
+    \jsc{} & 92\%\\
+    \veight{} & 95\% \\
+    \chakra{} & 75\% \\
+    \smonkey{} & 93\% \\
     \bottomrule 
   \end{tabular}
   \normalsize
@@ -1064,14 +1064,14 @@ failures) compared to other engines.
 \begin{table}[h]
   \centering
   \caption{\label{tab:summary-hi}Number of \hi\ warning
-    reports per engine.}
+    reports per engine.\Fix{falta add test262}}
   \begin{tabular}{crrrrr}
     \toprule
     fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
     \midrule
-    \radamsa{} & 30 & 4 & 121 & 3 & 143\\
-    \quickfuzz{} & & & & & \\    
-    \bottomrule     
+    \radamsa{} & 30 & 4 & 121 & 3 & 143 \\
+    \quickfuzz{} & 12 & 7 & 67 & 8 & 89 \\
+    \bottomrule
   \end{tabular}
 \end{table}
 
@@ -1083,10 +1083,12 @@ highlighted with a ``*'' in the table. The source ``Invalid Input''
 indicates that the test input violated some part of the
 specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
-sensitive to function specifications. The source ``Upcoming Feature''
+sensitive to function specifications. \Igor{devemos remover isso da 
+etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
+The source ``Upcoming Feature''
 indicates that the test fails because it uses a feature that is
 available in the original engine, but it is still not standard, and
-the target engine does not support that feature. For example,
+the target engine does not support that feature}. For example,
 \Fix{provide concrete example}. \Fix{explain error message mismatch}
 
 \begin{table}[h]
@@ -1100,7 +1102,7 @@ the target engine does not support that feature. For example,
     Timeout/OME & 23 & - \\
     Not Implemented & 19 & - \\
     * Invalid Input & 10 & - \\    
-    * Upcoming Feature & - & - \\
+    % * Upcoming Feature & - & - \\
     * Error Message Mismatch & 3 & - \\        
     \bottomrule     
   \end{tabular}
@@ -1209,7 +1211,13 @@ were not reported.
     \veight{} & New &
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}
     & - &  & \\
-    \midrule   
+    \midrule
+    15 & 8/23 & quickfuzz & \jsc{} & New  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}
+    & - & HI & Test262\\
+    15 & 8/23 & quickfuzz & \veight{} & New  &
+    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}
+    & - & HI & Test262\\
    \bottomrule
   \end{tabular}
 \end{table*}
