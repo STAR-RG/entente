@@ -333,7 +333,7 @@ available to certain engines.
                                &         & original & compile-in-all &  no-fail-in-all \\
     \midrule
     TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 &
-    29,846 & 18,943 \\
+    29,846 & 17,639 \\
     \midrule
     \jsc{} & \cite{webkit} & 1,031 & 1,021 & 955\\
     \smonkey\ & \cite{mozilla} & 2,634 & 2,116 & 1,686\\
@@ -859,20 +859,33 @@ justify attempting to automate the detection of duplicates.
                        &  &
     JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &  -  & \\
    \midrule
-   5 & 5/02  & JavascriptCore & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
+   5 & 5/02  & \jsc{} & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
    6 & 5/17  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}} & 2 & \jsc{}\\
    7 & 5/21  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
    8 & 6/28  & \chakra{} & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}} & 2 & \jsc{}\\
    9 & 7/10  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}} & 2 & \jerry{}\\
    10 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
-   11 & 7/18  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
+   11 & 7/18  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
    12 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5549}{\#5549}} & 2 & \jerry{}\\
    13 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
-   14 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
+   14 & 8/07  & \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
    15 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
-   16 & 8/07  & JavascriptCore & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
-   17 & 8/08  & V8 & \textbf{Fixed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
-   18 & 8/08  & JavascriptCore & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
+   16 & 8/07  & \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
+   17 & 8/08  & \veight{} & \textbf{Fixed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
+   18 & 8/08  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
+   19 & 8/16  & \veight{} & WontFix & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8064}{\#8064}} & 2 & Duktape\\
+   20 & 8/22  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5621}{\#5621}} & 2 & \smonkey{}\\
+   21 & 8/22  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188874}{\#188874}} & - & \smonkey{}\\
+   22 & 8/22  & \jsc{} & New &  & - & \smonkey{}\\
+   \midrule
+    \multirow{3}{*}{23}  & 
+    \multirow{3}{*}{8/22} & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188875}{\#188875}} & - & \multirow{3}{*}{\smonkey{}}\\
+    &  &
+    \veight{} & New & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8082}{\#8082} } &  -  & \\
+    &  &
+    \chakra{} & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5624}{\#5624} } &  -  & \\
+   \midrule
+   24 & 8/23  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188877}{\#188877}} & - & \smonkey{}\\
    \bottomrule
   \end{tabular}
 \end{table}
