@@ -380,31 +380,30 @@ jsfunfuzz~\cite{jsfunfuzz},
 LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, and
 Megadeth~\cite{grieco2016quickfuzz}.  Unfortunately, none of those
 were effective out of the box. For example, we produced 100K inputs
-with Grammarinator and only \Fix{X} of those were valid. With
-Megadeth, we were able to produce \Fix{Y, Y$>$Y?}  valid inputs as it
-contains some heuristics to circumvent violations of certain type
-rules such as \Fix{variable used must be defined?}. Nonetheless,
-running those inputs in our infrastructure we were unable to find
-discrepancies. Inspecting those inputs, we realized that they reflected
-very simple scenarios. To sum, a high percentage of inputs that
-Grammarinator and Megadeth generated were semantically-invalid that we
-needed to discard whereas the valid inputs manifested no
+with Grammarinator and only few inputs were valid. With Megadeth, we
+were able to produce more\Comment{ \Fix{Y, Y$>$Y?}} valid inputs as it
+contains some heuristics to circumvent violations of certain typing
+rules.\Comment{ such as \Fix{variable used must be defined?}.}
+Nonetheless, running those inputs in our infrastructure we were unable
+to find discrepancies. Inspecting those inputs, we realized that they
+reflected very simple scenarios. To sum, a high percentage of inputs
+that Grammarinator and Megadeth generated were semantically-invalid
+that we needed to discard whereas the valid inputs manifested no
 discrepancies. Considering jsfunfuzz~\cite{jsfunfuzz}, we noticed
 that, in addition to the issues mentioned above, it produces inputs
 that use functions that are only available in the \smonkey{}
 engine. We would need either to mock those functions in other engines
 or to discard those tests. Considering
 LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, the tool is not
-publicly available. One fundamental issue associated with generational
-fuzzers in our context is that the tests they produce do not contain
-assertions; to enable the integration of this kind of fuzzers in our
-infrastructure, we would need to look for discrepancies across
-compiler messages.  All in all, although grammar-based fuzzers have
-been shown effective to find real
-bugs~\cite{Holler:2012:FCF:2362793.2362831}, generating valid inputs,
-albeit promising conceptually, still requires some engineering
-effort. For this reason, we did not consider those fuzzers in this
-study.
+publicly available. Another fundamental issue associated with
+generational fuzzers in our context is that the tests they produce do
+not contain assertions; to enable the integration of this kind of
+fuzzers in our infrastructure---we would need to look for
+discrepancies across compiler error messages as opposed to assertion
+violations.  All in all, although grammar-based fuzzers have been
+shown effective to find real
+bugs~\cite{Holler:2012:FCF:2362793.2362831}, we did not consider those
+fuzzers in this study for the reasons above.
 
 %% Our
 %% infrastructure supports any grammar fuzzer with a few
@@ -440,15 +439,15 @@ adds code to collect branch coverage and to monitor specific
 properties\footnote{There are options in the clang toolchain to build
   programs with fuzzing instrumentation~\cite{libfuzzer}. clang
   provides several sanitizers for property
-  checking~\cite{clang-documentation}.}. AFL use coverage to determine
+  checking~\cite{clang-documentation}.}. AFL uses coverage to determine
 inputs that uncover a new branch and hence should be fuzzed more
 whereas libFuzzer uses evolutionary generation--it tries to minimize
 the distances to still-uncovered branches of the program. AFL takes
 the instrumented program binary (say, a JS engine) and one seed input
 to that program (say, a JS program) and produces on output
 fault-revealing inputs, if found. Considering our context of
-application, we needed to instrument one runtime engine for fuzzing;
-we chose v8. Unfortunately, we found that most of the inputs produced
+application, we needed to instrument one runtime engine for fuzzing.
+We chose \veight\ for that. Unfortunately, we found that most of the inputs produced
 by AFL violate the JS grammar. Furthermore, the fuzzing task can take
 days for a single seed input and there is no simple way to guide the
 exploration\footnote{Exchanged emails with the tool author.}. That
@@ -458,21 +457,21 @@ associated with the higher layers of the compiler (\eg{}, lexer and
 parser). It is worth mentioning that Google mitigates that problem
 with libFuzzer by asking developers to create fuzz targets for
 specific program
-functions\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although
-that approach has shown very effective, it requires domain knowledge
-to create the calling context to invoke the fuzz target. For those
-reasons, coverage-based fuzzers were not considered in this study.
+functions~\cite{libFuzzer-tutorial-google,libFuzzer-chromium-google}. Although
+that approach has shown to be effective, it requires domain knowledge
+to create the calling context to invoke the fuzz target. For that, we
+decide not to consider coverage-based in this study.
 
 We used two black-box mutational fuzzers in this
 study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
 fuzzers require no instrumentation and domain-knowledge. They mutate
 \emph{existing} inputs randomly. The strength of the approach is
 limited by the quality of the test suite and the supported mutation
-operators, which are typically simple. We chose \radamsa\ and
-\quickfuzz\ \Fix{...elaborate...} \Mar{I mention below that these
-  fuzzers ``only make valid changes in literals of the
-  language''. Please confirm and explain that still this is
-  interesting!}
+operators, which are typically simple. We chose these specific fuzzers
+because, conceptually, one complements the other. \quickfuzz\ creates
+mutations like \radamsa. In contrast to \radamsa, \quickfuzz\ is aware
+of the \js\ syntax; it is able to replace subtrees of the syntax
+tree~\cite{grieco2016quickfuzz} with trees created anew.
 
 \section{Differential Testing Infrastructure}
 \label{sec:design}
