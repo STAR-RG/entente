@@ -18,11 +18,11 @@
 %Should I Fuzz my Inputs or Improve my Tests? 
 \title{Leveraging Diversity to Find Bugs\\ in JavaScript Engines}
 
-\author{
-\IEEEauthorblockN{Igor Sim\~oes\qquad{}Marcelo d'Amorim}
-\IEEEauthorblockA{Federla University of Pernambuco, Brazil\\
-\{isol2,damorim\}@cin.ufpe.br}
-}
+%% \author{
+%% \IEEEauthorblockN{Igor Sim\~oes\qquad{}Marcelo d'Amorim}
+%% \IEEEauthorblockA{Federla University of Pernambuco, Brazil\\
+%% \{isol2,damorim\}@cin.ufpe.br}
+%% }
 
 \maketitle
 
@@ -106,21 +106,26 @@ example, Mozilla runs JS files\footnote{These files are created with
   the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
   ``compare\_jit'' from funfuzz.} against different configurations of
 a given build of their \smonkey\ engine (\eg{}, trying to enable or
-not eager JIT compilation). As the same engine is used, test outcomes are
-expected to be identical. Mozilla uses this approach since 2002 and
-have been able to find over 270 bugs since
-then~\cite{jsfunfuzz-at-mozilla}, including security
+not eager JIT compilation). As the same engine is used in this
+scenario, test outcomes are expected to be identical. The Mozilla team
+uses this approach since 2002; they have been able to find over 270
+bugs since then~\cite{jsfunfuzz-at-mozilla}, including security
 bugs. Cross-engine differential testing, in contrast, has not been
-popularized to similar extent. One possible reason is that it is still
-not practical to fully automate the technique. In contrast to other
+very popularized. One possible reason is that it is still not
+practical to fully automate the technique. In contrast to other
 applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
-(see Table~\ref{tab:false-positives}). Recently, Patra and
-Pradel~\cite{patra2016learning} explored the idea. They proposed a
-language-agnostic fuzzer to find cross-browser HTML+JS
-discrepancies. Their main contribution is analytical whereas our main
-contribution is empirical--goal is to evaluate ability and cost of
-simple diversity-aware approaches to find bugs in \js\ engines.
+(see Tables~\ref{fig:piecharts-transplantation} and
+~\ref{tab:false-positives}).
+
+%% Recently, Patra and
+%% Pradel~\cite{patra2016learning} proposed a language-agnostic fuzzer to
+%% find cross-browser HTML+JS discrepancies. The main difference of our
+%% work to theirs is in goal; our goal is to evaluate ability and cost of
+%% simple diversity-aware approaches to find bugs in \js\ engines.
+
+%% Their main contribution was
+%% analytical whereas our main contribution is empirical--
 
 \emph{Results.}~\Fix{REVISE}We considered engines from four major players--Apple,
 Google, Microsoft, and Mozilla. Our results indicate that both
@@ -261,18 +266,16 @@ reporting old and already-fixed bugs to developers.
 \begin{table}[t]
   \centering
   \caption{\label{tab:engines}Engines analyzed.}
-  \begin{tabular}{cccr}
+  \begin{tabular}{cccrr}
     \toprule
-    Team & Name & URL & \# Stars \\
+    Team & Name & URL & \# Stars  & DOB \\
     \midrule
-    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} & \multicolumn{1}{c}{3300+} \\
-    Google & \veight{} & \cite{v82018repo} & 9800+ \\
-%    \jerry{} & \jerry{} & \cite{jerryscript2018repo} & 3100+ \\
-    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ \\
-%    Moddable & XS & \cite{xs2018repo} & 140+ \\
-    %% \midrule
-    %% \multirow{2}{*}{Mozilla} & Rhino & \cite{rhino2018repo} & 1800+ \\
-    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} & \multicolumn{1}{c}{1100+} \\
+    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} &
+    \multicolumn{1}{c}{3300+} & Jun 2001\\
+    Google & \veight{} & \cite{v82018repo} & 9800+ & Jun 2008\\
+    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009\\
+    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} &
+    \multicolumn{1}{c}{1100+} & Mar 1996\\
    \bottomrule     
   \end{tabular}
 \end{table}
@@ -470,11 +473,11 @@ decide not to consider coverage-based in this study.
 We used two black-box mutational fuzzers in this
 study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
 fuzzers require no instrumentation and domain-knowledge. They mutate
-\emph{existing} inputs randomly. The strength of the approach is
+existing inputs randomly. The strength of the approach is
 limited by the quality of the test suite and the supported mutation
 operators, which are typically simple. We chose these specific fuzzers
 because, conceptually, one complements the other. \quickfuzz\ creates
-mutations like \radamsa. In contrast to \radamsa, \quickfuzz\ is aware
+mutations like \radamsa. However, in contrast to \radamsa, \quickfuzz\ is aware
 of the \js\ syntax; it is able to replace subtrees of the syntax
 tree~\cite{grieco2016quickfuzz} with trees created anew.
 
@@ -719,14 +722,13 @@ knowledge among \js\ developers.
 \vspace{0.5ex}
 \subsubsection{Methodology}
 \label{sec:methodology}
-In this experiment we analyzed each failure observed in a test
-execution. A developer with experience in \js\ analyzed each files in
-separate and classified the failure as potentially fault-revealing or
-not (\ie{}, a false positive). The co-authors supervised the
-classification process as to validate correctness. For the cases the
+In this experiment, a developer with experience in \js\ analyzed each
+test file that reveals failure in a given engine and classified that
+file as potentially fault-revealing or not. The co-authors supervised
+the classification process to validate correctness. For the cases the
 developer classified the failures as potentially fault-revealing, one
-of the co-authors carefully inspected the case and reported the bug
-(or re-classified the failure as a false alarm).
+of the co-authors carefully inspected the case and reported the bug,
+if confirmed, or re-classified the failure as a false alarm.
 
 \vspace{0.5ex}
 \subsubsection{Results}
@@ -819,98 +821,126 @@ the target engine yet. For example, at the time of writing, \chakra{}
 does not implement by default various properties from the
 \mcodeid{Symbol} object. These properties are only available
 activating the ES6 experimental mode with the flag
-\CodeIn{-ES6Experimental}. \Mar{revise this.}\textbf{Unknown.} This
+\CodeIn{-ES6Experimental}. \Mar{pela explicacao de
+  ``compile-in-all'', isto nao faz sentido.$\rightarrow$} \textbf{Non-Standanrd Element.} This kind
+corresponds to the cases the test case relies on some non-standard
+function or property of a standard object. \Mar{revise this.$\rightarrow$}\textbf{Unknown.} This
 category includes the cases we were unable to confidently diagnose the
 failure but we suspected it was a false alarm.
 
-\begin{figure}[h]
+%% \begin{figure}[h]
+%%   \centering
+%%   \subfloat[\label{fig:falsepositives}False Positives]{%
+%%     \includegraphics[trim=0 150 0 100,clip,width=0.4\textwidth]{R/piecharts/falsepositives}
+%%   }
+%%   \label{1a}\hfill
+%%   \subfloat[\label{fig:truepositives}True Positives]{%
+%%     \includegraphics[trim=0 150 0 150,clip,width=0.4\textwidth]{R/piecharts/truepositives}    
+%%   }
+%%   \label{1b}\\
+%%   \caption{\label{fig:piecharts-transplantation}False and True positives.}
+%% \end{figure}
+
+\begin{table}[h!]
+  \setlength{\tabcolsep}{4pt}    
   \centering
-  \subfloat[\label{fig:falsepositives}False Positives]{%
-    \includegraphics[trim=0 150 0 100,clip,width=0.4\textwidth]{R/piecharts/falsepositives}
-  }
-  \label{1a}\hfill
-  \subfloat[\label{fig:truepositives}True Positives]{%
-    \includegraphics[trim=0 150 0 150,clip,width=0.4\textwidth]{R/piecharts/truepositives}    
-  }
-  \label{1b}\\
-  \caption{\label{fig:piecharts-transplantation}False and True positives.}
-\end{figure}
+  \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution of false and true positives.}
+  \begin{tabular}{ccr}
+    \toprule
+    & source &  \#\\
+    \midrule
+    \multirow{5}{*}{False Positives} & Undefined Behavior & 313 \\
+    & Timeout/OME & 13 \\
+    & Not Implemented & 21 \\
+    & Non-Standard Element & \Fix{132} \\
+    & Unknown & \Fix{-} \\
+    \midrule
+    \multirow{2}{*}{True Positives} & Duplicate & 9 \\
+    & Bug & 24 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
-
-The piecharts from Figure~\ref{fig:piecharts-transplantation} show the
-distribution of false and true positives in this experiment. The
-piechart at the top shows false alarms. The absolute number of tests
-in each category is shown in parentheses to the right-side of each
-slice label naming the source of false positive.  We observed that
-``Unknown'' and ``Undefined'' were the most predominant
-sources. Considering true positives, we found a reasonable number of
-duplicate reports, but not enough high to justify attempting to
-automate the detection of duplicates.
+%%  The piechart at the top
+%% shows false alarms. The absolute number of tests in each category is
+%% shown in parentheses to the right-side of each slice label naming the
+%% source of false positive.  
 
 
 \begin{table}[t!]
-\setlength{\tabcolsep}{2pt}    
+\setlength{\tabcolsep}{5pt}    
 %  \vspace{-3ex}
 %  \scriptsize
   \centering
   \caption{List of bug reports issued as result of test
     transplantation. Url columns anonymized.}
   \label{tab:test-transplantation-bugs}
-  \begin{tabular}{cccccccc}
-    \toprule Issue\#    & Date & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
+  \begin{tabular}{rcccccc}
+    \toprule Issue\#\Comment{    & Date} & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
     \midrule    
-    1  & 4/18  & JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & - & \jerry{}      \\
-   2  & 4/23 & \chakra{}  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5033}{\#5033}} & 2 & \smonkey{}      \\
-   3  & 4/29 & \chakra{}  & \textbf{Confirmed}   &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5065}{\#5065}} & 2 & \smonkey{} \\
-   \midrule
-    \multirow{2}{*}{4}  & \multirow{2}{*}{4/29} & \chakra{} & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5067}{\#5067}} & 2 & \multirow{2}{*}{\smonkey{}}\\
-                       &  &
+    1  \Comment{& 4/18  }& JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & - & \jerry{}      \\
+   2  \Comment{& 4/23 }& \chakra{}  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5033}{\#5033}} & 2 & \smonkey{}      \\
+
+   3  \Comment{& 4/29 }& \chakra{}  & \textbf{Confirmed}   &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5065}{\#5065}}
+    & 2 & \smonkey{} \\
+    
+    \multirow{2}{*}{4}\Comment{& \multirow{2}{*}{4/29}} & \chakra{} & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5067}{\#5067}} & 2 & \multirow{2}{*}{\smonkey{}}\\
+                       &\Comment{  &}
     JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &  -  & \\
-   \midrule
-   5 & 5/02  & \jsc{} & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
-   6 & 5/17  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}} & 2 & \jsc{}\\
-   7 & 5/21  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
-   8 & 6/28  & \chakra{} & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}} & 2 & \jsc{}\\
-   9 & 7/10  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}} & 2 & \jerry{}\\
-   10 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
-   11 & 7/18  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
-   12 & 7/18  & \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5549}{\#5549}} & 2 & \jerry{}\\
-   13 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
-   14 & 8/07  & \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
-   15 & 8/07  & \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
-   16 & 8/07  & \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
-   17 & 8/08  & \veight{} & \textbf{Fixed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
-   18 & 8/08  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
-   19 & 8/16  & \veight{} & WontFix & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8064}{\#8064}} & 2 & Duktape\\
-   20 & 8/22  & \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5621}{\#5621}} & 2 & \smonkey{}\\
-   21 & 8/22  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188874}{\#188874}} & - & \smonkey{}\\
-   22 & 8/22  & \jsc{} & New &  & - & \smonkey{}\\
-   \midrule
-    \multirow{3}{*}{23}  & 
-    \multirow{3}{*}{8/22} & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188875}{\#188875}} & - & \multirow{3}{*}{\smonkey{}}\\
-    &  &
+   5 \Comment{& 5/02  }& \jsc{} & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
+   6 \Comment{& 5/17  }& \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}} & 2 & \jsc{}\\
+   7 \Comment{& 5/21  }& \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
+   8 \Comment{& 6/28  }& \chakra{} & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}} & 2 & \jsc{}\\
+   9 \Comment{& 7/10  }& \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}} & 2 & \jerry{}\\
+   10 \Comment{& 7/18  }& \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
+   11 \Comment{& 7/18  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
+   12 \Comment{& 7/18  }& \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5549}{\#5549}} & 2 & \jerry{}\\
+   13 \Comment{& 8/07  }& \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
+   14 \Comment{& 8/07  }& \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
+   15 \Comment{& 8/07  }& \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
+   16 \Comment{& 8/07  }& \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
+   17 \Comment{& 8/08  }& \veight{} & \textbf{Fixed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
+   18 \Comment{& 8/08  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
+   19 \Comment{& 8/16  }& \veight{} & WontFix & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8064}{\#8064}} & 2 & Duktape\\
+   20 \Comment{& 8/22  }& \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5621}{\#5621}} & 2 & \smonkey{}\\
+   21 \Comment{& 8/22  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188874}{\#188874}} & - & \smonkey{}\\
+   22 \Comment{& 8/22  }& \jsc{} & New & \anonym{\href{?????????????????????}{???}} & - & \smonkey{}\\
+%   \midrule
+    \multirow{3}{*}{23}\Comment{& 
+    \multirow{3}{*}{8/22}} & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188875}{\#188875}} & - & \multirow{3}{*}{\smonkey{}}\\
+    &  \Comment{&}
     \veight{} & New & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8082}{\#8082} } &  -  & \\
-    &  &
+    &  \Comment{&}
     \chakra{} & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5624}{\#5624} } &  -  & \\
-   \midrule
-   24 & 8/23  & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188877}{\#188877}} & - & \smonkey{}\\
+%   \midrule
+   24 \Comment{& 8/23  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188877}{\#188877}} & - & \smonkey{}\\
    \bottomrule
   \end{tabular}
 \end{table}
 
+Table~\ref{fig:piecharts-transplantation} shows the distribution of
+false and true positives. Considering false positives, ``Undefined
+Behavior'' and ``Non-Standard Element'' were the most predominant
+sources. Considering true positives, we found a reasonable number of
+duplicate reports, but not enough high to justify attempting to
+automate the detection of duplicates.
 Table~\ref{tab:test-transplantation-bugs} lists all bugs we found with
 test transplantation. The first column shows the identifier we
-assigned to the bug, column ``Date'' shows the date the bug was
-reported in the format ``m/dd'', column ``Engine'' shows the affected
-engine, column ``Status'' indicates the status of the bug report at
-the time of the writing (\eg{},``New'', ``Rejected'', ``Confirmed'',
-''Fixed''), column ``Url'' shows the web address for the bug report
-entry in the bug tracking system (de-anonymized upon request), column
-``Severity'' shows the severity level for confirmed bugs, and,
-finally, column ``Suite'' shows the name of the engine that originated
-the test. Considering severity levels, it is important to note that
-\jsc{} uses five levels~\cite{jsc-severity} whereas
+assigned to the bug\Comment{, column ``Date'' shows the date the bug
+  was reported in the format ``m/dd'',} column ``Engine'' shows the
+affected engine, column ``Status'' indicates the status of the bug
+report at the time of the writing (\eg{},``New'', ``Rejected'',
+``Confirmed'', ``Fixed''). The status string appear in bold face for
+status ``Confirmed'' or higher (\ie{}, ``Assigned'' or ``Fixed'').
+Column ``Url'' shows the URL (de-anonymized upon request) for the bug report entry in the
+corresponding bug-tracking system, column ``Severity''
+shows the severity level for confirmed bugs, and, finally, column
+``Suite'' shows the name of the engine that originated the
+test. Note that bug reports \#4 and \#23 afected multiple engines.
+
+Considering severity levels, it is important to note that \jsc{}
+uses five levels~\cite{jsc-severity} whereas
 \chakra{}~\cite{chakra-severity} and
 \smonkey{}~\cite{mozilla-severity} use only two. As usual, the
 smallest the severity value the highest the severity of the bug. We
@@ -1067,6 +1097,7 @@ failures) compared to other engines.
 %\veight\ and \smonkey. 
 
 \begin{table}[h]
+  \setlength{\tabcolsep}{5pt}
   \centering
   \caption{\label{tab:summary-hi}Number of \hi\ warning
     reports per engine.\Fix{falta add test262}}
@@ -1088,27 +1119,32 @@ highlighted with a ``*'' in the table. The source ``Invalid Input''
 indicates that the test input violated some part of the
 specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
-sensitive to function specifications. \Igor{devemos remover isso da 
-etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
-The source ``Upcoming Feature''
-indicates that the test fails because it uses a feature that is
-available in the original engine, but it is still not standard, and
-the target engine does not support that feature}. For example,
-\Fix{provide concrete example}. \Fix{explain error message mismatch}
+sensitive to function specifications.
+
+%% \Igor{devemos remover isso da 
+%% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
+%% The source ``Upcoming Feature''
+%% indicates that the test fails because it uses a feature that is
+%% available in the original engine, but it is still not standard, and
+%% the target engine does not support that feature}. For example,
+%% \Fix{provide concrete example}. \Fix{explain error message mismatch}
 
 \begin{table}[h]
   \centering
   \caption{\label{tab:false-positives}Distribution of false
-    positives buckets per source.}
-  \begin{tabular}{crr}
+    and true positives.}
+  \begin{tabular}{ccrr}
     \toprule
-    & \radamsa\ & \quickfuzz\ \\
-    Undefined Behavior & 18 & - \\
-    Timeout/OME & 23 & - \\
-    Not Implemented & 19 & - \\
-    * Invalid Input & 10 & - \\    
-    % * Upcoming Feature & - & - \\
-    * Error Message Mismatch & 3 & - \\        
+    & & \radamsa\ & \quickfuzz\ \\
+    \midrule
+    \multirow{5}{*}{False Positives} & Undefined Behavior & 18 & - \\
+    & Timeout/OME & 23 & - \\
+    & Not Implemented & 19 & - \\
+    & * Invalid Input & 10 & - \\    
+    & * Error Message Mismatch & 3 & - \\
+    \midrule
+    \multirow{2}{*}{True Positives} & Duplicate & - \\
+    & Bug & - \\
     \bottomrule     
   \end{tabular}
 \end{table}
@@ -1157,72 +1193,67 @@ were not reported.
     Issue\#    & Date & Fuzz & Engine  & Status  &
     \multicolumn{1}{c}{Url}  & Severity & Priority & Suite \\
     \midrule
-    \multicolumn{9}{c}{\emph{Exploratory Phase}} \\
-    \midrule    
+%    \multicolumn{9}{c}{\emph{Exploratory Phase}} \\
+%    \midrule    
     1  & 4/12 & radamsa & \chakra{}   & \textbf{Fixed}  &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4978}{\#4978}}
-    & 2 & LO & \jsc{} \\ 
+    & 2 & \lo{} & \jsc{} \\ 
     2  & 4/12 & radamsa & \chakra{}   & Rejected  &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4979}{\#4979}}
-    & - & HI & \jsc{} \\
+    & - & \hi{} & \jsc{} \\
     3  & 4/14 & radamsa & JavascriptCore  & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
-    } & -  & HI & \jsc{}    \\
+    } & -  & \hi{} & \jsc{}    \\
     4  & 4/25 & radamsa & \chakra{}  & \textbf{Fixed}     &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5038}{\#5038}}
-    & 2 & HI & \jerry{}   \\
+    & 2 & \hi{} & \jerry{}   \\
     5  & 4/29 & radamsa & JavascriptCore  & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
-    } & 2  & HI  & \jerry{}\\
-    \midrule
+    } & 2  & \hi{}  & \jerry{}\\
     \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
     \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}
-    & 2 & \multirow{2}{*}{HI} & \multirow{2}{*}{TinyJS}\\    
+    & 2 & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{TinyJS}\\    
                         &                        &        &
     JavascriptCore & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
     & - &  & \\
-    \midrule
     7 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
-    & 2 & LO & \smonkey{} \\
+    & 2 & \lo{} & \smonkey{} \\
     8 & 5/10 & radamsa & \chakra{} & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}
-    & 3 & HI & \jerry{} \\
+    & 3 & \hi{} & \jerry{} \\
     9 & 5/17 & radamsa & \chakra{} & \textbf{Fixed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}
-    & 2 & HI & \veight{}\\
+    & 2 & \hi{} & \veight{}\\
     10 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
-    & 2 & HI & \jsc{}\\
+    & 2 & \hi{} & \jsc{}\\
     11 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
-    & 2 & HI & \jerry{}\\
+    & 2 & \hi{} & \jerry{}\\
     12 & 7/10 & quickfuzz & \jsc{} & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
-    & 2 & HI & \jerry{}\\
+    & 2 & \hi{} & \jerry{}\\
     13 & 7/10 & quickfuzz & \chakra{} & \textbf{Confirmed}  &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}
-    & 2 & HI & \jerry{}\\
-    \midrule        
-    \multicolumn{9}{c}{\emph{Non-Exploratory Phase}} \\
-    \midrule
+    & 2 & \hi{} & \jerry{}\\
+%    \multicolumn{9}{c}{\emph{Non-Exploratory Phase}} \\
     \multirow{2}{*}{14} & \multirow{2}{*}{8/21}  &
     \multirow{2}{*}{radamsa} & \chakra{} & New &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5617}{\#5617}}
-    & - & \multirow{2}{*}{HI} & \multirow{2}{*}{Test262}\\    
+    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
     & & &
-    \veight{} & New &
+    \veight{} & \textbf{Confirmed} &
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}
     & - &  & \\
-    \midrule
     15 & 8/23 & quickfuzz & \jsc{} & New  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}
-    & - & HI & Test262\\
-    15 & 8/23 & quickfuzz & \veight{} & New  &
+    & - & \hi{} & Test262\\
+    16 & 8/23 & quickfuzz & \veight{} & New  &
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}
-    & - & HI & Test262\\
+    & - & \hi{} & Test262\\
    \bottomrule
   \end{tabular}
 \end{table*}
@@ -1258,7 +1289,7 @@ other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 
 \subsection{False Positives}
 
-An example of a warning from the HI group is defined in Figure~\ref{fig:hi-priority}. 
+An example of a warning from the \hi{} group is defined in Figure~\ref{fig:hi-priority}. 
 This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
 initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
 integer 3 to a big integer number. We reported this case in \chakra{} due a core dumps that occurs
@@ -1284,7 +1315,7 @@ if (!test())
   throw new Error("Test failed");
   \end{lstlisting}
   \normalsize
-  \caption{Warning captured as HI priority.}
+  \caption{Warning captured as \hi{} priority.}
   \label{fig:hi-priority}
   \end{figure}
 
@@ -1329,17 +1360,17 @@ if (!test())
 \subsection{Testing \js{} Engines}
 \label{sec:testing-js-engines}
 The closest work to ours was done by Patra and
-Pradel~\cite{patra2016learning}, where they proposed a
-language-agnostic fuzzer to find cross-browser HTML+JS
-discrepancies. Their work aims at building and evaluating an
-infrastructure for differential testing of runtime engines, such as JS
-engines nd WebAssembly engines. The sensible parts of the
-infrastructure are the checks of input validity (as to reduce
-waste/cost) and output correctness (as to reduce false
-positives). Patra and Pradel work differs from ours in that their main
-contribution is analytical whereas our main contribution is
-empirical--we aim at assessing reliability of \js\ engines and find
-bugs on them using simple approaches, such as test transplantation.
+Pradel~\cite{patra2016learning}. Their work proposes a
+language-agnostic fuzzer to findcross-browser HTML+JS
+discrepancies. Their fuzzer can be used to find bugs in JS engines and
+WebAssembly engines. The sensible parts of the infrastructure they
+built are the checks of input validity (as to reduce waste/cost) and
+output correctness (as to reduce false positives). Patra and Pradel
+work is complementary to ours--in principle, we could use their fuzzer
+in our evaluation. The main difference of our work to theirs is in
+goal--we aim at assessing reliability of \js\ engines and find bugs on
+them using simple approaches whereas they aim at proposing a new
+technique.
 
 Fuzzing is an active area of investigation with development of new
 techniques both in academia and industry. Several fuzzing tools exist
