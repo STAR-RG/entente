@@ -42,16 +42,17 @@ JavaScript; Diversity; Software Testing
 
 \section{Introduction}
 
-JavaScript (\js{}) is today one of the most popular programming
-languages around~\cite{business-insider,stackify}, with penetration in
-various segments including, web development, mobile, and, more
-recently, the Internet of Things~(IoT)~\cite{simply-technologies}. The
-interest of the community for the language encourages constant
-improvements in its specification and implementations. It is natural
-to expect that such improvements lead to sensible changes in engine
-implementation. In fact, even small changes can have high practical impact. For
-example, in October 2014 a new attribute added to Array objects
-resulted in the MS Outlook Calendar web app stop working under
+JavaScript (\js{}) is one of the most popular programming languages
+today~\cite{redmonk-javascript,business-insider,stackify}, with
+penetration in various segments including, web development, mobile,
+and, more recently, the Internet of
+Things~(IoT)~\cite{simply-technologies}. The interest of the community
+for the language encourages constant improvements in its specification
+and implementations. It is natural to expect that such improvements
+lead to sensible changes in engine implementation. In fact, even small
+changes can have high practical impact. For example, in October 2014 a
+new attribute added to Array objects resulted in the MS Outlook
+Calendar web app failing under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
 
 Finding bugs in \js\ engines is an important problem given the range
@@ -59,17 +60,17 @@ of applications that could be affected with those
 bugs. It\Comment{Finding bugs in \js\ engines} is also
 challenging. For example, a test that passes in one engine could
 legitimately fail in a different engine because of some undefined
-behavior in the spec\footnote{These cases of undefined behavior can be
-  localized by searching for the string ``implementation-dependent''
-  in the ES6 spec document~\cite{ecmas262-spec}.}. As another example,
-a test may fail because the engine does not fully implement some
-feature. The publicly-available Kangax compatibility
-table~\cite{kangax} relates \js\ features with the engines that
-support them. To sum, it is often non-trivial to assess if a test
-fails because of a bug or because of some other reason making test
-automation more challenging. Intuitively, developing reliable engines
-is difficult because specifications are intentionally incomplete--for
-development flexibility--and evolve frequently.
+behavior in the spec. These cases of undefined behavior can be
+localized by searching for the string ``implementation-dependent'' in
+the ES6 spec document~\cite{ecmas262-spec}. As another example, a test
+may fail because the engine does not fully implement some feature. The
+publicly-available Kangax compatibility table~\cite{kangax} relates
+\js\ features with the engines that support them. To sum, it is often
+non-trivial to assess if a test fails because of a bug or because of
+some other reason making test automation more challenging. Developing
+reliable engines is difficult because specifications are intentionally
+incomplete as to enable flexibility during development and because
+they evolve frequently.
 
 %% WHAT WE DID
 This paper reports on a study we ran to evaluate the importance of
@@ -78,14 +79,18 @@ effectiveness of two complementary diversity-aware testing
 techniques. \emph{Test transplantation} leverages diversity of test
 cases to find bugs. It evaluates the effects that running \js{} test
 files from a given engine have in detecting bugs in other engines. The
-intuition is that developers design test cases differently; hence
-replaying the test in a different engine may reveal unanticipated
+intuition is that developers design test cases with different
+objectives in mind. Replaying these tests, written for a given engine,
+in a different engine may reveal unanticipated
 problems. \emph{Cross-engine differential testing} evaluates the
 ability of leveraging diversity of engine implementations to find
-bugs. More precisely, it fuzzes existing test
+bugs. More precisely, this technique fuzzes existing test
 inputs~\cite{fuzz-testing-history} and then compares the output
-produced by different engines using a differential oracle. One of
-various causes of output discrepancy is a bug.
+produced by different engines using a differential oracle. The
+intuition is that \Fix{...}
+
+%One of
+%various causes of output discrepancy is a bug.
 
 %% It automates test generation in scenarios where multiple
 %% implementations of a system exist. DT leverages diversity across
