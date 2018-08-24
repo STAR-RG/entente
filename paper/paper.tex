@@ -626,8 +626,10 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
 2. RangeError: byteOffset cannot be negative
 3. RangeError: invalid or out-of-range index
   \end{lstlisting}
-  \caption{\label{fig:lo-truepositive}True positive example of a ``\lo''
-    warning.}
+  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
+    that led to a confirmed bug report in \chakra. The bug is caused
+    by a required precondition check in the implementation of function
+    \CodeIn{ToIndex} indirectly called by the test. }
 \end{figure}
 
 \section{Results}
