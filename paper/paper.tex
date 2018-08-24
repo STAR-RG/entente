@@ -637,47 +637,51 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
 
 The goal of our study is to assess reliability of \js\ engines by
 leveraging implementation diversity. We organized our study in three
-parts. First, we report on the conformance of the engines we analyzed
-using the official Test262 conformance test suite for
-EcmaScript~\cite{ecma262-conformance-suite}
+parts. First, we report on the conformance of the engines we studied
+using the official Test262 conformance
+suite~\cite{ecma262-conformance-suite}
 (Section~\ref{sec:stability}). In the limit, bugs would have low
 relevance if the engines are too unreliable. Second, we report results
 obtained with test transplantation
-(Section~\ref{sec:transplantation}). The rationale is that the domain
-of possible inputs is too large; consequently, we expect that test
-suites written for a given engine cover scenarios and corner cases
-uncovered by another engine.\Comment{ To sum, we conjecture that test
-  cases written for one engine could reveal bugs in different engines
-  as opposed to only manifesting false alarms.} Third, we analyzed the
-impact of using cross-engine differential testing to find bugs
-(Section~\ref{sec:cross-engine-diff-testing-results}). Differential
-testing has been used in several contexts to address the oracle
-problem~\cite{barr-etal-tse2015}. Intuitively, using differential
-testing to find functional bugs across engine implementation could be
-promising.
+(Section~\ref{sec:transplantation}). The rationale is that developers
+consider different goals when writing test cases--suites written for a
+given engine should cover scenarios not covered by a different
+engine. Third, we analyzed the impact of using cross-engine
+differential testing to find bugs
+(Section~\ref{sec:cross-engine-diff-testing-results}). The rationale
+is that bugs may be detected using inputs which are similar to those
+already tested. Our broad goal is to evaluate ability of these simple
+diversity-aware techniques in bug finding.
 
 %Figure~\ref{fig:summary} summarizes the bugs we reported.
 
 \vspace{1ex}
-\noindent\textbf{Summary of Bugs.}~Figures~\ref{fig:stacked-engine}
-and~\ref{fig:stacked-technique} show bugs reports per engine and
-technique, respectively. Each stacked bar breaks down the bugs per
-status. Note that several of these bugs were already fixed and
-incorporated in the latest release of the corresponding
-engines. Overall, discarding bug report with the ``new'' status, we
-reported a total of \noBugsTotalConfirmed{} bugs. Considering the
-engines, the majority of bug reports targeted \chakra\ and
-\jsc. Considering the techniques, the number of bug reports issued
-and confirmed were similar. We found, however, that the cost of
-inspecting \Fix{...elaborate...}
+\noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows the
+number of bug reports found per engine (\ref{fig:stacked-engine}) and
+technique (\ref{fig:stacked-technique}). Each stacked bar breaks down
+the bugs per status (\eg{}, ``1-New''). The prefix number serves to
+indicate the ordering that status labels are assigned. Note that
+several of these reports have the label ``3-Fixed'', indicating that
+bug fixes have been incorporated into the code already.\Comment{
+  Depending on the issue date, the fix may be in the latest release of
+  the corresponding engines.} Overall, discarding bug report with the
+``1-New'' status, we reported a total of \noBugsTotalConfirmed{}
+bugs. We found that the majority of bug reports targeted the engines
+from Microsoft and Apple. Considering the techniques, the number of
+bug reports were similar, if we consider only those confirmed or
+fixed. Most of these bugs are of moderate severity. All in all, these
+simple techniques seem promising to improve reliability of engines
+that continuously evolve with their specifications.
 
+%% We found,
+%% however, that the cost of inspecting \Fix{...elaborate...}
 %% It is
 %% also worth noting that several of these reports hold the status
 %% ``new'', which indicates that they were not reviewed yet by the
 %% development team. Note also that we did not find bugs in the Mozilla
 %% \smonkey\ engine.
 
-\begin{figure}[t!]
+\begin{figure}[h!]
   \centering
   \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
     \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
@@ -693,8 +697,14 @@ inspecting \Fix{...elaborate...}
 \subsection{Conformance}
 \label{sec:stability}
 
-\begin{wraptable}[12]{r}{0.25\textwidth}
-  \vspace{-3ex}
+We used the official conformance test suite
+Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
+engines to the \js\ current standard. As it is acceptable to release
+engines fulfilling the specification only partially~\cite{kangax}, it
+is expected that engines do not fully pass this test. However, we
+expect that results provide indication of engine's maturity. In the
+\begin{wraptable}[10]{r}{0.25\textwidth}
+%  \vspace{-3ex}
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
@@ -710,14 +720,8 @@ inspecting \Fix{...elaborate...}
     \bottomrule
   \end{tabular}
   \normalsize
+  \vspace{-3ex}  
 \end{wraptable}
-
-We used the official conformance test suite
-Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
-engines to the \js\ current standard. As it is acceptable to release
-engines fulfilling the specification only partially~\cite{kangax}, it
-is expected that engines do not fully pass this test. However, we
-expect that results provide indication of engine's maturity. In the
 limit, it is not desirable to flood bug reports on engines at early
 stages of development. We ran the suite once a day for seven
 consecutive days from the period of 16 to 22 of August,
@@ -740,6 +744,7 @@ possible to find correlation between the percentage of passing tests
 in the conformance suite (as per Table~\ref{tab:test262}) and reliability as
 measured by the number of bugs found (as per
 Figure~\ref{fig:summary}), we do not not imply causality.
+
 
 \subsection{Test Transplantation}
 \label{sec:transplantation}
