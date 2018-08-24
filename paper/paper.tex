@@ -186,7 +186,7 @@ ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 %% A compatibility table relating features and supporting engines is
 %% publicly available~\cite{kangax}.
 
-Both the specification and implementation of JavaScript are
+The specification and implementation of JavaScript are
 incomplete. Certain parts of the specification are undefined; it is
 responsibility of engine engineers to decide how to implement these
 functionalities. The JavaScript spec uses the label
@@ -194,27 +194,23 @@ functionalities. The JavaScript spec uses the label
 may differ from engine to engine. One reason this flexibility in the
 spec exists is to enable compiler optimizations. For example, the
 \mcodeid{for-in} loop does not clearly specify the iteration
-order~\cite{so-forin-undefined,javascript-in-chrome} and different
-engines capitalize on that~\cite{for-in-undefined}.  As another
-example, the latest version of the \es{} specification states that if
-the \mcodeid{Number.toPrecision()} function is called with more than
-one argument, then the behavior is
+order of elements~\cite{so-forin-undefined,javascript-in-chrome} and different
+engines capitalize on that for optimization~\cite{for-in-undefined}.  As another
+example, the specification states that if
+the \mcodeid{Number.toPrecision()} function is called with multiple arguments then the floating-point approximation is
 implementation-dependent~\cite{es6-toPrecision}. Various other cases
 like these exist in the specification. Such gap also exists at the
 implementation level. Given the speed the specification changes and
 the complexity of the language some features are not fully implemented
 as can be observed by the Kangax compatibility table~\cite{kangax}.
-
-\sloppy It is also worth noting that, as in other languages, some
+It is also worth noting that, as in other languages, some
 elements in JS have non-deterministic behavior (\eg{},
 \mcodeid{Math.random} and \mcodeid{Date}). A test that make decisions
 based on these elements could, in principle, produce different
 outcomes on different runs. Carefully-written test cases should not
 manifest this kind of
-flakiness~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
-fuzzed test files could are more likely, intuitively, to manifest
-them.
-
+flaky behavior~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
+fuzzed are more likely to manifest them.
 As mentioned previously, all those aspects make testing \js\ engines
 more challenging.
 
