@@ -632,30 +632,48 @@ problem~\cite{barr-etal-tse2015}. Intuitively, using differential
 testing to find functional bugs across engine implementation could be
 promising.
 
-\vspace{1ex}
-\noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows a
-summary of the bugs we reported. The figure shows the distribution of
-status of bug reports per engine. Note that several of these reports
-hold the status ``new'', which indicates that they were not reviewed
-yet by the development team. Note also that we did not find bugs in
-the Mozilla \smonkey\ engine and that several of the bugs we reported
-were already fixed and incorporated in the latest release of
-corresponding engines. Overall, discarding bug report with the ``new''
-label, we reported \noBugsTotalConfirmed{} bugs.
+%Figure~\ref{fig:summary} summarizes the bugs we reported.
 
-\begin{figure}[h]
+\vspace{1ex}
+\noindent\textbf{Summary of Bugs.}~Figures~\ref{fig:stacked-engine}
+and~\ref{fig:stacked-technique} show bugs reports per engine and
+technique, respectively. Each stacked bar breaks down the bugs per
+status. Note that several of these bugs were already fixed and
+incorporated in the latest release of the corresponding
+engines. Overall, discarding bug report with the ``new'' status, we
+reported a total of \noBugsTotalConfirmed{} bugs. Considering the
+engines, the majority of bug reports targeted \chakra\ and
+\jsc. Considering the techniques, the number of bug reports issued
+and confirmed were similar. We found, however, that the cost of
+inspecting \Fix{...elaborate...}
+
+%% It is
+%% also worth noting that several of these reports hold the status
+%% ``new'', which indicates that they were not reviewed yet by the
+%% development team. Note also that we did not find bugs in the Mozilla
+%% \smonkey\ engine.
+
+\begin{figure}[t!]
   \centering
-  \includegraphics[trim=0 120 0 150,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked}  
-  \caption{\label{fig:summary}Summary of bug reports per engine and status.}
+  \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
+    \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
+    \vspace{-5ex}
+  }\\
+  \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
+    \includegraphics[trim=0 180 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
+    \vspace{-5ex}        
+  }
+  \caption{\label{fig:summary}Summary of bug reports.}
 \end{figure}
 
 \subsection{Conformance}
 \label{sec:stability}
 
-\begin{wraptable}[12]{r}{0.25\textwidth}  
+\begin{wraptable}[12]{r}{0.25\textwidth}
+  \vspace{-3ex}
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
-    the Test262 conformance suite.\Mar{Please, use percentages.}}
+    the Test262 conformance suite.}
   \small
   \begin{tabular}{crr}
     \toprule
@@ -663,16 +681,12 @@ label, we reported \noBugsTotalConfirmed{} bugs.
     \midrule
     \jsc{} & 92\%\\
     \veight{} & 95\% \\
-    \chakra{} & 75\% \\
+    \chakra{} & 75\% \\    
     \smonkey{} & 93\% \\
-    \bottomrule 
+    \bottomrule
   \end{tabular}
   \normalsize
 \end{wraptable}
-
-%% It is important to note that failures are
-%% expected as it takes time for engines to adjust to the
-%% spec.
 
 We used the official conformance test suite
 Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
@@ -699,16 +713,9 @@ missing features as opposed to bugs. However, note that \chakra\ is
 both the engine that has the lowest passing ratio in the conformance
 test suite and the one we were able to find more bugs. Although it is
 possible to find correlation between the percentage of passing tests
-in Test262 (as per Table~\ref{tab:test262}) and reliability as
+in the conformance suite (as per Table~\ref{tab:test262}) and reliability as
 measured by the number of bugs found (as per
-Figure~\ref{fig:summary}), we do not not expect causality. We
-conjecture that the development age of the engine--Chakra is the
-newest engine\Fix{find DOB of Chakra}--justify the incidental
-correlation.
-
-%% The rationale is that lack of support
-%% to features (as measured by conformance testing) and reliability of
-%% engines (as measured in this study) may have some relationship. 
+Figure~\ref{fig:summary}), we do not not imply causality.
 
 \subsection{Test Transplantation}
 \label{sec:transplantation}
