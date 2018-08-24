@@ -47,3 +47,4 @@ Issue    Source   Engine    Status
 17       Diff     V8    "2-Confirmed"
 18       Diff     Chakra    "1-New"
 19       Diff     JavaScriptCore    "1-New"
+20       Diff     JavaScriptCore    "1-New"
