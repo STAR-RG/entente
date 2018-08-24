@@ -1,0 +1,95 @@
+\begin{table*}[h!]
+  \vspace{-3ex}
+%  \scriptsize
+  \centering
+  \caption{List of bug reports issued as result of cross-engine
+    differential testing.}
+  \label{tab:bugs}
+  \begin{tabular}{ccccccccc}
+    \toprule
+    Issue\#    & Date & Fuzz & Engine  & Status  &
+    \multicolumn{1}{c}{Url}  & Severity & Priority & Suite \\
+    \midrule
+%    \multicolumn{9}{c}{\emph{Exploratory Phase}} \\
+%    \midrule    
+    1  & 4/12 & radamsa & \chakra{}   & \textbf{Fixed}  &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4978}{\#4978}}
+    & 2 & \textbf{\lo} & \jsc{} \\ 
+    2  & 4/12 & radamsa & \chakra{}   & Rejected  &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4979}{\#4979}}
+    & - & \hi{} & \jsc{} \\
+    3  & 4/14 & radamsa & \jsc{}  & New &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
+    } & -  & \hi{} & \jsc{}    \\
+    4  & 4/25 & radamsa & \chakra{}  & \textbf{Fixed}     &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5038}{\#5038}}
+    & 2 & \hi{} & \jerry{}   \\
+    5  & 4/29 & radamsa & \jsc{}  & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
+    } & 2  & \hi{}  & \jerry{}\\
+    
+    \midrule
+    \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
+    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}
+    & 2 & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{TinyJS}\\    
+                        &                        &        &
+    \jsc{} & New &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
+    & - &  & \\
+    \midrule
+
+    
+    7 & 5/02 & radamsa & \jsc{}  & \textbf{Fixed} &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
+    & 2 & \textbf{\lo} & \smonkey{} \\
+    8 & 5/10 & radamsa & \chakra{} & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}
+    & 3 & \hi{} & \jerry{} \\
+    9 & 5/17 & radamsa & \chakra{} & \textbf{Fixed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}
+    & 2 & \hi{} & \veight{}\\
+    10 & 5/24 & radamsa & \jsc{} & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
+    & 2 & \hi{} & \jsc{}\\
+    11 & 6/26 & radamsa & \jsc{} & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
+    & 2 & \hi{} & \jerry{}\\
+    12 & 7/10 & quickfuzz & \jsc{} & \textbf{Fixed}  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
+    & 2 & \hi{} & \jerry{}\\
+    13 & 7/10 & quickfuzz & \chakra{} & \textbf{Confirmed}  &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}
+    & 2 & \hi{} & \jerry{}\\
+    %    \multicolumn{9}{c}{\emph{Non-Exploratory Phase}} \\
+
+    \midrule
+    \multirow{2}{*}{14} & \multirow{2}{*}{8/21}  &
+    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5617}{\#5617}}
+    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
+    & & &
+    \veight{} & \textbf{Confirmed} &
+    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}
+    & 2 &  & \\
+    \midrule
+    
+    15 & 8/23 & quickfuzz & \jsc{} & New  &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}
+    & - & \hi{} & Test262\\
+    16 & 8/23 & quickfuzz & \veight{} & New  &
+    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}
+    & - & \hi{} & Test262\\
+
+    \midrule
+    \multirow{2}{*}{17} & \multirow{2}{*}{8/24}  &
+    \multirow{2}{*}{quickfuzz} & \chakra{} & New &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5630}{\#5630}}
+    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
+    & & & 
+    \jsc{} & New &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188920}{\#188920}}
+    & - &  & \\
+   \bottomrule
+  \end{tabular}
+\end{table*}

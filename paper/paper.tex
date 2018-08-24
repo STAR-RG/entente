@@ -186,7 +186,7 @@ ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 %% A compatibility table relating features and supporting engines is
 %% publicly available~\cite{kangax}.
 
-Both the specification and implementation of JavaScript are
+The specification and implementation of JavaScript are
 incomplete. Certain parts of the specification are undefined; it is
 responsibility of engine engineers to decide how to implement these
 functionalities. The JavaScript spec uses the label
@@ -194,27 +194,23 @@ functionalities. The JavaScript spec uses the label
 may differ from engine to engine. One reason this flexibility in the
 spec exists is to enable compiler optimizations. For example, the
 \mcodeid{for-in} loop does not clearly specify the iteration
-order~\cite{so-forin-undefined,javascript-in-chrome} and different
-engines capitalize on that~\cite{for-in-undefined}.  As another
-example, the latest version of the \es{} specification states that if
-the \mcodeid{Number.toPrecision()} function is called with more than
-one argument, then the behavior is
+order of elements~\cite{so-forin-undefined,javascript-in-chrome} and different
+engines capitalize on that for optimization~\cite{for-in-undefined}.  As another
+example, the specification states that if
+the \mcodeid{Number.toPrecision()} function is called with multiple arguments then the floating-point approximation is
 implementation-dependent~\cite{es6-toPrecision}. Various other cases
 like these exist in the specification. Such gap also exists at the
 implementation level. Given the speed the specification changes and
 the complexity of the language some features are not fully implemented
 as can be observed by the Kangax compatibility table~\cite{kangax}.
-
-\sloppy It is also worth noting that, as in other languages, some
+It is also worth noting that, as in other languages, some
 elements in JS have non-deterministic behavior (\eg{},
 \mcodeid{Math.random} and \mcodeid{Date}). A test that make decisions
 based on these elements could, in principle, produce different
 outcomes on different runs. Carefully-written test cases should not
 manifest this kind of
-flakiness~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
-fuzzed test files could are more likely, intuitively, to manifest
-them.
-
+flaky behavior~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
+fuzzed are more likely to manifest them.
 As mentioned previously, all those aspects make testing \js\ engines
 more challenging.
 
@@ -1139,91 +1135,7 @@ were not reported.
 %% use test suites from seven different open source engines, including a
 %% total of 30K test files.
 
-\begin{table*}[h!]
-  \vspace{-3ex}
-%  \scriptsize
-  \centering
-  \caption{List of bug reports issued as result of cross-engine
-    differential testing.}
-  \label{tab:bugs}
-  \begin{tabular}{ccccccccc}
-    \toprule
-    Issue\#    & Date & Fuzz & Engine  & Status  &
-    \multicolumn{1}{c}{Url}  & Severity & Priority & Suite \\
-    \midrule
-%    \multicolumn{9}{c}{\emph{Exploratory Phase}} \\
-%    \midrule    
-    1  & 4/12 & radamsa & \chakra{}   & \textbf{Fixed}  &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4978}{\#4978}}
-    & 2 & \lo{} & \jsc{} \\ 
-    2  & 4/12 & radamsa & \chakra{}   & Rejected  &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4979}{\#4979}}
-    & - & \hi{} & \jsc{} \\
-    3  & 4/14 & radamsa & JavascriptCore  & New &
-    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}
-    } & -  & \hi{} & \jsc{}    \\
-    4  & 4/25 & radamsa & \chakra{}  & \textbf{Fixed}     &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5038}{\#5038}}
-    & 2 & \hi{} & \jerry{}   \\
-    5  & 4/29 & radamsa & JavascriptCore  & \textbf{Fixed}  &
-    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
-    } & 2  & \hi{}  & \jerry{}\\
-    \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
-    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}
-    & 2 & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{TinyJS}\\    
-                        &                        &        &
-    JavascriptCore & New &
-    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
-    & - &  & \\
-    7 & 5/02 & radamsa & JavascriptCore  & \textbf{Fixed} &
-    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
-    & 2 & \lo{} & \smonkey{} \\
-    8 & 5/10 & radamsa & \chakra{} & \textbf{Confirmed} &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}
-    & 3 & \hi{} & \jerry{} \\
-    9 & 5/17 & radamsa & \chakra{} & \textbf{Fixed} &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}
-    & 2 & \hi{} & \veight{}\\
-    10 & 5/24 & radamsa & JavascriptCore & \textbf{Fixed}  &
-    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
-    & 2 & \hi{} & \jsc{}\\
-    11 & 6/26 & radamsa & JavascriptCore & \textbf{Fixed}  &
-    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
-    & 2 & \hi{} & \jerry{}\\
-    12 & 7/10 & quickfuzz & \jsc{} & \textbf{Fixed}  &
-    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
-    & 2 & \hi{} & \jerry{}\\
-    13 & 7/10 & quickfuzz & \chakra{} & \textbf{Confirmed}  &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}
-    & 2 & \hi{} & \jerry{}\\
-%    \multicolumn{9}{c}{\emph{Non-Exploratory Phase}} \\
-    \multirow{2}{*}{14} & \multirow{2}{*}{8/21}  &
-    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5617}{\#5617}}
-    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
-    & & &
-    \veight{} & \textbf{Confirmed} &
-    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}
-    & 2 &  & \\
-    15 & 8/23 & quickfuzz & \jsc{} & New  &
-    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}
-    & - & \hi{} & Test262\\
-    16 & 8/23 & quickfuzz & \veight{} & \textbf{Confirmed}  &
-    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}
-    & 2 & \hi{} & Test262\\
-    \multirow{2}{*}{17} & \multirow{2}{*}{8/24}  &
-    \multirow{2}{*}{quickfuzz} & \chakra{} & New &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5630}{\#5630}}
-    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
-    & & & 
-    \jsc{} & New &
-    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188920}{\#188920}}
-    & - &  & \\
-   \bottomrule
-  \end{tabular}
-\end{table*}
-
+\input{table_differential}
 
 \section{Bugs Found}
 \label{sec:bugs}
