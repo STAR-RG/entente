@@ -21,6 +21,6 @@ ggplot(data=df, aes(x=engine, y=number, fill=status)) +
   geom_bar(stat="identity")  +
   scale_fill_grey(start = 0, end = .9) + 
   theme_bw() +
-  theme(axis.text=element_text(size=14), axis.title.x=element_blank(), axis.title.y=element_blank(), legend.text=element_text(size=14), aspect.ratio=0.5, panel.border = element_blank())
+  theme(axis.text=element_text(size=14), axis.title.x=element_blank(), axis.title.y=element_blank(), legend.text=element_text(size=14), aspect.ratio=0.3, panel.border = element_blank())
 
 

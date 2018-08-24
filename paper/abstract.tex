@@ -1,13 +1,13 @@
-JavaScript is a very popular programming language today. Several
-engine implementations compete for market dominance. Although a
-specification document and an conformance test suite exist to guide
+JavaScript is a very popular programming language today with several
+engine implementations competing for market dominance. Although a
+specification document and a conformance test suite exist to guide
 engine development, bugs occur and have important practical
-consequences. One reason for the difficulty in implementing correct
-engines stems from the fact that the specification is intentionally
+consequences. Implementing correct
+engines is challenging because the specification is intentionally
 incomplete and evolves frequently.
 
 This paper reports on a study we ran to evaluate the importance of
-diversity to find functional bugs in JavaScript engines. For that, we used two
+diversity to find functional bugs in JavaScript engines. For that, we use two
 simple diversity-aware techniques--test transplantation and cross-engine
 differential testing. The first technique\Comment{Test transplantation} evaluates the effects of
 running test suites of a given engine in another engine. The second technique\Comment{Cross-engine
