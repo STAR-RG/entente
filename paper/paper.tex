@@ -298,13 +298,18 @@ repository because they depend on non-portable objects. Notice that
 the number of tests in \veight\ is low. That happens because \veight{}
 uses many tests from Mozilla and \jsc{}; we discarded those to avoid
 repetition and to give credit where it is due. The columns
-``compile-in-all'' and ``no-fail-in-all'' correspond to the test files
-used, respectively, in the test transplantaion experiment and the
-differential testing experiment.
+``compile-in-all'' and ``no-fail-in-all'' indicate the tests used in
+the test transplantaion experiment and the differential testing
+experiment, respectively.
 
-Column ``compile-in-all'' shows the number of test cases whose
-execution does not throw errors because of an undefined variable or
-property. We capture these cases by looking for the presence of
+Column ``pass-in-par.'' shows the number of test cases that pass in
+their parent engine. We discarded tests that fail in their parent
+engine as we could not reliably indicate the reason for the failure,
+so we assumed the test could be broken. We removed 63 test cases that
+fail for that reason--6 tests from \jsc{} and 57 tests from
+\smonkey. Column ``compile-in-all'' shows the number of test cases
+whose executions do not throw errors because of an undefined variable
+or property. We capture these cases by looking for the presence of
 \CodeIn{ReferenceError} and \CodeIn{TypeError} in the output. A
 \CodeIn{ReferenceError} (respectively, \CodeIn{TypeError}) is raised
 when test execution attempts to access an undefined variable
@@ -313,12 +318,13 @@ avoid noise in the experiments as they clearly indicate some missing
 feature as opposed to bugs. For example, some tests use non-portable
 names (\eg{}, \jsc{}'s \CodeIn{drainMicrotasks()} and \smonkey{}'s
 \CodeIn{Error.lineNumber}) or use functions that, albeit part of the
-spec, not all engines currently support. We used the tests that lie
-within the circle that appears in the table in the evaluation of test
-transplantion, \ie{} the set ``compile-in-all'' minus set Test262. We
-did not consider tests from the conformance suite as they are more
-likely to indicate missing features as opposed to bugs. In addition,
-engine developers have access to these test and are encouraged to run
+spec, not all engines currently support. We used the
+\totalTestFilesForTestTransplantation{} tests included in the circle
+from the table in the evaluation of test transplantion, \ie{}, the
+difference between sets ``compile-in-all'' and Test262. We did not
+consider tests from the conformance suite as they are more likely to
+indicate missing features as opposed to bugs. In addition, engine
+developers have access to these test and are encouraged to run
 them. Column ``no-fail-in-all'' shows the tests for which all engines
 pass. This test set is used in the evaluation of differential
 testing. Note that it is a proper subset of the ``compile-in-all''
@@ -353,27 +359,26 @@ available to certain engines.
     for which engines do not throw compile error (\eg{}, undefined
     name), and column ``no-fail-all'' shows the number of test cases
     that pass in all four engines we analyzed.}
-  \begin{tabular}{ccrrr}
+  \setlength{\tabcolsep}{2.5pt}      
+  \begin{tabular}{ccrrrr}
     \toprule
     \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
-    \multicolumn{3}{c}{\# JS files} \\
-    \cline{3-5}
-                               &         & original & compile-in-all &  no-fail-in-all \\
+    \multicolumn{4}{c}{\# JS files} \\
+    \cline{3-6}
+                               &         & original & pass-in-par. & compile-in-all &  no-fail-in-all \\
     \midrule
-    TC-39 (Test262) & \cite{ecma262-conformance-suite} & 31,276 &
-    29,846 & 17,639 \\
+    Test262 & \cite{ecma262-conformance-suite} & 31,276 & - &  29,846 & 17,639 \\
     \midrule
-    \jsc{} & \cite{webkit} & 1,031 &\marktopleft{c1} 1,021 & 955\\
-    \smonkey\ & \cite{mozilla} & 2,634 & 2,116 & 1,686\\
-    \veight{} & \cite{v8} & 75 & 57 & 57\\
+    \jsc{} & \cite{webkit} & 1,031 & 1,025 &\marktopleft{c1}1,021 & 955\\
+    \smonkey\ & \cite{mozilla} & 2,634 & 1,977 & 2,116 & 1,686\\
+    \veight{} & \cite{v8} & 75 & 75 & 57 & 57\\
     \midrule
-    Duktape & \cite{duktape} & 1,195 & 921 & 915\\ 
-    \jerry{} & \cite{jerryscript} & 1,951 & 1,878 & 1,837\\
-    JSI & \cite{jsi} & 99 & 63 & 63\\
-    Tiny-js & \cite{tinyjs} & 49 & 37\markbottomright{c1} & 37\\
-    % \chakra{} & \cite{chakracore} & 2632 \\
+    Duktape & \cite{duktape} & 1,195 & 1,195 & 921 & 915\\ 
+    \jerry{} & \cite{jerryscript} & 1,951 & 1,951 & 1,878 & 1,837\\
+    JSI & \cite{jsi} & 99 & 99 & 63 & 63\\
+    Tiny-js & \cite{tinyjs} & 49 & 49 & 37\markbottomright{c1} & 37\\
     \midrule
-     &  & \totalTestFiles{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
+     &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
    \bottomrule 
   \end{tabular}
 \end{table}
@@ -629,7 +634,7 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
   \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
     that led to a confirmed bug report in \chakra. The bug is caused
     by a required precondition check in the implementation of function
-    \CodeIn{ToIndex} indirectly called by the test. }
+    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
 \end{figure}
 
 \section{Results}
@@ -776,26 +781,17 @@ test suites and the first row shows the engines that run those
 tests. We use a dash (``-'') to indicate that we did not consider the
 combinations that associate a test suite with its parent engine;
 failures in those cases would either indicate regressions or flaky
-tests as opposed to unknown bugs for that engine. We did not run test
-cases that fail on its parent engine in any other engine as that would indicate that
-the test case could be broken. In total, 64 test cases
-were discarded for that reason--6 from \jsc{} and 57 from
-\smonkey. Furthermore, we required that a test does not manifest
-compile errors as we want to focus on bugs in code not in tests. For
-that reason, we used the tests listed under the column
-``compile-in-all'' from Table~\ref{tab:test-suites}, totalling
-\totalTestFilesCompileInAll{} cases. \Mar{can you confirm that we used
-  ``compile-in-all'' and not ``origina'' as these numbers
-  suggest?}\Fix{In total, 7,029 test files (\ie{}, 38369-31276-64)
-  were considered in this experiment, which involved 24,922 test runs
-  (\ie, (7029*4)-1021-57-2116).}  Of these, 812 failures were
-manifested (3.25\% of the runs) across \textbf{543} distinct files
-(7.72\% of the files). We observed from
-the table that, considering this dataset, the Mozilla \smonkey\ was
-the engine that failed the least whereas the Microsoft engine
-\chakra\ failed the most. The \smonkey\ test suite also revealed more
-failures than any other, as expected, considering that it is the suite
-with more tests (see Table~\ref{tab:test-suites}).
+tests as opposed to unknown bugs for that engine. As explained in
+Section~\ref{sec:seeds}, we used in this experiment the
+\totalTestFilesForTestTransplantation{} tests included in the circle
+from Table~\ref{tab:test-suites}. Running those tests we observed a
+total of 812 failures manifested across 543 distinct files (8.9\% of
+total). Table~\ref{tab:cross-testing} shows that, considering the
+engines analyzed, \smonkey\ was the engine that failed the least
+whereas \chakra\ was the engine that failed the most. The
+\smonkey\ test suite also revealed more failures than any other,
+perhaps as expected, considering that it is the suite with more tests
+(see Table~\ref{tab:test-suites}).
 
 %% This suggests that the investiment in
 %% testing paid off in this case.
