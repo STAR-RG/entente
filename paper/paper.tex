@@ -513,8 +513,13 @@ tree~\cite{grieco2016quickfuzz} with trees created anew.
   \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
 \end{figure}
 
-Figure~\ref{fig:workflow} illustrates the infrastructure for
-differential testing, which is used in part of this study. It takes on
+\Comment{ Several fuzzing methods
+  have been proposed in the past, varying with respect to how new
+  inputs are
+  generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
+
+Figure~\ref{fig:workflow} illustrates the 
+differential testing infrastructure used in part of this study. It takes on
 input a list of JS files and generates warnings on output. Boxes in
 the figure denote encapsulation, arrowed lines denote data flow, and
 the cycle icons denote repetition--the leftmost icon indicates that
@@ -522,65 +527,61 @@ each file in the input list will be analyzed in separate whereas the
 rightmost icon shows that a single file will be fuzzed multiple times.
 The bug-finding process works as follows. New inputs are obtained for
 a given test input using some off-the-shelf input
-fuzzer~\cite{fuzz-testing-history}.\Comment{ Several fuzzing methods
-  have been proposed in the past, varying with respect to how new
-  inputs are
-  generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
-Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+fuzzer~\cite{fuzz-testing-history}; Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 The oracle checks whether or not the output produced for the fuzzed
 file is consistent across all engines. In case the test passes in all
 engines or fails in all engines (\ie{}, the output is consistent), the
-infrastructure discards the test. Otherwise, it considers the input as
-potentially fault-revealing; hence interesting for human
+infrastructure ignores the input. Otherwise, it considers the input as
+potentially fault-revealing; hence, interesting for human
 inspection. The infrastructure uses the
 open-source tool eshost-cli~\cite{eshost-cli}, also used at
 Microsoft, for checking output discrepancy. 
 
 %The checker can produce multiple warnings for a given input. 
 
-Note that a number of reasons exist, other than a bug, to explain
-discrepancy (see Table~\ref{tab:false-positives}) and there is no
-clear way to distinguish false and true positives automatically. As
-such, a human needs to inspect the warning to classify the issue. To
+It is worth noting that a number of reasons exist, other than a bug,
+to explain discrepancy (see Tables~\ref{fig:piecharts-transplantation}
+and ~\ref{tab:false-positives}) and there is no clear automatic
+approach to precisely distinguish false and true positives. As such, a
+human needs to inspect the warning to classify the issue. To
 facilitate inspection, we prioritized warnings and clustered them in
 groups. We describe these strategies in the following.
 
 \subsection{Prioritization}
 
-We classified warnings in two types,
-reflecting their likelihood of manifesting a real bug. Warnings of the
-kind ``\hi{}'' are associated with the cases where the test code
-executed to completion without violating any internal checks, but it
-violated assertions declared in the test itself or its harness. The
-rationale is that the input is more likely to be valid as it it did
-not raise exceptions during the execution of the application code,
-but, it manifested discrepancy through the violation of an assertion
-declared in the test. In contrast, warnings of type ``\lo{}'' are
-more likely to be asssociated with invalid inputs. They reflect the
-cases where the anomaly is observed during the execution of functions,
-which are part of the application. We found that different engines
-often check pre-conditions of those functions differently. It can
-happen, for example, that one engine enforces a weaker pre-condition
-on a function input compared to another engine and that is
-acceptable.\Comment{ For instance, it is acceptable to pass values greater than
-\Fix{x} to function \CodeIn{\Fix{WWW}} in \Fix{y} but not in
-\Fix{z}.} In those cases, the infrastructure would observe a
-discrepancy that is more likely to be associated with an invalid input
-produced by the fuzzer, \ie{}, it is likely to be a bug in the test
-code not the engine (library or runtime) code. However, as expected, our heuristic
-is not precise---``\lo'' warnings can 
-reveal bugs. Figure~\ref{fig:lo-truepositive} shows one of these
-cases. In this example, the test instantiates an \CodeIn{ArrayBuffer}
-object and stores an 8-bit integer at the 0 position. According to the
+We classified warnings in two types, reflecting their likelihood of
+manifesting a real bug. Warnings of the kind ``\hi{}'' are associated
+with the cases where the test code executed to completion without
+violating any internal checks, but it violated assertions declared in
+the test itself or its harness. The rationale is that the input is
+more likely to be valid as it it did not raise exceptions during the
+execution of the application code, but, it manifested discrepancy
+through the violation of an assertion declared in the test. In
+contrast, warnings of type ``\lo{}'' are more likely to be asssociated
+with invalid inputs. They reflect the cases where the anomaly is
+observed during the execution of functions, which are part of the
+application. We found that different engines often check
+pre-conditions of those functions differently. It can happen, for
+example, that one engine enforces a weaker pre-condition on a function
+input compared to another engine and that is acceptable.\Comment{ For
+  instance, it is acceptable to pass values greater than \Fix{x} to
+  function \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those
+cases, the infrastructure would observe a discrepancy that is more
+likely to be associated with an invalid input produced by the fuzzer,
+\ie{}, it is likely to be a ``bug'' in the test code as opposed to a
+bug in the engine code. However, as expected, our heuristic is not
+precise---``\lo'' warnings can reveal
+bugs. Figure~\ref{fig:lo-truepositive} shows one of these cases. In
+this example, the test instantiates an \CodeIn{ArrayBuffer} object and
+stores an 8-bit integer at the 0 position. According to the
 specification~\cite{ecmas262-getviewvalue}, a \CodeIn{RangeError}
 exception should be thrown if a negative value is passed to the
 function \CodeIn{ToIndex}, indirectly called by the test case. In this
-case, however, the \chakra{} engine did not throw any exception, which
-violates the spec. This case of undocumented precondition, reported
-and handled by developers as a bug, was fixed by developers after our bug
-report and is no longer present in the most recent release of
-\chakra. Despite that case, most bugs we found emerged from
-``\hi{}'' warnings.
+case, however, the \chakra{} engine did not throw any exception. This
+is a case of undocumented precondition, which is handled as a bug. It
+was fixed by \chakra\ developers and is no longer present in the most
+recent release of \chakra. Despite that case, most bugs we found
+emerged from ``\hi{}'' warnings.
 
 %% \Igor{
 %%   Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
@@ -609,7 +610,8 @@ that arise from the test case, which are typically
 distinct. Figure~\ref{fig:lo-truepositive} shows, at the bottom, the
 error messages produced by a ``\lo'' warning. Any warning, including
 this one, that has this same message signature will be included in the
-same cluster, which we may also refer as a ``bucket''.
+same ``bucket''. To maximize the hit ratio we remove references to
+code that may appear in the error messages.
 
 \begin{figure}[!h]
   \centering
