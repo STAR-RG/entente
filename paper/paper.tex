@@ -867,57 +867,7 @@ failure but we suspected it was a false alarm.
 %% source of false positive.  
 
 
-\begin{table}[t!]
-\setlength{\tabcolsep}{5pt}    
-%  \vspace{-3ex}
-%  \scriptsize
-  \centering
-  \caption{List of bug reports issued as result of test
-    transplantation. Url columns anonymized.}
-  \label{tab:test-transplantation-bugs}
-  \begin{tabular}{rcccccc}
-    \toprule Issue\#\Comment{    & Date} & Engine  & Status  & \multicolumn{1}{c}{Url}  & Severity & Suite \\
-    \midrule    
-    1  \Comment{& 4/18  }& JavascriptCore  & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}} & - & \jerry{}      \\
-   2  \Comment{& 4/23 }& \chakra{}  & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5033}{\#5033}} & 2 & \smonkey{}      \\
-
-   3  \Comment{& 4/29 }& \chakra{}  & \textbf{Confirmed}   &
-    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5065}{\#5065}}
-    & 2 & \smonkey{} \\
-    
-    \multirow{2}{*}{4}\Comment{& \multirow{2}{*}{4/29}} & \chakra{} & \textbf{Confirmed} &    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5067}{\#5067}} & 2 & \multirow{2}{*}{\smonkey{}}\\
-                       &\Comment{  &}
-    JavascriptCore & New &    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130} } &  -  & \\
-   5 \Comment{& 5/02  }& \jsc{} & New  & \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}} & - & \smonkey{} \\
-   6 \Comment{& 5/17  }& \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}} & 2 & \jsc{}\\
-   7 \Comment{& 5/21  }& \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}} & 2 & \smonkey{}\\
-   8 \Comment{& 6/28  }& \chakra{} & \textbf{Confirmed}  & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}} & 2 & \jsc{}\\
-   9 \Comment{& 7/10  }& \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}} & 2 & \jerry{}\\
-   10 \Comment{& 7/18  }& \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}} & 2 & \smonkey{}\\
-   11 \Comment{& 7/18  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}} & - & \jerry{}\\
-   12 \Comment{& 7/18  }& \chakra{} & \textbf{Fixed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5549}{\#5549}} & 2 & \jerry{}\\
-   13 \Comment{& 8/07  }& \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}} & - & \jerry{}\\
-   14 \Comment{& 8/07  }& \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}} & 2 & \jerry{}\\
-   15 \Comment{& 8/07  }& \chakra{} & New & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}} & - & \jerry{}\\
-   16 \Comment{& 8/07  }& \jsc{} & \textbf{Fixed} & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}} & 2 & \jerry{}\\
-   17 \Comment{& 8/08  }& \veight{} & \textbf{Fixed} & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}} & 3 & \jerry{}\\
-   18 \Comment{& 8/08  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}} & - & \jerry{}\\
-   19 \Comment{& 8/16  }& \veight{} & WontFix & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8064}{\#8064}} & 2 & Duktape\\
-   20 \Comment{& 8/22  }& \chakra{} & \textbf{Confirmed} & \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5621}{\#5621}} & 2 & \smonkey{}\\
-   21 \Comment{& 8/22  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188874}{\#188874}} & - & \smonkey{}\\
-   22 \Comment{& 8/22  }& \jsc{} & New & \anonym{\href{?????????????????????}{???}} & - & \smonkey{}\\
-%   \midrule
-    \multirow{3}{*}{23}\Comment{& 
-    \multirow{3}{*}{8/22}} & \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188875}{\#188875}} & - & \multirow{3}{*}{\smonkey{}}\\
-    &  \Comment{&}
-    \veight{} & New & \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8082}{\#8082} } &  -  & \\
-    &  \Comment{&}
-    \chakra{} & New & \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5624}{\#5624} } &  -  & \\
-%   \midrule
-   24 \Comment{& 8/23  }& \jsc{} & New & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188877}{\#188877}} & - & \smonkey{}\\
-   \bottomrule
-  \end{tabular}
-\end{table}
+\input{table_transplantation}
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 false and true positives. Considering false positives, ``Undefined
@@ -1254,6 +1204,14 @@ were not reported.
     16 & 8/23 & quickfuzz & \veight{} & New  &
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}
     & - & \hi{} & Test262\\
+    \multirow{2}{*}{17} & \multirow{2}{*}{8/24}  &
+    \multirow{2}{*}{quickfuzz} & \chakra{} & New &
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5630}{\#5630}}
+    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
+    & & &
+    \jsc{} & New &
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188920}{\#188920}}
+    & - &  & \\
    \bottomrule
   \end{tabular}
 \end{table*}
