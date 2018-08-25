@@ -1286,6 +1286,7 @@ of the ``Checker'' component from Figure~\ref{fig:workflow} that, for
 efficiency, is tighly integrated to our infrastructure.
 
 \subsection{Lessons Learned}
+\label{sec:lessons}
 
 We learned several lessons in this study:
 
@@ -1305,7 +1306,13 @@ We learned several lessons in this study:
     \js\ engine we used, with Google's \veight\ after it;
   \item Reporting real bugs is a great way to train (and encourage)
     students in software testing.
-\end{itemize}  
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% comentario de igor
+%%%%%%%%%%%%%%%%%%%%%%%
+%% sim, me refiro a testes que possuem algum comentário do que se trata aquele teste. Por exemplo os testes262, possuem comentários descrevendo o que o teste tem que fazer
+%% os testes da suite do mozilla são mais dificeis de debuggar... não dificeis de grosso modo, mas custava um pouco para identificar o real problema
 
 
 \section{Related Work}
@@ -1403,12 +1410,26 @@ orthogonal to theirs.
 
 \section{Conclusions}
 
-\Mar{----------------------------- estou aqui $\rightarrow$}
+JavaScript is a very popular language. For that reason, bugs in engine
+implementations often affect lots of people and organizations.
+Implementing correct engines is challenging because the specification
+is intentionally incomplete and evolves frequently. Finding bugs is
+challenging for similar reasons. We conducted a study to evaluate two
+simple diversity-aware techniques--test transplantation and
+cross-engine differential testing. The first technique runs test
+suites of a given engine in another engine. The second technique
+fuzzes existing inputs and then compares the output produced by
+different engines with a differential oracle.
 
+Overall, we reported \Fix{XX} bugs in this study. Of which, \Fix{YY}
+were confirmed and \Fix{ZZ} were fixed by developers. Although more
+work is necessary to reduce cost of manual analysis, we found that
+both techniques we used are effective at finding bugs in the engines
+used in the most popular we browsers used
+today. Section~\ref{sec:lessons} elaborates on the lessons we learned
+in this study. The result data, the infrastructure, and experimental
+scripts we prepared to run this study are available upon request.
 
-%\section*{Acknowledgment}
-
-%\bibliographystyle{IEEEtran}
 \balance
 \bibliographystyle{plain}
 \bibliography{references,../docs/google-research-awards-latam/tmp}
