@@ -855,7 +855,13 @@ object. These properties are only available activating the ES6
 experimental mode with the flag \CodeIn{-ES6Experimental}. \Mar{igor,
   nao consigo entender o porque deste caso nao dar aqueles erros
   (ReferenceError/TypeError) que vc. me mostrou e estourar na
-  assercao. explique e de um exemplo concreto, por favor$\rightarrow$}
+  assercao. explique e de um exemplo concreto, por favor$\rightarrow$
+}
+\Igor{Ha testes em que o non-standard element aparece com a mensagem de erro
+diferente da que usamos anteriormente. Por exemplo, existem testes que 
+estao dentro de um bloco try/catch, mesmo se a linha quebrar, 
+o catch vai capturar e enviar uma mensagem tipo "expected true, got false".
+}
 \textbf{Non-Standard Element.} This kind corresponds to the cases the
 test case relies on some non-standard function or property of a
 standard object. \Mar{igor, ha alguma explicacao/intuicao para
