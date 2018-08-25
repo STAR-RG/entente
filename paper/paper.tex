@@ -1210,10 +1210,9 @@ bugs, both of which were confirmed, with one fixed.
   \fbox{
     \begin{minipage}{8cm}
       \textit{Summary:}~Cross-engine differential testing was also
-      effective at finding several bugs in \js\ engines. However,
-      relative to test transplantation, it required substantial more
-      human effort, which may play a lesser role with improved
-      automation.
+      effective at finding bugs in \js\ engines. However, compared to
+      test transplantation, it required substantial more human effort
+      per bug found.
       \end{minipage}
     }
 \end{center}
@@ -1286,61 +1285,41 @@ function test() {
 
 \subsection{Threats}
 
-\subsection{Lessons}
+As it is the case for most empirical evaluations, there are both
+external and construct threats to validity associated to the results
+we presented. In terms of external validity, our results might not
+generalize to other test inputs and engines. To mitigate this threat,
+we carefully selected inputs from various sources and cleaned them
+according to a well-defined criteria. Considering the \js\ engines, we
+used engines associated with the most popular browsers in the
+market. In terms of construct validity, there might be errors in the
+implementation of our infrastructure. To mitigate this threat, we
+extensively inspected the results of our evaluation manually and, when
+we found the need for implementing a different component we kept the
+old one for cross-checking. For example, we used
+eshost-cli~\cite{eshost-cli} to validate our fork-join implementation
+of the ``Checker'' component from Figure~\ref{fig:workflow} that, for
+efficiency, is tighly integrated to our infrastructure.
 
-\Mar{----------------------------- estou aqui $\rightarrow$}
+\subsection{Lessons Learned}
 
-For example, a test that passes in one engine could
-legitimately fail in a different engine because of some undefined
-behavior in the spec. The most recent
-\js\ specification~\cite{ecmas262-spec} documents several of these
-cases, which can be traced looking for the string ``implementation-dependent''. As another example, a test
-may fail because the engine does not fully implement some feature. The
-publicly-available Kangax compatibility table~\cite{kangax} relates
-\js\ features with the engines that support them. To sum, it is often
-non-trivial to assess if a test fails because of a bug or because of
-some other reason making test automation more challenging. 
+We learned several lessons in this study:
 
-\Fix{...}
+\begin{itemize}
+  \item The diversity-aware techniques we used in this study are great
+    at finding bugs in \js\ engines;
+  \item The cost of inpecting failures/warnings is high. Although the
+    inspection activity was not uninterrupted, it is safe to say that
+    each warning required a substantial amount of time to analyze for
+    potential false alarms;
+  \item Even simple black-box fuzzers can create surprisingly
+    interesting inputs;
+  \item Mozilla's \smonkey\ appears to be the most reliable
+    \js\ engine, with Google's \veight\ after it;
+  \item Reporting real bugs is a great way to train (and encourage)
+    students in software testing.
+\end{itemize}  
 
-
-
-
-% \subsection{LO bugs}
-% 
-% \Igor{For example, a bug caught by our environment and reported as LO priority was reported 
-% on \chakra{} engine, the JS code can be found in Figure~\ref{fig:lo-priority}. In this case,
-% this is a seed from Mozilla suite (\CodeIn{mozilla/non262/statements/for-in-with-assignments.js}),
-% the warning was not caught by the \CodeIn{assertEq} function that compares if two arguments are equals, 
-% the bug appears inside the generator function\footnote{Generators \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*}}
-% at line 2. According to ES6 specification\footnote{ES6 YieldExpression \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#prod-YieldExpression}},
-% it is allowed the use of \CodeIn{yield in} in a \CodeIn{for} loop. In our infrastructure,
-% only \chakra{} engine fails with an error output \CodeIn{SyntaxError: Syntax error}, due
-% the output does not shows nothing related with assertions, we considered this one as a warning from LO group.
-% Until now, the issue was confirmed and waiting for merge/closed.
-% \Fix{checar ate o prazo de submissao. Essa issue esta confirmada e com commits, falta apenas o merge.}
-% }
-% \begin{figure}[h!]
-%   \centering
-%   \scriptsize
-%   \lstset{escapeinside={@}{@},
-%     numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-%     basicstyle=\ttfamily\scriptsize, boxpos=c,
-%     numberstyle=\tiny,
-%     morekeywords={assertEq, var, yield, in, function},
-%   }
-%   \begin{lstlisting}
-% function* g1() {
-%   for (var x = yield in {}) ;
-% }
-% var it = g1();
-% assertEq(it.next().done, false);
-% assertEq(it.next().done, true);
-%   \end{lstlisting}
-%   \normalsize
-%   \caption{Bug caught by our environment as LO priority.}
-%   \label{fig:lo-priority}
-%   \end{figure}
 
 \section{Related Work}
 
@@ -1436,6 +1415,8 @@ Systems as WordPress. The focus of this paper is on testing
 orthogonal to theirs.
 
 \section{Conclusions}
+
+\Mar{----------------------------- estou aqui $\rightarrow$}
 
 
 %\section*{Acknowledgment}
