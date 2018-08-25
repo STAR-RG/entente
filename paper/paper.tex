@@ -958,7 +958,6 @@ the test.
 
 %Note that bug reports \#4 and \#23 afected multiple engines. 
 
-
 Considering severity levels, it is worth noting that \jsc{}~\cite{jsc-severity} 
 and \smonkey{}~\cite{mozilla-severity} uses five levels, 
 whereas \chakra{}~\cite{chakra-severity} and \veight{}~\cite{v8-severity} 
@@ -966,18 +965,19 @@ use only three. As usual, the smallest the severity value the
 highest the severity of the bug. We use a dash (``-'') 
 in place of the severity level for the cases where the bug 
 report is pending confirmation.\Mar{por favor,
-  corrija estes numeros *com cuidado*! se possivel, use macros.} Of
-the \Fix{17} bugs we reported in this experiment, \Fix{9} were
-promoted from the status ``New'' to ``Confirmed''. Of these, \Fix{8}
+  corrija estes numeros *com cuidado*! se possivel, use macros.}\Igor{Done} Of
+the \noBugsTransplantation{} bugs we reported in this experiment, \noTransConfirmed{} were
+promoted from the status ``New'' to ``Confirmed''. Of these, \noTransSeverityTwo{}
 are severity-2 bugs.  Although we did not find any showstopper
 critical bugs, most of the bugs are seemingly important as per the
 categorization given by engineers. Analyzing the issue tracker of
 \chakra, we found that severity-1 bugs are indeed rare. Considering
 the bugs confirmed by developers, \chakra{} was the engine with the
-highest number, \Fix{8} in total, with \Fix{1} bug fixed. Considering
-the remaining engines, \veight{} developers confirmed \Fix{two} of the
-\Fix{three} bug we reported, fixing \Fix{one}. Curiously, Google
-engineers confirmed the report we issued in a few hours. We found that
+highest number, \noTransChakraBugs{} in total, with \noTransChakraBugsFixed{} 
+bug fixed. Considering the remaining engines, \veight{} 
+developers confirmed \noTransVeightBugsConfirmed{} of the
+\noTransVeightBugsReported{} bug we reported, fixing \noTransVeightBugsFixed{}. 
+Curiously, Google engineers confirmed the report we issued in a few hours. We found that
 development teams of other engines, specially \jsc\, took much longer
 to analyze bug reports as can be observed in the \jsc\ stacked bar
 from Figure~\ref{fig:stacked-engine}.
@@ -1187,7 +1187,7 @@ bug report as of Aug. 24, 2018 (``Status''), the Url of the bug report
 (``Url''), the severity of the bug report (``Severity''), the priority
 that we assigned to the warning that revealed the bug (``Priority''),
 and the test suite from the original test input (``Suite''). So far,
-\Fix{ten} of the bugs we reported were confirmed, \Fix{two} of which
+\noDiffConfirmed{} of the bugs we reported were confirmed, \noDiffFixed{} of which
 were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was cosidered to be acceptable. As
