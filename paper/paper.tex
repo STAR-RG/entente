@@ -869,7 +869,10 @@ and \CodeIn{TypeError}. For example, we found cases where the test (or
 its harness) capture the corresponding exception, making the test to
 fail in an assertion instead. \Mar{igor, ha alguma explicacao/intuicao
   para explicar porque nao conseguir classificar isto?.$\rightarrow$}
-\Igor{Exemplos: Testes especificos do engenho que }\Mar{nao
+  \Igor{Exemplos: Testes especificos e/ou com entradas invalidas, 
+  por exemplo cobre uma especificacao antiga onde o
+  teste esperava uma propriedade true, mas na documentacao 
+  cita que a propriedade tem que ser false.}\Mar{nao
   entendi. isto nao acabaria quebrando por um dos motivos anteriores?
   seja mais especifico, por favor!}  \textbf{Unknown.} This category
 includes the cases we were unable to confidently diagnose the failure
@@ -939,12 +942,13 @@ the test. Note that bug reports \#4 and \#23 afected multiple
 engines. 
 
 
-Considering severity levels, it is worth noting that \jsc{} uses five
-levels~\cite{jsc-severity} whereas \chakra{}~\cite{chakra-severity}
-and \smonkey{}~\cite{mozilla-severity} use only three\Mar{e v8?}. As
-usual, the smallest the severity value the highest the severity of the
-bug. We use a dash (``-'') in place of the severity level for the
-cases where the bug report is pending confirmation.\Mar{por favor,
+Considering severity levels, it is worth noting that \jsc{}~\cite{jsc-severity} 
+and \smonkey{}~\cite{mozilla-severity} uses five levels, 
+whereas \chakra{}~\cite{chakra-severity} and \veight{}~\cite{v8-severity} 
+use only three. As usual, the smallest the severity value the 
+highest the severity of the bug. We use a dash (``-'') 
+in place of the severity level for the cases where the bug 
+report is pending confirmation.\Mar{por favor,
   corrija estes numeros *com cuidado*! se possivel, use macros.} Of
 the \Fix{17} bugs we reported in this experiment, \Fix{9} were
 promoted from the status ``New'' to ``Confirmed''. Of these, \Fix{8}
@@ -1132,9 +1136,9 @@ mas a discrepancia ocorre no engenho que nao exibe essa mensagem.
 Analisando os casos que encontramos dessa natureza, 
 a comparacao da mensagem aparece no report, 
 porem a discrepancia ocorre quando o teste nao mostra 
-essa mensagem (passa por motivos de invalid input). 
+essa mensagem (passa por motivos de invalid input).
 Eu classifiquei como message mismatch, 
-mas creio que nesse caso seria invalid input. Pq se for message mis
+mas creio que nesse caso seria invalid input.
 }
 
 %% \Igor{devemos remover isso da 
@@ -1229,7 +1233,8 @@ successful technique--test transplantation and differential testing
 rejected bug report.
 
 \sloppy
-\vspace{1ex}\noindent\textbf{Issue \#4.}\Mar{de que tabela?} The JS code \CodeIn{\{var a =
+\vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:cross-testing}.} 
+The JS code \CodeIn{\{var a =
   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
   assert(+a === 0)\}} manifested a bug in the \js{} engine \chakra{}.
 The object property \CodeIn{valueOf} stores a function that returns a
