@@ -702,12 +702,6 @@ that continuously evolve with their specifications.
 \subsection{Conformance}
 \label{sec:stability}
 
-We used the official conformance test suite
-Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
-engines to the \js\ current standard. As it is acceptable to release
-engines fulfilling the specification only partially~\cite{kangax}, it
-is expected that engines do not fully pass this test. However, we
-expect that results provide indication of engine's maturity. In the
 \begin{wraptable}[10]{r}{0.25\textwidth}
 %  \vspace{-3ex}
   \centering
@@ -725,8 +719,13 @@ expect that results provide indication of engine's maturity. In the
     \bottomrule
   \end{tabular}
   \normalsize
-  \vspace{-3ex}  
 \end{wraptable}
+We used the official conformance test suite
+Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
+engines to the \js\ current standard. As it is acceptable to release
+engines fulfilling the specification only partially~\cite{kangax}, it
+is expected that engines do not fully pass this test. However, we
+expect that results provide indication of engine's maturity. In the
 limit, it is not desirable to flood bug reports on engines at early
 stages of development. We ran the suite once a day for seven
 consecutive days from the period of 16 to 22 of August,
@@ -795,7 +794,7 @@ perhaps as expected, considering that it is the suite with more tests
 
 %% This suggests that the investiment in
 %% testing paid off in this case.
-\begin{table}[h]
+\begin{table}[t]
   \centering
   \caption{\label{tab:cross-testing}Number of failures observed exchanging
   test suites.}
@@ -905,7 +904,7 @@ suspected it was a false alarm.
 
 \input{table_transplantation}
 
-\Mar{----------------------------- estou aqui $\rightarrow$}
+% (\eg{},``New'', ``Rejected'', ``Confirmed'', ``Fixed'')
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 false and true positives. Considering false positives, ``Undefined
@@ -916,59 +915,61 @@ automate the detection of duplicates.
 Table~\ref{tab:test-transplantation-bugs} lists all bugs we found with
 test transplantation. The first column shows the identifier we
 assigned to the bug\Comment{, column ``Date'' shows the date the bug
-  was reported in the format ``m/dd'',} column ``Engine'' shows the
-affected engine, column ``Status'' indicates the status of the bug
-report at the time of the writing (\eg{},``New'', ``Rejected'',
-``Confirmed'', ``Fixed''). The status string appear in bold face for
-status ``Confirmed'' or higher (\ie{}, ``Assigned'' or ``Fixed'').
-Column ``Url'' shows the URL (de-anonymized upon request) for the bug report entry in the
-corresponding bug-tracking system, column ``Severity''
-shows the severity level for confirmed bugs, and, finally, column
-``Suite'' shows the name of the engine that originated the
-test. Note that bug reports \#4 and \#23 afected multiple engines.
+  was reported in the format ``m/dd'',}, column ``Engine'' shows the
+affected engine, column ``Status'' shows the status of the bug report
+at the time of the writing. The status string appears in bold face for
+status ``Confirmed'' or higher, \ie{}, ``Assigned'' and ``Fixed''.
+Column ``Url'' shows the URL (de-anonymized upon request) for the bug
+report entry in the corresponding bug-tracking system, column
+``Severity'' shows the severity level for confirmed bugs, and,
+finally, column ``Suite'' shows the name of the engine that originated
+the test. Note that bug reports \#4 and \#23 afected multiple
+engines. 
 
-Considering severity levels, it is important to note that \jsc{}
-uses five levels~\cite{jsc-severity} whereas
-\chakra{}~\cite{chakra-severity} and
-\smonkey{}~\cite{mozilla-severity} use only two. As usual, the
-smallest the severity value the highest the severity of the bug. We
-use a dash (``-'') as the severity level for bugs with pending
-confirmation.  No bug we reported in this experiment was rejected.  Of
+
+Considering severity levels, it is worth noting that \jsc{} uses five
+levels~\cite{jsc-severity} whereas \chakra{}~\cite{chakra-severity}
+and \smonkey{}~\cite{mozilla-severity} use only three\Mar{e v8?}. As
+usual, the smallest the severity value the highest the severity of the
+bug. We use a dash (``-'') in place of the severity level for the
+cases where the bug report is pending confirmation.\Mar{por favor,
+  corrija estes numeros *com cuidado*! se possivel, use macros.} Of
 the \Fix{17} bugs we reported in this experiment, \Fix{9} were
-analyzed and moved from the status ``New'' to ``Confirmed''. Of these,
-\Fix{8} are severity-2 bugs.  Although we did not find any showstopper
+promoted from the status ``New'' to ``Confirmed''. Of these, \Fix{8}
+are severity-2 bugs.  Although we did not find any showstopper
 critical bugs, most of the bugs are seemingly important as per the
 categorization given by engineers. Analyzing the issue tracker of
-\chakra, we found that severity-1 bugs are rare. Considering the bugs
-confirmed by developers, \chakra{} was the engine with the highest
-number, \Fix{8} in total, with \Fix{1} bug fixed. Considering the
-remaining engines, \veight{} developers confirmed \Fix{one} bug we
-reported. Curiously, Google engineers confirmed that report in a few
-hours. We found that development teams of other engines, specially
-\jsc\, took much longer to analyze bug reports as can be observed by
-some pending reports from April 2018.
+\chakra, we found that severity-1 bugs are indeed rare. Considering
+the bugs confirmed by developers, \chakra{} was the engine with the
+highest number, \Fix{8} in total, with \Fix{1} bug fixed. Considering
+the remaining engines, \veight{} developers confirmed \Fix{two} of the
+\Fix{three} bug we reported, fixing \Fix{one}. Curiously, Google
+engineers confirmed the report we issued in a few hours. We found that
+development teams of other engines, specially \jsc\, took much longer
+to analyze bug reports as can be observed in the \jsc\ stacked bar
+from Figure~\ref{fig:stacked-engine}.
 
-Overall, we found these results promising given that precision (\ie{},
-the ratio of true positives over all reports) needs to take into
-account the cost of inspecting the failure~\cite{harman-ohearn-2018};
-it took a week for the developer to inspect the entire set of
-failures. The precision for \jsc\ was \Fix{X\%} (\ie, XX/270), which
-seems a low rate, but it took approximately \Fix{x} days to find
-\Fix{y} real bugs on this engine. Section~\ref{sec:bugs} shows samples
-of false and true positives.
+%% Overall, we found these results promising given that precision (\ie{},
+%% the ratio of true positives over all reports) needs to take into
+%% account the cost of inspecting the failure~\cite{harman-ohearn-2018};
+%% it took a week for the developer to inspect the entire set of
+%% failures. The precision for \jsc\ was \Fix{X\%} (\ie, XX/270), which
+%% seems a low rate, but it took approximately \Fix{x} days to find
+%% \Fix{y} real bugs on this engine. Section~\ref{sec:bugs} shows samples
+%% of false and true positives.
 
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
       \textit{Summary:}~Test transplantation is effective at finding
-      functional bugs. Although the inspection cost is non-negligible,
-      the approach was able to reveal several bugs in widely popular
-      engines.
+      functional bugs. Although the cost of classifying failures was
+      non-negligible, the approach revealed several non-trivial bugs
+      in widely popular engines.
       \end{minipage}
     }
 \end{center}
 
-
+\Mar{----------------------------- estou aqui $\rightarrow$}
 
 \subsection{Cross-Engine Differential Testing}
 \label{sec:cross-engine-diff-testing-results}
