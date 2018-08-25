@@ -851,25 +851,29 @@ is part of the official spec, but is not implemented in the target
 engine yet. For example, at the time of writing, \chakra{} does not
 implement by default various properties from the \mcodeid{Symbol}
 object. These properties are only available activating the ES6
-experimental mode with the flag \CodeIn{-ES6Experimental}. \Mar{igor,
-  nao consigo entender o porque deste caso nao dar aqueles erros
-  (ReferenceError/TypeError) que vc. me mostrou e estourar na
-  assercao. explique e de um exemplo concreto, por favor$\rightarrow$
-}
-\Igor{Ha testes em que o non-standard element aparece com a mensagem de erro
-diferente da que usamos anteriormente. Por exemplo, existem testes que 
-estao dentro de um bloco try/catch, mesmo se a linha quebrar, 
-o catch vai capturar e enviar uma mensagem tipo "expected true, got false".
-}
-\textbf{Non-Standard Element.} This kind corresponds to the cases the
-test case relies on some non-standard function or property of a
-standard object. \Mar{igor, ha alguma explicacao/intuicao para
-  explicar porque nao conseguir classificar
-  isto?.$\rightarrow$}
-  \Igor{Exemplos: Testes especificos do engenho que }
-  \textbf{Unknown.} This category includes the
-cases we were unable to confidently diagnose the failure but we
-suspected it was a false alarm.
+experimental mode with the flag \CodeIn{-ES6Experimental}.
+%% \Mar{igor,
+%%   nao consigo entender o porque deste caso nao dar aqueles erros
+%%   (ReferenceError/TypeError) que vc. me mostrou e estourar na
+%%   assercao. explique e de um exemplo concreto, por favor$\rightarrow$
+%% }
+%% \Igor{Ha testes em que o non-standard element aparece com a mensagem de erro
+%% diferente da que usamos anteriormente. Por exemplo, existem testes que 
+%% estao dentro de um bloco try/catch, mesmo se a linha quebrar, 
+%% o catch vai capturar e enviar uma mensagem tipo "expected true, got false".
+%% }
+\textbf{Non-Standard Element.} These cases manifest when a function or
+an object property is undefined in the execution engine but we were
+unable to capture looking for error types like \CodeIn{ReferenceError}
+and \CodeIn{TypeError}. For example, we found cases where the test (or
+its harness) capture the corresponding exception, making the test to
+fail in an assertion instead. \Mar{igor, ha alguma explicacao/intuicao
+  para explicar porque nao conseguir classificar isto?.$\rightarrow$}
+\Igor{Exemplos: Testes especificos do engenho que }\Mar{nao
+  entendi. isto nao acabaria quebrando por um dos motivos anteriores?
+  seja mais especifico, por favor!}  \textbf{Unknown.} This category
+includes the cases we were unable to confidently diagnose the failure
+but we suspected it was a false alarm.
 
 %% \begin{figure}[h]
 %%   \centering
@@ -1138,7 +1142,7 @@ alterar o corpo da mensagem. Esta era a ideia, mas
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{5}{*}{False Positives} & Undefined Behavior & 26 & 9 \\
+    \multirow{4}{*}{False Positives} & Undefined Behavior & 26 & 9 \\
     & Timeout/OME & 28 & 13 \\
     & * Invalid Input & 39 & 48 \\    
     & * Error Message Mismatch & 41 & 12 \\
