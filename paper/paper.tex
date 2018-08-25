@@ -1290,16 +1290,19 @@ efficiency, is tighly integrated to our infrastructure.
 We learned several lessons in this study:
 
 \begin{itemize}
-  \item The diversity-aware techniques we used in this study are great
+  \item The diversity-aware techniques we used are great
     at finding bugs in \js\ engines;
   \item The cost of inpecting failures/warnings is high. Although the
     inspection activity was not uninterrupted, it is safe to say that
     each warning required a substantial amount of time to analyze for
     potential false alarms;
+  \item We have found more bugs with test transplantation than we have
+    with cross-engine differential testing. In addition, test
+    transplantation demanded less effort per bug;
   \item Even simple black-box fuzzers can create surprisingly
     interesting inputs;
   \item Mozilla's \smonkey\ appears to be the most reliable
-    \js\ engine, with Google's \veight\ after it;
+    \js\ engine we used, with Google's \veight\ after it;
   \item Reporting real bugs is a great way to train (and encourage)
     students in software testing.
 \end{itemize}  
