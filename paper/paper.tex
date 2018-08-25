@@ -1121,12 +1121,10 @@ highlighted with a ``*'' in the table. The source ``Invalid Input''
 indicates that the test input violated some part of the
 specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
-sensitive to function specifications. The source ``Error Message Mismatch''
-indicates that 
-\Igor{
-  o fuzzer realiza mutacoes em assercoes que usam comparacao de string e/ou 
-  expressoes regulares.
-}
+sensitive to function specifications. Consequently, it can replace
+valid with invalid inputs. The source ``Error Message Mismatch''
+corresponds to the cases where the fuzzer modifies the assertion
+expression (\eg{}, some string expression or regular expression).
 
 %% \Igor{devemos remover isso da 
 %% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
@@ -1172,7 +1170,7 @@ were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was considered to be acceptable. As
 of now, we did not find any new bugs on \smonkey{}; the bugs we found
-were duplicates and were not reported. In \veight{}, we reported two
+were duplicates and were not reported. Considering \veight{}, we reported two
 bugs, both of which were confirmed, with one fixed.
 
 %% Note from the table that all bug reports still waiting for
@@ -1562,7 +1560,7 @@ first.
 \end{document}
 
 %%  LocalWords:  bytecodes JScript Ecma ome IoT Kangax DT JS fuzzer
-%%  LocalWords:  jsfunfuzz jit funfuzz \smonkey{} toPrecision JSVU
+%%  LocalWords:  jsfunfuzz jit funfuzz \smonkey{} toPrecision JSVU os
 %%  LocalWords:  GoogleChromeLab's cccr js runtime Fuzzers Radamsa de
 %%  LocalWords:  QuickFuzz fuzzers Grammarinator LangFuzz Megadeth
 %%  LocalWords:  AFL libFuzzer toolchain sanitizers arrowed eshost
@@ -1570,9 +1568,10 @@ first.
 %%  LocalWords:  JavascriptCore Url radamsa TinyJS \jerry{} JSC crr
 %%  LocalWords:  quickfuzz \jsc{} \chakra{}'s valueOf NUL ascii crrrr
 %%  LocalWords:  unary ToNumber NaN testcase WebKit typeof foofoofoo
-%%  LocalWords:  SSL TLS ICSE ReferenceError TypeError lineNumber
+%%  LocalWords:  SSL TLS ICSE ReferenceError TypeError lineNumber sep
 %%  LocalWords:  drainMicrotasks subtrees ArrayBuffer RangeError eval
 %%  LocalWords:  ToIndex Clusterization DataView setInt getInt boxpos
 %%  LocalWords:  JavaScriptCore SpiderMonkey byteOffset anonymized
 %%  LocalWords:  xleftmargin framexleftmargin basicstyle numberstyle
-%%  LocalWords:  escapeinside morekeywords
+%%  LocalWords:  escapeinside morekeywords cccrr ccrrrr Duktape JSI
+%%  LocalWords:  Lembrar que
