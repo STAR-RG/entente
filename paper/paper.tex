@@ -1442,9 +1442,9 @@ We learned several lessons in this study:
 \label{sec:testing-js-engines}
 The closest work to ours was done by Patra and
 Pradel~\cite{patra2016learning}. Their work proposes a
-language-agnostic fuzzer to findcross-browser HTML+JS
-discrepancies. Their fuzzer can be used to find bugs in JS engines and
-Web Assembly engines. The sensible parts of the infrastructure they
+language-agnostic fuzzer to find cross-browser HTML+JS
+discrepancies.\Comment{ They applied the proposed fuzzer to find bugs in JS engines and
+Web Assembly engines.} The sensible parts of the infrastructure they
 built are the checks of input validity (as to reduce waste/cost) and
 output correctness (as to reduce false positives). Patra and Pradel
 work is complementary to ours--in principle, we could use their fuzzer
