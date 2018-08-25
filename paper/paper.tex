@@ -824,6 +824,12 @@ perhaps as expected, considering that it is the suite with more tests
   \end{tabular}
 \end{table}
 
+%%  As another example, some tests from \Fix{Y} use the
+%% implementation-dependent description message\Mar{what is the name of
+%%   the property?} encapsulated in an \CodeIn{Error} object in
+%% assertions. As such, those tests fail in all engines but
+%% \Fix{Y}. 
+
 The sources of false positives found in this experiment are as
 follows: \textbf{Undefined Behavior.} False positives of this kind are
 manifested when tests cover implementation-dependent behavior, as
@@ -832,32 +838,31 @@ example, one of the tests from \jerry\ uses the function
 \CodeIn{Number.toPrecision([precision])}, which translates a number to
 a string, considering a given number of significant digits. The
 floating-point approximation of the real value is
-implementation-dependent, making the test to pass only in \chakra\ for
-that test. As another example, some tests from \Fix{Y} use the
-implementation-dependent description message\Mar{what is the name of
-  the property?} encapsulated in an \CodeIn{Error} object in
-assertions. As such, those tests fail in all engines but
-\Fix{Y}. \textbf{Timeout/OME\footnote{ome is for out of memory
-    error.}.} False positives of this kind manifest because the engine
-that runs the test does not optimize the code as the original engine
-and that has an effect in the test outcome.  The test may fail to
-finish at the specified time budget or it exceeds the memory
-budget. For example, a test case from the \jsc{} suite defines a
-function with a tail-call recursion. The test fails in all engines but
-\jsc{}, which implements tail-call optimization, which enables the
-test to finish execution fast. \textbf{Not implemented.} False
-positives of this kind manifest when a test fails because it covers a
-function that is part of the official spec, but is not implemented in
-the target engine yet. For example, at the time of writing, \chakra{}
-does not implement by default various properties from the
-\mcodeid{Symbol} object. These properties are only available
-activating the ES6 experimental mode with the flag
-\CodeIn{-ES6Experimental}. \Mar{pela explicacao de
-  ``compile-in-all'', isto nao faz sentido.$\rightarrow$} \textbf{Non-Standanrd Element.} This kind
-corresponds to the cases the test case relies on some non-standard
-function or property of a standard object. \Mar{revise this.$\rightarrow$}\textbf{Unknown.} This
-category includes the cases we were unable to confidently diagnose the
-failure but we suspected it was a false alarm.
+implementation-dependent, making that test to pass only in
+\chakra. \textbf{Timeout/OME\footnote{ome is for out of memory
+    error.}.} False positives of this kind typically manifest when the
+engine that runs the test does not optimize the code as the original
+engine of the test. As result, the test fails to finish at the
+specified time budget or it exceeds the memory budget. For example, a
+test case from \jsc{} defines a function with a tail-call
+recursion. The test fails in all engines but \jsc{}, which implements
+tail-call optimization. \textbf{Not implemented.} False positives of
+this kind manifest when a test fails because it covers a function that
+is part of the official spec, but is not implemented in the target
+engine yet. For example, at the time of writing, \chakra{} does not
+implement by default various properties from the \mcodeid{Symbol}
+object. These properties are only available activating the ES6
+experimental mode with the flag \CodeIn{-ES6Experimental}. \Mar{igor,
+  nao consigo entender o porque deste caso nao dar aqueles erros
+  (ReferenceError/TypeError) que vc. me mostrou e estourar na
+  assercao. explique e de um exemplo concreto, por favor$\rightarrow$}
+\textbf{Non-Standard Element.} This kind corresponds to the cases the
+test case relies on some non-standard function or property of a
+standard object. \Mar{igor, ha alguma explicacao/intuicao para
+  explicar porque nao conseguir classificar
+  isto?.$\rightarrow$}\textbf{Unknown.} This category includes the
+cases we were unable to confidently diagnose the failure but we
+suspected it was a false alarm.
 
 %% \begin{figure}[h]
 %%   \centering
@@ -899,6 +904,8 @@ failure but we suspected it was a false alarm.
 
 
 \input{table_transplantation}
+
+\Mar{----------------------------- estou aqui $\rightarrow$}
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 false and true positives. Considering false positives, ``Undefined
