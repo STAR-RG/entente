@@ -1240,8 +1240,8 @@ rejected bug report, and (iv) the test is short.
 %%   assert(+a === 0)\}}
 
 \sloppy
-\vspace{1ex}\noindent\textbf{Issue \#4, Table~\Fix{XX}.} The code
-snippet below shows the test input we used to reveal a bug in
+\vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
+code snippet below shows the test input we used to reveal a bug in
 \chakra.
 
 \begin{figure}[h!]
@@ -1264,42 +1264,25 @@ snippet below shows the test input we used to reveal a bug in
   %% \label{fig:hi-priority}
 \end{figure}
 
-The object property \CodeIn{valueOf} stores a function
-that returns a primitive value identifying the target
-object~\cite{valueof}. The original version of this code returns an
-empty string whereas the version of the code modified by the \radamsa{}
-fuzzer~\cite{radamsa} returns a string representation of a null
-character (\CodeIn{NUL} in ascii). The unary plus expression
-``\CodeIn{+a}", used in the assertion, is equivalent to the operation
+The object property \CodeIn{valueOf} stores a function that returns a
+primitive value identifying the target object~\cite{valueof}. The
+original version of this code returns an empty string whereas the
+version of the code modified by the \radamsa{} fuzzer~\cite{radamsa}
+returns a string representation of a null character (\CodeIn{NUL} in
+ascii). The unary plus expression ``\CodeIn{+a}", used in the
+assertion, is equivalent to the operation
 \CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
 otherwise the operation returns NaN (Not a
-Number)\cite{unary-plus}. For this case, \chakra{}\Mar{\chakra? if
-  chakra did that it would be fine, no?} \Igor{
-  \chakra{} converte incorretamente o valor hexadecimal para
-  0 e a expressao +0 resulta em 0, o que faz com que o teste passe. Os outros
-  engines consideram o hexadecimal invalido (valor esperado), 
-  quando o hexadecimal nao pode ser convertido, espera-se que retorne NaN, que +NaN resulta em NaN.
-  }evaluates the unary
-plus to NaN as expected, as the null character cannot be converted. As
-result, the test fails as expected. \chakra{}, in contrast,
-incorrectly converts the string to zero, making the test to pass. All
-other engines fail on this test. As Table~\ref{tab:bugs} shows, the
+Number)~\cite{unary-plus}. This test fails in all engines but
+\chakra{}. For all three engines the string cannot be parsed as an
+hexadecimal. As such, they produce a NaN as result and the test fails
+as expected. \chakra{}, in contrast, incorrectly converts the string
+to zero, making the test to pass. As Table~\ref{tab:bugs} shows, the
 \chakra{} team fixed the issue soon after we reported the problem.
 
-\vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.}
-\Igor{
-  Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
-  Este test case oriundo da suite Test262 foi fuzzado pelo \quickfuzz{}
-  que por ser um fuzzer mutacional, usa uma gramatica \js{} que auxilia na geracao
-  de entradas validas. In Figure~\ref{fig:bug-veight}, we observed a \CodeIn{eval} statement
-  that try to evaluate a \CodeIn{function f()}, this test case specify the ecma spec
-  B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a 
-  function declaration. The fuzzer removes the function declaration and 
-  injects a function with a break statement outside a loop. According to specification~\cite{break-statement},
-  the break statement should throw an early error (in this case a SyntaxError) 
-  if the break statement is not nested in an iterational or a switch statement. All engines works
-  as expected but \veight{} pass without failures.
-}
+\vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.}  The
+code snippet below shows the test input we used to reveal a bug in
+\veight{}.
 
 \begin{figure}[h!]
   \centering
@@ -1349,10 +1332,42 @@ failures.
 %% }
 
 
-\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:test-transplantation-bugs}.}
-Esse bug foi reportado no engenho do \chakra{} e foi manifestado atraves 
-de uma mutacao provinda do \radamsa{}. O test case eh descrito in Figure~\ref{xxx},
-the 
+\vspace{1ex}\noindent\textbf{Issue \#2,
+  Table~\ref{tab:test-transplantation-bugs}.}  The code snippet below
+shows the test input we used to reveal a bug in \jsc{}. This test
+originates from \jerry{} test suite; the bug was found during the test
+transplantation experiment.
+
+\begin{figure}[h!]
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+var obj = {}; var arr = [];
+try {
+  arr.sort(obj);
+  assert(false);
+} catch (e) {
+  assert(e instanceof TypeError);
+}
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+\end{figure}
+
+According to the specification~\cite{ecmas262-array-sort}, the
+parameter to the \CodeIn{Array.sort} function should be a comparable
+object or an undefined value, otherwise it should throw a
+\CodeIn{TypeError}. In this case, \jsc{} accepts a non-callable object
+as argument to \CodeIn{sort} and the test fails in the subsequent
+step. The other engines raise a \CodeIn{TypeError} as expected.
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
 code snippet below shows an example input related to a bug report that
@@ -1371,8 +1386,7 @@ we issued to the \chakra\ development team, but they did not accept.
   \begin{lstlisting}
 function test() {
   return typeof String.prototype.repeat === "function"
-    && "foo".repeat(657604378) === "foofoofoo";
-}
+    && "foo".repeat(657604378) === "foofoofoo"; }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
