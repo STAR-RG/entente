@@ -1381,11 +1381,11 @@ function test() {
 
 
 This is a testcase original from the \jsc{} suite that the
-\radamsa\ fuzzer modified. Instead of the long integer passed as
-argument to \CodeIn{"foo".repeat()}, the original test used the
-integer literal 3. The engine crashes on this input as result. The
-team answered that this was an incompatibility by design as the
-function repeat was not expected to receive such a long value.
+\radamsa\ fuzzer modified. The original test used the integer literal
+3 as argument to \CodeIn{repeat()}, but this test uses a long integer
+instead. As result, the engine crashes. The team answered that this
+was an incompatibility by design as the function was not expected to
+receive such a long value.
 
 
 \subsection{Threats To Validity}
