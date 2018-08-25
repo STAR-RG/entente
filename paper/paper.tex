@@ -939,28 +939,28 @@ shows the name of the engine that originated the test.
 %Note that bug reports \#4 and \#23 afected multiple engines. 
 
 
-Considering severity levels, it is worth noting that \jsc{}~\cite{jsc-severity} 
-and \smonkey{}~\cite{mozilla-severity} uses five levels, 
-whereas \chakra{}~\cite{chakra-severity} and \veight{}~\cite{v8-severity} 
-use only three. As usual, the smallest the severity value the 
-highest the severity of the bug. We use a dash (``-'') 
-in place of the severity level for the cases where the bug 
-report is pending confirmation.\Mar{por favor,
-  corrija estes numeros *com cuidado*! se possivel, use macros.} Of
-the \Fix{17} bugs we reported in this experiment, \Fix{9} were
-promoted from the status ``New'' to ``Confirmed''. Of these, \Fix{8}
-are severity-2 bugs.  Although we did not find any showstopper
-critical bugs, most of the bugs are seemingly important as per the
-categorization given by engineers. Analyzing the issue tracker of
-\chakra, we found that severity-1 bugs are indeed rare. Considering
-the bugs confirmed by developers, \chakra{} was the engine with the
-highest number, \Fix{8} in total, with \Fix{1} bug fixed. Considering
-the remaining engines, \veight{} developers confirmed \Fix{two} of the
-\Fix{three} bug we reported, fixing \Fix{one}. Curiously, Google
-engineers confirmed the report we issued in a few hours. We found that
-development teams of other engines, specially \jsc\, took much longer
-to analyze bug reports as can be observed in the \jsc\ stacked bar
-from Figure~\ref{fig:stacked-engine}.
+Considering severity levels, it is worth noting that
+\jsc{}~\cite{jsc-severity} and \smonkey{}~\cite{mozilla-severity} uses
+five levels, whereas \chakra{}~\cite{chakra-severity} and
+\veight{}~\cite{v8-severity} use only three. As usual, the smallest
+the severity value the highest the severity of the bug. We use a dash
+(``-'') in place of the severity level for the cases where the bug
+report is pending confirmation. Of the \noBugsTransplantation{} bugs
+we reported in this experiment, \noBugsTransplantationConfirmed\ were
+promoted from the status ``New'' to ``Confirmed''. Of these, 16 are
+severity-2 bugs.  Although we did not find any critical bugs, most of
+the bugs are seemingly important as per the categorization given by
+engineers. Analyzing the issue tracker of \chakra, we found that
+severity-1 bugs are indeed rare. Considering the bug reports confirmed
+by developers, \chakra{} was the engine with the highest number--12
+(with 3 bugs fixed). Considering the remaining engines, \veight{}
+developers confirmed the three bugs we reported, fixing
+one. Curiously, Google engineers confirmed the report we issued in a
+few hours. Overall, we found that development teams of other engines,
+specially \jsc\, took much longer to analyze bug reports as can be
+observed in the \jsc\ stacked bar from
+Figure~\ref{fig:stacked-engine}. Curiously, however, the bugs that the
+\jsc{} team confirms are quickly fixed.
 
 %% Overall, we found these results promising given that precision (\ie{},
 %% the ratio of true positives over all reports) needs to take into
