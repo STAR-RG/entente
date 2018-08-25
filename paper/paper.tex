@@ -1491,14 +1491,18 @@ suites of a given engine in another engine. The second technique
 fuzzes existing inputs and then compares the output produced by
 different engines with a differential oracle.
 
-Overall, we reported \Fix{XX} bugs in this study. Of which, \Fix{YY}
-were confirmed and \Fix{ZZ} were fixed by developers. Although more
-work is necessary to reduce cost of manual analysis, we found that
-both techniques we used are effective at finding bugs in the engines
-used in the most popular we browsers used
-today. Section~\ref{sec:lessons} elaborates on the lessons we learned
-in this study. The result data, the infrastructure, and experimental
-scripts we prepared to run this study are available upon request.
+Overall, we reported \totalBugsReported\ bugs in this study. Of which,
+\totalBugsConfirmed\ were confirmed by developers and
+\totalBugsConfirmed\ were fixed. Although more work is necessary to
+reduce cost of manual analysis, we found that both techniques we used
+are effective at finding bugs in
+\js\ engines. Section~\ref{sec:lessons} elaborates on the lessons
+learned from this study. The result data, infrastructure, and
+experimental scripts we prepared to run this study are available upon
+request. Future work includes mining test inputs from alternative
+sources (\eg{}, bug trackers) and predicting likelihood of false
+positives as to guide human effort on the most promising warnings
+first.
 
 \balance
 \bibliographystyle{plain}
