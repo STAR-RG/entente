@@ -1122,10 +1122,10 @@ indicates that the test input violated some part of the
 specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
 sensitive to function specifications. The source ``Error Message Mismatch''
-indicates that \Mar{por favor, explique. nao consigo lembrar.}
-\Igor{existem testes que realizam a comparacao de strings, o fuzzer pode
-alterar o corpo da mensagem. Casos onde o fuzzer muda a msg em uma assercao 
-(por exempo 'assertThrows(SyntaxError(), "SyntaxError: syntax error")').
+indicates that 
+\Igor{
+  o fuzzer realiza mutacoes em assercoes que usam comparacao de string e/ou 
+  expressoes regulares.
 }
 
 %% \Igor{devemos remover isso da 
