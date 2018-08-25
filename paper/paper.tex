@@ -1073,8 +1073,8 @@ fuzzers, the difference of files per bucket was negligible.
     \toprule
     & \# buckets & \# files & avg. \# files per bucket \\
     \midrule
-    \radamsa{} & 82 & 241 & 2.9 \\
-    \quickfuzz{} & 38 & 87 & 2.3 \\
+    \radamsa{} & 82 & 319 & 3.8 \\
+    \quickfuzz{} & 78 & 218 & 2.7 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1095,15 +1095,15 @@ compared to other engines.
   \setlength{\tabcolsep}{5pt}
   \centering
   \caption{\label{tab:summary-hi}Number of \hi\ warning
-    reports per engine.\Fix{falta add test262}}
+    reports per engine.}
   \begin{tabular}{crrrrr}
     \toprule
     fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
     \midrule
-    \radamsa{} & 30 & 4 & 121 & 3 & 143 \\
-    \quickfuzz{} & 12 & 7 & 67 & 8 & 89 \\
+    \radamsa{} & 137 & 47 & 323 & 21 & 483 \\
+    \quickfuzz{} & 81 & 62 & 649 & 13 & 369 \\
     \midrule
-    \textbf{total} & \Fix{x} & \Fix{x} & \Fix{x} & \Fix{x} & \Fix{x} \\    
+    \textbf{total} & 218 &  & 972 & 34 & 852 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1137,9 +1137,8 @@ sensitive to function specifications.
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{5}{*}{False Positives} & Undefined Behavior & 18 & - \\
-    & Timeout/OME & 23 & - \\
-    & Not Implemented & 19 & - \\
+    \multirow{5}{*}{False Positives} & Undefined Behavior & 26 & - \\
+    & Timeout/OME & 23 &  \\
     & * Invalid Input & 10 & - \\    
     & * Error Message Mismatch & 3 & - \\
     \midrule
