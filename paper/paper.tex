@@ -1141,18 +1141,8 @@ with unexpected arguments; this happens because fuzzing is not
 sensitive to function specifications. The source ``Error Message Mismatch''
 indicates that \Mar{por favor, explique. nao consigo lembrar.}
 \Igor{existem testes que realizam a comparacao de strings, o fuzzer pode
-alterar o corpo da mensagem. Esta era a ideia, mas 
-casos onde o fuzzer muda a msg em uma assercao 
-(por exempo 'assertThrows(SyntaxError(), "SyntaxError: syntax error")') 
-todos os engenhos falham e o teste nao ser reportado caso alcance esse bloco.
-Porem, existem casos em que o teste falha por message mismatch, 
-mas a discrepancia ocorre no engenho que nao exibe essa mensagem. 
-Analisando os casos que encontramos dessa natureza, 
-a comparacao da mensagem aparece no report, 
-porem a discrepancia ocorre quando o teste nao mostra 
-essa mensagem (passa por motivos de invalid input).
-Eu classifiquei como message mismatch, 
-mas creio que nesse caso seria invalid input.
+alterar o corpo da mensagem. Casos onde o fuzzer muda a msg em uma assercao 
+(por exempo 'assertThrows(SyntaxError(), "SyntaxError: syntax error")').
 }
 
 %% \Igor{devemos remover isso da 
@@ -1312,6 +1302,9 @@ eval(function b (a) {
   \caption{\label{fig:bug-veight}Fuzzed code mutated by \quickfuzz{}
   and reported in \veight{} engine}
 \end{figure}
+
+\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:test-transplantation-bugs}.}
+\Igor{to appear...}
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
 code snippet below shows an example input related to a bug report that
