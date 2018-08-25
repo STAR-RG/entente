@@ -1232,8 +1232,8 @@ This section discusses a selection of bugs reports. The selection
 criteria we used was: (i) to cover each of the engines we were able to
 find bugs--\chakra, \jsc, and \veight, (ii) to cover a different
 successful technique--test transplantation and differential testing
-(with \radamsa\ and with \quickfuzz), and (iii) to cover a case of
-rejected bug report.
+(with \radamsa\ and with \quickfuzz), (iii) to cover a case of
+rejected bug report, and (iv) the test is short.
 
 %% \CodeIn{\{var a =
 %%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
@@ -1352,12 +1352,6 @@ failures.
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
 code snippet below shows an example input related to a bug report that
 we issued to the \chakra\ development team, but they did not accept.
-This is a testcase original from the \jsc{} suite that the
-\radamsa\ fuzzer modified. Instead of the long integer passed as
-argument to \CodeIn{"foo".repeat()}, the original test used the
-integer literal 3. The engine crashes on this input as result. The
-team answered that this was an incompatibility by design as the
-function repeat was not expected to receive such a long value.
 
 \begin{figure}[h!]
   \centering
@@ -1380,7 +1374,16 @@ function test() {
   %% \label{fig:hi-priority}
 \end{figure}
 
-\subsection{Threats}
+
+This is a testcase original from the \jsc{} suite that the
+\radamsa\ fuzzer modified. Instead of the long integer passed as
+argument to \CodeIn{"foo".repeat()}, the original test used the
+integer literal 3. The engine crashes on this input as result. The
+team answered that this was an incompatibility by design as the
+function repeat was not expected to receive such a long value.
+
+
+\subsection{Threats To Validity}
 
 As it is the case for most empirical evaluations, there are both
 external and construct threats to validity associated to the results
