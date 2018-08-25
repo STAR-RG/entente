@@ -1101,9 +1101,9 @@ compared to other engines.
     fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
     \midrule
     \radamsa{} & 137 & 47 & 323 & 21 & 483 \\
-    \quickfuzz{} & 81 & 62 & 649 & 13 & 369 \\
+    \quickfuzz{} & 81 & 62 & 349 & 13 & 369 \\
     \midrule
-    \textbf{total} & 218 &  & 972 & 34 & 852 \\
+    \textbf{total} & 218 & 109 & 672 & 34 & 852 \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1118,6 +1118,9 @@ specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
 sensitive to function specifications. The source ``Error Message Mismatch''
 indicates that \Mar{por favor, explique. nao consigo lembrar.}
+\Igor{existem testes que realizam a comparacao de strings, o fuzzer pode
+alterar o corpo da mensagem. Esta era a ideia, mas 
+}
 
 %% \Igor{devemos remover isso da 
 %% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
@@ -1135,13 +1138,13 @@ indicates that \Mar{por favor, explique. nao consigo lembrar.}
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{5}{*}{False Positives} & Undefined Behavior & 26 & - \\
-    & Timeout/OME & 23 &  \\
-    & * Invalid Input & 10 & - \\    
-    & * Error Message Mismatch & 3 & - \\
+    \multirow{5}{*}{False Positives} & Undefined Behavior & 26 & 9 \\
+    & Timeout/OME & 28 & 13 \\
+    & * Invalid Input & 39 & 48 \\    
+    & * Error Message Mismatch & 41 & 12 \\
     \midrule
-    \multirow{2}{*}{True Positives} & Duplicate & - \\
-    & Bug & - \\
+    \multirow{2}{*}{True Positives} & Duplicate & 34 & 28\\
+    & Bug & 12 & 6\\
     \bottomrule     
   \end{tabular}
 \end{table}
