@@ -1270,6 +1270,22 @@ function test() {
 
 \subsection{Threats}
 
+As it is the case for most empirical evaluations, there are both
+external and construct threats to validity associated to the results
+we presented. In terms of external validity, our results might not
+generalize to other test inputs and engines. To mitigate this threat,
+we carefully selected inputs from various sources and cleaned them
+according to a well-defined criteria. Considering the \js\ engines, we
+used engines associated with the most popular browsers in the
+market. In terms of construct validity, there might be errors in the
+implementation of our infrastructure. To mitigate this threat, we
+extensively inspected the results of our evaluation manually and, when
+we found the need for implementing a different component we kept the
+old one for cross-checking. For example, we used
+eshost-cli~\cite{eshost-cli} to validate our fork-join implementation
+of the ``Checker'' component from Figure~\ref{fig:workflow} that, for
+efficiency, is tighly integrated to our infrastructure.
+
 \subsection{Lessons}
 
 \Mar{----------------------------- estou aqui $\rightarrow$}
