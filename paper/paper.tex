@@ -1240,9 +1240,9 @@ rejected bug report.
 %%   assert(+a === 0)\}}
 
 \sloppy
-\vspace{1ex}\noindent\textbf{Issue \#4,
-  Table~\Fix{XX}.}  The code snippet below show a bug
-in \chakra{}.
+\vspace{1ex}\noindent\textbf{Issue \#4, Table~\Fix{XX}.} The code
+snippet below shows the test input we used to reveal a bug in
+\chakra.
 
 \begin{figure}[h!]
   \centering
@@ -1283,20 +1283,20 @@ engines fail on this test. As Table~\ref{tab:bugs} shows, the
 
 \Mar{---------------------- estou aqui}
 
-\vspace{1ex}\noindent\textbf{Issue \#16, Table~\Fix{XX}}.
-\Igor{
-  Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
-  Este test case oriundo da suite Test262 foi fuzzado pelo \quickfuzz{}
-  que por ser um fuzzer mutacional, usa uma gramatica \js{} que auxilia na geracao
-  de entradas validas. In Figure~\ref{fig:bug-veight}, we observed a \CodeIn{eval} statement
-  that try to evaluate a \CodeIn{function f()}, this test case specify the ecma spec
-  B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a 
-  function declaration. The fuzzer removes the function declaration and 
-  injects a function with a break statement outside a loop. According to specification~\cite{break-statement},
-  the break statement should throw an early error (in this case a SyntaxError) 
-  if the break statement is not nested in an iterational or a switch statement. All engines works
-  as expected but \veight{} pass without failures.
-}
+\vspace{1ex}\noindent\textbf{Issue \#16, Table~\Fix{XX}}.  The code
+snippet below shows the test input we used to reveal a bug in \veight.
+
+%% eval(
+%% "{ 
+%%     function f() { 
+%%       return 'declaration'; 
+%%     } 
+%%  }
+%%  assert.sameValue(typeof f, 'function');
+%%  \assert.sameValue(f(), 'declaration');"
+%% );
+%% // Fuzzed file
+
 
 \begin{figure}[h!]
   \centering
@@ -1309,25 +1309,42 @@ engines fail on this test. As Table~\ref{tab:bugs} shows, the
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-// Original file
-eval(
-"{ 
-    function f() { 
-      return 'declaration'; 
-    } 
- }
- assert.sameValue(typeof f, 'function');
- \assert.sameValue(f(), 'declaration');"
-);
-// Fuzzed file
 eval(function b (a) {
   break;
 });
   \end{lstlisting}
   \normalsize
-  \caption{\label{fig:bug-veight}Fuzzed code mutated by \quickfuzz{}
-  and reported in \veight{} engine}
+  %% \caption{\label{fig:bug-veight}Fuzzed code mutated by \quickfuzz{}
+  %% and reported in \veight{} engine}
 \end{figure}
+
+This code snippet was obtained by fuzzing a Test262 test with
+\quickfuzz. In its original version, a string (omitted for space),
+passed as argument to the \CodeIn{eval} function, encoded the actual
+test. The fuzzer replaced the string argument with a function whose
+body is a \CodeIn{break} statement outside a valid block
+statement. Section B.3.3.3 from the spec~\cite{spec-b333} documents
+how eval should be handle code containing a function declaration.
+According to specification~\cite{break-statement}, the break statement
+should throw an early error--in this case a SyntaxError--if the break
+statement is not nested in an iterational or a switch statement. In
+this case, all engines behave as expected but \veight{} pass without
+failures.
+
+%% \Igor{
+%%   Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
+%%   Este test case oriundo da suite Test262 foi fuzzado pelo \quickfuzz{}
+%%   que por ser um fuzzer mutacional, usa uma gramatica \js{} que auxilia na geracao
+%%   de entradas validas. In Figure~\ref{fig:bug-veight}, we observed a \CodeIn{eval} statement
+%%   that try to evaluate a \CodeIn{function f()}, this test case specify the ecma spec
+%%   B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a 
+%%   function declaration. The fuzzer removes the function declaration and 
+%%   injects a function with a break statement outside a loop. According to specification~\cite{break-statement},
+%%   the break statement should throw an early error (in this case a SyntaxError) 
+%%   if the break statement is not nested in an iterational or a switch statement. All engines works
+%%   as expected but \veight{} pass without failures.
+%% }
+
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:test-transplantation-bugs}.}
 \Igor{to appear...}
