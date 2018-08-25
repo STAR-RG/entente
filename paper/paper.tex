@@ -127,31 +127,38 @@ support or not the decision for automation of these techniques.
 %% Their main contribution was
 %% analytical whereas our main contribution is empirical--
 
-\emph{Results.}~\Fix{REVISE}We considered engines from four major players--Apple,
+\emph{Results.}~We considered engines from four major players--Apple,
 Google, Microsoft, and Mozilla. Our results indicate that both
 techniques revealed several bugs, most of which confirmed by
 developers. Test transplantation revealed \noBugsTransplantation{}
-bugs (\noBugsTransplantationConfirmed{} confirmed, \noBugsTransplantationFixed{} fixed) and differential
-testing revealed \noBugsDifferentialTesting{} bugs
-(\noBugsDifferentialTestingConfirmed{} confirmed and \noBugsDifferentialTestingFixed{} fixed). Furthermore, results indicate
-that most of these bugs affected only two engines--Apple's \jsc{}
-(\percJSC{}) and Microsoft's \chakra{} (\percChakra{}); we found only
-one bug in Google \veight{} and none in Mozilla's \smonkey{}. Although
-our experience indicates that more research needs be done to automate
-parts of the inspection process, our results show that exploring
-diversity is a valuable help to find bugs in JavaScript engines.
+bugs (of which, \noBugsTransplantationConfirmed{} were confirmed and
+\noBugsTransplantationFixed{} were fixed) whereas differential testing
+revealed \noBugsDifferentialTesting{} bugs (of which,
+\noBugsDifferentialTestingConfirmed{} were confirmed and
+\noBugsDifferentialTestingFixed{} were fixed). Furthermore, results
+indicate that most of these bugs affected two engines--Apple's \jsc{}
+and Microsoft's \chakra{}.  We reported \noBugsBugsReportedGoogle{}
+bugs in Google \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and
+none in Mozilla's \smonkey{}. Our results indicate that both
+techniques were successful at finding bugs, but, overall, test
+transplantation demanded less effort compared to differential testing
+per bug found. Although our experience indicates that more research
+needs be done to automate parts of the inspection process, our results
+show that exploring diversity is a valuable help to find bugs in
+JavaScript engines.
 
 
 %% LIST OF CONTRIBUTIONS
 \emph{Contributions.}~This paper contributes the following:
 \begin{itemize}
   \item We ran a comprehensive study to analyze the effectiveness of
-    simple diversity-aware techniques to find bugs in highly-popular
-    \js\ engines. 
+    simple diversity-aware techniques to find functional bugs in
+     popular \js\ engines;
     
-  \item We reported more than \Fix{50} bugs on these engines over a
-    period of 5 months.
-
+  \item We reported a total of \totalBugsReported{} bugs on these
+    engines. Of which, \totalBugsConfirmed{} confirmed and
+    \totalBugsFixed{} fixed;
+    
   %% \item We offered insights on how to reduce cost of analyzing
   %%   warnings reported by diversity-aware techniques and make the
   %%   approach more practical.
@@ -669,9 +676,9 @@ indicate the ordering that status labels are assigned. Note that
 several of these reports have the label ``3-Fixed'', indicating that
 bug fixes have been incorporated into the code already.\Comment{
   Depending on the issue date, the fix may be in the latest release of
-  the corresponding engines.} Overall, discarding bug report with the
-``1-New'' status, we reported a total of \noBugsTotalConfirmed{}
-bugs. We found that the majority of bug reports targeted the engines
+  the corresponding engines.} Overall, discarding bug reports with the
+``1-New'' status, we reported a total of \totalBugsConfirmed{}
+bugs. We found that the vast majority of bug reports targeted the engines
 from Microsoft and Apple. Considering the techniques, the number of
 bug reports were similar, if we consider only those confirmed or
 fixed. Most of these bugs are of moderate severity. All in all, these
@@ -687,6 +694,7 @@ that continuously evolve with their specifications.
 %% \smonkey\ engine.
 
 \begin{figure}[h!]
+%  \vspace{-2ex}  
   \centering
   \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
     \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
@@ -697,13 +705,17 @@ that continuously evolve with their specifications.
     \vspace{-5ex}        
   }
   \caption{\label{fig:summary}Summary of bug reports.}
+%  \vspace{-3ex}
 \end{figure}
 
 \subsection{Conformance}
 \label{sec:stability}
 
-\begin{wraptable}[10]{r}{0.25\textwidth}
+%\begin{wraptable}[10]{r}{0.25\textwidth}
 %  \vspace{-3ex}
+%\end{wraptable}
+\
+\begin{table}[t]
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
@@ -719,7 +731,8 @@ that continuously evolve with their specifications.
     \bottomrule
   \end{tabular}
   \normalsize
-\end{wraptable}
+\end{table}
+    
 We used the official conformance test suite
 Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
 engines to the \js\ current standard. As it is acceptable to release
@@ -891,7 +904,7 @@ but we suspected it was a false alarm.
 %%   \caption{\label{fig:piecharts-transplantation}False and True positives.}
 %% \end{figure}
 
-\begin{table}[h!]
+\begin{table}[t!]
   \setlength{\tabcolsep}{4pt}    
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution of false and true positives.}
@@ -938,8 +951,9 @@ Column ``Url'' shows the URL (de-anonymized upon request) for the bug
 report entry in the corresponding bug-tracking system, column
 ``Severity'' shows the severity level for confirmed bugs, and,
 finally, column ``Suite'' shows the name of the engine that originated
-the test. Note that bug reports \#4 and \#23 afected multiple
-engines. 
+the test.
+
+%Note that bug reports \#4 and \#23 afected multiple engines. 
 
 
 Considering severity levels, it is worth noting that \jsc{}~\cite{jsc-severity} 
@@ -1349,23 +1363,33 @@ of the ``Checker'' component from Figure~\ref{fig:workflow} that, for
 efficiency, is tighly integrated to our infrastructure.
 
 \subsection{Lessons Learned}
+\label{sec:lessons}
 
 We learned several lessons in this study:
 
 \begin{itemize}
-  \item The diversity-aware techniques we used in this study are great
+  \item The diversity-aware techniques we used are great
     at finding bugs in \js\ engines;
   \item The cost of inpecting failures/warnings is high. Although the
     inspection activity was not uninterrupted, it is safe to say that
     each warning required a substantial amount of time to analyze for
     potential false alarms;
+  \item We have found more bugs with test transplantation than we have
+    with cross-engine differential testing. In addition, test
+    transplantation demanded less effort per bug;
   \item Even simple black-box fuzzers can create surprisingly
     interesting inputs;
   \item Mozilla's \smonkey\ appears to be the most reliable
-    \js\ engine, with Google's \veight\ after it;
+    \js\ engine we used, with Google's \veight\ after it;
   \item Reporting real bugs is a great way to train (and encourage)
     students in software testing.
-\end{itemize}  
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% comentario de igor
+%%%%%%%%%%%%%%%%%%%%%%%
+%% sim, me refiro a testes que possuem algum comentário do que se trata aquele teste. Por exemplo os testes262, possuem comentários descrevendo o que o teste tem que fazer
+%% os testes da suite do mozilla são mais dificeis de debuggar... não dificeis de grosso modo, mas custava um pouco para identificar o real problema
 
 
 \section{Related Work}
@@ -1463,12 +1487,26 @@ orthogonal to theirs.
 
 \section{Conclusions}
 
-\Mar{----------------------------- estou aqui $\rightarrow$}
+JavaScript is a very popular language. For that reason, bugs in engine
+implementations often affect lots of people and organizations.
+Implementing correct engines is challenging because the specification
+is intentionally incomplete and evolves frequently. Finding bugs is
+challenging for similar reasons. We conducted a study to evaluate two
+simple diversity-aware techniques--test transplantation and
+cross-engine differential testing. The first technique runs test
+suites of a given engine in another engine. The second technique
+fuzzes existing inputs and then compares the output produced by
+different engines with a differential oracle.
 
+Overall, we reported \Fix{XX} bugs in this study. Of which, \Fix{YY}
+were confirmed and \Fix{ZZ} were fixed by developers. Although more
+work is necessary to reduce cost of manual analysis, we found that
+both techniques we used are effective at finding bugs in the engines
+used in the most popular we browsers used
+today. Section~\ref{sec:lessons} elaborates on the lessons we learned
+in this study. The result data, the infrastructure, and experimental
+scripts we prepared to run this study are available upon request.
 
-%\section*{Acknowledgment}
-
-%\bibliographystyle{IEEEtran}
 \balance
 \bibliographystyle{plain}
 \bibliography{references,../docs/google-research-awards-latam/tmp}
