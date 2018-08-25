@@ -20,7 +20,7 @@ Issue    Source   Engine    Status
 18       Trans    V8        "3-Fixed"
 19       Trans    JavaScriptCore       "1-New"
 20       Trans    Chakra       "2-Confirmed"
-21       Trans    JavaScriptCore       "1-New"
+21       Trans    JavaScriptCore       "3-Fixed"
 21       Trans    JavaScriptCore       "1-New"
 23       Trans    V8       "2-Confirmed"
 24       Trans    Chakra       "2-Confirmed"
