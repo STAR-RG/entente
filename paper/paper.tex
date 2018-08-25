@@ -306,7 +306,7 @@ the number of tests in \veight\ is low. That happens because \veight{}
 uses many tests from Mozilla and \jsc{}; we discarded those to avoid
 repetition and to give credit where it is due. The columns
 ``compile-in-all'' and ``no-fail-in-all'' indicate the tests used in
-the test transplantaion experiment and the differential testing
+the test transplantation experiment and the differential testing
 experiment, respectively.
 
 Column ``pass-in-par.'' shows the number of test cases that pass in
@@ -887,7 +887,10 @@ fail in an assertion instead. \Mar{igor, ha alguma explicacao/intuicao
   teste esperava uma propriedade true, mas na documentacao 
   cita que a propriedade tem que ser false.}\Mar{nao
   entendi. isto nao acabaria quebrando por um dos motivos anteriores?
-  seja mais especifico, por favor!}  \textbf{Unknown.} This category
+  seja mais especifico, por favor!}
+  \Igor{nao, o teste eh valido (nao quebra por ReferenceError/TypeError) e
+  nao entra no undefined behaviour pq nao afeta a especificacao. Isso eh um caso,
+  outros casos estao ligados a nao-compreensao do testcase }  \textbf{Unknown.} This category
 includes the cases we were unable to confidently diagnose the failure
 but we suspected it was a false alarm.
 
@@ -1350,9 +1353,7 @@ failures.
 
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:test-transplantation-bugs}.}
-Esse bug foi reportado no engenho do \chakra{} e foi manifestado atraves 
-de uma mutacao provinda do \radamsa{}. O test case eh descrito in Figure~\ref{xxx},
-the 
+\Igor{JSC transplantation...}
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
 code snippet below shows an example input related to a bug report that
