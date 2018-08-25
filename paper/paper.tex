@@ -127,31 +127,38 @@ support or not the decision for automation of these techniques.
 %% Their main contribution was
 %% analytical whereas our main contribution is empirical--
 
-\emph{Results.}~\Fix{REVISE}We considered engines from four major players--Apple,
+\emph{Results.}~We considered engines from four major players--Apple,
 Google, Microsoft, and Mozilla. Our results indicate that both
 techniques revealed several bugs, most of which confirmed by
 developers. Test transplantation revealed \noBugsTransplantation{}
-bugs (\noBugsTransplantationConfirmed{} confirmed) and differential
-testing revealed \noBugsDifferentialTesting{} bugs
-(\noBugsDifferentialTestingConfirmed{}). Furthermore, results indicate
-that most of these bugs affected only two engines--Apple's \jsc{}
-(\percJSC{}) and Microsoft's \chakra{} (\percChakra{}); we found only
-one bug in Google \veight{} and none in Mozilla's \smonkey{}. Although
-our experience indicates that more research needs be done to automate
-parts of the inspection process, our results show that exploring
-diversity is a valuable help to find bugs in JavaScript engines.
+bugs (of which, \noBugsTransplantationConfirmed{} were confirmed and
+\noBugsTransplantationFixed{} were fixed) whereas differential testing
+revealed \noBugsDifferentialTesting{} bugs (of which,
+\noBugsDifferentialTestingConfirmed{} were confirmed and
+\noBugsDifferentialTestingFixed{} were fixed). Furthermore, results
+indicate that most of these bugs affected two engines--Apple's \jsc{}
+and Microsoft's \chakra{}.  We reported \noBugsBugsReportedGoogle{}
+bugs in Google \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and
+none in Mozilla's \smonkey{}. Our results indicate that both
+techniques were successful at finding bugs, but, overall, test
+transplantation demanded less effort compared to differential testing
+per bug found. Although our experience indicates that more research
+needs be done to automate parts of the inspection process, our results
+show that exploring diversity is a valuable help to find bugs in
+JavaScript engines.
 
 
 %% LIST OF CONTRIBUTIONS
 \emph{Contributions.}~This paper contributes the following:
 \begin{itemize}
   \item We ran a comprehensive study to analyze the effectiveness of
-    simple diversity-aware techniques to find bugs in highly-popular
-    \js\ engines. 
+    simple diversity-aware techniques to find functional bugs in
+     popular \js\ engines;
     
-  \item We reported more than \Fix{50} bugs on these engines over a
-    period of 5 months.
-
+  \item We reported a total of \totalBugsReported{} bugs on these
+    engines. Of which, \totalBugsConfirmed{} confirmed and
+    \totalBugsFixed{} fixed;
+    
   %% \item We offered insights on how to reduce cost of analyzing
   %%   warnings reported by diversity-aware techniques and make the
   %%   approach more practical.
@@ -669,9 +676,9 @@ indicate the ordering that status labels are assigned. Note that
 several of these reports have the label ``3-Fixed'', indicating that
 bug fixes have been incorporated into the code already.\Comment{
   Depending on the issue date, the fix may be in the latest release of
-  the corresponding engines.} Overall, discarding bug report with the
-``1-New'' status, we reported a total of \noBugsTotalConfirmed{}
-bugs. We found that the majority of bug reports targeted the engines
+  the corresponding engines.} Overall, discarding bug reports with the
+``1-New'' status, we reported a total of \totalBugsConfirmed{}
+bugs. We found that the vast majority of bug reports targeted the engines
 from Microsoft and Apple. Considering the techniques, the number of
 bug reports were similar, if we consider only those confirmed or
 fixed. Most of these bugs are of moderate severity. All in all, these
@@ -687,6 +694,7 @@ that continuously evolve with their specifications.
 %% \smonkey\ engine.
 
 \begin{figure}[h!]
+%  \vspace{-2ex}  
   \centering
   \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
     \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
@@ -697,13 +705,17 @@ that continuously evolve with their specifications.
     \vspace{-5ex}        
   }
   \caption{\label{fig:summary}Summary of bug reports.}
+%  \vspace{-3ex}
 \end{figure}
 
 \subsection{Conformance}
 \label{sec:stability}
 
-\begin{wraptable}[10]{r}{0.25\textwidth}
+%\begin{wraptable}[10]{r}{0.25\textwidth}
 %  \vspace{-3ex}
+%\end{wraptable}
+\
+\begin{table}[t]
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
@@ -719,7 +731,8 @@ that continuously evolve with their specifications.
     \bottomrule
   \end{tabular}
   \normalsize
-\end{wraptable}
+\end{table}
+    
 We used the official conformance test suite
 Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
 engines to the \js\ current standard. As it is acceptable to release
@@ -888,7 +901,7 @@ but we suspected it was a false alarm.
 %%   \caption{\label{fig:piecharts-transplantation}False and True positives.}
 %% \end{figure}
 
-\begin{table}[h!]
+\begin{table}[t!]
   \setlength{\tabcolsep}{4pt}    
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution of false and true positives.}
