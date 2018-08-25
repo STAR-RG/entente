@@ -808,7 +808,7 @@ with more tests (see Table~\ref{tab:test-suites}).
     \jsc{} & - & 9 & 10 & 58   \\
     \veight{} & 29 & - & 0 & 0  \\
 %    \chakra{} & - & - & - & -  \\
-    \smonkey{} & 217 & 106 & - & 278 \\
+    \smonkey{} & 218 & 107 & - & 279 \\
     Duktape & 0 & 4 & 4 & 1   \\
     \jerry{} & 23 & 25 & 22 & 23   \\
     JSI & 0 & 0 & 0 & 0   \\ 
@@ -1162,13 +1162,10 @@ were not reported.
 \section{Bugs Found}
 \label{sec:bugs}
 
-
-
-
 \Mar{justify why we discuss these bugs} \Mar{discuss other bugs}
 
 \sloppy
-\vspace{1ex}\noindent\textbf{Bug \# \Fix{6}.} The JS code \CodeIn{\{var a =
+\vspace{1ex}\noindent\textbf{Bug \#4} The JS code \CodeIn{\{var a =
   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
   assert(+a === 0)\}} manifested a bug in the \js{} engine \chakra{}.
 The object property \CodeIn{valueOf} stores a function that returns a
