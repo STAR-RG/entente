@@ -59,7 +59,7 @@ Finding bugs in \js\ engines is an important problem given the range
 of applications that could be affected with those bugs. It is also
 challenging.  Specifications are intentionally incomplete as to enable
 development flexibility. In addition, they evolve frequently to
-accomodate the pressing demands from
+accommodate the pressing demands from
 developers~\cite{ecmas262-spec-repo}. An official conformance test
 suites exist for \js~\cite{tc39-github}, but, naturally, many test
 scenarios are not covered in the suite. In addition, we noticed that a
@@ -103,7 +103,7 @@ example, Mozilla runs JS files\footnote{These files are created with
   the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
   ``compare\_jit'' from funfuzz.} against different configurations of
 a given build of their \smonkey\ engine (\eg{}, trying to enable or
-not eager JIT compilation). A positive aspect of the aproach is that
+not eager JIT compilation). A positive aspect of the approach is that
 it can be fully automated. As the same engine is used, the outcomes of
 the test in both configurations are expected to be identical. The
 Mozilla team uses this approach since 2002; they have been able to
@@ -164,7 +164,7 @@ JavaScript engines.
   %%   approach more practical.
     
   \item We made our testing infrastructure, results, and experimental
-    scripts available to the public. (upon request for anonimity.)
+    scripts available to the public. (upon request for anonymity.)
 
 \end{itemize}
 
@@ -327,7 +327,7 @@ names (\eg{}, \jsc{}'s \CodeIn{drainMicrotasks()} and \smonkey{}'s
 \CodeIn{Error.lineNumber}) or use functions that, albeit part of the
 spec, not all engines currently support. We used the
 \totalTestFilesForTestTransplantation{} tests included in the circle
-from the table in the evaluation of test transplantion, \ie{}, the
+from the table in the evaluation of test transplantation, \ie{}, the
 difference between sets ``compile-in-all'' and Test262. We did not
 consider tests from the conformance suite as they are more likely to
 indicate missing features as opposed to bugs. In addition, engine
@@ -569,7 +569,7 @@ the test itself or its harness. The rationale is that the input is
 more likely to be valid as it it did not raise exceptions during the
 execution of the application code, but, it manifested discrepancy
 through the violation of an assertion declared in the test. In
-contrast, warnings of type ``\lo{}'' are more likely to be asssociated
+contrast, warnings of type ``\lo{}'' are more likely to be associated
 with invalid inputs. They reflect the cases where the anomaly is
 observed during the execution of functions, which are part of the
 application. We found that different engines often check
@@ -744,7 +744,7 @@ stages of development. We ran the suite once a day for seven
 consecutive days from the period of 16 to 22 of August,
 2018. Table~\ref{tab:test262} shows the average number of passing
 tests over this period. The variance of results was negligible; for
-that reasons, we omited standard deviations. We noticed that all four
+that reasons, we omitted standard deviations. We noticed that all four
 engines we analyzed but \chakra{} use some variant of the Test262
 suite as part of their regression process, but we used the same
 version in this experiment; the one available from the Test262 web
@@ -865,34 +865,15 @@ engine yet. For example, at the time of writing, \chakra{} does not
 implement by default various properties from the \mcodeid{Symbol}
 object. These properties are only available activating the ES6
 experimental mode with the flag \CodeIn{-ES6Experimental}.
-%% \Mar{igor,
-%%   nao consigo entender o porque deste caso nao dar aqueles erros
-%%   (ReferenceError/TypeError) que vc. me mostrou e estourar na
-%%   assercao. explique e de um exemplo concreto, por favor$\rightarrow$
-%% }
-%% \Igor{Ha testes em que o non-standard element aparece com a mensagem de erro
-%% diferente da que usamos anteriormente. Por exemplo, existem testes que 
-%% estao dentro de um bloco try/catch, mesmo se a linha quebrar, 
-%% o catch vai capturar e enviar uma mensagem tipo "expected true, got false".
-%% }
 \textbf{Non-Standard Element.} These cases manifest when a function or
 an object property is undefined in the execution engine but we were
 unable to capture looking for error types like \CodeIn{ReferenceError}
 and \CodeIn{TypeError}. For example, we found cases where the test (or
 its harness) capture the corresponding exception, making the test to
-fail in an assertion instead. \Mar{igor, ha alguma explicacao/intuicao
-  para explicar porque nao conseguir classificar isto?.$\rightarrow$}
-  \Igor{Exemplos: Testes especificos e/ou com entradas invalidas, 
-  por exemplo cobre uma especificacao antiga onde o
-  teste esperava uma propriedade true, mas na documentacao 
-  cita que a propriedade tem que ser false.}\Mar{nao
-  entendi. isto nao acabaria quebrando por um dos motivos anteriores?
-  seja mais especifico, por favor!}
-  \Igor{nao, o teste eh valido (nao quebra por ReferenceError/TypeError) e
-  nao entra no undefined behaviour pq nao afeta a especificacao. Isso eh um caso,
-  outros casos estao ligados a nao-compreensao do testcase }  \textbf{Unknown.} This category
-includes the cases we were unable to confidently diagnose the failure
-but we suspected it was a false alarm.
+fail in an assertion instead.  \textbf{Other.} This category includes
+other sources. For example, it includes the cases where the test was
+valid for some previous version of the spec but is no longer valid for
+the current spec.
 
 %% \begin{figure}[h]
 %%   \centering
@@ -919,7 +900,7 @@ but we suspected it was a false alarm.
     & Timeout/OME & 15 \\
     & Not Implemented & 22 \\
     & Non-Standard Element & 119 \\
-    & Unknown & 135 \\
+    & Other & 135 \\
     \midrule
     \multirow{2}{*}{True Positives} & Duplicate & 10 \\
     & Bug & 24 \\
@@ -939,22 +920,21 @@ but we suspected it was a false alarm.
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 false and true positives. Considering false positives, ``Undefined
-Behavior'' and ``Non-Standard Element'' were the most predominant
-sources. Considering true positives, we found a reasonable number of
-duplicate reports, but not enough high to justify attempting to
-automate the detection of duplicates.
-Table~\ref{tab:test-transplantation-bugs} lists all bugs we found with
-test transplantation. The first column shows the identifier we
-assigned to the bug\Comment{, column ``Date'' shows the date the bug
-  was reported in the format ``m/dd'',}, column ``Engine'' shows the
-affected engine, column ``Status'' shows the status of the bug report
-at the time of the writing. The status string appears in bold face for
-status ``Confirmed'' or higher, \ie{}, ``Assigned'' and ``Fixed''.
-Column ``Url'' shows the URL (de-anonymized upon request) for the bug
-report entry in the corresponding bug-tracking system, column
-``Severity'' shows the severity level for confirmed bugs, and,
-finally, column ``Suite'' shows the name of the engine that originated
-the test.
+Behavior'' was the most predominant source. Considering true
+positives, we found a reasonable number of duplicate reports, but not
+enough high to justify attempting to automate the detection of
+duplicates.  Table~\ref{tab:test-transplantation-bugs} lists all bugs
+we found with test transplantation. The first column shows the
+identifier we assigned to the bug\Comment{, column ``Date'' shows the
+  date the bug was reported in the format ``m/dd'',}, column
+``Engine'' shows the affected engine, column ``Status'' shows the
+status of the bug report at the time of the writing. The status string
+appears in bold face for status ``Confirmed'' or higher, \ie{},
+``Assigned'' and ``Fixed''.  Column ``Url'' shows the URL
+(de-anonymized upon request) for the bug report entry in the
+corresponding bug-tracking system, column ``Severity'' shows the
+severity level for confirmed bugs, and, finally, column ``Suite''
+shows the name of the engine that originated the test.
 
 %Note that bug reports \#4 and \#23 afected multiple engines. 
 
@@ -1190,7 +1170,7 @@ and the test suite from the original test input (``Suite''). So far,
 \Fix{ten} of the bugs we reported were confirmed, \Fix{two} of which
 were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
-across engine implementations that was cosidered to be acceptable. As
+across engine implementations that was considered to be acceptable. As
 of now, we did not find any new bugs on \smonkey{}; the bugs we found
 were duplicates and were not reported. In \veight{}, we reported two
 bugs, both of which were confirmed, with one fixed.
@@ -1232,11 +1212,11 @@ bugs, both of which were confirmed, with one fixed.
 \subsection{Example Bug Reports}
 
 This section discusses a selection of bugs reports. The selection
-criteria we used was: (i) to cover each of the engines we were able to
-find bugs--\chakra, \jsc, and \veight, (ii) to cover a different
-successful technique--test transplantation and differential testing
-(with \radamsa\ and with \quickfuzz), (iii) to cover a case of
-rejected bug report, and (iv) the test is short.
+criteria we used was: (i) to cover each engine that we found
+bugs--\chakra, \jsc, and \veight, (ii) to cover a different
+technique--test transplantation and differential testing (with
+\radamsa\ and with \quickfuzz), (iii) to cover a case of rejected bug
+report, and (iv) to use short test inputs (for space).
 
 %% \CodeIn{\{var a =
 %%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
@@ -1259,8 +1239,9 @@ code snippet below shows the test input we used to reveal a bug in
   }
   \begin{lstlisting}
 {var a =
-  {valueOf:~function(){ return "\x00"}}
-  assert(+a === 0)}
+  {valueOf: function(){ return "\x00"}}
+  assert(+a === 0)
+}
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1271,8 +1252,8 @@ The object property \CodeIn{valueOf} stores a function that returns a
 primitive value identifying the target object~\cite{valueof}. The
 original version of this code returns an empty string whereas the
 version of the code modified by the \radamsa{} fuzzer~\cite{radamsa}
-returns a string representation of a null character (\CodeIn{NUL} in
-ascii). The unary plus expression ``\CodeIn{+a}", used in the
+returns a string representation of a null character (\CodeIn{NUL})\Comment{ in
+ascii}. The unary plus expression ``\CodeIn{+a}", used in the
 assertion, is equivalent to the operation
 \CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
 otherwise the operation returns NaN (Not a
@@ -1316,7 +1297,7 @@ statement. Section B.3.3.3 from the spec~\cite{spec-b333} documents
 how eval should be handle code containing a function declaration.
 According to specification~\cite{break-statement}, the break statement
 should throw an early error--in this case a SyntaxError--if the break
-statement is not nested in an iterational or a switch statement. In
+statement is not nested in an iterable or a switch statement. In
 this case, all engines behave as expected but \veight{} pass without
 failures.
 
@@ -1352,7 +1333,8 @@ transplantation experiment.
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-var obj = {}; var arr = [];
+var obj = {};
+var arr = [];
 try {
   arr.sort(obj);
   assert(false);
@@ -1389,7 +1371,8 @@ we issued to the \chakra\ development team, but they did not accept.
   \begin{lstlisting}
 function test() {
   return typeof String.prototype.repeat === "function"
-    && "foo".repeat(657604378) === "foofoofoo"; }
+  && "foo".repeat(657604378) === "foofoofoo";
+}
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1421,7 +1404,7 @@ we found the need for implementing a different component we kept the
 old one for cross-checking. For example, we used
 eshost-cli~\cite{eshost-cli} to validate our fork-join implementation
 of the ``Checker'' component from Figure~\ref{fig:workflow} that, for
-efficiency, is tighly integrated to our infrastructure.
+efficiency, is tightly integrated to our infrastructure.
 
 \subsection{Lessons Learned}
 \label{sec:lessons}
@@ -1431,7 +1414,7 @@ We learned several lessons in this study:
 \begin{itemize}
   \item The diversity-aware techniques we used are great
     at finding bugs in \js\ engines;
-  \item The cost of inpecting failures/warnings is high. Although the
+  \item The cost of inspecting failures/warnings is high. Although the
     inspection activity was not uninterrupted, it is safe to say that
     each warning required a substantial amount of time to analyze for
     potential false alarms;
@@ -1461,7 +1444,7 @@ The closest work to ours was done by Patra and
 Pradel~\cite{patra2016learning}. Their work proposes a
 language-agnostic fuzzer to findcross-browser HTML+JS
 discrepancies. Their fuzzer can be used to find bugs in JS engines and
-WebAssembly engines. The sensible parts of the infrastructure they
+Web Assembly engines. The sensible parts of the infrastructure they
 built are the checks of input validity (as to reduce waste/cost) and
 output correctness (as to reduce false positives). Patra and Pradel
 work is complementary to ours--in principle, we could use their fuzzer
@@ -1584,7 +1567,12 @@ first.
 %%  LocalWords:  QuickFuzz fuzzers Grammarinator LangFuzz Megadeth
 %%  LocalWords:  AFL libFuzzer toolchain sanitizers arrowed eshost
 %%  LocalWords:  cli pre EcmaScript dataset piecharts piechart \chakra{}
-%%  LocalWords:  JavascriptCore Url radamsa TinyJS \jerry{} JSC
-%%  LocalWords:  quickfuzz \jsc{} \chakra{}'s valueOf NUL ascii
+%%  LocalWords:  JavascriptCore Url radamsa TinyJS \jerry{} JSC crr
+%%  LocalWords:  quickfuzz \jsc{} \chakra{}'s valueOf NUL ascii crrrr
 %%  LocalWords:  unary ToNumber NaN testcase WebKit typeof foofoofoo
-%%  LocalWords:  SSL TLS ICSE
+%%  LocalWords:  SSL TLS ICSE ReferenceError TypeError lineNumber
+%%  LocalWords:  drainMicrotasks subtrees ArrayBuffer RangeError eval
+%%  LocalWords:  ToIndex Clusterization DataView setInt getInt boxpos
+%%  LocalWords:  JavaScriptCore SpiderMonkey byteOffset anonymized
+%%  LocalWords:  xleftmargin framexleftmargin basicstyle numberstyle
+%%  LocalWords:  escapeinside morekeywords
