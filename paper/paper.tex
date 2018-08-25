@@ -851,28 +851,29 @@ is part of the official spec, but is not implemented in the target
 engine yet. For example, at the time of writing, \chakra{} does not
 implement by default various properties from the \mcodeid{Symbol}
 object. These properties are only available activating the ES6
-experimental mode with the flag \CodeIn{-ES6Experimental}. \Mar{igor,
-  nao consigo entender o porque deste caso nao dar aqueles erros
-  (ReferenceError/TypeError) que vc. me mostrou e estourar na
-  assercao. explique e de um exemplo concreto, por favor$\rightarrow$
-}
-\Igor{Ha testes em que o non-standard element aparece com a mensagem de erro
-diferente da que usamos anteriormente. Por exemplo, existem testes que 
-estao dentro de um bloco try/catch, mesmo se a linha quebrar, 
-o catch vai capturar e enviar uma mensagem tipo "expected true, got false".
-}
-\textbf{Non-Standard Element.} This kind corresponds to the cases the
-test case relies on some non-standard function or property of a
-standard object. \Mar{igor, ha alguma explicacao/intuicao para
-  explicar porque nao conseguir classificar
-  isto?.$\rightarrow$}
-  \Igor{Exemplos: Testes especificos e/ou com entradas invalidas, 
-  por exemplo cobre uma especificacao antiga onde o
-  teste esperava uma propriedade true, mas na documentacao 
-  cita que a propriedade tem que ser false.}
-  \textbf{Unknown.} This category includes the
-cases we were unable to confidently diagnose the failure but we
-suspected it was a false alarm.
+experimental mode with the flag \CodeIn{-ES6Experimental}.
+%% \Mar{igor,
+%%   nao consigo entender o porque deste caso nao dar aqueles erros
+%%   (ReferenceError/TypeError) que vc. me mostrou e estourar na
+%%   assercao. explique e de um exemplo concreto, por favor$\rightarrow$
+%% }
+%% \Igor{Ha testes em que o non-standard element aparece com a mensagem de erro
+%% diferente da que usamos anteriormente. Por exemplo, existem testes que 
+%% estao dentro de um bloco try/catch, mesmo se a linha quebrar, 
+%% o catch vai capturar e enviar uma mensagem tipo "expected true, got false".
+%% }
+\textbf{Non-Standard Element.} These cases manifest when a function or
+an object property is undefined in the execution engine but we were
+unable to capture looking for error types like \CodeIn{ReferenceError}
+and \CodeIn{TypeError}. For example, we found cases where the test (or
+its harness) capture the corresponding exception, making the test to
+fail in an assertion instead. \Mar{igor, ha alguma explicacao/intuicao
+  para explicar porque nao conseguir classificar isto?.$\rightarrow$}
+\Igor{Exemplos: Testes especificos do engenho que }\Mar{nao
+  entendi. isto nao acabaria quebrando por um dos motivos anteriores?
+  seja mais especifico, por favor!}  \textbf{Unknown.} This category
+includes the cases we were unable to confidently diagnose the failure
+but we suspected it was a false alarm.
 
 %% \begin{figure}[h]
 %%   \centering
@@ -1152,7 +1153,7 @@ mas creio que nesse caso seria invalid input. Pq se for message mis
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{5}{*}{False Positives} & Undefined Behavior & 26 & 9 \\
+    \multirow{4}{*}{False Positives} & Undefined Behavior & 26 & 9 \\
     & Timeout/OME & 28 & 13 \\
     & * Invalid Input & 39 & 48 \\    
     & * Error Message Mismatch & 41 & 12 \\
@@ -1214,30 +1215,21 @@ bugs, both of which were confirmed, with one fixed.
 \end{center}
 
 
-\subsection{Discussion}
-
-\Mar{----------------------------- estou aqui $\rightarrow$}
-
-For example, a test that passes in one engine could
-legitimately fail in a different engine because of some undefined
-behavior in the spec. The most recent
-\js\ specification~\cite{ecmas262-spec} documents several of these
-cases, which can be traced looking for the string ``implementation-dependent''. As another example, a test
-may fail because the engine does not fully implement some feature. The
-publicly-available Kangax compatibility table~\cite{kangax} relates
-\js\ features with the engines that support them. To sum, it is often
-non-trivial to assess if a test fails because of a bug or because of
-some other reason making test automation more challenging. 
-
-\Fix{...}
-
-\section{Bugs Found}
+\section{Discussion}
 \label{sec:bugs}
 
-\Mar{justify why we discuss these bugs} \Mar{discuss other bugs}
+
+\subsection{Example Bug Reports}
+
+This section discusses a selection of bugs reports. The selection
+criteria we used was: (i) to cover each of the engines we were able to
+find bugs--\chakra, \jsc, and \veight, (ii) to cover a different
+successful technique--test transplantation and differential testing
+(with \radamsa\ and with \quickfuzz), and (iii) to cover a case of
+rejected bug report.
 
 \sloppy
-\vspace{1ex}\noindent\textbf{Bug \#4} The JS code \CodeIn{\{var a =
+\vspace{1ex}\noindent\textbf{Issue \#4.}\Mar{de que tabela?} The JS code \CodeIn{\{var a =
   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
   assert(+a === 0)\}} manifested a bug in the \js{} engine \chakra{}.
 The object property \CodeIn{valueOf} stores a function that returns a
@@ -1256,14 +1248,15 @@ incorrectly converts the string to zero, making the test to pass. All
 other engines fail on this test. As Table~\ref{tab:bugs} shows, the
 \chakra{} team fixed the issue soon after we reported the problem.
 
-\subsection{False Positives}
-
-An example of a warning from the \hi{} group is defined in Figure~\ref{fig:hi-priority}. 
-This is a testcase from WebKit.es6 suite that it was mutate by radamsa fuzzer, the 
-initial seed has in line 3 the code \CodeIn{"foo".repeat(3)} but the fuzzer changed the 
-integer 3 to a big integer number. We reported this case in \chakra{} due a core dumps that occurs
-during the runtime, however this case was rejected due \CodeIn{incompatibility by design} that
-this is an intentional behavior of engine that crash the process if it runs out of memory.
+\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
+code snippet below shows an example input related to a bug report that
+we issued to the \chakra\ development team, but they did not accept.
+This is a testcase original from the \jsc{} suite that the
+\radamsa\ fuzzer modified. Instead of the long integer passed as
+argument to \CodeIn{"foo".repeat()}, the original test used the
+integer literal 3. The engine crashes on this input as result. The
+team answered that this was an incompatibility by design as the
+function repeat was not expected to receive such a long value.
 
 \begin{figure}[h!]
   \centering
@@ -1280,13 +1273,33 @@ function test() {
   return typeof String.prototype.repeat === "function"
     && "foo".repeat(657604378) === "foofoofoo";
 }
-if (!test())
-  throw new Error("Test failed");
   \end{lstlisting}
   \normalsize
-  \caption{Warning captured as \hi{} priority.}
-  \label{fig:hi-priority}
-  \end{figure}
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+\end{figure}
+
+\subsection{Threats}
+
+\subsection{Lessons}
+
+\Mar{----------------------------- estou aqui $\rightarrow$}
+
+For example, a test that passes in one engine could
+legitimately fail in a different engine because of some undefined
+behavior in the spec. The most recent
+\js\ specification~\cite{ecmas262-spec} documents several of these
+cases, which can be traced looking for the string ``implementation-dependent''. As another example, a test
+may fail because the engine does not fully implement some feature. The
+publicly-available Kangax compatibility table~\cite{kangax} relates
+\js\ features with the engines that support them. To sum, it is often
+non-trivial to assess if a test fails because of a bug or because of
+some other reason making test automation more challenging. 
+
+\Fix{...}
+
+
+
 
 % \subsection{LO bugs}
 % 
