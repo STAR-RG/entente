@@ -961,7 +961,7 @@ from Figure~\ref{fig:stacked-engine}.
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
-      \textit{Summary:}~Test transplantation is effective at finding
+      \textit{Summary:}~Test transplantation was effective at finding
       functional bugs. Although the cost of classifying failures was
       non-negligible, the approach revealed several non-trivial bugs
       in widely popular engines.
@@ -1100,18 +1100,16 @@ compared to other engines.
   \end{tabular}
 \end{table}
 
-\Mar{----------------------------- estou aqui $\rightarrow$}
-
-
 Table~\ref{tab:false-positives} shows the distribution of false
 positives per source. The sources of imprecision are as defined in
-Section~\ref{sec:transplantation} with the addition of three new
+Section~\ref{sec:transplantation} with the addition of two new
 sources, which we did not observe before. These sources are
 highlighted with a ``*'' in the table. The source ``Invalid Input''
 indicates that the test input violated some part of the
 specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
-sensitive to function specifications.
+sensitive to function specifications. The source ``Error Message Mismatch''
+indicates that \Mar{por favor, explique. nao consigo lembrar.}
 
 %% \Igor{devemos remover isso da 
 %% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
@@ -1141,29 +1139,33 @@ sensitive to function specifications.
   \end{tabular}
 \end{table}
 
-Table~\ref{tab:bugs} shows the list of bugs we reported. The table is
-organized in two sections. The top section shows results obtained
-during the exploratory phase of the study and the bottom section shows
-the results obtained during the non-exploratory phase. The table shows
-the date the bug was reported (``Date''), the fuzzing tool used
+%% The table is
+%% organized in two sections. The top section shows results obtained
+%% during the exploratory phase of the study and the bottom section shows
+%% the results obtained during the non-exploratory phase. 
+
+Table~\ref{tab:bugs} shows the list of bugs we reported. The table
+shows the date the bug was reported (``Date''), the fuzzing tool used
 (``Fuzz''), the \js\ engine affected (``Engine''), the status of the
 bug report as of Aug. 24, 2018 (``Status''), the Url of the bug report
 (``Url''), the severity of the bug report (``Severity''), the priority
 that we assigned to the warning that revealed the bug (``Priority''),
-and the test suite from the original test input (``Suite'').
+and the test suite from the original test input (``Suite''). So far,
+\Fix{ten} of the bugs we reported were confirmed, \Fix{two} of which
+were fixed. Note that one bug report that we submitted was rejected on
+the basis that the offending JS file manifested an incompatibility
+across engine implementations that was cosidered to be acceptable. As
+of now, we did not find any new bugs on \smonkey{}; the bugs we found
+were duplicates and were not reported. In \veight{}, we reported two
+bugs, both of which were confirmed, with one fixed.
 
-So far, ten of the bugs we reported were confirmed, two of
-which were fixed. One bug report we submitted was rejected on the
-basis that the offending JS file manifested an incompatibility across
-engine implementations that was expected.  Note from the table that
-all bug reports still waiting for confirmation are associated with the
-\jsc{} engine. A closer look at the \jsc{} issue tracker showed that
-their triage process is slow relative to \chakra's.\Comment{\Igor{ The bugs
-  reported on \chakra{}'s bug tracker was defined as confirmed,
-  however the bugs are included on a milestone for the next release
-  following an internal priority.  }} As of now, we did not find any
-new bug on \smonkey{} and V8; the bugs we found were duplicates and
-were not reported.
+%% Note from the table that all bug reports still waiting for
+%% confirmation are associated with the \jsc{} engine. A closer look at
+%% the \jsc{} issue tracker showed that their triage process is slow
+%% relative to \chakra's.\Comment{\Igor{ The bugs reported on \chakra{}'s
+%%     bug tracker was defined as confirmed, however the bugs are
+%%     included on a milestone for the next release following an internal
+%%     priority.  }} 
 
 %% Finally, it is worth noting that \Fix{11 of the 19}
 %% JS files that manifested discrepancies were \emph{not} produced with
@@ -1174,6 +1176,36 @@ were not reported.
 %% total of 30K test files.
 
 \input{table_differential}
+
+\begin{center}
+  \fbox{
+    \begin{minipage}{8cm}
+      \textit{Summary:}~Cross-engine differential testing was also
+      effective at finding several bugs in \js\ engines. However,
+      relative to test transplantation, it required substantial more
+      human effort, which may play a lesser role with improved
+      automation.
+      \end{minipage}
+    }
+\end{center}
+
+
+\subsection{Discussion}
+
+\Mar{----------------------------- estou aqui $\rightarrow$}
+
+For example, a test that passes in one engine could
+legitimately fail in a different engine because of some undefined
+behavior in the spec. The most recent
+\js\ specification~\cite{ecmas262-spec} documents several of these
+cases, which can be traced looking for the string ``implementation-dependent''. As another example, a test
+may fail because the engine does not fully implement some feature. The
+publicly-available Kangax compatibility table~\cite{kangax} relates
+\js\ features with the engines that support them. To sum, it is often
+non-trivial to assess if a test fails because of a bug or because of
+some other reason making test automation more challenging. 
+
+\Fix{...}
 
 \section{Bugs Found}
 \label{sec:bugs}
@@ -1366,18 +1398,6 @@ orthogonal to theirs.
 
 \section{Conclusions}
 
-For example, a test that passes in one engine could
-legitimately fail in a different engine because of some undefined
-behavior in the spec. The most recent
-\js\ specification~\cite{ecmas262-spec} documents several of these
-cases, which can be traced looking for the string ``implementation-dependent''. As another example, a test
-may fail because the engine does not fully implement some feature. The
-publicly-available Kangax compatibility table~\cite{kangax} relates
-\js\ features with the engines that support them. To sum, it is often
-non-trivial to assess if a test fails because of a bug or because of
-some other reason making test automation more challenging. 
-
-\Fix{...}
 
 %\section*{Acknowledgment}
 
