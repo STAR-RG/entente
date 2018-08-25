@@ -18,14 +18,18 @@ We considered engines from four major players in our
 experiments--Apple, Google, Microsoft, and Mozilla. Our results
 indicate that both techniques revealed several bugs, many of which
 confirmed by developers. We reported \noBugsTransplantation{} bugs
-with test transplantation (with \noBugsTransplantationConfirmed{} bugs
+with test transplantation (\noBugsTransplantationConfirmed{} of these bugs
 confirmed and \noBugsTransplantationFixed{} fixed) and reported
 \noBugsDifferentialTesting{} bugs with differential testing
-(with \noBugsDifferentialTestingConfirmed{} confirmed
-and \noBugsDifferentialTestingFixed{} fixed). Furthermore, results
-indicate that most of these bugs affected two engines--Apple's
-\jsc{} (\percJSC{}) and Microsoft's \chakra{} (\percChakra{}); we found
-only \Fix{one} bug in Google \veight{} and none in Mozilla's
-\smonkey{}. Although more research needs to be done to optimizie 
-warning triaging, our results show that exploring diversity is a
-valuable help to find bugs in JavaScript engines.
+(\noBugsDifferentialTestingConfirmed{} of these confirmed
+and \noBugsDifferentialTestingFixed{} fixed). Results indicate that
+most of these bugs affected two engines--Apple's
+\jsc{} and Microsoft's \chakra{}. To sum, our results show that
+exploring diversity is effective to find bugs in JavaScript engines.
+
+%% Although more research needs to be done to optimizie 
+%% warning triaging, 
+
+%% ; we found
+%% only \Fix{one} bug in Google \veight{} and none in Mozilla's
+%% \smonkey{}

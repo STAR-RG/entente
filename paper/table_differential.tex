@@ -5,7 +5,7 @@
   \caption{List of bug reports issued as result of cross-engine
     differential testing.}
   \label{tab:bugs}
-  \begin{tabular}{ccccccccc}
+  \begin{tabular}{rcccccccc}
     \toprule
     Issue\#    & Date & Fuzz & Engine  & Status  &
     \multicolumn{1}{c}{Url}  & Severity & Priority & Suite \\
@@ -28,70 +28,69 @@
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}
     } & 2  & \hi{}  & \jerry{}\\
     
-    \midrule
-    \multirow{2}{*}{6} & \multirow{2}{*}{4/30}  &
-    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
+    6 & 4/30  & radamsa & \chakra{} & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}
-    & 2 & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{TinyJS}\\    
-                        &                        &        &
+    & 2 & \hi{} & TinyJS\\
+    
+    7                    & 4/30                       &  radamsa   &
     \jsc{} & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}
-    & - &  & \\
-    \midrule
+    & - & \hi{} & TinyJS \\
+
 
     
-    7 & 5/02 & radamsa & \jsc{}  & \textbf{Fixed} &
+    8 & 5/02 & radamsa & \jsc{}  & \textbf{Fixed} &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}
     & 2 & \textbf{\lo} & \smonkey{} \\
-    8 & 5/10 & radamsa & \chakra{} & \textbf{Confirmed} &
+    9 & 5/10 & radamsa & \chakra{} & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}
     & 3 & \hi{} & \jerry{} \\
-    9 & 5/17 & radamsa & \chakra{} & \textbf{Fixed} &
+    10 & 5/17 & radamsa & \chakra{} & \textbf{Fixed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}
     & 2 & \hi{} & \veight{}\\
-    10 & 5/24 & radamsa & \jsc{} & \textbf{Fixed}  &
+    11 & 5/24 & radamsa & \jsc{} & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}
     & 2 & \hi{} & \jsc{}\\
-    11 & 6/26 & radamsa & \jsc{} & \textbf{Fixed}  &
+    12 & 6/26 & radamsa & \jsc{} & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}
     & 2 & \hi{} & \jerry{}\\
-    12 & 7/10 & quickfuzz & \jsc{} & \textbf{Fixed}  &
+    13 & 7/10 & quickfuzz & \jsc{} & \textbf{Fixed}  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}
     & 2 & \hi{} & \jerry{}\\
-    13 & 7/10 & quickfuzz & \chakra{} & \textbf{Confirmed}  &
+    14 & 7/10 & quickfuzz & \chakra{} & \textbf{Confirmed}  &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}
     & 2 & \hi{} & \jerry{}\\
     %    \multicolumn{9}{c}{\emph{Non-Exploratory Phase}} \\
 
-    \midrule
-    \multirow{2}{*}{14} & \multirow{2}{*}{8/21}  &
-    \multirow{2}{*}{radamsa} & \chakra{} & \textbf{Confirmed} &
+
+
+    15 & 8/21  & radamsa & \chakra{} & \textbf{Confirmed} &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5617}{\#5617}}
-    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
-    & & &
+    & - & \hi{} & Test262\\    
+
+    16 & 8/21 & radamsa &
     \veight{} & \textbf{Fixed} &
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}
-    & 2 &  & \\
-    \midrule
+    & 2 & \hi{} & Test262 \\
+
     
-    15 & 8/23 & quickfuzz & \jsc{} & New  &
+    17 & 8/23 & quickfuzz & \jsc{} & New  &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}
     & - & \hi{} & Test262\\
-    16 & 8/23 & quickfuzz & \veight{} & \textbf{Confirmed}  &
+    18 & 8/23 & quickfuzz & \veight{} & \textbf{Confirmed}  &
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}
     & 2 & \hi{} & Test262\\
 
-    \midrule
-    \multirow{2}{*}{17} & \multirow{2}{*}{8/24}  &
-    \multirow{2}{*}{quickfuzz} & \chakra{} & New &
+    19 & 8/24  & quickfuzz & \chakra{} & New &
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5630}{\#5630}}
-    & - & \multirow{2}{*}{\hi{}} & \multirow{2}{*}{Test262}\\    
-    & & & 
+    & - & \hi{} & Test262\\
+    
+    20 & 8/24 &  quickfuzz & 
     \jsc{} & New &
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188920}{\#188920}}
-    & - &  & \\
-    \midrule
-    18 & 8/24 & quickfuzz & \jsc{}  & New &
+    & - & \hi{} & Test262 \\
+
+    21 & 8/24 & quickfuzz & \jsc{}  & New &
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=188930}{\#188930}}
     & - & \hi{} & Test262\\
    \bottomrule
