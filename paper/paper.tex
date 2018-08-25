@@ -1053,7 +1053,7 @@ and the order of inspection changed. We restricted our analysis to
 \hi\ warnings and, aware that we would be unable to analyze each and
 every warning reported, we grouped those warnings per engine,
 analyzing each group in a round-robin fashion.  At each iteration, we
-analyzed \Fix{five} warnings in each group. A warning belongs to the
+analyzed \warningsIteration{} warnings in each group. A warning belongs to the
 group of a given engine if only that engine manifests distinct
 behavior, \ie{}, it produces a distinct output compared to others. We
 separated in a distinct group the warnings for which two engines
