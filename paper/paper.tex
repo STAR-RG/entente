@@ -969,7 +969,6 @@ from Figure~\ref{fig:stacked-engine}.
     }
 \end{center}
 
-\Mar{----------------------------- estou aqui $\rightarrow$}
 
 \subsection{Cross-Engine Differential Testing}
 \label{sec:cross-engine-diff-testing-results}
@@ -977,39 +976,40 @@ from Figure~\ref{fig:stacked-engine}.
 This section reports the results obtained with differential
 testing. More precisely, we report results obtained by fuzzing test
 inputs, running those inputs on different engines, and checking the
-outcomes with a differential oracle.  We configured our infrastructure
-(see Figure~\ref{fig:workflow}) to produce 20 well-formed fuzzed files
-per input file, \ie{}, the number of fuzzing iterations can exceed the
-number above as we discard syntactically invalid files.
+outcomes with a differential oracle.
 
 \vspace{0.5ex}
 \subsubsection{Methodology}
-The methodology we used to assess effectiveness of this technique is
-as follows. To avoid experimental noise, we only fuzz test files that
-pass in all engines.  This corresponds to the tests appearing under
-the column ``no-fail-in-all'' from Table~\ref{tab:test-suites}--a
-total of \totalTestFilesPassInAll\ tests satisfy this restriction.
-The intuition is that we wanted to avoid the scenario where fuzzing
-produces a fault-revealing input based on a test that was already
-revealing failures on some engine. This decision ensures that we can
+The experimental methodology we used is as follows. To avoid
+experimental noise, we only fuzz test files that pass in all
+engines--a total of \totalTestFilesPassInAll\ tests satisfy this
+restriction.  Those tests appear under the column ``no-fail-in-all''
+from Table~\ref{tab:test-suites}.  The intuition is that we wanted to
+avoid the scenario where fuzzing produces a fault-revealing input
+based on a test that was already revealing failures on some
+engine. This decision facilitates our inspection task; it helps us
 establish cause-effect relationship between fuzzing and the
-observation of discrepancy. 
+observation of discrepancy.  We configured our infrastructure (see
+Figure~\ref{fig:workflow}) to produce 20 well-formed fuzzed files per
+input file, \ie{}, the number of fuzzing iterations can exceed the
+number above as we discard syntactically invalid files.
+
+%%  That
+%% finding would be important to reduce inspection cost and guide future
+%% developments of this approach. 
 
 \vspace{0.5ex}
 \noindent\textbf{Exploratory Phase.} For the first three months of the
 study, our inspection process was exploratory.  In this phase, we
 wanted to learn whether or not black-box fuzzers could reveal real
 bugs and how effective \lo\ warnings were relative to
-\hi\ warnings. Considering the choice of fuzzers, we did find several
-bugs with \radamsa\, but only some with \quickfuzz. The rationale for
-studying the the \hi\ and \lo\ warning classification was that if we
-found that the ratio of bugs from \lo\ warnings was rather low, we
-could focus our inspection efforts only on \hi\ warnings as we
-expected the number of warnings to increase dramatically compared to
-the previous experiment. That finding would be important to reduce
-inspection cost and guide future developments of this approach. To run
-this experiment, we trained eight students in analyzing the warnings
-that our infrastructure produces. The students were enrolled in a
+\hi\ warnings. The rationale for studying the \hi\ and \lo\ warning
+classification was that if we realized that the ratio of bugs from
+\lo\ warnings was rather low, we could focus our inspection efforts
+only on \hi\ warnings as we expected the number of warnings to
+increase dramatically compared to the previous experiment. To run this
+experiment, we trained eight students in analyzing the warnings that
+our infrastructure produces. The students were enrolled in a
 graduate-level testing class. We listed warnings in a spreadsheet and
 requested the students to update an ``owner'' column indicating who
 was working on it, but we did not enforce a strict order on the
@@ -1026,13 +1026,13 @@ was reported, indicate in the spreadsheet that that warning is
 potentially fault-revealing. We encouraged students to use
 lithium~\cite{lithium} to minimize long test cases; the tests from the
 Mozilla suite are often longer than others. Only after the co-authors
-checked the potential bugs, a bug report was filed. Each student found
-at least one bug using this methodology.
+reviewed the diagnosis, a bug report was filed. Each student found at
+least one bug using this methodology.
 
 \vspace{0.5ex}
 \noindent\textbf{Non-Exploratory Phase.} Results obtained in the
 exploratory phase confirmed our expectations that most of the bugs
-found during the initial three months of investigation were related to
+found during the initial period of investigation were related to
 \hi\ warnings. For that reason, we changed our inspection
 strategy. This time, only the co-authors inspected the bugs using a
 similar discipline as before. However, the set of warnings inspected
@@ -1049,8 +1049,7 @@ each engine more uniformly, enabling more fair comparison across
 engines.
 
 \vspace{0.5ex}
-\subsubsection{Results} In this section we discuss results obtained
-across these two phases of the experiment. Table~\ref{tab:summary-lo}
+\subsubsection{Results} Table~\ref{tab:summary-lo}
 shows statistics of \lo\ warnings obtained when fuzzing inputs with
 different tools. Column ``\# buckets'' shows the number of buckets
 associated with ``\lo'' warnings, column ``\# files'' shows the total
@@ -1077,13 +1076,12 @@ from Section~\ref{sec:clusterization} that we do not cluster
 \hi\ warnings\Comment{ as there was no clear clustering criteria to
   use for that}. This table breaks down \hi\ warning by the affected
 engine, \ie, the engine manifesting distinct output among those
-analyzed. Column ``+1'' show the cases where more than one engine
-disagree on the output. Note that the ordering of engines considering
-this metric is consistent with the one observed on
+analyzed. Column ``+1'' shows the cases where more than one engine
+disagree on the output. Note from the totals that the ordering of
+engines is consistent with the one observed on
 Table~\ref{tab:cross-testing}, with \chakra\ and \jsc\ holding first
-and second place, respectively, in number of warnings (resp.,
-failures) compared to other engines.
-%\veight\ and \smonkey. 
+and second place, respectively, in number of warnings (/failures)
+compared to other engines.
 
 \begin{table}[h]
   \setlength{\tabcolsep}{5pt}
@@ -1096,9 +1094,14 @@ failures) compared to other engines.
     \midrule
     \radamsa{} & 30 & 4 & 121 & 3 & 143 \\
     \quickfuzz{} & 12 & 7 & 67 & 8 & 89 \\
+    \midrule
+    \textbf{total} & \Fix{x} & \Fix{x} & \Fix{x} & \Fix{x} & \Fix{x} \\    
     \bottomrule
   \end{tabular}
 \end{table}
+
+\Mar{----------------------------- estou aqui $\rightarrow$}
+
 
 Table~\ref{tab:false-positives} shows the distribution of false
 positives per source. The sources of imprecision are as defined in
