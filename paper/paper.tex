@@ -866,7 +866,10 @@ test case relies on some non-standard function or property of a
 standard object. \Mar{igor, ha alguma explicacao/intuicao para
   explicar porque nao conseguir classificar
   isto?.$\rightarrow$}
-  \Igor{Exemplos: Testes especificos do engenho que }
+  \Igor{Exemplos: Testes especificos e/ou com entradas invalidas, 
+  por exemplo cobre uma especificacao antiga onde o
+  teste esperava uma propriedade true, mas na documentacao 
+  cita que a propriedade tem que ser false.}
   \textbf{Unknown.} This category includes the
 cases we were unable to confidently diagnose the failure but we
 suspected it was a false alarm.
@@ -892,10 +895,10 @@ suspected it was a false alarm.
     \toprule
     & source &  \#\\
     \midrule
-    \multirow{5}{*}{False Positives} & Undefined Behavior & 313 \\
+    \multirow{5}{*}{False Positives} & Undefined Behavior & 252 \\
     & Timeout/OME & 15 \\
     & Not Implemented & 22 \\
-    & Non-Standard Element & 177 \\
+    & Non-Standard Element & 119 \\
     & Unknown & 135 \\
     \midrule
     \multirow{2}{*}{True Positives} & Duplicate & 10 \\
@@ -1120,6 +1123,17 @@ sensitive to function specifications. The source ``Error Message Mismatch''
 indicates that \Mar{por favor, explique. nao consigo lembrar.}
 \Igor{existem testes que realizam a comparacao de strings, o fuzzer pode
 alterar o corpo da mensagem. Esta era a ideia, mas 
+casos onde o fuzzer muda a msg em uma assercao 
+(por exempo 'assertThrows(SyntaxError(), "SyntaxError: syntax error")') 
+todos os engenhos falham e o teste nao ser reportado caso alcance esse bloco.
+Porem, existem casos em que o teste falha por message mismatch, 
+mas a discrepancia ocorre no engenho que nao exibe essa mensagem. 
+Analisando os casos que encontramos dessa natureza, 
+a comparacao da mensagem aparece no report, 
+porem a discrepancia ocorre quando o teste nao mostra 
+essa mensagem (passa por motivos de invalid input). 
+Eu classifiquei como message mismatch, 
+mas creio que nesse caso seria invalid input. Pq se for message mis
 }
 
 %% \Igor{devemos remover isso da 
