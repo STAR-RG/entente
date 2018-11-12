@@ -1,0 +1,184 @@
+Dear Marcelo,
+
+Thank you for your submission to the ICSE 2019 Technical Track. The ICSE 2019 author response period is now open and will close on November 14, 2018 (11.59pm, AOE).
+
+During this time, you will have access to the current state of the reviews for your papers. Please note that
+   - every paper received at least three reviews and no additional reviews will be solicited from this point forward;
+   - reviews may be updated to take the discussion among reviewers and your response into account;
+   - the reviewers may have explicitly asked you, the authors, questions that may help them better assess your contribution. If so, it is in your interests to respond to these questions clearly.
+
+You have 500 words for your response. Please use this opportunity to answer the reviewers’ questions. You can also point out factual errors in the reviews if you find any. Try to be as concise and to the point as possible, and please do not provide new research results.
+
+The program committee and the program board members will read your response carefully and take this information into account during the discussions.
+
+Your response will be seen by all PB and PC members who have access to the discussion of your paper, so please be polite and constructive.
+
+The reviews on your paper are included here. To submit your response you should log on to the EasyChair Web page for ICSE 2019 and select your submission on the menu.
+
+Best,
+
+Jon and Tevfik
+ICSE 2019 PC Co-Chairs
+
+----------------------- REVIEW 1 ---------------------
+PAPER: 512
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+AUTHORS: Igor Lima and Marcelo d'Amorim
+
+Poster Paper: no
+
+----------- Summary -----------
+The primary contribution of the work is to evaluate the importance of
+test-transplantation (running tests of one computing env in another)
+and cross-engine testing (running mutated tests on multiple
+environment and verifying consistency) in finding bugs. The test
+subject is Javascript programming language and the engines considered
+are from Apple, Google, MS and Mozilla. The authors conclude that
+Apple and MS engines are impacted by most of the bugs and test
+transplantation is more effective that cross-engine testing, in the
+context.
+
+----------- Detailed Evaluation -----------
+The paper is well-written. It is important to focus on such evaluation
+related problems.  However, it is not clear to the reader whether the
+work warrants a publication in conference proceedings.  Two important
+aspects need to be addressed or clarified further, if possible.
+
+- What are the engineering and/or scientific challenges in conducting
+  the experiments? How does the design of experiments ensure that the
+  conclusions are based on representative and sufficient data points?
+
+- The question being asked as part of the experiments is to evaluate
+  whether or not differential testing is useful. The experiments seem
+  to validate this claim through observation. Are there any
+  conclusions that can be arrived based on the observations--for
+  instance, is there any characteristic of the JavaScript engine from
+  MS and Apple that makes them susceptible to bugs? Is it the design
+  of these engines or the pace in which these engines are being
+  developed without official conformance? Or is it the case, the test
+  cases fail because their interpretation in different engines are not
+  well-defined (or sound)?
+
+----------- Strengths and Weaknesses -----------
+Please refer to detailed review.
+
+----------- Author Question 1 -----------
+How does the design of experiments ensure that the conclusions are based on representative and sufficient data points?
+
+----------- Author Question 2 -----------
+What sound conclusions regarding the test-subjects can be arrived based on the observations from the experiments?
+
+----------------------- REVIEW 2 ---------------------
+PAPER: 512
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+AUTHORS: Igor Lima and Marcelo d'Amorim
+
+Poster Paper: no
+
+----------- Summary -----------
+This article presents a study showing that test transplantation and cross-engine differential testing,  two diversity-aware techniques, work well for finding real bugs on real projects.  The test transplantation technique runs test suites of a given engine in
+another engine. The  cross-engine differential testing technique fuzzes existing inputs and then compares the output produced by different engines with a differential oracle.
+The study focuses on the different JavaScript interpreters present in browsers. 
+Overall, authors reported 48 bugs in this study. Of which, 30 were confirmed by developers and 15 were fixed. Although more work is necessary to reduce cost of manual analysis, authors discuss that both techniques used are effective at finding bugs in JS engines.
+
+----------- Detailed Evaluation -----------
+I really enjoyed reading this article. It is well written, easy to read and well structured. Introduction and background sections are clear, related work is exhaustive. 
+This article presents a very nice experiment. The work for this study is very significant and the construction of the dataset is a genuine contribution to the community. 
+On the other hand, the scientific contribution as such is not easy to highlight. Browser javascript interpreters are special pieces of software for which it is indeed possible to perform differential testing. It is not clear in the discussion what could be generalized and in which context. 
+The benefits of test transplantation and cross-engine differential testing have been demonstrated before. It is therefore not the core of the contribution. 
+
+As a result the core contributions which are clearly discussed in the introduction are 
+- the empirical study. 
+- The technical results of the study that find real bugs on real JavaScript engine.
+- the testing infrastructure, results, and experimental scripts available to the public. On this last point, it would be great to use (https://anonymous.4open.science/) for sharing this infrastructure with the reviewers.
+
+I would like to argue in for accepting this paper for the following reasons. The benefits of a rigorous analysis on a real, complex object of study is helpful for the community. Sharing this dataset to the community could lead to new results in particular to decrease the cost of manual inspections of  failures/warnings. The article does not overclaim. In particular in the related work, they often discuss that in contrast to other approaches they did not propose new techniques; their contribution is empirical.
+
+----------- Strengths and Weaknesses -----------
+Strengths:
++ well-written, well-structured easy to read
++ excellent object of study (we could consider that these JavaScript engines represent state of the practice of Software Engineering in Industry. 
++ good testing infrastructure
++ Sharable benchmark for the community
+
+Limitation
+- Novelty is not clear: mainly a new empirical study that assess the benefits of existing testing techniques
+
+----------- Author Question 1 -----------
+How can the conclusions be reused in a context other than JS engines?
+
+----------------------- REVIEW 3 ---------------------
+PAPER: 512
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+AUTHORS: Igor Lima and Marcelo d'Amorim
+
+Poster Paper: yes
+
+----------- Summary -----------
+Reports on a detailed case study of using test cases from diverse sources to test Javascript engines. The main sources are test cases from the Javascript specification as well as a number of Javascript engines and github Javascript projects. This initial set of seed test cases are also mutated using black-box fuzzers to find additional problems. After extensive, manual classification of warnings/problems identified a number of actual bugs was found, confirmed and sometimes even fixed by developers of the engines.
+
+----------- Detailed Evaluation -----------
+# Overview of evaluation and Justification for recommendation
+This is an extensive empirical study on using test cases from diverse sources (either from other systems trying to conform to the same specification, or by mutation of an initial set of such test cases) to test of systems with similar goals and specification. The effort involved and that real bugs have been found, confirmed, and (partly) even fixed is impressive.
+
+However, it is less clear what more general knowledge or lessons learnt we can take from the study. For a case study of this type the lessons learnt have to be discussed in depth. Here they are not.
+
+On balance, I think this is an ok empirical study but the limitations in generalizability indicates for me a weak accept and I could be convinced to also reject. There is no major problems with the work but there is also nothing that really stands out as critically important from a scientific perspective.
+
+## PROS of paper
++ 1. Included JS seed files also from other projects and engines not investigated
+  - This makes sense from a diversity perspective.
+
+- 2. Finding real bugs that have been confirmed/fixed by developers
+  - This shows real-world benefit. Of course, it should be properly discussed in relation to the effort/time needed. You don't discuss this enough.
+
+## CONS of paper
+- 1. Novelty unclear
+  - The paper does not fully spell out what is the added knowledge from this empirical study. Since the paper does not innovate in the particular technologies used it should make very clear what are the added "lessons learned" from the application of existing and well-known technologies for this particular case(s). Currently the reader is left wondering what more we have learnt than that these technologies can be effective (which we already know from the related literature).
+
+- 2. Lack of details on how warnings are clustered.
+  - Is it based on the values, exception messages or something else? Details missing.
+
+- 3. Claim that test transplantation found more tests is dubious
+  - Since the basis for the differential testing was test cases that didn't already fail in any of the engines it is hard to claim the two methods can be compared as being used "from scratch"; you used them in slightly different settings. IMHO it would be wrong if readers take away from your study that "test transplantation" is to be preferred. You used them "in sequence", not "in parallel".
+
+- 4. Too little discussion of lessons learnt
+
+# ICSE criteria
+
+## Soundness
+The papers contributions are somewhat unclear since it is more of an experience report from applying existing techniques. Given that caveat I find the research methods appropriate and their application rigorous.
+
+## Significance
+It is not clear what is the significance of the work. It is novel in the sense that these particular testing techniques have not been previously used in this way on these specific software systems but it is not clear what we actually learn from the authors' experience.
+
+## Verifiability
+Yes, there is enough information here to independently verify and even replicate.
+
+## Presentation
+The paper is well-written and presented.
+
+# Smaller problems with the paper that would need to be clarified/fixed
+
+- 1. Your paper doesn't cite key results on the value of diversity in software testing such as for example:
+  - Chen, Tsong Yueh, et al. "Adaptive random testing: The art of test case diversity." Journal of Systems and Software 83.1 (2010): 60-66.
+  - Feldt, Robert, Simon Poulding et al "Test set diameter: Quantifying the diversity of sets of test cases." Software Testing, Verification and Validation (ICST), 2016 IEEE International Conference on. IEEE, 2016.
+
+----------- Strengths and Weaknesses -----------
+## PROS of paper
++ 1. Included JS seed files also from other projects and engines not investigated
++ 2. Finding real bugs that have been confirmed/fixed by developers
+
+## CONS of paper
+- 1. Novelty unclear
+- 2. Lack of details on how warnings are clustered.
+- 3. Claim that test transplantation found more tests is dubious
+- 4. Too little discussion of lessons learnt
+
+----------- Author Question 1 -----------
+How do you cluster warnings so that they are in a cluster with test cases that fail for "a similar reason" and what does the "message signature" used for this include?
+
+----------- Author Question 2 -----------
+What are the main lessons learnt and novelty(ies) of the work compared to what we already know about test transplantation and differential testing?
+
+------------------------------------------------------
