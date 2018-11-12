@@ -61,7 +61,7 @@ challenging.  Specifications are intentionally incomplete as to enable
 development flexibility. In addition, they evolve frequently to
 accommodate the pressing demands from
 developers~\cite{ecmas262-spec-repo}. An official conformance test
-suites exist for \js~\cite{tc39-github}, but, naturally, many test
+suite exists for \js~\cite{tc39-github}, but, naturally, many test
 scenarios are not covered in the suite. In addition, we noticed that a
 significant fraction (5 to 15\%) of the tests constantly fail on the
 most popular engines, reflecting the struggle of developers in keeping
@@ -669,29 +669,22 @@ diversity-aware techniques in bug finding.
 
 \vspace{1ex}
 \noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows the
-number of bug reports found per engine (\ref{fig:stacked-engine}) and
-technique (\ref{fig:stacked-technique}). Each stacked bar breaks down
-the bugs per status (\eg{}, ``1-New''). The prefix number serves to
-indicate the ordering that status labels are assigned. Note that
-several of these reports have the label ``3-Fixed'', indicating that
-bug fixes have been incorporated into the code already.\Comment{
-  Depending on the issue date, the fix may be in the latest release of
-  the corresponding engines.} Overall, discarding bug reports with the
-``1-New'' status, we reported a total of \totalBugsConfirmed{}
-bugs. We found that the vast majority of bug reports targeted the engines
-from Microsoft and Apple. Considering the techniques, the number of
-bug reports were similar, if we consider only those confirmed or
-fixed. Most of these bugs are of moderate severity. All in all, these
-simple techniques seem promising to improve reliability of engines
-that continuously evolve with their specifications.
-
-%% We found,
-%% however, that the cost of inspecting \Fix{...elaborate...}
-%% It is
-%% also worth noting that several of these reports hold the status
-%% ``new'', which indicates that they were not reviewed yet by the
-%% development team. Note also that we did not find bugs in the Mozilla
-%% \smonkey\ engine.
+breakdown of bug reports found per engine (\ref{fig:stacked-engine})
+and technique (\ref{fig:stacked-technique}). Each stacked bar breaks
+down the bugs per status (\eg{}, ``1-New'', ``2-Confirmed'',
+etc.). The prefix number indicates the ordering that status labels are
+assigned. Note that several of these reports have the label
+``3-Fixed'', indicating that bug fixes have been incorporated into the
+code already.\Comment{ Depending on the issue date, the fix may be in
+  the latest release of the corresponding engines.} Overall, ignoring
+bug reports with the ``1-New'' status, we reported a total of
+\totalBugsConfirmed{} bugs. We found that the vast majority of bug
+reports targeted the engines from Microsoft and Apple. Considering the
+techniques, the number of bug reports were similar, if we consider
+only those confirmed or fixed. Most of these bugs are of moderate
+severity. All in all, these simple techniques seem promising to
+improve reliability of engines that continuously evolve with their
+specifications.
 
 \begin{figure}[h!]
 %  \vspace{-2ex}  
@@ -1292,12 +1285,11 @@ passed as argument to the \CodeIn{eval} function, encoded the actual
 test. The fuzzer replaced the string argument with a function whose
 body is a \CodeIn{break} statement outside a valid block
 statement. Section B.3.3.3 from the spec~\cite{spec-b333} documents
-how eval should be handle code containing a function declaration.
-According to specification~\cite{break-statement}, the break statement
-should throw an early error--in this case a SyntaxError--if the break
-statement is not nested in an iterable or a switch statement. In
-this case, all engines behave as expected but \veight{} pass without
-failures.
+how eval should handle code containing function declarations.
+According to the spec~\cite{break-statement}, the virtual machine
+should throw an early error--in this case, a SyntaxError--if the break
+statement is not nested in an iterable or a switch statement. In this
+case, all engines, but \veight{}, behave as expected.
 
 %% \Igor{
 %%   Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
