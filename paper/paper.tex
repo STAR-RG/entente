@@ -806,19 +806,8 @@ specifications.
 \subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
 
-%\begin{wraptable}[10]{r}{0.25\textwidth}
-%  \vspace{-3ex}
-%\end{wraptable}
-
-We used the official conformance test suite
-Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
-engines to the \js\ current standard. As it is acceptable to release
-engines fulfilling the specification only partially~\cite{kangax}, it
-is expected that engines do not fully pass this test. However, we
-expect that results provide indication of engine's maturity. In the
-limit, it is not desirable to flood bug reports on engines at early
-stages of development. We ran the suite once a day for seven
-\begin{wraptable}[12]{r}{0.2\textwidth}  
+\begin{wraptable}[11]{r}{0.22\textwidth}
+  \vspace{-4ex}      
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
@@ -834,7 +823,16 @@ stages of development. We ran the suite once a day for seven
     \bottomrule
   \end{tabular}
   \normalsize
+  \vspace{-4ex}
 \end{wraptable}
+We used the official conformance test suite
+Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
+engines to the \js\ current standard. As it is acceptable to release
+engines fulfilling the specification only partially~\cite{kangax}, it
+is expected that engines do not fully pass this test. However, we
+expect that results provide indication of engine's maturity. In the
+limit, it is not desirable to flood bug reports on engines at early
+stages of development. We ran the suite once a day for seven
 consecutive days from the period of 16 to 22 of August,
 2018. Table~\ref{tab:test262} shows the average number of passing
 tests over this period. The variance of results was negligible; for
@@ -874,7 +872,7 @@ suite original from a given engine in another engine. Intuitively, we
 want to assess how effective is the idea of cross-fertilization of
 knowledge among \js\ developers.
 
-\vspace{0.5ex}
+%\vspace{0.5ex}
 \subsubsection{Methodology}
 \label{sec:methodology}
 In this experiment, a developer with experience in \js\ analyzed each
@@ -885,7 +883,7 @@ developer classified the failures as potentially fault-revealing, one
 of the co-authors carefully inspected the case and reported the bug,
 if confirmed, or re-classified the failure as a false alarm.
 
-\vspace{0.5ex}
+%\vspace{0.5ex}
 \subsubsection{Results}
 \label{sec:results}
 
@@ -913,7 +911,8 @@ perhaps as expected, considering that it is the suite with more tests
   \small
   \centering
   \caption{\label{tab:cross-testing}Number of failures observed exchanging
-  test suites.}
+    test suites.}
+  \renewcommand*{\arraystretch}{0.9}
   \begin{tabular}{crrrr}
     \toprule
     test suite\textbackslash{}engine & \jsc{} & \veight{} & \smonkey{} & \chakra{}\\
@@ -937,6 +936,7 @@ perhaps as expected, considering that it is the suite with more tests
    \textbf{total} & 270 & 145 & 36 & 361 \\
     \bottomrule 
   \end{tabular}
+  \vspace{-3ex}
 \end{table}
 
 %%  As another example, some tests from \Fix{Y} use the
@@ -979,50 +979,28 @@ other sources. For example, it includes the cases where the test was
 valid for some previous version of the spec but is no longer valid for
 the current spec.
 
-%% \begin{figure}[h]
-%%   \centering
-%%   \subfloat[\label{fig:falsepositives}False Positives]{%
-%%     \includegraphics[trim=0 150 0 100,clip,width=0.4\textwidth]{R/piecharts/falsepositives}
-%%   }
-%%   \label{1a}\hfill
-%%   \subfloat[\label{fig:truepositives}True Positives]{%
-%%     \includegraphics[trim=0 150 0 150,clip,width=0.4\textwidth]{R/piecharts/truepositives}    
-%%   }
-%%   \label{1b}\\
-%%   \caption{\label{fig:piecharts-transplantation}False and True positives.}
-%% \end{figure}
-
-\begin{table}[t!]
+\begin{wraptable}[12]{r}{0.23\textwidth}  
   \small
-%  \setlength{\tabcolsep}{4pt}    
   \centering
-  \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution of false and true positives.}
+  \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
+    of False (FP) and True Positives (TP).}
+  \setlength{\tabcolsep}{3pt}      
+  \renewcommand*{\arraystretch}{0.9}
   \begin{tabular}{ccr}
     \toprule
     & source &  \#\\
     \midrule
-    \multirow{5}{*}{False Positives} & Undefined Behavior & 252 \\
+    \multirow{5}{*}{FP} & Undefined Behavior & 252 \\
     & Timeout/OME & 15 \\
     & Not Implemented & 22 \\
     & Non-Standard Element & 119 \\
     & Other & 135 \\
     \midrule
-    \multirow{2}{*}{True Positives} & Duplicate & 10 \\
+    \multirow{2}{*}{TP} & Duplicate & 10 \\
     & Bug & 24 \\
     \bottomrule
   \end{tabular}
-\end{table}
-
-%%  The piechart at the top
-%% shows false alarms. The absolute number of tests in each category is
-%% shown in parentheses to the right-side of each slice label naming the
-%% source of false positive.  
-
-
-\input{table_transplantation}
-
-% (\eg{},``New'', ``Rejected'', ``Confirmed'', ``Fixed'')
-
+\end{wraptable}
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 false and true positives. Considering false positives, ``Undefined
 Behavior'' was the most predominant source. Considering true
@@ -1035,13 +1013,15 @@ identifier we assigned to the bug\Comment{, column ``Date'' shows the
 ``Engine'' shows the affected engine, column ``Status'' shows the
 status of the bug report at the time of the writing. The status string
 appears in bold face for status ``Confirmed'' or higher, \ie{},
-``Assigned'' and ``Fixed''.  Column ``Url'' shows the URL
-(de-anonymized upon request) for the bug report entry in the
-corresponding bug-tracking system, column ``Severity'' shows the
-severity level for confirmed bugs, and, finally, column ``Suite''
+``Assigned'' and ``Fixed''.  Column ``Severity'' shows the
+severity of confirmed bugs, and, finally, column ``Suite''
 shows the name of the engine that originated the test.
 
-%Note that bug reports \#4 and \#23 afected multiple engines. 
+%% ``Url'' shows the URL
+%% (de-anonymized upon request) for the bug report entry in the
+%% corresponding bug-tracking system, column 
+
+\input{table_transplantation}
 
 
 Considering severity levels, it is worth noting that
@@ -1190,6 +1170,16 @@ fuzzers, the difference of files per bucket was negligible.
   \end{tabular}
 \end{table}
 
+Table~\ref{tab:summary-hi} shows statistics of \hi\ warnings, which
+are not clustered. The table breaks down \hi\ warning by the affected
+engine, \ie, the engine manifesting distinct output among those
+analyzed. Column ``+1'' shows the cases where more than one engine
+disagree on the output. Note from the totals that the ordering of
+engines is consistent with the one observed on
+Table~\ref{tab:cross-testing}, with \chakra\ and \jsc\ in first and
+second places, respectively, in number of warnings.
+
+
 \begin{table}[t]
   \small
   \setlength{\tabcolsep}{4.5pt}
@@ -1207,6 +1197,21 @@ fuzzers, the difference of files per bucket was negligible.
     \bottomrule
   \end{tabular}
 \end{table}
+
+
+Table~\ref{tab:false-positives} shows the distribution of false
+positives per source. The sources of imprecision are as defined in
+Section~\ref{sec:transplantation} with the addition of two new
+sources, which we did not observe before. These sources are
+highlighted with a ``*'' in the table. The source ``Invalid Input''
+indicates that the test input violated some part of the
+specification. For example, the test indirectly invoked some function
+with unexpected arguments; this happens because fuzzing is not
+sensitive to function specifications. Consequently, it can replace
+valid with invalid inputs. The source ``Error Message Mismatch''
+corresponds to the cases where the fuzzer modifies the assertion
+expression (\eg{}, some string expression or regular expression).
+
 
 \begin{table}[t]
   \small
@@ -1228,30 +1233,6 @@ fuzzers, the difference of files per bucket was negligible.
   \end{tabular}
 \end{table}
 
-Table~\ref{tab:summary-hi} shows statistics of \hi\ warnings; recall
-from Section~\ref{sec:clusterization} that we do not cluster
-\hi\ warnings\Comment{ as there was no clear clustering criteria to
-  use for that}. This table breaks down \hi\ warning by the affected
-engine, \ie, the engine manifesting distinct output among those
-analyzed. Column ``+1'' shows the cases where more than one engine
-disagree on the output. Note from the totals that the ordering of
-engines is consistent with the one observed on
-Table~\ref{tab:cross-testing}, with \chakra\ and \jsc\ holding first
-and second place, respectively, in number of warnings (/failures)
-compared to other engines.
-
-Table~\ref{tab:false-positives} shows the distribution of false
-positives per source. The sources of imprecision are as defined in
-Section~\ref{sec:transplantation} with the addition of two new
-sources, which we did not observe before. These sources are
-highlighted with a ``*'' in the table. The source ``Invalid Input''
-indicates that the test input violated some part of the
-specification. For example, the test indirectly invoked some function
-with unexpected arguments; this happens because fuzzing is not
-sensitive to function specifications. Consequently, it can replace
-valid with invalid inputs. The source ``Error Message Mismatch''
-corresponds to the cases where the fuzzer modifies the assertion
-expression (\eg{}, some string expression or regular expression).
 
 %% \Igor{devemos remover isso da 
 %% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
@@ -1267,7 +1248,6 @@ expression (\eg{}, some string expression or regular expression).
 %% during the exploratory phase of the study and the bottom section shows
 %% the results obtained during the non-exploratory phase.
 
-\input{table_differential}
 
 Table~\ref{tab:bugs} shows the list of bugs we reported. The table
 shows the fuzzing tool used
@@ -1283,6 +1263,8 @@ across engine implementations that was considered to be acceptable. As
 of now, we did not find any new bugs on \smonkey{}; the bugs we found
 were duplicates and were not reported. Considering \veight{}, we reported two
 bugs, both of which were confirmed, with one fixed.
+
+\input{table_differential}
 
 %% Note from the table that all bug reports still waiting for
 %% confirmation are associated with the \jsc{} engine. A closer look at
