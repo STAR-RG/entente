@@ -1,4 +1,4 @@
-\documentclass[sigconf,screen,anonymous]{acmart}
+\documentclass[sigconf,review, anonymous]{acmart}
 
 \hyphenation{on-tol-o-gy ad-di-tion-al in-fra-struc-ture an-a-lyze a-nal-y-sis} 
 
@@ -30,6 +30,7 @@
 }
 \usepackage{balance}
 \usepackage{wrapfig}
+\usepackage{enumitem}
 
 \input{macros}
 
@@ -50,8 +51,7 @@
 \acmISBN{123-4567-24-567/08/06}
 
 %Conference
-\acmConference[WOODSTOCK'97]{ACM Woodstock conference}{July 1997}{El
-  Paso, Texas USA}
+\acmConference[ESEC/FSE 2019]{The 27th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering}{26--30 August, 2019}{Tallinn, Estonia}
 \acmYear{1997}
 \copyrightyear{2016}
 
@@ -207,9 +207,10 @@ practical to fully automate the technique. In contrast to other
 applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
-~\ref{tab:false-positives}). This paper evaluates the potential
-benefits of diversity techniques, including DT. It provides data to
-support or not the decision for automation of these techniques.
+~\ref{tab:false-positives}). \Mar{rewrite. too vague.}\Fix{This paper
+  evaluates the potential benefits of diversity techniques, including
+  DT. It provides data to support or not the decision for automation
+  of these techniques.}
 
 %% Recently, Patra and
 %% Pradel~\cite{patra2016learning} proposed a language-agnostic fuzzer to
@@ -232,15 +233,16 @@ revealed \noBugsDifferentialTesting{} bugs (of which,
 indicate that most of these bugs affected two engines--Apple's \jsc{}
 and Microsoft's \chakra{}.  We reported \noBugsBugsReportedGoogle{}
 bugs in Google \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and
-none in Mozilla's \smonkey{}. Our results indicate that both
-techniques were successful at finding bugs, but, overall, test
-transplantation demanded less effort compared to differential testing
-per bug found. Although our experience indicates that more research
-needs be done to automate parts of the inspection process, our results
-show that exploring diversity is a valuable help to find bugs in
-JavaScript engines.
+none in Mozilla's \smonkey{}. 
 
-\emph{Key Findings.}~\Fix{copied from ICSE meta-review $\rightarrow$}The key
+\emph{Key Findings.}~Results indicate that both techniques were
+successful at finding bugs. Overall, test transplantation demanded
+less effort compared to differential testing per bug
+found.\Fix{redundant with the sentences that follow...check} Although
+our experience indicates that more research needs be done to automate
+parts of the inspection process, our results show that exploring
+diversity is a valuable help to find bugs in JavaScript
+engines. \Fix{copied from ICSE meta-review $\rightarrow$}The key
 findings could include, e.g.: - Not only multiple different
 implementations can be leveraged in differential testing, also
 differences in test suites can be important.  - Even for problems with
@@ -295,33 +297,32 @@ ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 %% A compatibility table relating features and supporting engines is
 %% publicly available~\cite{kangax}.
 
-The specification and implementation of JavaScript are
-incomplete. Certain parts of the specification are undefined; it is
-responsibility of engine engineers to decide how to implement these
-functionalities. The JavaScript spec uses the label
+For different reasons, the specification and implementation of
+JavaScript are incomplete. Certain parts of the specification are
+undefined; it is responsibility of engineers to decide how to
+implement these functionalities. The JavaScript spec uses the label
 ``implementation-dependent'' to indicate these cases, where behavior
 may differ from engine to engine. One reason this flexibility in the
 spec exists is to enable compiler optimizations. For example, the
-\mcodeid{for-in} loop does not clearly specify the iteration
-order of elements~\cite{so-forin-undefined,javascript-in-chrome} and different
-engines capitalize on that for optimization~\cite{for-in-undefined}.  As another
-example, the specification states that if
-the \mcodeid{Number.toPrecision()} function is called with multiple arguments then the floating-point approximation is
+\mcodeid{for-in} loop does not clearly specify the iteration order of
+elements~\cite{so-forin-undefined,javascript-in-chrome} and different
+engines capitalize on that for optimization~\cite{for-in-undefined}.
+As another example, the specification states that if the
+\mcodeid{Number.toPrecision()} function is called with multiple
+arguments then the floating-point approximation is
 implementation-dependent~\cite{es6-toPrecision}. Various other cases
 like these exist in the specification. Such gap also exists at the
 implementation level. Given the speed the specification changes and
 the complexity of the language some features are not fully implemented
 as can be observed by the Kangax compatibility table~\cite{kangax}.
-It is also worth noting that, as in other languages, some
-elements in JS have non-deterministic behavior (\eg{},
-\mcodeid{Math.random} and \mcodeid{Date}). A test that make decisions
-based on these elements could, in principle, produce different
-outcomes on different runs. Carefully-written test cases should not
-manifest this kind of
-flaky behavior~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}, but
-fuzzed are more likely to manifest them.
-As mentioned previously, all those aspects make testing \js\ engines
-more challenging.
+It is also worth noting that, as in other languages, some elements in
+JS have non-deterministic behavior (\eg{}, \mcodeid{Math.random} and
+\mcodeid{Date}). A test that make decisions based on these elements
+could, in principle, produce different outcomes on different
+runs. Carefully-written test cases should not manifest this kind of
+flaky behavior~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}.  As
+mentioned previously, all those aspects make testing \js\ engines more
+challenging.
 
 
 %\subsection{Randomness}
@@ -620,20 +621,6 @@ tree~\cite{grieco2016quickfuzz} with trees created anew.
 \section{Differential Testing Infrastructure}
 \label{sec:design}
 
-%\begin{wrapfigure}[10]{r}[0pt]{0.45\textwidth}
-\begin{figure}[t!]
-  \centering
-%  \includegraphics[trim=20 350 200
-%    0,clip,width=0.35\textwidth]{google-awards-workflow}
-  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
-\end{figure}
-
-\Comment{ Several fuzzing methods
-  have been proposed in the past, varying with respect to how new
-  inputs are
-  generated~\cite{afl,honggfuzz,grammarinator,jsfunfuzz,radamsa}.}
-
 Figure~\ref{fig:workflow} illustrates the 
 differential testing infrastructure used in part of this study. It takes on
 input a list of JS files and generates warnings on output. Boxes in
@@ -651,9 +638,14 @@ infrastructure ignores the input. Otherwise, it considers the input as
 potentially fault-revealing; hence, interesting for human
 inspection. The infrastructure uses the
 open-source tool eshost-cli~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy. 
+Microsoft, for checking output discrepancy.
 
-%The checker can produce multiple warnings for a given input. 
+\begin{figure}[h!]
+  \centering
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
+  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+\end{figure}
+
 
 It is worth noting that a number of reasons exist, other than a bug,
 to explain discrepancy (see Tables~\ref{fig:piecharts-transplantation}
@@ -754,24 +746,28 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
 \label{sec:results}
 
 The goal of our study is to assess reliability of \js\ engines by
-leveraging implementation diversity. We organized our study in three
-parts. First, we report on the conformance of the engines we studied
-using the official Test262 conformance
-suite~\cite{ecma262-conformance-suite}
-(Section~\ref{sec:stability}). In the limit, bugs would have low
-relevance if the engines are too unreliable. Second, we report results
-obtained with test transplantation
-(Section~\ref{sec:transplantation}). The rationale is that developers
-consider different goals when writing test cases--suites written for a
-given engine should cover scenarios not covered by a different
-engine. Third, we analyzed the impact of using cross-engine
-differential testing to find bugs
-(Section~\ref{sec:cross-engine-diff-testing-results}). The rationale
-is that bugs may be detected using inputs which are similar to those
-already tested. Our broad goal is to evaluate ability of these simple
-diversity-aware techniques in bug finding.
+leveraging on diversity of test data and engine implementations. Based
+on that, we pose three questions:
+\begin{description}[leftmargin=.5in]
+\item[RQ1.] How conformant are the engines to the Test262 suite?
+\item[RQ2.] How effective is test transplantation to find bugs?
+\item[RQ3.] How effective is cross-engine differential testing to find bugs?  
+\end{description}
 
-%Figure~\ref{fig:summary} summarizes the bugs we reported.
+The first question focuses on the conformance of our selected engines
+to the official Test262 suite~\cite{ecma262-conformance-suite}
+(Section~\ref{sec:stability}). In the limit, bugs would have low
+relevance if the engines are too unreliable. The second question
+focuses on the effectiveness of test transplantation
+(Section~\ref{sec:transplantation}). The rationale for using inputs
+from different engines is that developers consider different goals
+when writing test cases--suites written for a given engine should
+cover scenarios not covered by a different engine. The third question
+evaluates the effectiveness of cross-engine differential testing to
+find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
+rationale is that bugs may be detected using inputs which are similar
+to those already tested. Overall, our goal is to evaluate ability of
+these simple diversity-aware techniques to find bugs.
 
 \vspace{1ex}
 \noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows the
@@ -807,7 +803,7 @@ specifications.
 %  \vspace{-3ex}
 \end{figure}
 
-\subsection{Conformance}
+\subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
 
 %\begin{wraptable}[10]{r}{0.25\textwidth}
@@ -860,8 +856,16 @@ in the conformance suite (as per Table~\ref{tab:test262}) and reliability as
 measured by the number of bugs found (as per
 Figure~\ref{fig:summary}), we do not not imply causality.
 
+\begin{center}
+  \fbox{
+    \begin{minipage}{8cm}
+      \textit{Summary:}~...
+      \end{minipage}
+    }
+\end{center}
 
-\subsection{Test Transplantation}
+
+\subsection{Answering RQ2 (Test Transplantation)}
 \label{sec:transplantation}
 
 This section reports results of test transplantation. More
@@ -1084,10 +1088,10 @@ Figure~\ref{fig:stacked-engine}. Curiously, however, the bugs that the
 \end{center}
 
 
-\subsection{Cross-Engine Differential Testing}
+\subsection{Answering RQ3 (Differential Testing)}
 \label{sec:cross-engine-diff-testing-results}
 
-This section reports the results obtained with differential
+This section reports the results obtained with cross-engine differential
 testing. More precisely, we report results obtained by fuzzing test
 inputs, running those inputs on different engines, and checking the
 outcomes with a differential oracle.
@@ -1266,8 +1270,8 @@ expression (\eg{}, some string expression or regular expression).
 \input{table_differential}
 
 Table~\ref{tab:bugs} shows the list of bugs we reported. The table
-shows the date the bug was reported (``Date''), the fuzzing tool used
-(``Fuzz''), the \js\ engine affected (``Engine''), the status of the
+shows the fuzzing tool used
+(``Fuzzer''), the \js\ engine affected (``Engine''), the status of the
 bug report as of Aug. 24, 2018 (``Status''), the Url of the bug report
 (``Url''), the severity of the bug report (``Severity''), the priority
 that we assigned to the warning that revealed the bug (``Priority''),

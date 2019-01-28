@@ -37,7 +37,7 @@
 %%   Right brace   \}     Tilde         \~}
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{acmart}
-[2018/11/11 v1.56 Typesetting articles for the Association for
+[2018/12/16 v1.57 Typesetting articles for the Association for
 Computing Machinery]
 \def\@classname{acmart}
 \InputIfFileExists{acmart-preload-hook.tex}{%
@@ -108,6 +108,10 @@ Computing Machinery]
   \fi}{\PackageError{\@classname}{The option nonacm can be either true or
     false}}
 \ExecuteOptionsX{nonacm=false}
+\define@boolkey+{acmart.cls}[@ACM@]{balance}[true]{}{%
+  \PackageError{\@classname}{The option balance can be either true or
+    false}}
+\ExecuteOptionsX{balance}
 \define@boolkey+{acmart.cls}[@ACM@]{natbib}[true]{%
   \if@ACM@natbib
     \PackageInfo{\@classname}{Explicitly selecting natbib mode}%
@@ -212,6 +216,7 @@ Computing Machinery]
 \LoadClass[\ACM@fontsize, reqno]{amsart}
 \RequirePackage{microtype}
 \RequirePackage{etoolbox}
+\RequirePackage{booktabs}
 \RequirePackage{refcount}
 \RequirePackage{totpages}
 \RequirePackage{environ}
@@ -1161,6 +1166,8 @@ Computing Machinery]
 \newif\if@insideauthorgroup
 \@insideauthorgroupfalse
 \renewcommand\author[2][]{%
+  \IfSubStr{#2}{,}{\ClassWarning{\@classname}{Do not put several
+      authors in the same \string\author\space macro!}}{}%
   \global\advance\num@authors by 1\relax
   \if@insideauthorgroup\else
     \global\advance\num@authorgroups by 1\relax
@@ -1224,6 +1231,8 @@ Computing Machinery]
   \let\country\position
   Also with #1\unskip.\egroup}
 \renewcommand{\email}[2][]{%
+  \IfSubStr{#2}{,}{\ClassWarning{\@classname}{Do not put several
+      addresses in the same \string\email\space macro!}}{}%
   \if@ACM@anonymous\else
     \g@addto@macro\addresses{\email{#1}{#2}}%
   \fi}
@@ -2101,9 +2110,11 @@ Computing Machinery]
   \fi
   \gdef\and{}}%
   \def\email##1##2{\ifx\@currentaffiliation\@empty
-    \gdef\@currentaffiliation{\nolinkurl{##2}}%
+    \gdef\@currentaffiliation{\bgroup
+      \mathchardef\UrlBreakPenalty=10000\nolinkurl{##2}\egroup}%
   \else
-    \g@addto@macro\@currentaffiliation{\par\nolinkurl{##2}}%
+    \g@addto@macro\@currentaffiliation{\par\bgroup
+      \mathchardef\UrlBreakPenalty=10000\nolinkurl{##2}\egroup}%
   \fi}%
   \def\affiliation##1##2{\ifx\@currentaffiliation\@empty
     \gdef\@currentaffiliation{%
@@ -2684,6 +2695,35 @@ Computing Machinery]
 }{%
   \popQED\endtrivlist\@endpefalse
 }
+\AtEndPreamble{%
+  \if@ACM@balance
+    \ifcase\ACM@format@nr
+    \relax % manuscript
+         \global\@ACM@balancefalse
+       \or % acmsmall
+         \global\@ACM@balancefalse
+       \or % acmlarge
+         \global\@ACM@balancefalse
+       \or % acmtog
+          \RequirePackage{balance}%
+       \or % sigconf
+          \RequirePackage{balance}%
+       \or % siggraph
+          \RequirePackage{balance}%
+       \or % sigplan
+          \RequirePackage{balance}%
+       \or % sigchi
+          \RequirePackage{balance}%
+       \or % sigchi-a
+          \global\@ACM@balancefalse
+    \fi
+  \fi
+}
+\AtEndDocument{%
+  \if@ACM@balance
+  \if@twocolumn
+  \balance
+  \fi\fi}
 \newcommand\acksname{Acknowledgments}
 \specialcomment{acks}{%
   \begingroup
@@ -2716,6 +2756,17 @@ Computing Machinery]
   \ifx\@tempa\@tempb
      arXiv:\href{http://arxiv.org/abs/#2}{#2}\else arXiv:#2%
   \fi}
+\apptocmd{\@vspace}{\ClassWarning{\@classname}{\string\vspace\space should
+    only be used to provide space above/below surrounding
+    objects}}{}{}
+\apptocmd{\@vspacer}{\ClassWarning{\@classname}{\string\vspace\space should
+    only be used to provide space above/below surrounding
+    objects}}{}{}
+\let\ACM@origbaselinestretch\baselinestretch
+\AtEndDocument{\ifx\baselinestretch\ACM@origbaselinestretch\else
+  \ClassError{\@classname}{An attempt to redefine
+    \string\baselinestretch\space detected.  Please do not do this for
+    ACM submissions!}\fi}
 \normalsize\normalfont\frenchspacing
 \endinput
 %%
