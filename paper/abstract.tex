@@ -9,7 +9,7 @@ incomplete and evolves frequently.
 %reports on a study we ran to 
 This paper evaluates the importance of
 diversity to find functional bugs in JavaScript engines. For that, we
-explored two simple diversity-aware techniques---test transplantation and
+explored two existing diversity-aware techniques---test transplantation and
 cross-engine differential testing. The first technique runs test
 suites of a given engine in another engine. The second technique
 fuzzes existing inputs and then compares the output produced by
@@ -29,10 +29,3 @@ most of these bugs affected two engines--Apple's
 \jsc{} and Microsoft's \chakra{}. To sum, our results show that
 diversity-aware techniques are easy to apply and very effective in
 finding bugs in complex software, such as JavaScript engines.
-
-%% Although more research needs to be done to optimizie 
-%% warning triaging, 
-
-%% ; we found
-%% only \Fix{one} bug in Google \veight{} and none in Mozilla's
-%% \smonkey{}

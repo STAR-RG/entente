@@ -145,7 +145,7 @@ for the language encourages constant improvements in its specification~\cite{ecm
 lead to sensible changes in engine implementations~\cite{kangax}. Even small
 changes can have high practical impact. For example, in October 2014 a
 new attribute added to Array objects resulted in the MS Outlook
-Calendar web app, which is built in \js{}, failing under
+Calendar web app, which is built in \js{}, to fail under 
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
 
 Finding bugs in \js\ engines is an important problem given the range
@@ -156,28 +156,36 @@ accommodate the pressing demands from
 developers~\cite{ecmas262-spec-repo}. An official conformance test
 suite exists for \js~\cite{tc39-github}, but, naturally, many test
 scenarios are not covered in the suite. In addition, we noticed that a
-significant fraction (5 to 15\%) of the tests constantly fail on the
+significant fraction (5 to 15\%) of the tests fail regularly in the
 most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
 %% WHAT WE DID
 This paper reports on a study we ran to evaluate the importance of
-diversity in finding bugs on JavaScript engines. We evaluated
+diversity to find bugs in JavaScript engines. We evaluated
 effectiveness of two complementary diversity-aware testing
-techniques. \emph{Test transplantation} leverages diversity of test
-cases to find bugs. It evaluates the effects that running \js{} test
-files from a given engine have in detecting bugs in other engines. The
-intuition is that developers design test cases with different
-objectives in mind. Replaying these tests, written for a given engine,
-in a different engine may reveal unanticipated
-problems. \emph{Cross-engine differential testing} leverages diversity of engine implementations to find
+techniques.
+
+\begin{itemize}
+
+\item \emph{Test transplantation} leverages diversity of test cases to
+  find bugs. It evaluates the effects that running test files from a
+  given engine have in detecting bugs in other engines. The intuition
+  is that developers design test cases with different objectives in
+  mind. As such, replaying these tests in different engines could
+  reveal unanticipated problems.
+
+\item \emph{Cross-engine differential testing} leverages diversity of engine implementations to find
 bugs. More precisely, this technique fuzzes existing test
 inputs~\cite{fuzz-testing-history} and then compares the output
 produced by different engines using a differential oracle. The
 intuition is that similar inputs to those already tested may reveal
-problems. Our study measures the ability of these techniques in
-finding bugs and the impact of false positives, which
-can arise in both testing scenarios.
+problems.
+\end{itemize}
+
+Our study measures the ability of these techniques in finding bugs and
+the impact of false positives, which can arise in both testing
+scenarios, on the practicality of the approach.
 
 %One of
 %various causes of output discrepancy is a bug.
@@ -186,9 +194,9 @@ can arise in both testing scenarios.
 %% implementations of a system exist. DT leverages diversity across
 %% system's implementations to detect anomalous behavior. 
 
-\emph{Related Ideas.}  It is worth noting that Differential
-Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
-contexts to find
+\emph{Related Ideas.}\Mar{Summarize Test Transplantation.} It is worth
+noting that Differential Testing~\cite{Brumley-etal-ss07} (DT) has
+been applied in a variety of contexts to find
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
 It has shown to be specially practical in scenarios where the
 observation of difference gives a strong signal of a real problem. For
@@ -197,8 +205,8 @@ example, Mozilla runs JS files\footnote{These files are created with
   ``compare\_jit'' from funfuzz.} against different configurations of
 a given build of their \smonkey\ engine (\eg{}, trying to enable or
 not eager JIT compilation). A positive aspect of the approach is that
-it can be fully automated. As the same engine is used, the outcomes of
-the test in both configurations are expected to be identical. The
+it can be fully automated---as only one engine is used, the outcomes
+of the test in both configurations are expected to be identical. The
 Mozilla team uses this approach since 2002; they have been able to
 find over 270 bugs since then~\cite{jsfunfuzz-at-mozilla}, including
 security bugs. Cross-engine differential testing, in contrast, has not
@@ -207,10 +215,14 @@ practical to fully automate the technique. In contrast to other
 applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
-~\ref{tab:false-positives}). \Mar{rewrite. too vague.}\Fix{This paper
-  evaluates the potential benefits of diversity techniques, including
-  DT. It provides data to support or not the decision for automation
-  of these techniques.}
+~\ref{tab:false-positives}). To sum, variations of these ideas have
+been explored before in different contexts.  The goal of the paper is
+to assess the ability of these techniques aforementioned in finding
+bugs on \javascript\ engines.
+
+%% This paper evaluates the benefits of
+%% test case diversity and engine diversity in finding bugs on
+%% \javascript\ engines.
 
 %% Recently, Patra and
 %% Pradel~\cite{patra2016learning} proposed a language-agnostic fuzzer to
@@ -233,46 +245,34 @@ revealed \noBugsDifferentialTesting{} bugs (of which,
 indicate that most of these bugs affected two engines--Apple's \jsc{}
 and Microsoft's \chakra{}.  We reported \noBugsBugsReportedGoogle{}
 bugs in Google \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and
-none in Mozilla's \smonkey{}. 
+none in Mozilla's \smonkey{}. Overall, results indicate that both
+techniques were successful at finding bugs. Considering cost per bug
+found, test transplantation demanded less effort--from the developers
+who inspected the alarms---compared to differential testing.
 
-\emph{Key Findings.}~Results indicate that both techniques were
-successful at finding bugs. Overall, test transplantation demanded
-less effort compared to differential testing per bug
-found.\Fix{redundant with the sentences that follow...check} Although
-our experience indicates that more research needs be done to automate
-parts of the inspection process, our results show that exploring
-diversity is a valuable help to find bugs in JavaScript
-engines. \Fix{copied from ICSE meta-review $\rightarrow$}The key
-findings could include, e.g.: - Not only multiple different
-implementations can be leveraged in differential testing, also
-differences in test suites can be important.  - Even for problems with
-fairly clear specifications, as here for a programming language and
-how it is to be executed, there is likely to be (a lot of) variation
-between different implementations.  - Differential testing is feasible
-on real, complex, widely used pieces of software.
-
+\emph{Key Findings.}~1) Not only multiple different implementations
+can be leveraged in differential testing, but differences in test
+suites can also be important. 2) Even for problems with fairly clear
+specifications, as in \javascript{}, there is likely to be (a lot of)
+variation between different implementations. 3) Differential testing
+is feasible on real, complex, widely used pieces of software. 4) More
+research needs be done to automate parts of the inspection process as
+to reduce false alarms and prioritize alarms for inspection.
 
 %% LIST OF CONTRIBUTIONS
-\emph{Contributions.}~This paper contributes the following:
-\begin{itemize}
-  \item We ran a comprehensive study to analyze the effectiveness of
-    simple diversity-aware techniques to find functional bugs in
-     popular \js\ engines;
-    
-  \item We reported a total of \totalBugsReported{} bugs on these
-    engines. Of these, \totalBugsConfirmed{} bug reported were confirmed and
-    \totalBugsFixed{} were fixed;
-    
-  %% \item We offered insights on how to reduce cost of analyzing
-  %%   warnings reported by diversity-aware techniques and make the
-  %%   approach more practical.
-    
-  \item We made our testing infrastructure, results, and experimental
-    scripts available to the public. (upon request for anonymity.)
+\emph{Contributions.}~This paper contributes the following: 1)~A
+comprehensive study to analyze the effectiveness of diversity-aware
+techniques to find functional bugs in popular \javascript\ engines.
+2)~A number of bugs found and fixed. We reported a total of
+\totalBugsReported{} bugs. Of these, \totalBugsConfirmed{} bugs were
+confirmed and \totalBugsFixed{} bugs were fixed. 3)~An infrastructure
+for diversity-aware testing. We made our testing infrastructure,
+results, and experimental scripts available to the public. (upon
+request for anonymity.)
 
-\end{itemize}
-
-
+To sum, the paper provides initial, yet strong evidence that exploring
+diversity is a valuable help to find bugs in JavaScript engines and
+should be encouraged.
 
 \section{JavaScript}
 \label{sec:es6-design}
