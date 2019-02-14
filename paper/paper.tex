@@ -462,6 +462,26 @@ engines.
 
 \subsubsection{Mining Tests from Issue Trackers}
 
+N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
+Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
+Para obter o codigo extraido dos reports, foi criado um modelo de aprendizagem para reconhecer
+se um bloco de texto eh um bloco de codigo.
+
+Motivacao:
+Utilizamos a tecnica de Embeddings que eh reconhecida pela comunidade pelo seu uso em PLN (Processing Language Natural),
+onde atraves de uma rede neural, consegue-se montar um dicionario de palavras com a distancia 
+de similaridade entre elas.
+Para treinamenteo, foi utilizado uma rede neural simples CNN (Convolutional Neural network) com apenas 2 camadas, uma de entrada e outra de saida.
+Utilizando as variaveis \Fix{XYZ} e as funcoes \Fix{XYZ}. Obtivemos 98\% de acuracia em nosso treinamento.
+(melhorar definicao do modelo)
+
+Inputs:
+Para nosso modelo de dados, foi necessario gerar um arquivo CSV com cerca de 50K de dados extraidos
+de arquivos javascript (nossas seeds) e de linguagem natural, utilizamos 25K para cada classe.
+Os rotulos das classes sao definidas em 0 (is not code) ou 1 (is code).
+
+Com isso, extraimos cerca de \Fix{X} codigo e apos realizar o parser para validar o arquivo, obtivemos um total de \Fix{X} novas seeds.
+
 \Fix{...elaborate...}
 
 
