@@ -131,7 +131,7 @@
 
 %% \ccsdesc[500]{Software and its engineering~Software testing and debugging}
 
-\keywords{JavaScript, Diversity, Software Testing}
+%% \keywords{JavaScript, Diversity, Software Testing}
 
 \maketitle
 
@@ -362,26 +362,19 @@ challenging.
 %% than jsfunfuzz.\Mar{ask C. Holler. it is unclear to me how the output
 %%   could be different.}
 
-\section{Objects of Study}
+%% \section{Objects of Study}
+%% This section discusses the objects we used in our study.
+
+\section{Engines Studied}
 \label{sec:methodology}
-
-This section discusses the objects we used in our study.
-
-\subsection{Engines}
 \label{sec:methodology:engines}~We selected 
-JS engines according to the following criteria.
-
-\begin{itemize}
-\item Released latest version after Jan 1, 2018
-\item Contains more than 1K stars on GitHub  
-\item Uses a public issue tracker
-\end{itemize}  
-
-We look for highly-maintained (as per the first criterion) and popular
-(as per the second criterion) projects. As we wanted to report bugs,
-we also looked for project with public issue
-trackers. Table~\ref{tab:engines} lists the engines we analyzed in
-this work. It is worth noting that we used GoogleChromeLab's JSVU
+JS engines according to the following criteria: 1) Released latest
+version after Jan 1, 2018, 2) Contains more than 1K stars on GitHub,
+and 3) Uses a public issue tracker. We looked for highly-maintained
+(as per the first criterion) and popular (as per the second criterion)
+engines. As we wanted to report bugs, we also looked for project with
+public issue trackers. Table~\ref{tab:engines} lists the engines we
+analyzed. It is worth noting that we used GoogleChromeLab's JSVU
 tool~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
 aim to use the most recent stable versions of each engine as to avoid
@@ -397,7 +390,7 @@ reporting old and already-fixed bugs to developers.
 \begin{table}[t]
   \small
   \centering
-  \caption{\label{tab:engines}Engines analyzed.}
+  \caption{\label{tab:engines}Engines selected.}
   \begin{tabular}{cccrr}
     \toprule
     Team & Name & URL & \# Stars  & DOB \\
@@ -412,7 +405,8 @@ reporting old and already-fixed bugs to developers.
   \end{tabular}
 \end{table}
 
-\subsection{Seed JS files\label{sec:seeds}}~
+\section{Seed JS files}
+\label{sec:seeds}
 A good test set is critical for finding bugs with the techniques used
 in this paper. For that reason, we looked for \js\ files from various
 sources: 1) test files from the Test262~\cite{tc39-github} conformance
@@ -427,13 +421,13 @@ these engines.
 %% API~\cite{github-rest-api}.
 
 Table~\ref{tab:test-suites} shows the breakdown of tests we per
-engine. Column ``original'' shows the number of test cases associated
-with each test suite. Column ``pass-in-par.''  shows the number of
+engine. Column ``full'' shows the number of test cases associated
+with each engine. Column ``pass-in-par.''  shows the number of
 test cases that pass in their parent engine. We discarded tests that
 fail in their parent engine as we could not reliably indicate the
 reason for the failure, so we assumed the test could be broken. We
 removed 63 test cases that fail for that reason--6 tests from \jsc{}
-and 57 tests from \smonkey. Column ``compile-in-all'' shows the number
+and 57 tests from \smonkey. Column ``type-in-all'' shows the number
 of test cases whose executions do not throw dynamic type errors in any
 of the engines because of an undefined variable or property. We
 capture these cases by looking for the presence of
@@ -448,18 +442,65 @@ names (\eg{}, \jsc{}'s \CodeIn{drainMicrotasks()} and \smonkey{}'s
 spec, not all engines currently support. We used the
 \totalTestFilesForTestTransplantation{} tests included in the circle
 from the table in the evaluation of test transplantation, \ie{}, all
-tests under the ``compile-in-all'' column\Mar{change name to
+tests under the ``type-in-all'' column\Mar{change name to
   type-in-all} but the Test262 tests. We did not consider tests from
 the conformance suite as they are more likely to indicate missing
 features as opposed to bugs. In addition, engine developers have
 access to these test and are encouraged to run them.  Column
 ``no-fail-in-all'' shows the tests for which all engines pass. This
 test set is used in the evaluation of differential testing. Note that
-it is a proper subset of the ``compile-in-all'' test set. The tests
+it is a proper subset of the ``type-in-all'' test set. The tests
 from this group are used as fuzzing seeds. The guarantee that they
 pass in all engines assures that, if discrepancies occur, they are
 related to the changes in the input as opposed to the original cause
 of failure.
+
+
+\newcommand\marktopleft[1]{%
+    \tikz[overlay,remember picture] 
+        \node (marker-#1-a) at (0,2ex) {};%
+}
+\newcommand\markbottomright[1]{%
+    \tikz[overlay,remember picture] 
+        \node (marker-#1-b) at (0,0) {};%
+    \tikz[overlay,remember picture,thick,dashed,inner sep=2pt]
+        \node[draw,rounded rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};%
+}
+
+%% \Comment{ Column ``full'' shows the number of the test cases found
+%%     for that engine, column ``compile-in-all'' shows the number of
+%%     test cases for which engines do not throw compile error (\eg{},
+%%     undefined name), and column ``no-fail-all'' shows the number of
+%%     test cases that pass in all four engines we analyzed.\Mar{explain
+%%       ``pass-in-par.''}\Mar{why SpiderMonkey 1,977->2,116?}}}
+
+\begin{table}[t]
+  \small
+  \centering
+  \caption{\label{tab:test-suites}Number of test cases per suite.}
+  \setlength{\tabcolsep}{2pt}
+  \begin{tabular}{ccrrrr}
+    \toprule
+    \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
+    \multicolumn{4}{c}{\# JS files} \\
+    \cline{3-6}
+                               &         & total & pass-in-par. & type-in-all &  no-fail-in-all \\
+    \midrule
+    Test262 & \cite{ecma262-conformance-suite} & 31,276 & - &  29,846 & 17,639 \\
+    \midrule
+    \jsc{} & \cite{webkit} & 1,031 & 1,025 &\marktopleft{c1}1,021 & 955\\
+    \smonkey\ & \cite{mozilla} & 2,634 & 1,977 & 2,116 & 1,686\\
+    \veight{} & \cite{v8} & 75 & 75 & 57 & 57\\
+    \midrule
+    Duktape & \cite{duktape} & 1,195 & 1,195 & 921 & 915\\ 
+    \jerry{} & \cite{jerryscript} & 1,951 & 1,951 & 1,878 & 1,837\\
+    JSI & \cite{jsi} & 99 & 99 & 63 & 63\\
+    Tiny-js & \cite{tinyjs} & 49 & 49 & 37\markbottomright{c1} & 37\\
+    \midrule
+     &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
+   \bottomrule 
+  \end{tabular}
+\end{table}
 
 
 %% The main source of test
@@ -487,7 +528,7 @@ tests uniformly across all engines. More precisely, we needed to mock
 non-portable harness functions, which are only available in certain
 engines.
 
-\subsubsection{Mining Tests from Issue Trackers}
+\subsection{Mining Tests from Issue Trackers}
 
 \sloppy{}We observed that issue trackers are an important source of
 test data and should not be ignored. Analyzing a sample of issues, we
@@ -559,52 +600,130 @@ is publicly available from our website as a separate component.
 %% \Fix{add code to explain}
 
 
+\section{Cross-Engine Differential Testing}
+\label{sec:design}
 
-\newcommand\marktopleft[1]{%
-    \tikz[overlay,remember picture] 
-        \node (marker-#1-a) at (0,1.5ex) {};%
-}
-\newcommand\markbottomright[1]{%
-    \tikz[overlay,remember picture] 
-        \node (marker-#1-b) at (0,0) {};%
-    \tikz[overlay,remember picture,thick,dashed,inner sep=3pt]
-        \node[draw,rounded rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};%
-}
+Figure~\ref{fig:workflow} illustrates the 
+differential testing infrastructure used in part of this study. It takes on
+input a list of JS files and generates warnings on output. Boxes in
+the figure denote encapsulation, arrowed lines denote data flow, and
+the cycle icons denote repetition--the leftmost icon indicates that
+each file in the input list will be analyzed in separate whereas the
+rightmost icon shows that a single file will be fuzzed multiple times.
+The bug-finding process works as follows. New inputs are obtained for
+a given test input using some off-the-shelf input
+fuzzer~\cite{fuzz-testing-history}; Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+The oracle checks whether or not the output produced for the fuzzed
+file is consistent across all engines. In case the test passes in all
+engines or fails in all engines (\ie{}, the output is consistent), the
+infrastructure ignores the input. Otherwise, it considers the input as
+potentially fault-revealing; hence, interesting for human
+inspection. The infrastructure uses the
+open-source tool eshost-cli~\cite{eshost-cli}, also used at
+Microsoft, for checking output discrepancy.
 
-\begin{table}[t]
-  \small
+\begin{figure}[t]
   \centering
-  \caption{\label{tab:test-suites}Number of test cases per
-    suite. Column ``original'' shows the original size of the test
-    suite, column ``compile-in-all'' shows the number of test cases
-    for which engines do not throw compile error (\eg{}, undefined
-    name), and column ``no-fail-all'' shows the number of test cases
-    that pass in all four engines we analyzed.\Mar{explain
-      ``pass-in-par.''}\Mar{why SpiderMonkey 1,977->2,116?}}
-  \setlength{\tabcolsep}{2.25pt}      
-  \begin{tabular}{ccrrrr}
-    \toprule
-    \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
-    \multicolumn{4}{c}{\# JS files} \\
-    \cline{3-6}
-                               &         & original & pass-in-par. & compile-in-all &  no-fail-in-all \\
-    \midrule
-    Test262 & \cite{ecma262-conformance-suite} & 31,276 & - &  29,846 & 17,639 \\
-    \midrule
-    \jsc{} & \cite{webkit} & 1,031 & 1,025 &\marktopleft{c1}1,021 & 955\\
-    \smonkey\ & \cite{mozilla} & 2,634 & 1,977 & 2,116 & 1,686\\
-    \veight{} & \cite{v8} & 75 & 75 & 57 & 57\\
-    \midrule
-    Duktape & \cite{duktape} & 1,195 & 1,195 & 921 & 915\\ 
-    \jerry{} & \cite{jerryscript} & 1,951 & 1,951 & 1,878 & 1,837\\
-    JSI & \cite{jsi} & 99 & 99 & 63 & 63\\
-    Tiny-js & \cite{tinyjs} & 49 & 49 & 37\markbottomright{c1} & 37\\
-    \midrule
-     &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
-   \bottomrule 
-  \end{tabular}
-\end{table}
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
+  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+\end{figure}
 
+
+It is worth noting that a number of reasons exist, other than a bug,
+to explain discrepancy (see Tables~\ref{fig:piecharts-transplantation}
+and ~\ref{tab:false-positives}) and there is no clear automatic
+approach to precisely distinguish false and true positives. As such, a
+human needs to inspect the warning to classify the issue. To
+facilitate inspection, we prioritized warnings and clustered them in
+groups. We describe these strategies in the following.
+
+\subsection{Prioritization}
+
+We classified warnings in two types, reflecting their likelihood of
+manifesting a real bug. Warnings of the kind ``\hi{}'' are associated
+with the cases where the test code executed to completion without
+violating any internal checks, but it violated assertions declared in
+the test itself or its harness. The rationale is that the input is
+more likely to be valid as it it did not raise exceptions during the
+execution of the application code, but, it manifested discrepancy
+through the violation of an assertion declared in the test. In
+contrast, warnings of type ``\lo{}'' are more likely to be associated
+with invalid inputs. They reflect the cases where the anomaly is
+observed during the execution of functions, which are part of the
+application. We found that different engines often check
+pre-conditions of those functions differently. It can happen, for
+example, that one engine enforces a weaker pre-condition on a function
+input compared to another engine and that is acceptable.\Comment{ For
+  instance, it is acceptable to pass values greater than \Fix{x} to
+  function \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those
+cases, the infrastructure would observe a discrepancy that is more
+likely to be associated with an invalid input produced by the fuzzer,
+\ie{}, it is likely to be a ``bug'' in the test code as opposed to a
+bug in the engine code. However, as expected, our heuristic is not
+precise---``\lo'' warnings can reveal
+bugs. Figure~\ref{fig:lo-truepositive} shows one of these cases. In
+this example, the test instantiates an \CodeIn{ArrayBuffer} object and
+stores an 8-bit integer at the 0 position. According to the
+specification~\cite{ecmas262-getviewvalue}, a \CodeIn{RangeError}
+exception should be thrown if a negative value is passed to the
+function \CodeIn{ToIndex}, indirectly called by the test case. In this
+case, however, the \chakra{} engine did not throw any exception. This
+is a case of undocumented precondition, which is handled as a bug. It
+was fixed by \chakra\ developers and is no longer present in the most
+recent release of \chakra. Despite that case, most bugs we found
+emerged from ``\hi{}'' warnings.
+
+%% \Igor{
+%%   Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
+%%   casos reportados como LO tambem podem ser considerados como um true positive.
+%%   Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
+%%   se um teste falha antes da linha em que ha uma assercao, entao a falha
+%%   ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
+%%   possivel observar um caso de bug obtido em um bucket classificado como LO.
+%%   Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
+%%   posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
+%%   maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
+%%   de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
+%%   lancar Offset is outside the bounds.
+
+%%   Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
+%%   Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
+%%   correto seria usar um levantar um erro
+%% }
+
+\subsection{Clusterization}
+\label{sec:clusterization}
+
+Clusterization helps to group tests that fail for similar reasons. We
+only clustered ``\lo'' warnings as ``\hi'' warnings produce messages
+that arise from the test case, which are typically
+distinct. Figure~\ref{fig:lo-truepositive} shows, at the bottom, the
+error messages produced by a ``\lo'' warning. Any warning, including
+this one, that has this same message signature will be included in the
+same ``bucket''. To maximize the hit ratio we remove references to
+code that may appear in the error messages.
+
+\begin{figure}[t!]
+  \centering
+  \begin{lstlisting}
+var buffer = new ArrayBuffer(64);
+var view = new DataView(buffer);
+view.setInt8(0,0x80);
+assert(view.getInt8(-1770523502845470856) === -0x80);
+
+Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
+1. RangeError: Offset is outside the bounds of the DataView
+2. RangeError: byteOffset cannot be negative
+3. RangeError: invalid or out-of-range index
+  \end{lstlisting}
+  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
+    that led to a confirmed bug report in \chakra. The bug is caused
+    by a required precondition check in the implementation of function
+    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
+\end{figure}
+
+\Fix{...reviewer asks for more details...check what we added in the
+  rebuttal for this.}
 
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
@@ -723,130 +842,6 @@ because, conceptually, one complements the other. \quickfuzz\ creates
 mutations like \radamsa. However, in contrast to \radamsa, \quickfuzz\ is aware
 of the \js\ syntax; it is able to replace subtrees of the syntax
 tree~\cite{grieco2016quickfuzz} with trees created anew.
-
-\section{Differential Testing Infrastructure}
-\label{sec:design}
-
-Figure~\ref{fig:workflow} illustrates the 
-differential testing infrastructure used in part of this study. It takes on
-input a list of JS files and generates warnings on output. Boxes in
-the figure denote encapsulation, arrowed lines denote data flow, and
-the cycle icons denote repetition--the leftmost icon indicates that
-each file in the input list will be analyzed in separate whereas the
-rightmost icon shows that a single file will be fuzzed multiple times.
-The bug-finding process works as follows. New inputs are obtained for
-a given test input using some off-the-shelf input
-fuzzer~\cite{fuzz-testing-history}; Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
-The oracle checks whether or not the output produced for the fuzzed
-file is consistent across all engines. In case the test passes in all
-engines or fails in all engines (\ie{}, the output is consistent), the
-infrastructure ignores the input. Otherwise, it considers the input as
-potentially fault-revealing; hence, interesting for human
-inspection. The infrastructure uses the
-open-source tool eshost-cli~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy.
-
-\begin{figure}[h!]
-  \centering
-  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
-\end{figure}
-
-
-It is worth noting that a number of reasons exist, other than a bug,
-to explain discrepancy (see Tables~\ref{fig:piecharts-transplantation}
-and ~\ref{tab:false-positives}) and there is no clear automatic
-approach to precisely distinguish false and true positives. As such, a
-human needs to inspect the warning to classify the issue. To
-facilitate inspection, we prioritized warnings and clustered them in
-groups. We describe these strategies in the following.
-
-\subsection{Prioritization}
-
-We classified warnings in two types, reflecting their likelihood of
-manifesting a real bug. Warnings of the kind ``\hi{}'' are associated
-with the cases where the test code executed to completion without
-violating any internal checks, but it violated assertions declared in
-the test itself or its harness. The rationale is that the input is
-more likely to be valid as it it did not raise exceptions during the
-execution of the application code, but, it manifested discrepancy
-through the violation of an assertion declared in the test. In
-contrast, warnings of type ``\lo{}'' are more likely to be associated
-with invalid inputs. They reflect the cases where the anomaly is
-observed during the execution of functions, which are part of the
-application. We found that different engines often check
-pre-conditions of those functions differently. It can happen, for
-example, that one engine enforces a weaker pre-condition on a function
-input compared to another engine and that is acceptable.\Comment{ For
-  instance, it is acceptable to pass values greater than \Fix{x} to
-  function \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those
-cases, the infrastructure would observe a discrepancy that is more
-likely to be associated with an invalid input produced by the fuzzer,
-\ie{}, it is likely to be a ``bug'' in the test code as opposed to a
-bug in the engine code. However, as expected, our heuristic is not
-precise---``\lo'' warnings can reveal
-bugs. Figure~\ref{fig:lo-truepositive} shows one of these cases. In
-this example, the test instantiates an \CodeIn{ArrayBuffer} object and
-stores an 8-bit integer at the 0 position. According to the
-specification~\cite{ecmas262-getviewvalue}, a \CodeIn{RangeError}
-exception should be thrown if a negative value is passed to the
-function \CodeIn{ToIndex}, indirectly called by the test case. In this
-case, however, the \chakra{} engine did not throw any exception. This
-is a case of undocumented precondition, which is handled as a bug. It
-was fixed by \chakra\ developers and is no longer present in the most
-recent release of \chakra. Despite that case, most bugs we found
-emerged from ``\hi{}'' warnings.
-
-%% \Igor{
-%%   Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
-%%   casos reportados como LO tambem podem ser considerados como um true positive.
-%%   Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
-%%   se um teste falha antes da linha em que ha uma assercao, entao a falha
-%%   ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
-%%   possivel observar um caso de bug obtido em um bucket classificado como LO.
-%%   Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
-%%   posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
-%%   maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
-%%   de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
-%%   lancar Offset is outside the bounds.
-
-%%   Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
-%%   Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
-%%   correto seria usar um levantar um erro
-%% }
-
-\subsection{Clusterization}
-\label{sec:clusterization}
-
-Clusterization helps to group tests that fail for similar reasons. We
-only clustered ``\lo'' warnings as ``\hi'' warnings produce messages
-that arise from the test case, which are typically
-distinct. Figure~\ref{fig:lo-truepositive} shows, at the bottom, the
-error messages produced by a ``\lo'' warning. Any warning, including
-this one, that has this same message signature will be included in the
-same ``bucket''. To maximize the hit ratio we remove references to
-code that may appear in the error messages.
-
-\begin{figure}[!h]
-  \centering
-  \begin{lstlisting}
-var buffer = new ArrayBuffer(64);
-var view = new DataView(buffer);
-view.setInt8(0,0x80);
-assert(view.getInt8(-1770523502845470856) === -0x80);
-
-Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
-1. RangeError: Offset is outside the bounds of the DataView
-2. RangeError: byteOffset cannot be negative
-3. RangeError: invalid or out-of-range index
-  \end{lstlisting}
-  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
-    that led to a confirmed bug report in \chakra. The bug is caused
-    by a required precondition check in the implementation of function
-    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
-\end{figure}
-
-\Fix{reviewer asks for more details...}
 
 \section{Results}
 \label{sec:results}
@@ -1419,8 +1414,7 @@ report, and (iv) to use short test inputs (for space).
 
 \sloppy
 \vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
-code snippet below shows the test input we used to reveal a bug in
-\chakra.
+code snippet below shows a test that reveals a bug in \chakra.
 
 \begin{figure}[h!]
   \centering
@@ -1458,38 +1452,19 @@ to zero, making the test to pass. As Table~\ref{tab:bugs} shows, the
 \chakra{} team fixed the issue soon after we reported the problem.
 
 \vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.}  The
-code snippet below shows the test input we used to reveal a bug in
-\veight{}.
-
-\begin{figure}[h!]
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assert, assertEq, var, yield, in, function, eval,
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
- eval(function b (a) { break;});
-  \end{lstlisting}
-  \normalsize
-  %% \caption{\label{fig:bug-veight}Fuzzed code mutated by \quickfuzz{}
-  %% and reported in \veight{} engine}
-\end{figure}
-
-This code snippet was obtained by fuzzing a Test262 test with
-\quickfuzz. In its original version, a string (omitted for space),
-passed as argument to the \CodeIn{eval} function, encoded the actual
-test. The fuzzer replaced the string argument with a function whose
-body is a \CodeIn{break} statement outside a valid block
-statement. Section B.3.3.3 from the spec~\cite{spec-b333} documents
-how eval should handle code containing function declarations.
-According to the spec~\cite{break-statement}, the virtual machine
-should throw an early error--in this case, a SyntaxError--if the break
-statement is not nested in an iterable or a switch statement. In this
-case, all engines, but \veight{}, behave as expected.
+code {\footnotesize\ttfamily{eval(function b(a)\{break;\});}} shows
+the test input we used to reveal a bug in \veight{}. This code snippet
+was obtained by fuzzing a Test262 test with \quickfuzz. In its
+original version, a string (omitted for space), passed as argument to
+the \CodeIn{eval} function, encoded the actual test. The fuzzer
+replaced the string argument with a function whose body is a
+\CodeIn{break} statement outside a valid block statement. Section
+B.3.3.3 from the spec~\cite{spec-b333} documents how eval should
+handle code containing function declarations.  According to the
+spec~\cite{break-statement}, the virtual machine should throw an early
+error--in this case, a SyntaxError--if the break statement is not
+nested in an iterable or a switch statement. All engines, but
+\veight{}, behave as expected in this case.
 
 %% \Igor{
 %%   Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
