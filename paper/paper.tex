@@ -419,44 +419,47 @@ sources: 1) test files from the Test262~\cite{tc39-github} conformance
 suite of the ECMA262 specification~\cite{ecmas262-spec}, 2) test files
 from the test suite of the selected engines (see
 Section~\ref{sec:methodology:engines}); these files are accessible
-from the engine's official repositories, 3) test files mined from
-issue trackers of these engines, and 4) test files from public engines
-accessible from GitHub using the GitHub REST
-API~\cite{github-rest-api}.
+from the engine's official repositories, 3) test files from the suites
+of public engines, and 4) test files mined from issue trackers of
+these engines.
+
+%% accessible from GitHub using the GitHub REST
+%% API~\cite{github-rest-api}.
 
 Table~\ref{tab:test-suites} shows the breakdown of tests we per
-source. Column ``original'' shows the number of test cases associated
-with each test suite. Column ``pass-in-par.'' shows the number of test
-cases that pass in their parent engine. We discarded tests that fail
-in their parent engine as we could not reliably indicate the reason
-for the failure, so we assumed the test could be broken. We removed 63
-test cases that fail for that reason--6 tests from \jsc{} and 57 tests
-from \smonkey. Column ``compile-in-all'' shows the number of test
-cases whose executions do not throw dynamic type errors in any of the
-engines because of an undefined variable or property. We capture these
-cases by looking for the presence of \CodeIn{ReferenceError} and
-\CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
-(respectively, \CodeIn{TypeError}) is raised when test execution
-attempts to access an undefined variable (respectively, property of an
-object). We discarded those tests to avoid noise in the experiments as
-they clearly indicate some missing feature as opposed to bugs. For
-example, some tests use non-portable names (\eg{}, \jsc{}'s
-\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
-or use functions that, albeit part of the spec, not all engines
-currently support. We used the \totalTestFilesForTestTransplantation{}
-tests included in the circle from the table in the evaluation of test
-transplantation, \ie{}, all tests under the ``compile-in-all''
-column\Mar{change name to type-in-all}
-but the Test262 tests. We did not consider tests from the conformance
-suite as they are more likely to indicate missing features as opposed
-to bugs. In addition, engine developers have access to these test and
-are encouraged to run them.  Column ``no-fail-in-all'' shows the tests
-for which all engines pass. This test set is used in the evaluation of
-differential testing. Note that it is a proper subset of the
-``compile-in-all'' test set. The tests from this group are used as
-fuzzing seeds. The guarantee that they pass in all engines assures
-that, if discrepancies occur, they are related to the changes in the
-input as opposed to the original cause of failure.
+engine. Column ``original'' shows the number of test cases associated
+with each test suite. Column ``pass-in-par.''  shows the number of
+test cases that pass in their parent engine. We discarded tests that
+fail in their parent engine as we could not reliably indicate the
+reason for the failure, so we assumed the test could be broken. We
+removed 63 test cases that fail for that reason--6 tests from \jsc{}
+and 57 tests from \smonkey. Column ``compile-in-all'' shows the number
+of test cases whose executions do not throw dynamic type errors in any
+of the engines because of an undefined variable or property. We
+capture these cases by looking for the presence of
+\CodeIn{ReferenceError} and \CodeIn{TypeError} in the output. A
+\CodeIn{ReferenceError} (respectively, \CodeIn{TypeError}) is raised
+when test execution attempts to access an undefined variable
+(respectively, property of an object). We discarded those tests to
+avoid noise in the experiments as they clearly indicate some missing
+feature as opposed to bugs. For example, some tests use non-portable
+names (\eg{}, \jsc{}'s \CodeIn{drainMicrotasks()} and \smonkey{}'s
+\CodeIn{Error.lineNumber}) or use functions that, albeit part of the
+spec, not all engines currently support. We used the
+\totalTestFilesForTestTransplantation{} tests included in the circle
+from the table in the evaluation of test transplantation, \ie{}, all
+tests under the ``compile-in-all'' column\Mar{change name to
+  type-in-all} but the Test262 tests. We did not consider tests from
+the conformance suite as they are more likely to indicate missing
+features as opposed to bugs. In addition, engine developers have
+access to these test and are encouraged to run them.  Column
+``no-fail-in-all'' shows the tests for which all engines pass. This
+test set is used in the evaluation of differential testing. Note that
+it is a proper subset of the ``compile-in-all'' test set. The tests
+from this group are used as fuzzing seeds. The guarantee that they
+pass in all engines assures that, if discrepancies occur, they are
+related to the changes in the input as opposed to the original cause
+of failure.
 
 
 %% The main source of test
@@ -486,30 +489,68 @@ engines.
 
 \subsubsection{Mining Tests from Issue Trackers}
 
-N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
-Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
-Para obter o codigo extraido dos reports, foi criado um modelo de aprendizagem para reconhecer
-se um bloco de texto eh um bloco de codigo.
+\sloppy{}We observed that issue trackers are an important source of
+test data and should not be ignored. Analyzing a sample of issues, we
+observed that developers either 1) add test cases as attachments of
+issues or 2) embed test cases within the textual description of an
+issue. The test cases in attachments are longer compared to the test
+cases embedded in issue descriptions whereas the latter are more
+common. Consequently, we thought we should handle both
+cases. Accessing attachments is simpler compared to embedded
+tests. For attachments, we wrote a crawler to visit the issue trackers
+of all four engines listed in Table~\ref{tab:engines} and were able to
+retrieve a total of \Fix{XX} files
+(\jsc{}=\Fix{XX},\veight{}=\Fix{XX},\chakra{}=\Fix{XX}, and
+\smonkey{}=\Fix{XX}). To mine tests from the textual descriptions, we
+broke the text describing the issue in paragraphs and used a binary
+classifier to label each paragraph as ``code'' or ``not code''. Then,
+based on that information, we merged consecutive paragraphs labeled as
+``code'' and used a \js\ parser to check well-formedness of the
+corresponding code fragment. Using that method we were able to
+retrieve a total of \Fix{XX} files
+(\jsc{}=\Fix{XX},\veight{}=\Fix{XX},\chakra{}=\Fix{XX}). All those
+files were included in Table~\ref{tab:test-suites}.
 
-Motivacao:
-Utilizamos a tecnica de Embeddings que eh reconhecida pela comunidade pelo seu uso em PLN (Processing Language Natural),
-onde atraves de uma rede neural, consegue-se montar um dicionario de palavras com a distancia 
-de similaridade entre elas.
-Para treinamenteo, foi utilizado uma rede neural simples CNN (Convolutional Neural network) com apenas 2 camadas, uma de entrada e outra de saida.
-Utilizando as variaveis \Fix{XYZ} e as funcoes \Fix{XYZ}. Obtivemos 98\% de acuracia em nosso treinamento.
-(melhorar definicao do modelo)
+Surprisingly, we did not find a public classifier to solve the problem
+above. For space, we summarize the solution that worked the best in
+the following. We used a standard Embeddings NLP
+technique~\Fix{cite}\Mar{needs to explain what this ``Embeddings''
+  thing does at a high-level. Also, if this stuff exists why we did
+  not find a solution off-the-shelf?} that uses a neural
+net~\Fix{cite} to keep a dictionary of words and the similarity
+distance among them\Mar{but we are talking about sentences. how does
+  it go from words to sentences? Note that many words from the
+  ``code'' vocabulary are from English!}. In more detail, the
+classification model uses a Convolutional Neural Network~\Fix{cite}
+classifier with two layers\Mar{why two? is there a meaning for each
+  layer?} and has been trained and evaluated using a dataset with 25K
+samples of English paragraphs and 25K snippets of \js{}. We ran a
+standard \Fix{X}-repeated 10-fold cross validation to evaluate the
+model and obtained a predicted accuracy of \Fix{98\%}. This classifier
+is publicly available from our website as a separate component.
 
-Inputs:
-Para nosso modelo de dados, foi necessario gerar um arquivo CSV com cerca de 50K de dados extraidos
-de arquivos javascript (nossas seeds) e de linguagem natural, utilizamos 25K para cada classe.
-Os rotulos das classes sao definidas em 0 (is not code) ou 1 (is code).
+%% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
+%% Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
+%% Para obter o codigo extraido dos reports, foi criado um modelo de aprendizagem para reconhecer
+%% se um bloco de texto eh um bloco de codigo.
 
-Com isso, extraimos cerca de \Fix{X} codigo e apos realizar o parser para validar o arquivo, obtivemos um total de \Fix{X} novas seeds.
+%% Motivacao:
+%% Utilizamos a tecnica de Embeddings que eh reconhecida pela comunidade pelo seu uso em PLN (Processing Language Natural),
+%% onde atraves de uma rede neural, consegue-se montar um dicionario de palavras com a distancia 
+%% de similaridade entre elas.
+%% Para treinamenteo, foi utilizado uma rede neural simples CNN (Convolutional Neural network) com apenas 2 camadas, uma de entrada e outra de saida.
+%% Utilizando as variaveis \Fix{XYZ} e as funcoes \Fix{XYZ}. Obtivemos 98\% de acuracia em nosso treinamento.
+%% (melhorar definicao do modelo)
 
-\Fix{...elaborate...}
+%% Inputs:
+%% Para nosso modelo de dados, foi necessario gerar um arquivo CSV com cerca de 50K de dados extraidos
+%% de arquivos javascript (nossas seeds) e de linguagem natural, utilizamos 25K para cada classe.
+%% Os rotulos das classes sao definidas em 0 (is not code) ou 1 (is code).
 
+%% Com isso, extraimos cerca de \Fix{X} codigo e apos realizar o parser para validar o arquivo, obtivemos um total de \Fix{X} novas seeds.
 
-\Mar{-------- estou aqui}
+%% \Fix{...elaborate...}
+
 
 %% \Fix{revise this}
 %% For example to run the \jerry{} tests it was necessary 
@@ -1732,3 +1773,5 @@ first.
 \bibliography{references,../docs/google-research-awards-latam/tmp}
 
 \end{document}
+
+%%  LocalWords:  formedness Embeddings NLP Convolutional dataset
