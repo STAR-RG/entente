@@ -119,17 +119,17 @@
 % http://dl.acm.org/ccs.cfm
 % Please copy and paste the code instead of the example below.
 %
-\begin{CCSXML}
-<ccs2012>
-<concept>
-<concept_id>10011007.10011074.10011099.10011102.10011103</concept_id>
-<concept_desc>Software and its engineering~Software testing and debugging</concept_desc>
-<concept_significance>500</concept_significance>
-</concept>
-</ccs2012>
-\end{CCSXML}
+%% \begin{CCSXML}
+%% <ccs2012>
+%% <concept>
+%% <concept_id>10011007.10011074.10011099.10011102.10011103</concept_id>
+%% <concept_desc>Software and its engineering~Software testing and debugging</concept_desc>
+%% <concept_significance>500</concept_significance>
+%% </concept>
+%% </ccs2012>
+%% \end{CCSXML}
 
-\ccsdesc[500]{Software and its engineering~Software testing and debugging}
+%% \ccsdesc[500]{Software and its engineering~Software testing and debugging}
 
 \keywords{JavaScript, Diversity, Software Testing}
 
@@ -1361,17 +1361,15 @@ code snippet below shows the test input we used to reveal a bug in
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-{var a =
-  {valueOf: function(){ return "\x00"}}
-  assert(+a === 0)
-}
+ { var a = {valueOf: function(){ return "\x00"}}
+   assert(+a === 0) }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1402,16 +1400,14 @@ code snippet below shows the test input we used to reveal a bug in
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assert, assertEq, var, yield, in, function, eval,
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-eval(function b (a) {
-  break;
-});
+ eval(function b (a) { break;});
   \end{lstlisting}
   \normalsize
   %% \caption{\label{fig:bug-veight}Fuzzed code mutated by \quickfuzz{}
@@ -1455,21 +1451,16 @@ transplantation experiment.
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-var obj = {};
-var arr = [];
-try {
-  arr.sort(obj);
-  assert(false);
-} catch (e) {
-  assert(e instanceof TypeError);
-}
+ var obj = {}; var arr = [];
+ try { arr.sort(obj); assert(false);}
+ catch (e) { assert(e instanceof TypeError); }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1491,17 +1482,16 @@ we issued to the \chakra\ development team, but they did not accept.
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-function test() {
-  return typeof String.prototype.repeat === "function"
-  && "foo".repeat(657604378) === "foofoofoo";
-}
+ function test() {
+   return typeof String.prototype.repeat === "function"
+     && "foo".repeat(657604378) === "foofoofoo"; }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1574,6 +1564,19 @@ We learned several lessons in this study:
 
 \section{Related Work}
 
+\subsection{Testing \js\ Programs}
+Patra and colleagues~\cite{Patra:2018:CFU:3180155.3180184} proposed a
+lightweight approach to detect conflicts in \js\ libraries that occur
+when names introduced by different libraries collide. This problem was
+found to be common as the design of \js\ allows for overlaps in
+namespaces. A similar problem has been investigated by Nguyen and
+colleagues~\cite{nguyen-etal-icse2014} and Eshkevari and
+colleagues~\cite{eshkevari-etal-icpc2014} in the context of PHP
+programs, which are popular in the context of Content Management
+Systems as WordPress. The focus of this paper is on testing
+\js\ engines as opposed to \js\ programs. Our goal is therefore
+orthogonal to theirs.
+
 \subsection{Testing \js{} Engines}
 \label{sec:testing-js-engines}
 The closest work to ours was done by Patra and
@@ -1604,19 +1607,6 @@ consequently, would go undetected by current fuzzing approaches. It is
 should be noted, however, that such problems are not unimportant as
 per the severity levels reported in
 Tables~\ref{tab:test-transplantation-bugs} and~\ref{tab:bugs}.
-
-\subsection{Testing \js\ Programs}
-Patra and colleagues~\cite{Patra:2018:CFU:3180155.3180184} proposed a
-lightweight approach to detect conflicts in \js\ libraries that occur
-when names introduced by different libraries collide. This problem was
-found to be common as the design of \js\ allows for overlaps in
-namespaces. A similar problem has been investigated by Nguyen and
-colleagues~\cite{nguyen-etal-icse2014} and Eshkevari and
-colleagues~\cite{eshkevari-etal-icpc2014} in the context of PHP
-programs, which are popular in the context of Content Management
-Systems as WordPress. The focus of this paper is on testing
-\js\ engines as opposed to \js\ programs. Our goal is therefore
-orthogonal to theirs.
 
 \subsection{Differential Testing}
 Several different applications of differential testing have been
@@ -1666,8 +1656,25 @@ contrast to Patra and Pradel, we did not propose new techniques; our
 contribution was empirical.
 
 \subsection{Diversity in Testing}
-
-\Fix{Discuss...}~\cite{Chen:2010:ART:1663656.1663914,7515474}
+The idea of test set diversity dates back to the
+eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. The
+assumption behind test set diversity is that faults often spread
+contiguously in the input domain. Consequently, it should be
+beneficial to partition the input domain and explore it more evenly as
+to find bugs faster. Later in the nineties, Chen and
+Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
+the continuity assumption. They found that faults, most open, manifest
+themselves in regular patterns across the input
+domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
+observations led researchers to investigate generalizations of the
+approach to non-numerical data types and strategies to explore the
+input (or output) space to solve different problems in Software
+Engineering (\eg{}, test input generation and test
+selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
+paper explores diversity of sources of test cases and diversity of
+engines to test and find bugs. We remain to investigate the diversity
+of test cases themselves. In principle, that could help reduce the
+number of alarms to inspect, for example.
 
 \section{Conclusions}
 
