@@ -389,67 +389,91 @@ reporting old and already-fixed bugs to developers.
 \end{table}
 
 \subsection{Seed JS files\label{sec:seeds}}~
-We selected test files from several public projects from GitHub. We
-looked for self-contained tests from JS engine projects, initially
-using the GitHub REST API~\cite{github-rest-api}. We noticed that some
-of the tests we found depend on external libraries, which not all
-engines we use support. We decided to discard those. For example, many
-tests we found required a Node.js runtime~\cite{node} for
-execution. The main source of test cases is the official
-Test262~\cite{tc39-github} conformance test suite for the ECMA262
-specification~\cite{ecmas262-spec}.\Comment{ This test suite contains
-  87\% of all the tests we used.} We also considered test suites of
-three of the four engines mentioned in
-Section~\ref{sec:methodology:engines} and four other engines. Overall,
-we selected a total of \totfiles{} JS
-files. Table~\ref{tab:test-suites} shows the breakdown of tests we
-considered. Column ``original'' shows the number of test cases for
-each test suite. We did not consider tests from the \chakra{}
-repository because they depend on non-portable objects. Notice that
-the number of tests in \veight\ is low. That happens because \veight{}
-uses many tests from Mozilla and \jsc{}; we discarded those to avoid
-repetition and to give credit where it is due. The columns
-``compile-in-all'' and ``no-fail-in-all'' indicate the tests used in
-the test transplantation experiment and the differential testing
-experiment, respectively.
+A good test set is critical for finding bugs with the techniques used
+in this paper. For that reason, we looked for \js\ files from various
+sources: 1) test files from the Test262~\cite{tc39-github} conformance
+suite of the ECMA262 specification~\cite{ecmas262-spec}, 2) test files
+from the test suite of the selected engines (see
+Section~\ref{sec:methodology:engines}); these files are accessible
+from the engine's official repositories, 3) test files mined from
+issue trackers of these engines, and 4) test files from public engines
+accessible from GitHub using the GitHub REST
+API~\cite{github-rest-api}.
 
-Column ``pass-in-par.'' shows the number of test cases that pass in
-their parent engine. We discarded tests that fail in their parent
-engine as we could not reliably indicate the reason for the failure,
-so we assumed the test could be broken. We removed 63 test cases that
-fail for that reason--6 tests from \jsc{} and 57 tests from
-\smonkey. Column ``compile-in-all'' shows the number of test cases
-whose executions do not throw errors because of an undefined variable
-or property. We capture these cases by looking for the presence of
-\CodeIn{ReferenceError} and \CodeIn{TypeError} in the output. A
-\CodeIn{ReferenceError} (respectively, \CodeIn{TypeError}) is raised
-when test execution attempts to access an undefined variable
-(respectively, property of an object). We discarded those tests to
-avoid noise in the experiments as they clearly indicate some missing
-feature as opposed to bugs. For example, some tests use non-portable
-names (\eg{}, \jsc{}'s \CodeIn{drainMicrotasks()} and \smonkey{}'s
-\CodeIn{Error.lineNumber}) or use functions that, albeit part of the
-spec, not all engines currently support. We used the
-\totalTestFilesForTestTransplantation{} tests included in the circle
-from the table in the evaluation of test transplantation, \ie{}, the
-difference between sets ``compile-in-all'' and Test262. We did not
-consider tests from the conformance suite as they are more likely to
-indicate missing features as opposed to bugs. In addition, engine
-developers have access to these test and are encouraged to run
-them. Column ``no-fail-in-all'' shows the tests for which all engines
-pass. This test set is used in the evaluation of differential
-testing. Note that it is a proper subset of the ``compile-in-all''
-test set. The tests from this group are used as fuzzing seeds. The
-guarantee that they pass in all engines assures that, if discrepancies
-occur, they are related to the changes in the input as opposed to the
-original cause of failure.
+Table~\ref{tab:test-suites} shows the breakdown of tests we per
+source. Column ``original'' shows the number of test cases associated
+with each test suite. Column ``pass-in-par.'' shows the number of test
+cases that pass in their parent engine. We discarded tests that fail
+in their parent engine as we could not reliably indicate the reason
+for the failure, so we assumed the test could be broken. We removed 63
+test cases that fail for that reason--6 tests from \jsc{} and 57 tests
+from \smonkey. Column ``compile-in-all'' shows the number of test
+cases whose executions do not throw dynamic type errors in any of the
+engines because of an undefined variable or property. We capture these
+cases by looking for the presence of \CodeIn{ReferenceError} and
+\CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
+(respectively, \CodeIn{TypeError}) is raised when test execution
+attempts to access an undefined variable (respectively, property of an
+object). We discarded those tests to avoid noise in the experiments as
+they clearly indicate some missing feature as opposed to bugs. For
+example, some tests use non-portable names (\eg{}, \jsc{}'s
+\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
+or use functions that, albeit part of the spec, not all engines
+currently support. We used the \totalTestFilesForTestTransplantation{}
+tests included in the circle from the table in the evaluation of test
+transplantation, \ie{}, all tests under the ``compile-in-all''
+column\Mar{change name to type-in-all}
+but the Test262 tests. We did not consider tests from the conformance
+suite as they are more likely to indicate missing features as opposed
+to bugs. In addition, engine developers have access to these test and
+are encouraged to run them.  Column ``no-fail-in-all'' shows the tests
+for which all engines pass. This test set is used in the evaluation of
+differential testing. Note that it is a proper subset of the
+``compile-in-all'' test set. The tests from this group are used as
+fuzzing seeds. The guarantee that they pass in all engines assures
+that, if discrepancies occur, they are related to the changes in the
+input as opposed to the original cause of failure.
 
-It is also worth mentioning that some engines use a custom shell to
-run tests, including a harness with specific assertions.  For that, we
-needed to make minor changes in the testing infrastructure to be able
-to run the tests uniformly across all engines. More precisely, we
-needed to mock non-portable harness functions, which are only
-available to certain engines.
+
+%% The main source of test
+%% cases is the official Test262~\cite{tc39-github} conformance test
+%% suite for the ECMA262 specification~\cite{ecmas262-spec}.\Comment{
+%%   This test suite contains 87\% of all the tests we used.} We also
+%% considered test suites of three of the four engines mentioned in
+%% Section~\ref{sec:methodology:engines} and four other engines. Overall,
+%% we selected a total of \totfiles{} JS
+%% files.
+
+\lbrack{}Cleansing\rbrack{}~We noticed that some of the tests we found
+depend on external libraries, which not all selected engines
+support. We decided to discard those. For example, many tests we found
+required a Node.js runtime~\cite{node} for execution. Also, we did not
+consider tests from the \chakra{} repository because they depend on
+non-portable objects. Finally, note that the number of tests in
+\veight\ is low; that happens because \veight{} uses many tests from
+Mozilla and \jsc{}; we discarded those to avoid repetition and to give
+credit where it is due. \lbrack{}Test Harness\rbrack{}~It is also
+worth mentioning that some engines use a custom shell to run tests,
+including a harness with specific assertions.  For that, we needed to
+make minor changes in the testing infrastructure to be able to run the
+tests uniformly across all engines. More precisely, we needed to mock
+non-portable harness functions, which are only available in certain
+engines.
+
+\subsubsection{Mining Tests from Issue Trackers}
+
+\Fix{...elaborate...}
+
+
+\Mar{-------- estou aqui}
+
+%% \Fix{revise this}
+%% For example to run the \jerry{} tests it was necessary 
+%% use the unit-test package to run it, but with our changes we added the assertion
+%% does not have an assertion in the test file
+%% \Fix{add code to explain}
+
+
 
 \newcommand\marktopleft[1]{%
     \tikz[overlay,remember picture] 
@@ -470,7 +494,8 @@ available to certain engines.
     suite, column ``compile-in-all'' shows the number of test cases
     for which engines do not throw compile error (\eg{}, undefined
     name), and column ``no-fail-all'' shows the number of test cases
-    that pass in all four engines we analyzed.}
+    that pass in all four engines we analyzed.\Mar{explain
+      ``pass-in-par.''}\Mar{why SpiderMonkey 1,977->2,116?}}
   \setlength{\tabcolsep}{2.25pt}      
   \begin{tabular}{ccrrrr}
     \toprule
@@ -495,10 +520,6 @@ available to certain engines.
   \end{tabular}
 \end{table}
 
-For example to run the \jerry{} tests it was necessary 
-use the unit-test package to run it, but with our changes we added the assertion
-does not have an assertion in the test file
-\Fix{add code to explain}
 
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
