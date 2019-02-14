@@ -1341,17 +1341,15 @@ code snippet below shows the test input we used to reveal a bug in
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-{var a =
-  {valueOf: function(){ return "\x00"}}
-  assert(+a === 0)
-}
+ { var a = {valueOf: function(){ return "\x00"}}
+   assert(+a === 0) }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1382,16 +1380,14 @@ code snippet below shows the test input we used to reveal a bug in
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assert, assertEq, var, yield, in, function, eval,
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-eval(function b (a) {
-  break;
-});
+ eval(function b (a) { break;});
   \end{lstlisting}
   \normalsize
   %% \caption{\label{fig:bug-veight}Fuzzed code mutated by \quickfuzz{}
@@ -1435,21 +1431,16 @@ transplantation experiment.
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-var obj = {};
-var arr = [];
-try {
-  arr.sort(obj);
-  assert(false);
-} catch (e) {
-  assert(e instanceof TypeError);
-}
+ var obj = {}; var arr = [];
+ try { arr.sort(obj); assert(false);}
+ catch (e) { assert(e instanceof TypeError); }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
@@ -1471,17 +1462,16 @@ we issued to the \chakra\ development team, but they did not accept.
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
-function test() {
-  return typeof String.prototype.repeat === "function"
-  && "foo".repeat(657604378) === "foofoofoo";
-}
+ function test() {
+   return typeof String.prototype.repeat === "function"
+     && "foo".repeat(657604378) === "foofoofoo"; }
   \end{lstlisting}
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
