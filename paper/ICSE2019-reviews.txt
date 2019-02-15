@@ -1,31 +1,38 @@
 Dear Marcelo,
 
-Thank you for your submission to the ICSE 2019 Technical Track. The ICSE 2019 author response period is now open and will close on November 14, 2018 (11.59pm, AOE).
+Thank you for submitting your paper
 
-During this time, you will have access to the current state of the reviews for your papers. Please note that
-   - every paper received at least three reviews and no additional reviews will be solicited from this point forward;
-   - reviews may be updated to take the discussion among reviewers and your response into account;
-   - the reviewers may have explicitly asked you, the authors, questions that may help them better assess your contribution. If so, it is in your interests to respond to these questions clearly.
+Leveraging Diversity to Find Bugs in JavaScript Engines
 
-You have 500 words for your response. Please use this opportunity to answer the reviewers’ questions. You can also point out factual errors in the reviews if you find any. Try to be as concise and to the point as possible, and please do not provide new research results.
+to the ICSE 2019 Technical Track.
 
-The program committee and the program board members will read your response carefully and take this information into account during the discussions.
+We regret to inform you that your paper has not been accepted to the program. Each paper was reviewed by at least 3 Program Committee (PC) members and the decision overseen by a member of the Program Board (PB). Out of 529 submissions, 109 papers were accepted (an acceptance rate of 21%). The reviews as well as a meta-review written by the PB member summarizing the discussion are included below. We hope that you find the feedback provided in the reviews and meta-review useful, and that it will help you to revise your work for a future submission.
 
-Your response will be seen by all PB and PC members who have access to the discussion of your paper, so please be polite and constructive.
+Although your submission was not accepted as a full paper, based on recommendations by the reviewers, you are invited to submit an extended abstract to the ICSE 2019 Posters Track (see https://2019.icse-conferences.org/track/icse-2019-Posters for further details). Note that all poster submissions are invitation-only. Because reviewers have recommended your submission to appear in the conference program as a poster, the Poster Track reviewers will not re-review your work.  Rather the Posters Track will implement a lightweight review process to assure that (1) the problem addressed by the poster, (2) the approach taken by the authors and (3) the main results achieved so far are properly summarized in a 2-page paper. As such, the acceptance rate is expected to be higher than in previous years’ ICSEs (which had open submissions for posters).
 
-The reviews on your paper are included here. To submit your response you should log on to the EasyChair Web page for ICSE 2019 and select your submission on the menu.
+If you would like to submit a poster paper, please do so via this link (please do not share this link with others since poster submissions are invitation-only):
+https://easychair.org/conferences/?conf=icse2019
 
-Best,
+There are also many other avenues to present your work at ICSE, including 27 workshops:
+https://2019.icse-conferences.org/track/icse-2019-Workshops
 
-Jon and Tevfik
+You can follow ICSE 2019 on social media:
+- Facebook: https://www.facebook.com/icseconf/
+- Twitter:  https://twitter.com/ICSEconf (use tag @ICSEconf)
+
+Thanks for submitting your work to ICSE, and we hope to see you at ICSE 2019 in Montreal in May, 2019.
+
+All the best,
+
+Tevfik Bultan and Jon Whittle
 ICSE 2019 PC Co-Chairs
+
 
 ----------------------- REVIEW 1 ---------------------
 PAPER: 512
 TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
 AUTHORS: Igor Lima and Marcelo d'Amorim
 
-Poster Paper: no
 
 ----------- Summary -----------
 The primary contribution of the work is to evaluate the importance of
@@ -68,12 +75,12 @@ How does the design of experiments ensure that the conclusions are based on repr
 ----------- Author Question 2 -----------
 What sound conclusions regarding the test-subjects can be arrived based on the observations from the experiments?
 
+
 ----------------------- REVIEW 2 ---------------------
 PAPER: 512
 TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
 AUTHORS: Igor Lima and Marcelo d'Amorim
 
-Poster Paper: no
 
 ----------- Summary -----------
 This article presents a study showing that test transplantation and cross-engine differential testing,  two diversity-aware techniques, work well for finding real bugs on real projects.  The test transplantation technique runs test suites of a given engine in
@@ -107,12 +114,12 @@ Limitation
 ----------- Author Question 1 -----------
 How can the conclusions be reused in a context other than JS engines?
 
+
 ----------------------- REVIEW 3 ---------------------
 PAPER: 512
 TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
 AUTHORS: Igor Lima and Marcelo d'Amorim
 
-Poster Paper: yes
 
 ----------- Summary -----------
 Reports on a detailed case study of using test cases from diverse sources to test Javascript engines. The main sources are test cases from the Javascript specification as well as a number of Javascript engines and github Javascript projects. This initial set of seed test cases are also mutated using black-box fuzzers to find additional problems. After extensive, manual classification of warnings/problems identified a number of actual bugs was found, confirmed and sometimes even fixed by developers of the engines.
@@ -181,4 +188,16 @@ How do you cluster warnings so that they are in a cluster with test cases that f
 ----------- Author Question 2 -----------
 What are the main lessons learnt and novelty(ies) of the work compared to what we already know about test transplantation and differential testing?
 
-------------------------------------------------------
+
+-------------------------  METAREVIEW  ------------------------
+PAPER: 512
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+
+The paper has been discussion in detail by the reviewers and multiple program board members. Even though some people liked the work, there eventually wasn't enough support for accepting it. All reviewers agree that the paper essentially is an empirical study, with little novelty on the technical side. For an empirical study, reviewers expect novel insights, which are clearly spelled out and discussed in detail. However, several people pointed out independently that the new lessons learned from this work aren't explicit enough. As submitted, the paper focuses mostly on what experiments were done and what results were obtained.
+
+To revise the submission into a stronger paper, we suggest to formulate research questions and key findings explicitly. The key findings could include, e.g.:
+- Not only multiple different implementations can be leveraged in differential testing, also differences in test suites can be important.
+- Even for problems with fairly clear specifications, as here for a programming language and how it is to be executed, there is likely to be (a lot of) variation between different implementations.
+- Differential testing is feasible on real, complex, widely used pieces of software.
+
+We encourage the authors to revise the paper, e.g., along the lines outlined above, so that it can life up to its full potential.

@@ -161,27 +161,28 @@ most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
 %% WHAT WE DID
-This paper reports on a study we ran to evaluate the importance of
-diversity to find bugs in JavaScript engines. We evaluated
-effectiveness of two complementary diversity-aware testing
-techniques.
+This paper reports on a study to evaluate the importance of diversity
+to find bugs in JavaScript engines; it covers two complementary
+diversity-aware testing techniques.
 
+\vspace{-1ex}
 \begin{itemize}
-
-\item \emph{Test transplantation} leverages diversity of test cases to
-  find bugs. It evaluates the effects that running test files from a
-  given engine have in detecting bugs in other engines. The intuition
-  is that developers design test cases with different objectives in
+  \setlength\itemsep{0em}
+\item \emph{Test transplantation} leverages diversity of test
+  cases. It evaluates the effects that running test files from a given
+  engine have in detecting bugs in other engines. The intuition is
+  that developers design test cases with different objectives in
   mind. As such, replaying these tests in different engines could
   reveal unanticipated problems.
 
-\item \emph{Cross-engine differential testing} leverages diversity of engine implementations to find
-bugs. More precisely, this technique fuzzes existing test
-inputs~\cite{fuzz-testing-history} and then compares the output
-produced by different engines using a differential oracle. The
-intuition is that similar inputs to those already tested may reveal
-problems.
+\item \emph{Cross-engine differential testing} leverages diversity of
+  engine implementations. More precisely, it fuzzes existing test
+  inputs~\cite{fuzz-testing-history} and then compares the output
+  produced by different engines using a differential oracle. The
+  intuition is that similar inputs to those already tested may reveal
+  problems.
 \end{itemize}
+\vspace{-1ex}
 
 Our study measures the ability of these techniques in finding bugs and
 the impact of false positives, which can arise in both testing
@@ -224,11 +225,11 @@ has been applied in a variety of contexts to find
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
 It has shown to be specially practical in scenarios where the
 observation of difference gives a strong signal of a real problem. For
-example, Mozilla runs JS files\footnote{These files are created with
-  the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
-  ``compare\_jit'' from funfuzz.} against different configurations of
+example, Mozilla runs JS files against different configurations of
 a given build of their \smonkey\ engine (\eg{}, trying to enable or
-not eager JIT compilation). A positive aspect of the approach is that
+not eager JIT compilation\footnote{These files are created with
+  the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
+  ``compare\_jit'' from funfuzz.}). A positive aspect of the approach is that
 it can be fully automated---as only one engine is used, the outcomes
 of the test in both configurations are expected to be identical. The
 Mozilla team uses this approach since 2002; they have been able to
@@ -271,8 +272,8 @@ and Microsoft's \chakra{}.  We reported \noBugsBugsReportedGoogle{}
 bugs in Google \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and
 none in Mozilla's \smonkey{}. Overall, results indicate that both
 techniques were successful at finding bugs. Considering cost per bug
-found, test transplantation demanded less effort--from the developers
-who inspected the alarms---compared to differential testing.
+found, test transplantation demanded less effort from the developers
+who inspected the alarms, compared to differential testing.
 
 \emph{Key Findings.}~1) Not only multiple different implementations
 can be leveraged in differential testing, but differences in test
@@ -321,31 +322,32 @@ ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 %% A compatibility table relating features and supporting engines is
 %% publicly available~\cite{kangax}.
 
-For different reasons, the specification and implementation of
-JavaScript are incomplete. Certain parts of the specification are
-undefined; it is responsibility of engineers to decide how to
-implement these functionalities. The JavaScript spec uses the label
+The specification of JavaScript is incomplete for different
+reasons. Certain parts of the specification are undefined; it is
+responsibility of engineers to decide how to implement these
+functionalities. The JavaScript spec uses the label
 ``implementation-dependent'' to indicate these cases, where behavior
 may differ from engine to engine. One reason this flexibility in the
 spec exists is to enable compiler optimizations. For example, the
-\mcodeid{for-in} loop does not clearly specify the iteration order of
+\js\ \mcodeid{for-in} loop construct does not clearly specify the
+iteration order of
 elements~\cite{so-forin-undefined,javascript-in-chrome} and different
-engines capitalize on that for optimization~\cite{for-in-undefined}.
-As another example, the specification states that if the
-\mcodeid{Number.toPrecision()} function is called with multiple
-arguments then the floating-point approximation is
+engines capitalize on that for loop
+optimizations~\cite{for-in-undefined}.  As another example, the
+specification states that if the \mcodeid{Number.toPrecision()}
+function is called with multiple arguments then the floating-point
+approximation is
 implementation-dependent~\cite{es6-toPrecision}. Various other cases
-like these exist in the specification. Such gap also exists at the
-implementation level. Given the speed the specification changes and
-the complexity of the language some features are not fully implemented
-as can be observed by the Kangax compatibility table~\cite{kangax}.
-It is also worth noting that, as in other languages, some elements in
-JS have non-deterministic behavior (\eg{}, \mcodeid{Math.random} and
-\mcodeid{Date}). A test that make decisions based on these elements
-could, in principle, produce different outcomes on different
-runs. Carefully-written test cases should not manifest this kind of
-flaky behavior~\cite{luo-etal-fse2014,palomba-zaidman-icsme2017}.  As
-mentioned previously, all those aspects make testing \js\ engines more
+like these exist in the specification. Given the speed the
+specification changes and the complexity of the language some features
+are not fully implemented as can be observed by the Kangax
+compatibility table~\cite{kangax}.  It is also worth noting that, as
+in other languages, some elements in JS have non-deterministic
+behavior (\eg{}, \mcodeid{Math.random} and \mcodeid{Date}). A test
+that make decisions based on these elements could, in principle,
+produce different outcomes on different runs. Carefully-written test
+cases should not manifest this kind of flaky behavior.  As mentioned
+previously, all those aspects make testing \js\ engines more
 challenging.
 
 
@@ -374,7 +376,7 @@ and 3) Uses a public issue tracker. We looked for highly-maintained
 (as per the first criterion) and popular (as per the second criterion)
 engines. As we wanted to report bugs, we also looked for project with
 public issue trackers. Table~\ref{tab:engines} lists the engines we
-analyzed. It is worth noting that we used GoogleChromeLab's JSVU
+analyzed. It is worth noting that we used Google Chrome Lab's JSVU
 tool~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
 aim to use the most recent stable versions of each engine as to avoid
@@ -405,7 +407,7 @@ reporting old and already-fixed bugs to developers.
   \end{tabular}
 \end{table}
 
-\section{Seed JS files}
+\section{JS Files Mined}
 \label{sec:seeds}
 A good test set is critical for finding bugs with the techniques used
 in this paper. For that reason, we looked for \js\ files from various
@@ -420,41 +422,38 @@ these engines.
 %% accessible from GitHub using the GitHub REST
 %% API~\cite{github-rest-api}.
 
-Table~\ref{tab:test-suites} shows the breakdown of tests we per
-engine. Column ``full'' shows the number of test cases associated
-with each engine. Column ``pass-in-par.''  shows the number of
-test cases that pass in their parent engine. We discarded tests that
-fail in their parent engine as we could not reliably indicate the
-reason for the failure, so we assumed the test could be broken. We
-removed 63 test cases that fail for that reason--6 tests from \jsc{}
-and 57 tests from \smonkey. Column ``type-in-all'' shows the number
-of test cases whose executions do not throw dynamic type errors in any
-of the engines because of an undefined variable or property. We
-capture these cases by looking for the presence of
-\CodeIn{ReferenceError} and \CodeIn{TypeError} in the output. A
-\CodeIn{ReferenceError} (respectively, \CodeIn{TypeError}) is raised
-when test execution attempts to access an undefined variable
-(respectively, property of an object). We discarded those tests to
-avoid noise in the experiments as they clearly indicate some missing
-feature as opposed to bugs. For example, some tests use non-portable
-names (\eg{}, \jsc{}'s \CodeIn{drainMicrotasks()} and \smonkey{}'s
-\CodeIn{Error.lineNumber}) or use functions that, albeit part of the
-spec, not all engines currently support. We used the
-\totalTestFilesForTestTransplantation{} tests included in the circle
-from the table in the evaluation of test transplantation, \ie{}, all
-tests under the ``type-in-all'' column\Mar{change name to
-  type-in-all} but the Test262 tests. We did not consider tests from
-the conformance suite as they are more likely to indicate missing
-features as opposed to bugs. In addition, engine developers have
-access to these test and are encouraged to run them.  Column
-``no-fail-in-all'' shows the tests for which all engines pass. This
-test set is used in the evaluation of differential testing. Note that
-it is a proper subset of the ``type-in-all'' test set. The tests
-from this group are used as fuzzing seeds. The guarantee that they
-pass in all engines assures that, if discrepancies occur, they are
-related to the changes in the input as opposed to the original cause
-of failure.
-
+Table~\ref{tab:test-suites} shows the breakdown of tests per
+engine. Column ``full'' shows the number of test cases associated with
+each engine. Column ``pass-in-par.''  shows the number of test cases
+that pass in their parent engine. We discarded tests that fail in
+their parent engine as we could not reliably indicate the reason for
+the failure, so we assumed the test could be broken. We removed 63
+test cases that fail for that reason--6 tests from \jsc{} and 57 tests
+from \smonkey. Column ``type-in-all'' shows the number of test cases
+whose executions do not throw dynamic type errors in any of the
+engines because of an undefined variable or property. These cases were
+captured by looking for the presence of \CodeIn{ReferenceError} and
+\CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
+(respectively, \CodeIn{TypeError}) is raised when test execution
+attempts to access an undefined variable (respectively, property of an
+object). We discarded those tests to avoid noise in the experiments as
+they clearly indicate some missing feature as opposed to bugs. For
+example, some tests use non-portable names (\eg{}, \jsc{}'s
+\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
+or use functions that, albeit part of the spec, not all engines
+currently support. For the evaluation of test transplantation, we used
+the \totalTestFilesForTestTransplantation{} tests included in the
+dashed rectangle under column ``type-in-all'', \ie{}, all tests under
+that column but the Test262 tests. We did not consider tests from the
+conformance suite as they are more likely to indicate missing features
+as opposed to bugs. In addition, engine developers have access to
+these test and are encouraged to run them. Finally, column
+``no-fail-in-all'' shows the tests for which all engines pass. Note
+that the set of tests in this column is a subset of the
+``type-in-all'' test set. This test set is used in the evaluation of
+differential testing as fuzzing seeds. The guarantee that they pass in
+all engines assures that, if discrepancies occur, they are related to
+the changes in the input as opposed to the original cause of failure.
 
 \newcommand\marktopleft[1]{%
     \tikz[overlay,remember picture] 
@@ -464,21 +463,16 @@ of failure.
     \tikz[overlay,remember picture] 
         \node (marker-#1-b) at (0,0) {};%
     \tikz[overlay,remember picture,thick,dashed,inner sep=2pt]
-        \node[draw,rounded rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};%
+        \node[draw,rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};%
 }
-
-%% \Comment{ Column ``full'' shows the number of the test cases found
-%%     for that engine, column ``compile-in-all'' shows the number of
-%%     test cases for which engines do not throw compile error (\eg{},
-%%     undefined name), and column ``no-fail-all'' shows the number of
-%%     test cases that pass in all four engines we analyzed.\Mar{explain
-%%       ``pass-in-par.''}\Mar{why SpiderMonkey 1,977->2,116?}}}
 
 \begin{table}[t]
   \small
   \centering
-  \caption{\label{tab:test-suites}Number of test cases per suite.}
-  \setlength{\tabcolsep}{2pt}
+  \caption{\label{tab:test-suites}Number of test files. Dashed
+    rectangle under column ``type-in-all'' (resp., ``no-fail-in-all'')
+    shows the tests used for test transplantation (resp., cross-engine
+    differential testing).}  \setlength{\tabcolsep}{2pt}
   \begin{tabular}{ccrrrr}
     \toprule
     \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
@@ -486,7 +480,7 @@ of failure.
     \cline{3-6}
                                &         & total & pass-in-par. & type-in-all &  no-fail-in-all \\
     \midrule
-    Test262 & \cite{ecma262-conformance-suite} & 31,276 & - &  29,846 & 17,639 \\
+    Test262 & \cite{ecma262-conformance-suite} & 31,276 & - &  29,846 & \marktopleft{c2}17,639 \\
     \midrule
     \jsc{} & \cite{webkit} & 1,031 & 1,025 &\marktopleft{c1}1,021 & 955\\
     \smonkey\ & \cite{mozilla} & 2,634 & 1,977 & 2,116 & 1,686\\
@@ -495,7 +489,7 @@ of failure.
     Duktape & \cite{duktape} & 1,195 & 1,195 & 921 & 915\\ 
     \jerry{} & \cite{jerryscript} & 1,951 & 1,951 & 1,878 & 1,837\\
     JSI & \cite{jsi} & 99 & 99 & 63 & 63\\
-    Tiny-js & \cite{tinyjs} & 49 & 49 & 37\markbottomright{c1} & 37\\
+    Tiny-js & \cite{tinyjs} & 49 & 49 & 37\markbottomright{c1} & 37\markbottomright{c2}\\
     \midrule
      &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
    \bottomrule 
@@ -537,38 +531,41 @@ issues or 2) embed test cases within the textual description of an
 issue. The test cases in attachments are longer compared to the test
 cases embedded in issue descriptions whereas the latter are more
 common. Consequently, we thought we should handle both
-cases. Accessing attachments is simpler compared to embedded
-tests. For attachments, we wrote a crawler to visit the issue trackers
-of all four engines listed in Table~\ref{tab:engines} and were able to
-retrieve a total of 627 files
-(\jsc{}=147,\veight{}=370 and
-\smonkey{}=110). To mine tests from the textual descriptions, we
-broke the text describing the issue in paragraphs and used a binary
-classifier to label each paragraph as ``code'' or ``not code''. Then,
-based on that information, we merged consecutive paragraphs labeled as
-``code'' and used a \js\ parser to check well-formedness of the
-corresponding code fragment. Using that method we were able to
-retrieve a total of \Fix{XX} files
-(\jsc{}=\Fix{XX},\veight{}=\Fix{XX},\chakra{}=\Fix{XX}). All those
-files were included in Table~\ref{tab:test-suites}.
+cases.
 
-Surprisingly, we did not find a public classifier to solve the problem
-above. For space, we summarize the solution that worked the best in
-the following. We used a standard Embeddings NLP
-technique~\Fix{cite}\Mar{needs to explain what this ``Embeddings''
-  thing does at a high-level. Also, if this stuff exists why we did
-  not find a solution off-the-shelf?} that uses a neural
-net~\Fix{cite} to keep a dictionary of words and the similarity
-distance among them\Mar{but we are talking about sentences. how does
-  it go from words to sentences? Note that many words from the
-  ``code'' vocabulary are from English!}. In more detail, the
-classification model uses a Convolutional Neural Network~\Fix{cite}
-classifier with two layers\Mar{why two? is there a meaning for each
-  layer?} and has been trained and evaluated using a dataset with 25K
-samples of English paragraphs and 25K snippets of \js{}. We ran a
-standard \Fix{X}-repeated 10-fold cross validation to evaluate the
-model and obtained a predicted accuracy of \Fix{98\%}. This classifier
-is publicly available from our website as a separate component.
+Accessing attachments was engineering-wise simpler compared to
+embedded tests. For that, we wrote a crawler to visit the issue
+trackers of all four engines listed in Table~\ref{tab:engines} and we
+were able to retrieve a total of 627 files (\jsc{}=147, \veight{}=370,
+and \smonkey{}=110).
+
+To mine tests from the textual descriptions we proceeded as
+follows. First, we broke the text describing the issue in paragraphs
+and used a binary classifier to label each paragraph as ``code'' or
+``not code''. Then, based on that information, we merged consecutive
+paragraphs labeled as ``code'' and used a \js\ parser to check
+well-formedness of the corresponding code fragment. Using that method
+we were able to retrieve a total of \Fix{XX} files (\jsc{}=\Fix{XX},
+\veight{}=\Fix{XX}, \smonkey{}=\Fix{XX}). All those files were
+included in Table~\ref{tab:test-suites}.  Surprisingly, we did not
+find a public classifier to solve the problem above. For space, we
+summarize the solution that worked the best in the following. The
+classifier that performed best for this case uses
+a standard Embeddings NLP technique~\Fix{cite}\Mar{needs to explain
+  what this ``Embeddings'' thing does at a high-level. Also, if this
+  stuff exists why we did not find a solution off-the-shelf?} that
+builds on a neural net~\Fix{cite} to keep a dictionary of words and the
+similarity distance among them\Mar{but we are talking about
+  sentences. how does it go from words to sentences? Note that many
+  words from the ``code'' vocabulary are from English!}. In more
+detail, the classification model uses a Convolutional Neural
+Network~\Fix{cite} classifier with two layers\Mar{why two? is there a
+  meaning for each layer?} and has been trained and evaluated using a
+dataset with 25K samples of English paragraphs and 25K snippets of
+\js{}. We ran a standard \Fix{X}-repeated 10-fold cross validation to
+evaluate the model and obtained a predicted accuracy of
+\Fix{98\%}. This classifier is publicly available from our website as
+a separate component.
 
 %% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
 %% Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
@@ -612,7 +609,7 @@ each file in the input list will be analyzed in separate whereas the
 rightmost icon shows that a single file will be fuzzed multiple times.
 The bug-finding process works as follows. New inputs are obtained for
 a given test input using some off-the-shelf input
-fuzzer~\cite{fuzz-testing-history}; Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+fuzzer; Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 The oracle checks whether or not the output produced for the fuzzed
 file is consistent across all engines. In case the test passes in all
 engines or fails in all engines (\ie{}, the output is consistent), the
@@ -620,7 +617,9 @@ infrastructure ignores the input. Otherwise, it considers the input as
 potentially fault-revealing; hence, interesting for human
 inspection. The infrastructure uses the
 open-source tool eshost-cli~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy.
+Microsoft, for checking output discrepancy.\Mar{any difference in
+  output is considered for reporting? are there any
+  filtering?}
 
 \begin{figure}[t]
   \centering
@@ -633,75 +632,80 @@ It is worth noting that a number of reasons exist, other than a bug,
 to explain discrepancy (see Tables~\ref{fig:piecharts-transplantation}
 and ~\ref{tab:false-positives}) and there is no clear automatic
 approach to precisely distinguish false and true positives. As such, a
-human needs to inspect the warning to classify the issue. To
-facilitate inspection, we prioritized warnings and clustered them in
-groups. We describe these strategies in the following.
+human needs to inspect the warning to classify the issue. As mentioned
+earlier, this justifies why differential testing is challenging to
+automate at the functional level. To facilitate inspection, we
+prioritized warnings and clustered them in groups. We describe these
+strategies in the following.
 
 \subsection{Prioritization}
 
-We classified warnings in two types, reflecting their likelihood of
-manifesting a real bug. Warnings of the kind ``\hi{}'' are associated
-with the cases where the test code executed to completion without
-violating any internal checks, but it violated assertions declared in
-the test itself or its harness. The rationale is that the input is
-more likely to be valid as it it did not raise exceptions during the
-execution of the application code, but, it manifested discrepancy
-through the violation of an assertion declared in the test. In
-contrast, warnings of type ``\lo{}'' are more likely to be associated
-with invalid inputs. They reflect the cases where the anomaly is
-observed during the execution of functions, which are part of the
-application. We found that different engines often check
-pre-conditions of those functions differently. It can happen, for
-example, that one engine enforces a weaker pre-condition on a function
-input compared to another engine and that is acceptable.\Comment{ For
-  instance, it is acceptable to pass values greater than \Fix{x} to
-  function \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those
-cases, the infrastructure would observe a discrepancy that is more
-likely to be associated with an invalid input produced by the fuzzer,
-\ie{}, it is likely to be a ``bug'' in the test code as opposed to a
-bug in the engine code. However, as expected, our heuristic is not
-precise---``\lo'' warnings can reveal
-bugs. Figure~\ref{fig:lo-truepositive} shows one of these cases. In
-this example, the test instantiates an \CodeIn{ArrayBuffer} object and
+We prioritized warnings based on their types, reflecting likelihood of
+manifesting a real bug. We defined two types---``\hi{}'' and
+``\lo{}''.
+
+Warnings of the kind ``\hi{}'' are associated with the cases where the
+test code executes without violating any internal checks, but it
+violates an assertion declared in the test itself or its harness. The
+rationale is that the test data is more likely to be valid in this
+case as execution does not raise exceptions in application
+code. Warnings of kind ``lo'' cover the remaining cases. These
+warnings are more likely to be associated with invalid inputs. They
+reflect the cases where the anomaly is observed during the execution
+of application functions as opposed to assertions. We observed that
+different engines often check pre-conditions of functions
+differently. It can happen, for example, that one engine enforces a
+weaker pre-condition, compared to another engine, on the inputs of a
+function and that is acceptable.\Comment{ For instance, it is
+  acceptable to pass values greater than \Fix{x} to function
+  \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those cases,
+the infrastructure would report a warning that is more likely to be
+associated with an invalid input produced by the fuzzer, \ie{}, it is
+likely to be a ``bug'' in the test code as opposed to a bug in the
+engine. Recall that, for differential testing, we only use seed tests
+that pass in all engines.
+
+Despite the problem mentioned above, ``\lo'' warnings can reveal bugs.
+Figure~\ref{fig:lo-truepositive} shows one of these cases. In this
+example, the test instantiates an \CodeIn{ArrayBuffer} object and
 stores an 8-bit integer at the 0 position. According to the
 specification~\cite{ecmas262-getviewvalue}, a \CodeIn{RangeError}
 exception should be thrown if a negative value is passed to the
-function \CodeIn{ToIndex}, indirectly called by the test case. In this
-case, however, the \chakra{} engine did not throw any exception. This
-is a case of undocumented precondition, which is handled as a bug. It
-was fixed by \chakra\ developers and is no longer present in the most
-recent release of \chakra. Despite that case, most bugs we found
-emerged from ``\hi{}'' warnings.
-
-%% \Igor{
-%%   Apesar dos bugs encontrados serem em sua maioria classificados como HI group,
-%%   casos reportados como LO tambem podem ser considerados como um true positive.
-%%   Nossa heuristica de classificacao eh baseada no error stream dos engenhos,
-%%   se um teste falha antes da linha em que ha uma assercao, entao a falha
-%%   ocorreu em uma funcao nativa do JS. Na figura \ref{fig:lo-truepositive}, \'e 
-%%   possivel observar um caso de bug obtido em um bucket classificado como LO.
-%%   Neste exemplo, o teste instancia um ArrayBuffer e armazena um 8-bit integer na 
-%%   posicao 0 do dataframe, quando tentamos obter um elemento em uma posicao
-%%   maior e/ou menor do que a suportada, neste caso \CodeIn{getInt8}, 
-%%   de acordo com a especificacao\cite{ecmas262-getviewvalue}, deve-se 
-%%   lancar Offset is outside the bounds.
-
-%%   Os casos reportados no grupo LO nao foram capturados atraves das assercoes.
-%%   Por exemplo, se o fuzzer gera uma entrada que viola uma especificacao, o 
-%%   correto seria usar um levantar um erro
-%% }
+function \CodeIn{ToIndex}, indirectly called by the test case from the
+function call \CodeIn{getInt8()}. In this case, however, the \chakra{}
+engine did not throw any exception, as can be confirmed from the
+report that our infrastructure produces starting with text ``Engine
+Messages'' at the bottom of Figure~\ref{fig:lo-truepositive}. This is
+a case of undocumented precondition. It was fixed by
+\chakra\ developers and is no longer present in the most recent
+release of \chakra.
 
 \subsection{Clusterization}
 \label{sec:clusterization}
 
-Clusterization helps to group tests that fail for similar reasons. We
-only clustered ``\lo'' warnings as ``\hi'' warnings produce messages
-that arise from the test case, which are typically
-distinct. Figure~\ref{fig:lo-truepositive} shows, at the bottom, the
-error messages produced by a ``\lo'' warning. Any warning, including
-this one, that has this same message signature will be included in the
-same ``bucket''. To maximize the hit ratio we remove references to
-code that may appear in the error messages.
+%% Prioritization helps to steer our focus to the warnings more likely to
+%% reveal bugs, but there could be several tests producing similar
+%% warnings.
+
+Clusterization is complementary to prioritization; it helps to group
+similar warnings reported by our infrastructure. We only clustered
+``\lo'' warnings as ``\hi'' warnings produce messages that arise from
+the test case, which are typically distinct.
+
+Figure~\ref{fig:lo-truepositive} shows, at the bottom, the identifier
+of an engine, the exception it raises, and the message it produces on
+a ``\lo'' warning.  This sequence of engine id, exception, and error
+message triples defines a warning signature that we use for
+clustering. It is worth mentioning that we filter references to code
+in messages as to increase ability to aggregate warnings from
+different test sources. Any warnings, including this one, that has
+this same signature will be included in the same
+``bucket''. Considering the example from
+Figure~\ref{fig:lo-truepositive}, the signature for that cluster will
+be [(JavaScriptCore, ``RangeError'', ``byteOffset cannot be
+  negative''), (SpiderMonkey, ``RangeError'', ``invalid or
+  out-of-range index''), (V8, ``RangeError'', ``Offset is outside the
+  bounds of the DataView'')]. 
 
 \begin{figure}[t!]
   \centering
@@ -722,15 +726,8 @@ Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
     \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
 \end{figure}
 
-\Fix{...reviewer asks for more details...check what we added in the
-  rebuttal for this.}
-
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
-
-%% In the following, we describe the list of fuzzers we analyzed. We
-%% initially considered generational grammar-based fuzzers and mutational
-%% fuzzers.
 
 Fuzzers are typically categorized in two main groups--those that build
 inputs anew (generational) and those that modify existing inputs
