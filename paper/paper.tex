@@ -872,9 +872,9 @@ tree~\cite{grieco2016quickfuzz} with trees created anew.
 \section{Results}
 \label{sec:results}
 
-The goal of our study is to assess reliability of \js\ engines by
-leveraging on diversity of test data and engine implementations. Based
-on that, we pose three questions:
+The goal of this paper is to assess ability of techniques that
+leverage data and implementation diversity on to find functional bugs
+in \javascript\ engines. Based on that, we pose three questions:
 \begin{description}[leftmargin=.5in]
 \item[RQ1.] How conformant are the engines to the Test262 suite?
 \item[RQ2.] How effective is test transplantation to find bugs?
@@ -888,22 +888,31 @@ relevance if the engines are too unreliable. The second question
 focuses on the effectiveness of test transplantation
 (Section~\ref{sec:transplantation}). The rationale for using inputs
 from different engines is that developers consider different goals
-when writing test cases--suites written for a given engine should
-cover scenarios not covered by a different engine. The third question
+when writing tests---suites written for a given engine may cover
+scenarios not covered by a different engine. The third question
 evaluates the effectiveness of cross-engine differential testing to
 find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
-rationale is that bugs may be detected using inputs which are similar
-to those already tested. Overall, our goal is to evaluate ability of
-these simple diversity-aware techniques to find bugs.
+rationale for this question is that fuzzing inputs may explore
+scenarios not well tested by at least one of the engines.
 
 \subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
 
-\begin{wraptable}[11]{r}{0.22\textwidth}
-  \vspace{-4ex}      
+The ECMA Test262~\cite{ecma262-conformance-suite} test suite serves to check conformance of
+engines to the \js\ current standard. As it is acceptable to release
+engines fulfilling the specification only partially~\cite{kangax}, it
+is expected that engines do not fully pass this check. However, we
+expect that results provide indication of engine's maturity. In the
+limit, it is not desirable to flood bug reports on engines at early
+stages of development. We ran the suite once a day for seven
+consecutive days from the period of a week and averaged the passing ratios.
+
+\begin{wraptable}[10]{r}{0.22\textwidth}
+%  \vspace{-2ex}      
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
+  \vspace{-2ex}        
   \small
   \begin{tabular}{crr}
     \toprule
@@ -918,39 +927,30 @@ these simple diversity-aware techniques to find bugs.
   \normalsize
   \vspace{-4ex}
 \end{wraptable}
-We used the official conformance test suite
-Test262~\cite{ecma262-conformance-suite} to evaluate conformance of
-engines to the \js\ current standard. As it is acceptable to release
-engines fulfilling the specification only partially~\cite{kangax}, it
-is expected that engines do not fully pass this test. However, we
-expect that results provide indication of engine's maturity. In the
-limit, it is not desirable to flood bug reports on engines at early
-stages of development. We ran the suite once a day for seven
-consecutive days from the period of 16 to 22 of August,
-2018. Table~\ref{tab:test262} shows the average number of passing
-tests over this period. The variance of results was negligible; for
-that reasons, we omitted standard deviations. We noticed that all four
-engines we analyzed but \chakra{} use some variant of the Test262
-suite as part of their regression process, but we used the same
-version in this experiment; the one available from the Test262 web
-site~\cite{ecma262-conformance-suite}. Results show that there are
-still many unsupported cases as can be observed from the percentages
-in the table, but the number of passing tests is high, with
-\veight\ and \smonkey\ performing better compared to others and
+Table~\ref{tab:test262} shows the average number of passing tests over
+this period. The variance of results was negligible; for that reasons,
+we omitted standard deviations. We noticed that all four engines but
+\chakra{} used some variant of the Test262 suite as part of their
+regression process, but we used the same version in this
+experiment~\cite{ecma262-conformance-suite}. Results show that there
+are still many unsupported cases as can be observed from the
+percentages in the table, but the number of passing tests is high,
+with \veight\ and \smonkey\ performing better compared to others and
 \chakra\ performing well worse than others. It is important to
 highlight that failures in this conformance test suite indicates
 missing features as opposed to bugs. However, note that \chakra\ is
 both the engine that has the lowest passing ratio in the conformance
 test suite and the one we were able to find more bugs. Although it is
-possible to find correlation between the percentage of passing tests
-in the conformance suite (as per Table~\ref{tab:test262}) and reliability as
-measured by the number of bugs found (as per
-Figure~\ref{fig:summary}), we do not not imply causality.
+plausible to find correlation between the passing ratios and
+reliability as measured by the number of bugs found (as per
+Figure~\ref{fig:summary}), we not not imply causality.
 
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
-      \textit{Summary:}~...
+      \textit{Summary:}~All engines seems to adhere well to the
+      \js\ standard. Except for \chakra, the passing ratio of all
+      engines is above 90\%.
       \end{minipage}
     }
 \end{center}
