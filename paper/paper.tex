@@ -165,9 +165,9 @@ This paper reports on a study to evaluate the importance of diversity
 to find bugs in JavaScript engines; it covers two complementary
 diversity-aware testing techniques.
 
-\vspace{-1ex}
-\begin{itemize}
-  \setlength\itemsep{0em}
+%\vspace{-1ex}
+%noitemsep,
+\begin{itemize}[topsep=0pt,parsep=0pt,partopsep=2pt,labelwidth=0cm,align=left,itemindent=-0.25cm]
 \item \emph{Test transplantation} leverages diversity of test
   cases. It evaluates the effects that running test files from a given
   engine have in detecting bugs in other engines. The intuition is
@@ -182,7 +182,6 @@ diversity-aware testing techniques.
   intuition is that similar inputs to those already tested may reveal
   problems.
 \end{itemize}
-\vspace{-1ex}
 
 Our study measures the ability of these techniques in finding bugs and
 the impact of false positives, which can arise in both testing
@@ -258,31 +257,44 @@ bugs on \javascript\ engines.
 %% Their main contribution was
 %% analytical whereas our main contribution is empirical--
 
-\emph{Results.}~We considered engines from four major players--Apple,
-Google, Microsoft, and Mozilla. Our results indicate that both
+
+\emph{Results.}~We considered the following engines--Apple, Google,
+Microsoft, and Mozilla. Figure~\ref{fig:summary} shows the breakdown
+of bug reports per engine (\ref{fig:stacked-engine}) and per technique
+(\ref{fig:stacked-technique}). Additionally, each stacked bar breaks
+down the bugs per status (\eg{}, ``1-New''). The prefix number
+indicates the ordering that status labels are assigned. Note that
+several of these reports have the label ``3-Fixed'', indicating that
+bug fixes have been incorporated into the code already. Note that most
+of these bugs affected two engines--Microsoft's \chakra{} and Apple's
+\jsc{}.  We reported \noBugsBugsReportedGoogle{} bugs in Google
+\veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and none in
+Mozilla's \smonkey{}.  Furthermore, our results show that both
 techniques revealed several bugs, most of which confirmed by
 developers. Test transplantation revealed \noBugsTransplantation{}
 bugs (of which, \noBugsTransplantationConfirmed{} were confirmed and
 \noBugsTransplantationFixed{} were fixed) whereas differential testing
 revealed \noBugsDifferentialTesting{} bugs (of which,
 \noBugsDifferentialTestingConfirmed{} were confirmed and
-\noBugsDifferentialTestingFixed{} were fixed). Furthermore, results
-indicate that most of these bugs affected two engines--Apple's \jsc{}
-and Microsoft's \chakra{}.  We reported \noBugsBugsReportedGoogle{}
-bugs in Google \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and
-none in Mozilla's \smonkey{}. Overall, results indicate that both
-techniques were successful at finding bugs. Considering cost per bug
-found, test transplantation demanded less effort from the developers
-who inspected the alarms, compared to differential testing.
+\noBugsDifferentialTestingFixed{} were fixed).  Overall, results
+indicate that both techniques were successful at finding bugs. The
+number of bug reports were similar, if we consider only those
+confirmed or fixed. Considering cost per bug found, we found that test
+transplantation, compared to differential testing, demanded less
+effort from the developers who inspected the alarms. Most of the bugs
+we found are of moderate severity.
+
+%% All in all, these simple techniques
+%% seem promising to improve reliability of engines that continuously
+%% evolve with their specifications.
 
 \emph{Key Findings.}~1) Not only multiple different implementations
 can be leveraged in differential testing, but differences in test
 suites can also be important. 2) Even for problems with fairly clear
 specifications, as in \javascript{}, there is likely to be (a lot of)
 variation between different implementations. 3) Differential testing
-is feasible on real, complex, widely used pieces of software. 4) More
-research needs be done to automate parts of the inspection process as
-to reduce false alarms and prioritize alarms for inspection.
+is feasible on real, complex, widely used pieces of software.
+
 
 %% LIST OF CONTRIBUTIONS
 \emph{Contributions.}~This paper contributes the following: 1)~A
@@ -295,9 +307,26 @@ for diversity-aware testing. We made our testing infrastructure,
 results, and experimental scripts available to the public. (upon
 request for anonymity.)
 
-To sum, the paper provides initial, yet strong evidence that exploring
-diversity is a valuable help to find bugs in JavaScript engines and
-should be encouraged.
+\vspace{1ex} To sum, although more research needs be done to automate
+parts of the inspection process (\eg{}, reduction of false alarms),
+the paper provides initial, yet strong evidence that exploring
+diversity should be encouraged to find functional bugs in JavaScript
+engines.
+
+\begin{figure}[t]
+%  \vspace{-2ex}  
+  \centering
+  \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
+    \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
+    \vspace{-5ex}
+  }\\
+  \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
+    \includegraphics[trim=0 180 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
+    \vspace{-5ex}        
+  }
+  \caption{\label{fig:summary}Summary of bug reports.}
+  \vspace{-3ex}
+\end{figure}
 
 \section{JavaScript}
 \label{sec:es6-design}
@@ -866,40 +895,6 @@ find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
 rationale is that bugs may be detected using inputs which are similar
 to those already tested. Overall, our goal is to evaluate ability of
 these simple diversity-aware techniques to find bugs.
-
-\vspace{1ex}
-\noindent\textbf{Summary of Bugs.}~Figure~\ref{fig:summary} shows the
-breakdown of bug reports found per engine (\ref{fig:stacked-engine})
-and technique (\ref{fig:stacked-technique}). Each stacked bar breaks
-down the bugs per status (\eg{}, ``1-New'', ``2-Confirmed'',
-etc.). The prefix number indicates the ordering that status labels are
-assigned. Note that several of these reports have the label
-``3-Fixed'', indicating that bug fixes have been incorporated into the
-code already.\Comment{ Depending on the issue date, the fix may be in
-  the latest release of the corresponding engines.} Overall, ignoring
-bug reports with the ``1-New'' status, we reported a total of
-\totalBugsConfirmed{} bugs. We found that the vast majority of bug
-reports targeted the engines from Microsoft and Apple. Considering the
-techniques, the number of bug reports were similar, if we consider
-only those confirmed or fixed. Most of these bugs are of moderate
-severity. All in all, these simple techniques seem promising to
-improve reliability of engines that continuously evolve with their
-specifications.
-
-\begin{figure}[h!]
-%  \vspace{-2ex}  
-  \centering
-  \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
-    \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
-    \vspace{-5ex}
-  }\\
-  \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
-    \includegraphics[trim=0 180 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
-    \vspace{-5ex}        
-  }
-  \caption{\label{fig:summary}Summary of bug reports.}
-%  \vspace{-3ex}
-\end{figure}
 
 \subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
