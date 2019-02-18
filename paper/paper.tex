@@ -577,7 +577,26 @@ well-formedness of the corresponding code fragment. Using that method
 we were able to retrieve a total of \Fix{XX} files (\jsc{}=\Fix{XX},
 \veight{}=\Fix{XX}, \smonkey{}=\Fix{XX}). All those files were
 included in Table~\ref{tab:test-suites}.  Surprisingly, we did not
-find a public classifier to solve the problem above. For space, we
+find a public classifier to solve the problem above. 
+\Igor{
+For space, we summarize the solution that worked the best in the following. 
+We used a standard Embeddings NLP word2vec \cite{kusner2015word}
+to get the relationship between sentences and as feature extractor to 
+feed the neural network (NN). 
+Embedding is a technique that uses a neural network to encoding data 
+in a vector of fixed length, mainly, categorical data. 
+In this context, embedding was used following the method skip-gram whose 
+the purpose is given a word, predict the neighbors words.
+The model has been trained and evaluated using a
+dataset with 25K samples of English paragraphs and 25K snippets of
+\js{}. Devido a quantidade de amostras ser relativamente grande, 
+utilizamos a validação durante cada epoch no treinamento and 
+obtained a predicted accuracy of \Fix{98\%}.
+This classifier is publicly available from our website as
+a separate component.
+}
+\Comment{
+For space, we
 summarize the solution that worked the best in the following. The
 classifier that performed best for this case uses
 a standard Embeddings NLP technique~\Fix{cite}\Mar{needs to explain
@@ -595,6 +614,7 @@ dataset with 25K samples of English paragraphs and 25K snippets of
 evaluate the model and obtained a predicted accuracy of
 \Fix{98\%}. This classifier is publicly available from our website as
 a separate component.
+}
 
 %% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
 %% Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
