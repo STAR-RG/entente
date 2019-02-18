@@ -562,59 +562,54 @@ cases embedded in issue descriptions whereas the latter are more
 common. Consequently, we thought we should handle both
 cases.
 
-Accessing attachments was engineering-wise simpler compared to
-embedded tests. For that, we wrote a crawler to visit the issue
-trackers of all four engines listed in Table~\ref{tab:engines} and we
-were able to retrieve a total of 627 files (\jsc{}=147, \veight{}=370,
-and \smonkey{}=110).
+% (\jsc{}=147, \veight{}=370, and \smonkey{}=110).
+% (\jsc{}=\Fix{XX}, \veight{}=\Fix{XX}, \smonkey{}=\Fix{XX})
+To obtain test files included as attachments, we wrote a crawler to
+visit the issue trackers of all engines listed in
+Table~\ref{tab:engines} and we were able to retrieve a total of
+\Fix{627} files.  To mine tests from the textual descriptions we
+proceeded as follows. First, we broke the text describing the issue in
+paragraphs and used a binary classifier to label each paragraph as
+``code'' or ``not code'' (\ie{}, natural language). Then, based on
+that information, we merged consecutive paragraphs labeled as ``code''
+and used a \js\ parser to check well-formedness of the retrieved code
+fragment. Using that method we were able to retrieve a total of
+\Fix{XX} files. All those files were included in
+Table~\ref{tab:test-suites}. For the classification of ``code''
+vs. ``not code'', we used word2vec~\cite{kusner2015word}, a popular
+NLP technique to produce word embeddings. A word embedding is a
+mapping of words---in our case, sentences---to vectors of real
+numbers. With that mapping it is possible to measure distance between
+two sentences as the distance between the vectors characterizing
+them. Consequently, one can measure, for example, the minimum distance
+between a sentence in English and a sentence in a \js\ embedding,
+built with word2vec using a corpus of \js\ sentences. \Mar{Please
+  confirm if this is the idea! If yes, shouldn't just one corpus
+  (e.g., the JS corpus) be enough to solve the problem? Are there two
+  separate embeddings (one for English and one for JS)? If not, how
+  they are combined? What about the classification scheme?  It needs
+  to answer yes/no (not a distance).}  We used a corpus with 25K
+samples of English paragraphs and 25K snippets of \js{} code and
+obtained a classifier with accuracy of 98\%. This classifier is
+publicly available from our website as a separate component.
 
-To mine tests from the textual descriptions we proceeded as
-follows. First, we broke the text describing the issue in paragraphs
-and used a binary classifier to label each paragraph as ``code'' or
-``not code''. Then, based on that information, we merged consecutive
-paragraphs labeled as ``code'' and used a \js\ parser to check
-well-formedness of the corresponding code fragment. Using that method
-we were able to retrieve a total of \Fix{XX} files (\jsc{}=\Fix{XX},
-\veight{}=\Fix{XX}, \smonkey{}=\Fix{XX}). All those files were
-included in Table~\ref{tab:test-suites}.  Surprisingly, we did not
-find a public classifier to solve the problem above. 
-\Igor{
-For space, we summarize the solution that worked the best in the following. 
-We used a standard Embeddings NLP word2vec \cite{kusner2015word}
-to get the relationship between sentences and as feature extractor to 
-feed the neural network (NN). 
-Embedding is a technique that uses a neural network to encoding data 
-in a vector of fixed length, mainly, categorical data. 
-In this context, embedding was used following the method skip-gram whose 
-the purpose is given a word, predict the neighbors words.
-The model has been trained and evaluated using a
-dataset with 25K samples of English paragraphs and 25K snippets of
-\js{}. Devido a quantidade de amostras ser relativamente grande, 
-utilizamos a validação durante cada epoch no treinamento and 
-obtained a predicted accuracy of \Fix{98\%}.
-This classifier is publicly available from our website as
-a separate component.
-}
-\Comment{
-For space, we
-summarize the solution that worked the best in the following. The
-classifier that performed best for this case uses
-a standard Embeddings NLP technique~\Fix{cite}\Mar{needs to explain
-  what this ``Embeddings'' thing does at a high-level. Also, if this
-  stuff exists why we did not find a solution off-the-shelf?} that
-builds on a neural net~\Fix{cite} to keep a dictionary of words and the
-similarity distance among them\Mar{but we are talking about
-  sentences. how does it go from words to sentences? Note that many
-  words from the ``code'' vocabulary are from English!}. In more
-detail, the classification model uses a Convolutional Neural
-Network~\Fix{cite} classifier with two layers\Mar{why two? is there a
-  meaning for each layer?} and has been trained and evaluated using a
-dataset with 25K samples of English paragraphs and 25K snippets of
-\js{}. We ran a standard \Fix{X}-repeated 10-fold cross validation to
-evaluate the model and obtained a predicted accuracy of
-\Fix{98\%}. This classifier is publicly available from our website as
-a separate component.
-}
+%% For space, we summarize the solution that worked the best in
+%% the following. The classifier that performed best for this case uses a
+%% standard Embeddings NLP technique~\Fix{cite}\Mar{needs to explain what
+%%   this ``Embeddings'' thing does at a high-level. Also, if this stuff
+%%   exists why we did not find a solution off-the-shelf?}  that builds
+%% on a neural net~\Fix{cite} to keep a dictionary of words and the
+%% similarity distance among them\Mar{but we are talking about
+%%   sentences. how does it go from words to sentences? Note that many
+%%   words from the ``code'' vocabulary are from English!}. In more
+%% detail, the classification model uses a Convolutional Neural
+%% Network~\Fix{cite} classifier with two layers\Mar{why two? is there a
+%%   meaning for each layer?} and has been trained and evaluated using a
+%% dataset with 25K samples of English paragraphs and 25K snippets of
+%% \js{}. We ran a standard \Fix{X}-repeated 10-fold cross validation to
+%% evaluate the model and obtained a predicted accuracy of
+%% \Fix{98\%}. This classifier is publicly available from our website as
+%% a separate component.
 
 %% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
 %% Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
