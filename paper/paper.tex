@@ -979,22 +979,27 @@ This section reports results of test transplantation. More
 specifically, we analyzed the failures observed when running a test
 suite original from a given engine in another engine. Intuitively, we
 want to assess how effective is the idea of cross-fertilization of
-knowledge among \js\ developers.
+testing knowledge among \js\ developers.
 
 %\vspace{0.5ex}
 \subsubsection{Methodology}
 \label{sec:methodology}
 In this experiment, a developer with experience in \js\ analyzed each
-test file that reveals failure in a given engine and classified that
-file as potentially fault-revealing or not. The co-authors supervised
-the classification process to validate correctness. For the cases the
-developer classified the failures as potentially fault-revealing, one
-of the co-authors carefully inspected the case and reported the bug,
-if confirmed, or re-classified the failure as a false alarm.
+test failure, affecting a particular engine, and classified that
+failure as potentially fault-revealing or not. The authors supervised
+the classification process to validate correctness. For the
+potentially fault-revealing cases, one of the authors carefully
+inspected the scenario and, if agreed on the classification, reported
+the bug on the issue tracker of the affected engine.
+
+%If not, re-classified the failure as a false alarm.
 
 %\vspace{0.5ex}
 \subsubsection{Results}
 \label{sec:results}
+
+\Fix{Igor, please check these numbers! The status of most reports should
+  have changed.}
 
 Table~\ref{tab:cross-testing} shows the number of failures observed
 for each pair of test suite and engine. The first column shows the
@@ -1003,16 +1008,16 @@ tests. We use a dash (``-'') to indicate that we did not consider the
 combinations that associate a test suite with its parent engine;
 failures in those cases would either indicate regressions or flaky
 tests as opposed to unknown bugs for that engine. As explained in
-Section~\ref{sec:seeds}, we used in this experiment the
+Section~\ref{sec:seeds}, we used the
 \totalTestFilesForTestTransplantation{} tests included in the circle
-from Table~\ref{tab:test-suites}. Running those tests we observed a
-total of 812 failures manifested across 543 distinct files (8.9\% of
-total). Table~\ref{tab:cross-testing} shows that, considering the
-engines analyzed, \smonkey\ was the engine that failed the least
-whereas \chakra\ was the engine that failed the most. The
-\smonkey\ test suite also revealed more failures than any other,
-perhaps as expected, considering that it is the suite with more tests
-(see Table~\ref{tab:test-suites}).
+from Table~\ref{tab:test-suites} in this experiment. Running those
+tests we observed a total of 812 failures manifested across 543
+distinct files (8.9\% of total). Table~\ref{tab:cross-testing} shows
+that \smonkey\ was the engine that failed the least whereas
+\chakra\ was the engine that failed the most. The \smonkey\ test suite
+also revealed more failures than any other, perhaps as expected,
+considering that it is the suite with more tests (see
+Table~\ref{tab:test-suites}).
 
 %% This suggests that the investiment in
 %% testing paid off in this case.
@@ -1054,8 +1059,7 @@ perhaps as expected, considering that it is the suite with more tests
 %% assertions. As such, those tests fail in all engines but
 %% \Fix{Y}. 
 
-\sloppy
-The sources of false positives found in this experiment are as
+\sloppy The sources of false positives found in this experiment are as
 follows: \textbf{Undefined Behavior.} False positives of this kind are
 manifested when tests cover implementation-dependent behavior, as
 defined in the ECMA262 specification~\cite{ecmas262-spec}. For
@@ -1074,21 +1078,22 @@ recursion. The test fails in all engines but \jsc{}, which implements
 tail-call optimization. \textbf{Not implemented.} False positives of
 this kind manifest when a test fails because it covers a function that
 is part of the official spec, but is not implemented in the target
-engine yet. For example, at the time of writing, \chakra{} does not
+engine yet. For example, at the time of writing, \chakra{} did not
 implement by default various properties from the \mcodeid{Symbol}
 object. These properties are only available activating the ES6
 experimental mode with the flag \CodeIn{-ES6Experimental}.
 \textbf{Non-Standard Element.} These cases manifest when a function or
 an object property is undefined in the execution engine but we were
-unable to capture looking for error types like \CodeIn{ReferenceError}
-and \CodeIn{TypeError}. For example, we found cases where the test (or
-its harness) capture the corresponding exception, making the test to
-fail in an assertion instead.  \textbf{Other.} This category includes
-other sources. For example, it includes the cases where the test was
-valid for some previous version of the spec but is no longer valid for
-the current spec.
+unable to capture that by looking for error types like
+\CodeIn{ReferenceError} and \CodeIn{TypeError}.\Comment{ For example, we found
+cases where the test (or its harness) fails in an assertion because of
+an undefined property.}
+\textbf{Other.} This category includes other sources. For example, it
+includes the cases where the test was valid for some previous version
+of the spec but is no longer valid for the current spec.
 
-\begin{wraptable}[12]{r}{0.23\textwidth}  
+\begin{wraptable}[12]{r}{0.23\textwidth}
+  \vspace{-3ex}
   \small
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
@@ -1111,20 +1116,13 @@ the current spec.
   \end{tabular}
 \end{wraptable}
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
-false and true positives. Considering false positives, ``Undefined
-Behavior'' was the most predominant source. Considering true
-positives, we found a reasonable number of duplicate reports, but not
-enough high to justify attempting to automate the detection of
-duplicates.  Table~\ref{tab:test-transplantation-bugs} lists all bugs
-we found with test transplantation. The first column shows the
-identifier we assigned to the bug\Comment{, column ``Date'' shows the
-  date the bug was reported in the format ``m/dd'',}, column
-``Engine'' shows the affected engine, column ``Status'' shows the
-status of the bug report at the time of the writing. The status string
-appears in bold face for status ``Confirmed'' or higher, \ie{},
-``Assigned'' and ``Fixed''.  Column ``Severity'' shows the
-severity of confirmed bugs, and, finally, column ``Suite''
-shows the name of the engine that originated the test.
+False Positives (FPs) and True Positives (TPs). Considering false
+positives, ``Undefined Behavior'' was the most predominant
+source. Considering true positives, we found a reasonable number of
+duplicate reports, but not high enough to justify attempting to
+automate the detection of duplicates.
+
+
 
 %% ``Url'' shows the URL
 %% (de-anonymized upon request) for the bug report entry in the
@@ -1133,28 +1131,38 @@ shows the name of the engine that originated the test.
 \input{table_transplantation}
 
 
-Considering severity levels, it is worth noting that
-\jsc{}~\cite{jsc-severity} and \smonkey{}~\cite{mozilla-severity} uses
-five levels, whereas \chakra{}~\cite{chakra-severity} and
-\veight{}~\cite{v8-severity} use only three. As usual, the smallest
-the severity value the highest the severity of the bug. We use a dash
-(``-'') in place of the severity level for the cases where the bug
-report is pending confirmation. Of the \noBugsTransplantation{} bugs
-we reported in this experiment, \noBugsTransplantationConfirmed\ were
-promoted from the status ``New'' to ``Confirmed''. Of these, 16 are
-severity-2 bugs.  Although we did not find any critical bugs, most of
-the bugs are seemingly important as per the categorization given by
-engineers. Analyzing the issue tracker of \chakra, we found that
-severity-1 bugs are indeed rare. Considering the bug reports confirmed
-by developers, \chakra{} was the engine with the highest number--12
-(with 3 bugs fixed). Considering the remaining engines, \veight{}
-developers confirmed the three bugs we reported, fixing
-one. Curiously, Google engineers confirmed the report we issued in a
-few hours. Overall, we found that development teams of other engines,
-specially \jsc\, took much longer to analyze bug reports as can be
-observed in the \jsc\ stacked bar from
-Figure~\ref{fig:stacked-engine}. Curiously, however, the bugs that the
-\jsc{} team confirms are quickly fixed.
+Table~\ref{tab:test-transplantation-bugs} lists all bugs we found with
+test transplantation. The first column shows the identifier we
+assigned to the bug\Comment{, column ``Date'' shows the date the bug
+  was reported in the format ``m/dd'',}, column ``Engine'' shows the
+affected engine, column ``Status'' shows the status of the bug report
+at the time of the writing. The status string appears in bold face for
+status ``Confirmed'' or higher, \ie{}, ``Assigned'' and ``Fixed''.
+Column ``Severity'' shows the severity of confirmed bugs, and,
+finally, column ``Suite'' shows the name of the engine that originated
+the test.  (We omitted the URLs of the issues to protect anonymity.)
+Considering severity levels, we found that \jsc{}~\cite{jsc-severity}
+and \smonkey{}~\cite{mozilla-severity} developers use five levels,
+whereas \chakra{}~\cite{chakra-severity} and
+\veight{}~\cite{v8-severity} developers use only three. As usual, the
+smallest the severity value the highest the severity of the bug. We
+use a dash (``-'') in place of the severity level for the cases where
+the bug report is pending confirmation. Of the
+\noBugsTransplantation{} bugs we reported in this experiment,
+\noBugsTransplantationConfirmed\ were promoted from the status ``New''
+to ``Confirmed''. Of these, 16 are severity-2 bugs.  Although we did
+not find any critical bugs, most of the bugs are seemingly important
+as per the categorization given by engineers. Analyzing the issue
+tracker of \chakra, we found that severity-1 bugs are indeed
+rare. Considering the number of bug reports confirmed by developers,
+\chakra{} was the engine with the highest number--12 (with 3 bugs
+fixed). Considering the remaining engines, \veight{} developers
+confirmed the three bugs we reported, fixing one. Curiously, Google
+engineers confirmed the issued bug reports in a few hours. Overall, we
+found that development teams of other engines, specially \jsc\, took
+much longer to analyze bug reports as can be observed in the
+\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}. 
+However, the bugs the \jsc{} team confirmed were quickly fixed.
 
 %% Overall, we found these results promising given that precision (\ie{},
 %% the ratio of true positives over all reports) needs to take into
