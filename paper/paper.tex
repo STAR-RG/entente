@@ -1195,57 +1195,58 @@ outcomes with a differential oracle.
 
 \vspace{0.5ex}
 \subsubsection{Methodology}
-The experimental methodology we used is as follows. To avoid
-experimental noise, we only fuzz test files that pass in all
-engines--a total of \totalTestFilesPassInAll\ tests satisfy this
-restriction.  Those tests appear under the column ``no-fail-in-all''
-from Table~\ref{tab:test-suites}.  The intuition is that we wanted to
-avoid the scenario where fuzzing produces a fault-revealing input
-based on a test that was already revealing failures on some
-engine. This decision facilitates our inspection task; it helps us
-establish cause-effect relationship between fuzzing and the
-observation of discrepancy.  We configured our infrastructure (see
-Figure~\ref{fig:workflow}) to produce 20 well-formed fuzzed files per
-input file, \ie{}, the number of fuzzing iterations can exceed the
-number above as we discard syntactically invalid files.
+The experimental methodology we used is as follows. As explained in
+Section~\ref{sec:objects:fuzzers}, we used Radamsa~\cite{radamsa} and
+QuickFuzz~\cite{quickfuzz} for fuzzing. To avoid experimental noise,
+we only fuzz test files that pass in all engines--a total of
+\totalTestFilesPassInAll\ tests satisfy this restriction. Those tests
+appear under the column ``no-fail-in-all'' on
+Table~\ref{tab:test-suites}.  We want to avoid the scenario where
+fuzzing produces a fault-revealing input based on a test that was
+already revealing failures on some engine. This decision facilitates
+our inspection task; it helps us establish cause-effect relationship
+between fuzzing and the observation of discrepancy.  We configured our
+infrastructure (see Figure~\ref{fig:workflow}) to produce 20
+well-formed fuzzed files per input file, \ie{}, the number of fuzzing
+iterations can exceed the number above as we discard generated files
+that are syntactically invalid.
 
 %%  That
 %% finding would be important to reduce inspection cost and guide future
 %% developments of this approach. 
 
 \vspace{0.5ex}
-\noindent\textbf{Exploratory Phase.} For the first three months of the
+\lbrack{}Exploratory Phase.\rbrack{} For the first three months of the
 study, our inspection process was exploratory.  In this phase, we
 wanted to learn whether or not black-box fuzzers could reveal real
-bugs and how effective \lo\ warnings were relative to
-\hi\ warnings. The rationale for studying the \hi\ and \lo\ warning
-classification was that if we realized that the ratio of bugs from
-\lo\ warnings was rather low, we could focus our inspection efforts
-only on \hi\ warnings as we expected the number of warnings to
-increase dramatically compared to the previous experiment. To run this
-experiment, we trained eight students in analyzing the warnings that
-our infrastructure produces. The students were enrolled in a
-graduate-level testing class. We listed warnings in a spreadsheet and
-requested the students to update an ``owner'' column indicating who
-was working on it, but we did not enforce a strict order on the
-warnings the students should inspect. Recall from
-Section~\ref{sec:clusterization} that we clustered \lo\ warnings in
-buckets. For that reason, we only listed one \lo\ warning per
-representative class/bucket in the spreadsheet. First, we explained,
-through examples, the possible sources of false alarms they could find
-and then we asked the students to use the following procedure when
-finding a suspicious warning. Analyze the parts of the spec related to
-the problem and, if still suspicious, look for potential duplicates on
-the bug tracker of the affected engine using related keywords. If none
-was reported, indicate in the spreadsheet that that warning is
-potentially fault-revealing. We encouraged students to use
-lithium~\cite{lithium} to minimize long test cases; the tests from the
-Mozilla suite are often longer than others. Only after the co-authors
-reviewed the diagnosis, a bug report was filed. Each student found at
-least one bug using this methodology.
+bugs and how effective was the \hi{}-\lo\ warning classification.  We
+expected the number of warnings to increase dramatically compared to
+the previous experiment and, if we realized that the ratio of bugs
+from \lo\ warnings was rather low, we could focus our inspection
+efforts on \hi\ warnings. To run this experiment, we trained eight
+students in analyzing the warnings that our infrastructure
+produces. The students were enrolled in a graduate-level testing
+class. We listed warnings in a spreadsheet and requested the students
+to update an ``owner'' column indicating who was working on it, but we
+did not enforce a strict order on the warnings the students should
+inspect. Recall from Section~\ref{sec:clusterization} that we
+clustered \lo\ warnings in buckets. For that reason, we only listed
+one \lo\ warning per representative class/bucket in the
+spreadsheet. First, we explained, through examples, the possible
+sources of false alarms they could find and then we asked the students
+to use the following procedure when finding a suspicious
+warning. Analyze the parts of the spec related to the problem and, if
+still suspicious, look for potential duplicates on the bug tracker of
+the affected engine using related keywords. If none was reported,
+indicate in the spreadsheet that that warning is potentially
+fault-revealing. We encouraged students to use lithium~\cite{lithium}
+to minimize long test cases\Comment{; the tests from the Mozilla suite are
+often longer than others}. Only after the co-authors reviewed the
+diagnosis, a bug report was filed. Each student found at least one bug
+using this methodology.
 
 \vspace{0.5ex}
-\noindent\textbf{Non-Exploratory Phase.} Results obtained in the
+\lbrack{}Non-Exploratory Phase.\rbrack{} Results obtained in the
 exploratory phase confirmed our expectations that most of the bugs
 found during the initial period of investigation were related to
 \hi\ warnings. For that reason, we changed our inspection
@@ -1255,13 +1256,13 @@ and the order of inspection changed. We restricted our analysis to
 \hi\ warnings and, aware that we would be unable to analyze each and
 every warning reported, we grouped those warnings per engine,
 analyzing each group in a round-robin fashion.  At each iteration, we
-analyzed \warningsIteration{} warnings in each group. A warning belongs to the
-group of a given engine if only that engine manifests distinct
-behavior, \ie{}, it produces a distinct output compared to others. We
-separated in a distinct group the warnings for which two engines
-diverge. The rationale for this methodology was to give attention to
-each engine more uniformly, enabling more fair comparison across
-engines.
+analyzed \warningsIteration{} warnings in each group. A warning
+belongs to the group of a given engine if only that engine manifests
+distinct behavior, \ie{}, it produces a distinct output compared to
+others. We separated in a distinct group the warnings for which two
+engines diverge. The rationale for this methodology was to give
+attention to each engine more uniformly, enabling more fair comparison
+across engines.
 
 \vspace{0.5ex}
 \subsubsection{Results} Table~\ref{tab:summary-lo}
@@ -1269,9 +1270,10 @@ shows statistics of \lo\ warnings obtained when fuzzing inputs with
 different tools. Column ``\# buckets'' shows the number of buckets
 associated with ``\lo'' warnings, column ``\# files'' shows the total
 number of files involved in these warnings, and column ``avg. \# files
-per bucket'' show the average number of files per bucket. Note that,
+per bucket'' shows the average number of files per bucket. Note that,
 although the number of buckets and files differ substantially across
-fuzzers, the difference of files per bucket was negligible.
+fuzzers, the difference of files per bucket was not very high.\Mar{not
+sure how relevant is this par.}
 
 \begin{table}[t]
   \small
@@ -1319,8 +1321,8 @@ second places, respectively, in number of warnings.
 Table~\ref{tab:false-positives} shows the distribution of false
 positives per source. The sources of imprecision are as defined in
 Section~\ref{sec:transplantation} with the addition of two new
-sources, which we did not observe before. These sources are
-highlighted with a ``*'' in the table. The source ``Invalid Input''
+sources, which we did not observe before. These new sources are
+marked with a ``*'' in the table. The source ``Invalid Input''
 indicates that the test input violated some part of the
 specification. For example, the test indirectly invoked some function
 with unexpected arguments; this happens because fuzzing is not
@@ -1333,18 +1335,19 @@ expression (\eg{}, some string expression or regular expression).
 \begin{table}[t]
   \small
   \centering
-  \caption{\label{tab:false-positives}Distribution of false
-    and true positives.}
+  \caption{\label{tab:false-positives}Distribution of False (FP)
+    and True Positives (TP).\Mar{why numbers in this table does match with
+      that on table ``Number of hi warnings...''?}}
   \begin{tabular}{ccrr}
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{4}{*}{False Positives} & Undefined Behavior & 26 & 9 \\
+    \multirow{4}{*}{FP} & Undefined Behavior & 26 & 9 \\
     & Timeout/OME & 28 & 13 \\
     & * Invalid Input & 39 & 48 \\    
     & * Error Message Mismatch & 41 & 12 \\
     \midrule
-    \multirow{2}{*}{True Positives} & Duplicate & 34 & 28\\
+    \multirow{2}{*}{TP} & Duplicate & 34 & 28\\
     & Bug & 12 & 6\\
     \bottomrule     
   \end{tabular}
@@ -1369,8 +1372,8 @@ expression (\eg{}, some string expression or regular expression).
 Table~\ref{tab:bugs} shows the list of bugs we reported. The table
 shows the fuzzing tool used
 (``Fuzzer''), the \js\ engine affected (``Engine''), the status of the
-bug report as of Aug. 24, 2018 (``Status''), the Url of the bug report
-(``Url''), the severity of the bug report (``Severity''), the priority
+bug report (``Status'')\Comment{ as of Aug. 24, 2018, the Url of the bug report
+(``Url'')}, the severity of the bug report (``Severity''), the priority
 that we assigned to the warning that revealed the bug (``Priority''),
 and the test suite from the original test input (``Suite''). So far,
 \noDiffConfirmed{} of the bugs we reported were confirmed, \noDiffFixed{} of which
@@ -1402,10 +1405,8 @@ bugs, both of which were confirmed, with one fixed.
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
-      \textit{Summary:}~Cross-engine differential testing was also
-      effective at finding bugs in \js\ engines. However, compared to
-      test transplantation, it required substantial more human effort
-      per bug found.
+      \textit{Summary:}~Cross-engine differential testing was very
+      effective at finding bugs in \js\ engines. 
       \end{minipage}
     }
 \end{center}
