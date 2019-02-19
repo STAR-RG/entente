@@ -456,12 +456,12 @@ engine. Column ``full'' shows the number of test cases associated with
 each engine. Column ``pass-in-par.''  shows the number of test cases
 that pass in their parent engine. We discarded tests that fail in
 their parent engine as we could not reliably indicate the reason for
-the failure, so we assumed the test could be broken. We removed 63
-test cases that fail for that reason--6 tests from \jsc{} and 57 tests
-from \smonkey. Column ``type-in-all'' shows the number of test cases
-whose executions do not throw dynamic type errors in any of the
-engines because of an undefined variable or property. These cases were
-captured by looking for the presence of \CodeIn{ReferenceError} and
+the failure, so we assumed the test could be broken. We removed \testsThatFail{}
+test cases that fail for that reason--\testsThatFailJSC{} tests from \jsc{} and 
+\testsThatFailSM{} tests from \smonkey. Column ``type-in-all'' 
+shows the number of test cases whose executions do not throw 
+dynamic type errors in any of the engines because of an undefined variable or property. 
+These cases were captured by looking for the presence of \CodeIn{ReferenceError} and
 \CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
 (respectively, \CodeIn{TypeError}) is raised when test execution
 attempts to access an undefined variable (respectively, property of an
@@ -540,7 +540,8 @@ depend on external libraries, which not all selected engines
 support. We decided to discard those. For example, many tests we found
 required a Node.js runtime~\cite{node} for execution. Also, we did not
 consider tests from the \chakra{} repository because they depend on
-non-portable objects. Finally, note that the number of tests in
+non-portable objects. \Fix{fix... the number will increase}
+Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
 Mozilla and \jsc{}; we discarded those to avoid repetition and to give
 credit where it is due. \lbrack{}Test Harness\rbrack{}~It is also
@@ -567,14 +568,14 @@ cases.
 To obtain test files included as attachments, we wrote a crawler to
 visit the issue trackers of all engines listed in
 Table~\ref{tab:engines} and we were able to retrieve a total of
-\Fix{627} files.  To mine tests from the textual descriptions we
+\filesAttached{} files.  To mine tests from the textual descriptions we
 proceeded as follows. First, we broke the text describing the issue in
 paragraphs and used a binary classifier to label each paragraph as
 ``code'' or ``not code'' (\ie{}, natural language). Then, based on
 that information, we merged consecutive paragraphs labeled as ``code''
 and used a \js\ parser to check well-formedness of the retrieved code
 fragment. Using that method we were able to retrieve a total of
-\Fix{XX} files. All those files were included in
+\filesMining{} files. All those files were included in
 Table~\ref{tab:test-suites}. For the classification of ``code''
 vs. ``not code'', we used word2vec~\cite{kusner2015word}, a popular
 NLP technique to produce word embeddings. A word embedding is a
@@ -588,9 +589,9 @@ built with word2vec using a corpus of \js\ sentences. \Mar{Please
   (e.g., the JS corpus) be enough to solve the problem? Are there two
   separate embeddings (one for English and one for JS)? If not, how
   they are combined? What about the classification scheme?  It needs
-  to answer yes/no (not a distance).}  We used a corpus with 25K
-samples of English paragraphs and 25K snippets of \js{} code and
-obtained a classifier with accuracy of 98\%. This classifier is
+  to answer yes/no (not a distance).}  We used a corpus with \samplesEnglish{}
+samples of English paragraphs and \samplesJSSnippets{} snippets of \js{} code and
+obtained a classifier with accuracy of \accuracyMining{}. This classifier is
 publicly available from our website as a separate component.
 
 %% For space, we summarize the solution that worked the best in
@@ -663,7 +664,15 @@ inspection. The infrastructure uses the
 open-source tool eshost-cli~\cite{eshost-cli}, also used at
 Microsoft, for checking output discrepancy.\Mar{any difference in
   output is considered for reporting? are there any
-  filtering?}
+  filtering?}\Igor{acho que nos equivocamos ao deixar o "eshost-cli", 
+  nao estamos mais utilizando isso devido a essa ferramenta nao 
+  capturar certos tipo de issues (e.g. crash), retirar tambem da Figura 2.
+  A respeito de filtros nos reports, nao. Nos so capturamos o output,
+  o que modificamos eh apenas a formatacao do output para coletar apenas a
+  mensagem e nao o stack trace.
+  Mas eu lembro que se houver um crash ou algo do tipo, nos reportamos de qualquer maneira,
+  mas nao tenho certeza (vou olhar no nosso codigo)
+  }
 
 \begin{figure}[t]
   \centering
@@ -932,10 +941,10 @@ development.
     \toprule
     engine & \% passing \\
     \midrule
-    \jsc{} & 92\%\\
-    \veight{} & 95\% \\
-    \chakra{} & 75\% \\    
-    \smonkey{} & 93\% \\
+    \jsc{} & \percentSuiteTestJSC{}\\
+    \veight{} & \percentSuiteTestVeight{} \\
+    \chakra{} & \percentSuiteTestChakra{} \\    
+    \smonkey{} & \percentSuiteTestSM{} \\
     \bottomrule
   \end{tabular}
   \normalsize
@@ -1009,10 +1018,11 @@ combinations that associate a test suite with its parent engine;
 failures in those cases would either indicate regressions or flaky
 tests as opposed to unknown bugs for that engine. As explained in
 Section~\ref{sec:seeds}, we used the
-\totalTestFilesForTestTransplantation{} tests included in the circle
+\totalTestFilesForTestTransplantation{} tests included in the \Igor{rectangle area}
 from Table~\ref{tab:test-suites} in this experiment. Running those
-tests we observed a total of 812 failures manifested across 543
-distinct files (8.9\% of total). Table~\ref{tab:cross-testing} shows
+tests we observed a total of \failuresTestTrans{} failures manifested across 
+\failuresTestTransDistictFiles{} distinct files (\failuresTestTransPercent{} of total). 
+Table~\ref{tab:cross-testing} shows
 that \smonkey\ was the engine that failed the least whereas
 \chakra\ was the engine that failed the most. The \smonkey\ test suite
 also revealed more failures than any other, perhaps as expected,
@@ -1150,14 +1160,14 @@ use a dash (``-'') in place of the severity level for the cases where
 the bug report is pending confirmation. Of the
 \noBugsTransplantation{} bugs we reported in this experiment,
 \noBugsTransplantationConfirmed\ were promoted from the status ``New''
-to ``Confirmed''. Of these, 16 are severity-2 bugs.  Although we did
+to ``Confirmed''. Of these, \noBugsTransplantationSeverityTwo{} are severity-2 bugs.  Although we did
 not find any critical bugs, most of the bugs are seemingly important
 as per the categorization given by engineers. Analyzing the issue
 tracker of \chakra, we found that severity-1 bugs are indeed
 rare. Considering the number of bug reports confirmed by developers,
-\chakra{} was the engine with the highest number--12 (with 3 bugs
+\chakra{} was the engine with the highest number--\bugsChakra{} (with \bugsChakraFixed{} bugs
 fixed). Considering the remaining engines, \veight{} developers
-confirmed the three bugs we reported, fixing one. Curiously, Google
+confirmed the \bugsVeight{} bugs we reported, fixing \bugsVeightFixed{}. Curiously, Google
 engineers confirmed the issued bug reports in a few hours. Overall, we
 found that development teams of other engines, specially \jsc\, took
 much longer to analyze bug reports as can be observed in the
@@ -1381,8 +1391,8 @@ were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was considered to be acceptable. As
 of now, we did not find any new bugs on \smonkey{}; the bugs we found
-were duplicates and were not reported. Considering \veight{}, we reported two
-bugs, both of which were confirmed, with one fixed.
+were duplicates and were not reported. Considering \veight{}, we reported \bugsVeight{}
+bugs, all of them were confirmed, with \bugsVeightFixed{} fixed.
 
 \input{table_differential}
 
