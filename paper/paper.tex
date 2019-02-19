@@ -913,14 +913,13 @@ scenarios not well tested by at least one of the engines.
 \subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
 
-The ECMA Test262~\cite{ecma262-conformance-suite} test suite serves to check conformance of
-engines to the \js\ current standard. As it is acceptable to release
-engines fulfilling the specification only partially~\cite{kangax}, it
-is expected that engines do not fully pass this check. However, we
-expect that results provide indication of engine's maturity. In the
-limit, it is not desirable to flood bug reports on engines at early
-stages of development. We ran the suite once a day for seven
-consecutive days from the period of a week and averaged the passing ratios.
+The ECMA Test262~\cite{ecma262-conformance-suite} test suite serves to
+check conformance of engines to the \js\ standard. It is
+acceptable to release engines fulfilling the specification only
+partially~\cite{kangax}. We expect that the pass rate on this suite
+provide some indication of the engine's maturity. In the limit, it is
+not desirable to flood bug reports on engines at early stages of
+development. 
 
 \begin{wraptable}[10]{r}{0.22\textwidth}
 %  \vspace{-2ex}      
@@ -942,28 +941,30 @@ consecutive days from the period of a week and averaged the passing ratios.
   \normalsize
   \vspace{-4ex}
 \end{wraptable}
-Table~\ref{tab:test262} shows the average number of passing tests over
-this period. The variance of results was negligible; for that reasons,
-we omitted standard deviations. We noticed that all four engines but
-\chakra{} used some variant of the Test262 suite as part of their
-regression process, but we used the same version in this
+For this experiment, we ran the suite once a day for seven consecutive
+days and averaged the passing ratios. Table~\ref{tab:test262} shows
+the average number of passing tests over this period. The variance of
+results was negligible; for that reason, we omitted standard
+deviations. We noticed that all four engines but \chakra{} used some
+variant of the Test262 suite as part of their regression process, but
+we used the same version in this
 experiment~\cite{ecma262-conformance-suite}. Results show that there
-are still many unsupported cases as can be observed from the
-percentages in the table, but the number of passing tests is high,
-with \veight\ and \smonkey\ performing better compared to others and
-\chakra\ performing well worse than others. It is important to
-highlight that failures in this conformance test suite indicates
-missing features as opposed to bugs. However, note that \chakra\ is
-both the engine that has the lowest passing ratio in the conformance
-test suite and the one we were able to find more bugs. Although it is
-plausible to find correlation between the passing ratios and
-reliability as measured by the number of bugs found (as per
-Figure~\ref{fig:summary}), we not not imply causality.
+are still many unsupported scenarios as can be observed from the
+percentages in the table. The number of passing tests is high and
+similar for \jsc{}, \veight{}, and \smonkey\ whereas \chakra\ performs
+worse compared to the other engines. Note also that \chakra\ is both
+the engine that has the lowest passing ratio in this test suite and
+the one we were able to find more bugs (as per
+Figure~\ref{fig:summary}). Although it is plausible to find
+correlation between the passing ratios and reliability as measured by
+the number of bugs found, we do not imply causality. It is important
+to note that failures in this conformance test suite indicates missing
+features as opposed to bugs.
 
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
-      \textit{Summary:}~All engines seems to adhere well to the
+      \textit{Summary:}~All engines seem to adhere well to the
       \js\ standard. Except for \chakra, the passing ratio of all
       engines is above 90\%.
       \end{minipage}
