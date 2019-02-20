@@ -113,18 +113,18 @@
 
 %% no bugs
 \newcommand{\noBugsTransplantation}{27}
-\newcommand{\noBugsTransplantationConfirmed}{17}
-\newcommand{\noBugsTransplantationFixed}{7}
+\newcommand{\noBugsTransplantationConfirmed}{18}
+\newcommand{\noBugsTransplantationFixed}{12}
 
 \newcommand{\noBugsDifferentialTesting}{21}
-\newcommand{\noBugsDifferentialTestingConfirmed}{14}
-\newcommand{\noBugsDifferentialTestingFixed}{9}
+\newcommand{\noBugsDifferentialTestingConfirmed}{15}
+\newcommand{\noBugsDifferentialTestingFixed}{10}
 
 
 \newcommand{\totalBugsReported}{48}
-\newcommand{\totalBugsConfirmed}{30}
+\newcommand{\totalBugsConfirmed}{33}
 %\newcommand{\noBugsTotalConfirmed}{\Fix{23}}
-\newcommand{\totalBugsFixed}{15}
+\newcommand{\totalBugsFixed}{22}
 
 
 \newcommand{\noBugsBugsReportedGoogle}{five}
@@ -143,6 +143,15 @@
 \newcommand{\noTransVeightBugsConfirmed}{two}
 \newcommand{\noTransVeightBugsReported}{three}
 \newcommand{\noTransVeightBugsFixed}{two}
+
+% table transplantation
+\newcommand{\noTransUndefined}{179} % 252
+\newcommand{\noTransTimeout}{15} % 15
+\newcommand{\noTransNotImplemented}{49} % 22
+\newcommand{\noTransNonStandard}{119} % 119
+\newcommand{\noTransOther}{147} % 135
+\newcommand{\noTransTPDuplicated}{11} % 10
+\newcommand{\noTransTPBugs}{24} % 24
 
 % diff summary
 \newcommand{\noDiffConfirmed}{fifteen}
@@ -200,8 +209,8 @@
 \newcommand{\percentSuiteTestSM}{93\%}
 
 % RESULTS
-\newcommand{\failuresTestTrans}{812}
-\newcommand{\failuresTestTransDistictFiles}{543}
+\newcommand{\failuresTestTrans}{812} % 812 + 
+\newcommand{\failuresTestTransDistictFiles}{612} % 544 + 68 (mining)
 \newcommand{\failuresTestTransPercent}{8.9\%}
 \newcommand{\noBugsTransplantationSeverityTwo}{16}
 \newcommand{\bugsChakra}{12}
