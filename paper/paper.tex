@@ -507,16 +507,16 @@ the changes in the input as opposed to the original cause of failure.
     \cline{3-6}
                                &         & total & pass-in-par. & type-in-all &  no-fail-in-all \\
     \midrule
-    Test262 & \cite{ecma262-conformance-suite} & 31,276 & - &  29,846 & \marktopleft{c2}17,639 \\
+    Test262 & \cite{ecma262-conformance-suite} & \testOriginal{} & \testPassInPar{} &  \testCompileAll{} & \marktopleft{c2}\testNoFailAll{} \\
     \midrule
-    \jsc{} & \cite{webkit} & 1,031 & 1,025 &\marktopleft{c1}1,021 & 955\\
-    \smonkey\ & \cite{mozilla} & 2,634 & 1,977 & 2,116 & 1,686\\
-    \veight{} & \cite{v8} & 75 & 75 & 57 & 57\\
+    \jsc{} & \cite{webkit} & \jscOriginal{} & \jscPassInPar{} &\marktopleft{c1}\jscCompileAll{} & \jscNoFailAll{}\\
+    \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
+    \veight{} & \cite{v8} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
     \midrule
-    Duktape & \cite{duktape} & 1,195 & 1,195 & 921 & 915\\ 
-    \jerry{} & \cite{jerryscript} & 1,951 & 1,951 & 1,878 & 1,837\\
-    JSI & \cite{jsi} & 99 & 99 & 63 & 63\\
-    Tiny-js & \cite{tinyjs} & 49 & 49 & 37\markbottomright{c1} & 37\markbottomright{c2}\\
+    Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\ 
+    \jerry{} & \cite{jerryscript} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
+    JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
+    Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
     \midrule
      &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
    \bottomrule 
@@ -538,7 +538,7 @@ depend on external libraries, which not all selected engines
 support. We decided to discard those. For example, many tests we found
 required a Node.js runtime~\cite{node} for execution. Also, we did not
 consider tests from the \chakra{} repository because they depend on
-non-portable objects. \Fix{fix... the number will increase}
+non-portable objects. 
 Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
 Mozilla and \jsc{}; we discarded those to avoid repetition and to give
