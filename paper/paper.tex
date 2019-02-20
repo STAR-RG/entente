@@ -940,8 +940,14 @@ development.
 
 For this experiment, we ran the suite once a day for seven consecutive
 days and averaged the passing ratios. Table~\ref{tab:test262} shows
+the average number of passing tests over this period. The variance of
+results was negligible; for that reason, we omitted standard
+deviations. We noticed that all four engines but \chakra{} used some
+variant of the Test262 suite as part of their regression process, but
+we used the same version in this
+experiment~\cite{ecma262-conformance-suite}. Results show that there
 \begin{wraptable}[10]{r}{0.22\textwidth}
-  \vspace{-2ex}      
+%  \vspace{-2ex}      
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
@@ -960,12 +966,6 @@ days and averaged the passing ratios. Table~\ref{tab:test262} shows
   \normalsize
   \vspace{-4ex}
 \end{wraptable}
-the average number of passing tests over this period. The variance of
-results was negligible; for that reason, we omitted standard
-deviations. We noticed that all four engines but \chakra{} used some
-variant of the Test262 suite as part of their regression process, but
-we used the same version in this
-experiment~\cite{ecma262-conformance-suite}. Results show that there
 are still many unsupported scenarios as can be observed from the
 percentages in the table. The number of passing tests is high and
 similar for \jsc{}, \veight{}, and \smonkey\ whereas \chakra\ performs
@@ -1418,8 +1418,9 @@ all of them were confirmed, with \noDiffVeightFixed{} fixed.
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
-      \textit{Summary:}~Cross-engine differential testing was very
-      effective at finding bugs in \js\ engines. 
+      \textit{Summary:}~Cross-engine differential testing was
+      effective at finding \js\ engines bugs, several of which have
+      been fixed already.
       \end{minipage}
     }
 \end{center}
@@ -1603,7 +1604,7 @@ efficiency, is tightly integrated to our infrastructure.
 The main findings of this study are as follows.
 
 \begin{itemize}
-  \item Both techniques investigated were successful in revealing
+  \item Both techniques we investigated were successful in revealing
     bugs (several of them);
   %% \item We have found more bugs with test transplantation than we have
   %%   with cross-engine differential testing. In addition, test
@@ -1612,24 +1613,38 @@ The main findings of this study are as follows.
     interesting inputs. We conjecture that there is room to find more
     bugs using other fuzzers;
   \item Mozilla's \smonkey\ appears to be the most reliable
-    \js\ engine we used, with Google's \veight\ after it;
-  \item Reporting real bugs is a great way to train (and encourage)
-    students in software testing.
+    \js\ engine we used, with Google's \veight\ after it.
 \end{itemize}
 
-The main lessons we learned in this study are the following: 1)~Even
-for problems with fairly clear specifications, as in \javascript{},
-there is likely to be (a lot of) variation between different
-implementations. 2)~Not only multiple different implementations can be
-leveraged in differential testing, but differences in test suites can
-also be important. 3)~Differential testing is feasible on real,
-complex, widely used pieces of software. 4)~The cost of inspecting
-failures/warnings is high. Although the inspection activity was not
+The main lessons we learned from this study are as follows: 1)~Even
+for software projects with fairly clear specifications, as the case of
+\javascript{}~\cite{ecmas262-spec}, there is likely to be (a lot of)
+variation between different implementations and, therefore,
+opportunities for bugs. 2)~Not only multiple different implementations
+can be leveraged in differential testing, but differences in test
+suites can also be important. 3)~Finding functional/non-crash bugs
+with differential testing is feasible on real, complex, widely used
+pieces of software. 4)~Further reducing cost of inspection is an
+important problem. Although the inspection activity was not
 uninterrupted, it is safe to say that each warning required a
-substantial amount of time to analyze for potential false alarms. We
-prefer to see this as an opportunity for future research in applying
-learning techniques to prioritize warnings more likely to be faulty.
-%based on static and dynamic features.
+substantial amount of time to analyze for potential false alarms. In
+fact, many \hi\ warnings reported with differential testing were not
+analyzed. In determining cost, we observed, from experience, that the
+complexity of the \js\ specifications that the original test covers
+increases cost of diagnosing (as developers need to read and
+understand those) and the availability of alternative implementations
+(for the cases warnings are revealed through differential testing)
+reduces the cost of diagnosis. We prefer to see such problem as an
+opportunity for future research. For example, applying learning
+techniques to prioritize the warnings more likely to be faulty may be
+a promising avenue to explore. Recall that most of those warnings are
+false positives.  5)~We learned that reporting real bugs is a great
+way to train (and encourage) students in software testing. Students
+praised the experience of diagnosing failures, understanding part of
+the specs (as needed), writing bug reports, participating in
+discussions on issue trackers, and observing the change of
+status. That was a relatively self-contained hands-on activity that
+enabled students to engage in a real-life serious industrial project.
 
 \section{Related Work}
 \label{sec:related-work}
