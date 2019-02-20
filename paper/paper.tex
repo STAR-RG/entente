@@ -257,6 +257,20 @@ bugs on \javascript\ engines.
 %% Their main contribution was
 %% analytical whereas our main contribution is empirical--
 
+\begin{figure}[t]
+%  \vspace{-2ex}  
+  \centering
+  \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
+    \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
+    \vspace{-5ex}
+  }\\
+  \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
+    \includegraphics[trim=0 180 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
+    \vspace{-5ex}        
+  }
+  \caption{\label{fig:summary}Summary of bug reports.}
+  \vspace{-3ex}
+\end{figure}
 
 \emph{Results.}~We considered the following engines--Apple, Google,
 Microsoft, and Mozilla. Figure~\ref{fig:summary} shows the breakdown
@@ -293,8 +307,9 @@ can be leveraged in differential testing, but differences in test
 suites can also be important. 2) Even for problems with fairly clear
 specifications, as in \javascript{}, there is likely to be (a lot of)
 variation between different implementations. 3) Differential testing
-is feasible on real, complex, widely used pieces of software.
-
+is feasible on real, complex, widely used pieces of
+software. Section~\ref{sec:lessons} expands and elaborates key
+findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
 \emph{Contributions.}~This paper contributes the following: 1)~A
@@ -307,26 +322,9 @@ for diversity-aware testing. We made our testing infrastructure,
 results, and experimental scripts available to the public. (upon
 request for anonymity.)
 
-\vspace{1ex} To sum, although more research needs be done to automate
-parts of the inspection process (\eg{}, reduction of false alarms),
-the paper provides initial, yet strong evidence that exploring
-diversity should be encouraged to find functional bugs in JavaScript
-engines.
-
-\begin{figure}[t]
-%  \vspace{-2ex}  
-  \centering
-  \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
-    \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
-    \vspace{-5ex}
-  }\\
-  \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
-    \includegraphics[trim=0 180 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
-    \vspace{-5ex}        
-  }
-  \caption{\label{fig:summary}Summary of bug reports.}
-  \vspace{-3ex}
-\end{figure}
+\vspace{1ex} To sum, the paper provides initial, yet strong evidence
+that exploring diversity should be encouraged to find functional bugs
+in JavaScript engines.
 
 \section{JavaScript}
 \label{sec:es6-design}
@@ -436,7 +434,7 @@ reporting old and already-fixed bugs to developers.
   \end{tabular}
 \end{table}
 
-\section{JS Files Mined}
+\section{Mined JS Files}
 \label{sec:seeds}
 A good test set is critical for finding bugs with the techniques used
 in this paper. For that reason, we looked for \js\ files from various
@@ -659,26 +657,26 @@ component.
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
 
-Figure~\ref{fig:workflow} illustrates the 
-differential testing infrastructure used in part of this study. It takes on
-input a list of JS files and generates warnings on output. Boxes in
-the figure denote encapsulation, arrowed lines denote data flow, and
-the cycle icons denote repetition--the leftmost icon indicates that
-each file in the input list will be analyzed in separate whereas the
-rightmost icon shows that a single file will be fuzzed multiple times.
-The bug-finding process works as follows. New inputs are obtained for
-a given test input using some off-the-shelf input
-fuzzer; Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
+This section describes the infrastructure we used for cross-engine
+differential testing. Figure~\ref{fig:workflow} illustrate the
+workflow of the approach. It takes on input a list of JS files and
+generates warnings on output. Boxes in the figure denote
+encapsulation, arrowed lines denote data flow, and the cycle icons
+denote repetition--the leftmost icon indicates that each file in the
+input list will be analyzed in separate whereas the rightmost icon
+shows that a single file will be fuzzed multiple times.  The
+bug-finding process works as follows. New inputs are obtained for a
+given test input using some off-the-shelf input fuzzer;
+Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
 The oracle checks whether or not the output produced for the fuzzed
 file is consistent across all engines. In case the test passes in all
 engines or fails in all engines (\ie{}, the output is consistent), the
 infrastructure ignores the input. Otherwise, it considers the input as
 potentially fault-revealing; hence, interesting for human
-inspection. The infrastructure uses the
-open-source tool eshost-cli~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy.\Mar{any difference in
-  output is considered for reporting? are there any
-  filtering?}
+inspection. The infrastructure uses the open-source tool
+eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
+output discrepancy.\Mar{any difference in output is considered for
+  reporting? are there any filtering?}
 
 \begin{figure}[t]
   \centering
@@ -936,8 +934,10 @@ provide some indication of the engine's maturity. In the limit, it is
 not desirable to flood bug reports on engines at early stages of
 development. 
 
+For this experiment, we ran the suite once a day for seven consecutive
+days and averaged the passing ratios. Table~\ref{tab:test262} shows
 \begin{wraptable}[10]{r}{0.22\textwidth}
-%  \vspace{-2ex}      
+  \vspace{-2ex}      
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
@@ -956,8 +956,6 @@ development.
   \normalsize
   \vspace{-4ex}
 \end{wraptable}
-For this experiment, we ran the suite once a day for seven consecutive
-days and averaged the passing ratios. Table~\ref{tab:test262} shows
 the average number of passing tests over this period. The variance of
 results was negligible; for that reason, we omitted standard
 deviations. We noticed that all four engines but \chakra{} used some
@@ -1013,9 +1011,6 @@ the bug on the issue tracker of the affected engine.
 \subsubsection{Results}
 \label{sec:results}
 
-\Fix{Igor, please check these numbers! The status of most reports should
-  have changed.}
-
 Table~\ref{tab:cross-testing} shows the number of failures observed
 for each pair of test suite and engine. The first column shows the
 test suites and the first row shows the engines that run those
@@ -1039,8 +1034,8 @@ Table~\ref{tab:test-suites}).
 \begin{table}[t]
   \small
   \centering
-  \caption{\label{tab:cross-testing}Number of failures observed exchanging
-    test suites.}
+  \caption{\label{tab:cross-testing}Number of failures with
+    Test Transplantation.}
   \renewcommand*{\arraystretch}{0.9}
   \begin{tabular}{crrrr}
     \toprule
@@ -1108,7 +1103,7 @@ includes the cases where the test was valid for some previous version
 of the spec but is no longer valid for the current spec.
 
 \begin{wraptable}[12]{r}{0.23\textwidth}
-  \vspace{-3ex}
+  \vspace{-1ex}
   \small
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
@@ -1279,33 +1274,32 @@ engines diverge. The rationale for this methodology was to give
 attention to each engine more uniformly, enabling more fair comparison
 across engines.
 
+%% Table~\ref{tab:summary-lo}
+%% shows statistics of \lo\ warnings obtained when fuzzing inputs with
+%% different tools. Column ``\# buckets'' shows the number of buckets
+%% associated with ``\lo'' warnings, column ``\# files'' shows the total
+%% number of files involved in these warnings, and column ``avg. \# files
+%% per bucket'' shows the average number of files per bucket. Note that,
+%% although the number of buckets and files differ substantially across
+%% fuzzers, the difference of files per bucket was not very high.\Mar{not
+%% sure how relevant is this par.}
+
+%% \begin{table}[t]
+%%   \small
+%%   \centering
+%%   \caption{\label{tab:summary-lo}Summary of \lo\ warning reports.}
+%%   \begin{tabular}{crrr}
+%%     \toprule
+%%     & \# buckets & \# files & avg. \# files per bucket \\
+%%     \midrule
+%%     \radamsa{} & 82 & 319 & 3.8 \\
+%%     \quickfuzz{} & 78 & 218 & 2.7 \\
+%%     \bottomrule
+%%   \end{tabular}
+%% \end{table}
+
 \vspace{0.5ex}
-\subsubsection{Results} Table~\ref{tab:summary-lo}
-shows statistics of \lo\ warnings obtained when fuzzing inputs with
-different tools. Column ``\# buckets'' shows the number of buckets
-associated with ``\lo'' warnings, column ``\# files'' shows the total
-number of files involved in these warnings, and column ``avg. \# files
-per bucket'' shows the average number of files per bucket. Note that,
-although the number of buckets and files differ substantially across
-fuzzers, the difference of files per bucket was not very high.\Mar{not
-sure how relevant is this par.}
-
-\begin{table}[t]
-  \small
-  \centering
-  \caption{\label{tab:summary-lo}Summary of \lo\ warning reports.}
-  \begin{tabular}{crrr}
-    \toprule
-    & \# buckets & \# files & avg. \# files per bucket \\
-    \midrule
-    \radamsa{} & 82 & 319 & 3.8 \\
-    \quickfuzz{} & 78 & 218 & 2.7 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
-
-Table~\ref{tab:summary-hi} shows statistics of \hi\ warnings, which
-are not clustered. The table breaks down \hi\ warning by the affected
+\subsubsection{Results}~Table~\ref{tab:summary-hi} shows statistics of \hi\ warnings. The table breaks down \hi\ warning by the affected
 engine, \ie, the engine manifesting distinct output among those
 analyzed. Column ``+1'' shows the cases where more than one engine
 disagree on the output. Note from the totals that the ordering of
@@ -1346,13 +1340,11 @@ valid with invalid inputs. The source ``Error Message Mismatch''
 corresponds to the cases where the fuzzer modifies the assertion
 expression (\eg{}, some string expression or regular expression).
 
-
 \begin{table}[t]
   \small
   \centering
   \caption{\label{tab:false-positives}Distribution of False (FP)
-    and True Positives (TP).\Mar{why numbers in this table does match with
-      that on table ``Number of hi warnings...''?}}
+    and True Positives (TP).}
   \begin{tabular}{ccrr}
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
@@ -1367,7 +1359,6 @@ expression (\eg{}, some string expression or regular expression).
     \bottomrule     
   \end{tabular}
 \end{table}
-
 
 %% \Igor{devemos remover isso da 
 %% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
@@ -1599,40 +1590,39 @@ efficiency, is tightly integrated to our infrastructure.
 
 \Fix{elaborate}
 
-\subsection{Lessons Learned}
+\subsection{Key Findings and Lessons}
 \label{sec:lessons}
 
-We learned several lessons in this study:
+The main findings of this study are as follows.
 
 \begin{itemize}
-  \item The diversity-aware techniques we used are great
-    at finding bugs in \js\ engines;
-  \item The cost of inspecting failures/warnings is high. Although the
-    inspection activity was not uninterrupted, it is safe to say that
-    each warning required a substantial amount of time to analyze for
-    potential false alarms;
-  \item We have found more bugs with test transplantation than we have
-    with cross-engine differential testing. In addition, test
-    transplantation demanded less effort per bug;
+  \item Both techniques investigated were successful in revealing
+    bugs (several of them);
+  %% \item We have found more bugs with test transplantation than we have
+  %%   with cross-engine differential testing. In addition, test
+  %%   transplantation demanded less effort per bug;
   \item Even simple black-box fuzzers can create surprisingly
-    interesting inputs;
+    interesting inputs. We conjecture that there is room to find more
+    bugs using other fuzzers;
   \item Mozilla's \smonkey\ appears to be the most reliable
     \js\ engine we used, with Google's \veight\ after it;
   \item Reporting real bugs is a great way to train (and encourage)
     students in software testing.
 \end{itemize}
 
-\Fix{revisor(es) reclamaram de pouca discussao. isto poderia ser usado
-  em outros contexto? (resp: JS possui varias engine e muitos
-  tests...) ver tambem ``key findings'' na introducao (precisa ficar
-  consistente)}
-
-%%%%%%%%%%%%%%%%%%%%%%%
-%%% comentario de igor
-%%%%%%%%%%%%%%%%%%%%%%%
-%% sim, me refiro a testes que possuem algum comentário do que se trata aquele teste. Por exemplo os testes262, possuem comentários descrevendo o que o teste tem que fazer
-%% os testes da suite do mozilla são mais dificeis de debuggar... não dificeis de grosso modo, mas custava um pouco para identificar o real problema
-
+The main lessons we learned in this study are the following: 1)~Even
+for problems with fairly clear specifications, as in \javascript{},
+there is likely to be (a lot of) variation between different
+implementations. 2)~Not only multiple different implementations can be
+leveraged in differential testing, but differences in test suites can
+also be important. 3)~Differential testing is feasible on real,
+complex, widely used pieces of software. 4)~The cost of inspecting
+failures/warnings is high. Although the inspection activity was not
+uninterrupted, it is safe to say that each warning required a
+substantial amount of time to analyze for potential false alarms. We
+prefer to see this as an opportunity for future research in applying
+learning techniques to prioritize warnings more likely to be faulty.
+%based on static and dynamic features.
 
 \section{Related Work}
 \label{sec:related-work}
@@ -1750,6 +1740,10 @@ per the severity levels reported in
 Tables~\ref{tab:test-transplantation-bugs} and~\ref{tab:bugs}.
 
 \section{Conclusions}
+
+\Fix{
+although more research needs be done to automate
+parts of the inspection process (\eg{}, reduction of false alarms),}
 
 JavaScript is a very popular language. For that reason, bugs in engine
 implementations often affect lots of people and organizations.
