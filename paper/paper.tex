@@ -1580,23 +1580,34 @@ receive such a long value.
 
 \subsection{Threats To Validity}
 
-As it is the case for most empirical evaluations, there are both
-external and construct threats to validity associated to the results
-we presented. In terms of external validity, our results might not
-generalize to other test inputs and engines. To mitigate this threat,
-we carefully selected inputs from various sources and cleaned them
-according to a well-defined criteria. Considering the \js\ engines, we
-used engines associated with the most popular browsers in the
-market. In terms of construct validity, there might be errors in the
-implementation of our infrastructure. To mitigate this threat, we
-extensively inspected the results of our evaluation manually and, when
-we found the need for implementing a different component we kept the
-old one for cross-checking. For example, we used
-eshost-cli~\cite{eshost-cli} to validate our fork-join implementation
-of the ``Checker'' component from Figure~\ref{fig:workflow} that, for
-efficiency, is tightly integrated to our infrastructure.
+As it is the case for most empirical evaluations, our findings are
+subject to internal, external, and construct validity
+threats. Considering internal validity, conceptually, it is possible
+that the authors of this paper made mistakes in the implementation of
+the scripts supporting the experiments. To mitigate this threat, we
+carefully inspected the implementation and results, looking for
+inconsistencies whenever possible. As for external validity, our
+results might not generalize to other test inputs and engines. To
+mitigate this threat, we carefully selected inputs from various
+sources according to a well-defined criteria. Likewise, we selected
+the engines by using using a well-defined criteria and found that the
+engines selected were associated, certainly not by coincidence, with
+the browsers informally considered the most popular in the market. In
+terms of construct validity, we used standard metrics to determine the
+effectiveness of the testing techniques we studied (\eg{}, number of
+bugs confirmed and fixed and severity). Engine developers were
+responsible for determining the labels of the bug reports and their
+severity. Consequently, these metrics originate from a trusted source.
 
-\Fix{elaborate}
+%% there might be errors in the implementation of our
+%% infrastructure. To mitigate this threat, we extensively inspected the
+%% results of our evaluation manually and, when we found the need for
+%% implementing a different component we kept the old one for
+%% cross-checking. For example, we used eshost-cli~\cite{eshost-cli} to
+%% validate our fork-join implementation of the ``Checker'' component
+%% from Figure~\ref{fig:workflow} that, for efficiency, is tightly
+%% integrated to our infrastructure.
+%% \Fix{elaborate}
 
 \subsection{Key Findings and Lessons}
 \label{sec:lessons}
@@ -1613,7 +1624,7 @@ The main findings of this study are as follows.
     interesting inputs. We conjecture that there is room to find more
     bugs using other fuzzers;
   \item Mozilla's \smonkey\ appears to be the most reliable
-    \js\ engine we used, with Google's \veight\ after it.
+    \js\ engine we analyzed, with Google's \veight\ after it.
 \end{itemize}
 
 The main lessons we learned from this study are as follows: 1)~Even
@@ -1715,7 +1726,7 @@ differential bugs across multiple
 browsers~\cite{patra2016learning}. As such they specialized their
 fuzzer to HTML and JS (see Section~\ref{sec:testing-js-engines}). In
 contrast to Patra and Pradel, we did not propose new techniques; our
-contribution was empirical.
+contribution was empirical. \Fix{differential testing of debuggers...}
 
 \subsection{Testing \js\ Programs}
 Patra and colleagues~\cite{Patra:2018:CFU:3180155.3180184} proposed a
