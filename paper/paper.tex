@@ -193,27 +193,6 @@ scenarios, on the practicality of the approach.
 %% It automates test generation in scenarios where multiple
 %% implementations of a system exist. DT leverages diversity across
 %% system's implementations to detect anomalous behavior.
-
-The idea of test set diversity dates back to the
-eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. The
-assumption behind test set diversity is that faults often spread
-contiguously in the input domain. Consequently, it should be
-beneficial to partition the input domain and explore it more evenly as
-to find bugs faster. Later in the nineties, Chen and
-Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
-the continuity assumption. They found that faults, most open, manifest
-themselves in regular patterns across the input
-domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
-observations led researchers to investigate generalizations of the
-approach to non-numerical data types and strategies to explore the
-input (or output) space to solve different problems in Software
-Engineering (\eg{}, test input generation and test
-selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
-paper explores diversity of sources of test cases and diversity of
-engines to test and find bugs. We remain to investigate the diversity
-of test cases themselves. In principle, that could help reduce the
-number of alarms to inspect, for example.
-
 \emph{Related Ideas.}~The idea of test set diversity dates back to the
 eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. In constrast
 to prior work on test set diversity, this paper explores diversity of
@@ -241,7 +220,7 @@ exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
 ~\ref{tab:false-positives}). To sum, variations of these ideas have
 been explored before in different contexts.  The goal of the paper is
-to assess the ability of these techniques aforementioned in finding
+to assess the ability of the techniques aforementioned in finding
 bugs on \javascript\ engines.
 
 %% This paper evaluates the benefits of
@@ -1026,9 +1005,9 @@ tests. We use a dash (``-'') to indicate that we did not consider the
 combinations that associate a test suite with its parent engine;
 failures in those cases would either indicate regressions or flaky
 tests as opposed to unknown bugs for that engine. As explained in
-Section~\ref{sec:seeds}, we used the
-\totalTestFilesForTestTransplantation{} tests included in the \Igor{rectangle area}
-from Table~\ref{tab:test-suites} in this experiment. Running those
+Section~\ref{sec:seeds}, we used in this experiment the
+\totalTestFilesForTestTransplantation{} tests included in the
+rectangle area under column ``type-in-all'' from Table~\ref{tab:test-suites}. Running those
 tests we observed a total of \failuresTestTrans{} failures manifested across 
 \failuresTestTransDistictFiles{} distinct files (\failuresTestTransPercent{} of total). 
 Table~\ref{tab:cross-testing} shows
@@ -1646,7 +1625,7 @@ contiguously in the input domain. Consequently, it should be
 beneficial to partition the input domain and explore it more evenly as
 to find bugs faster. Later in the nineties, Chen and
 Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
-the continuity assumption. They found that faults, most open, manifest
+the continuity assumption. They found that faults, most often, manifest
 themselves in regular patterns across the input
 domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
 observations led researchers to investigate generalizations of the
