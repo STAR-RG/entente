@@ -260,7 +260,7 @@ indicates the ordering that status labels are assigned. Note that
 several of these reports have the label ``3-Fixed'', indicating that
 bug fixes have been incorporated into the code already. Note that most
 of these bugs affected two engines--Microsoft's \chakra{} and Apple's
-\jsc{}.  We reported \noBugsBugsReportedGoogle{} bugs in Google
+JavaScriptCore (\jsc{}).  We reported \noBugsBugsReportedGoogle{} bugs in Google
 \veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and none in
 Mozilla's \smonkey{}.  Furthermore, our results show that both
 techniques revealed several bugs, most of which confirmed by
@@ -274,7 +274,7 @@ indicate that both techniques were successful at finding bugs. The
 number of bug reports were similar, if we consider only those
 confirmed or fixed. Considering cost per bug found, we found that test
 transplantation, compared to differential testing, demanded less
-effort from the developers who inspected the alarms. Most of the bugs
+effort from the developers who inspected the alarms. Most bugs
 we found are of moderate severity.
 
 %% All in all, these simple techniques
@@ -301,7 +301,7 @@ for diversity-aware testing. We made our testing infrastructure,
 results, and experimental scripts available to the public. (upon
 request for anonymity.)
 
-\vspace{1ex} To sum, the paper provides initial, yet strong evidence
+\vspace{1ex} To sum, this paper provides initial, yet strong evidence
 that exploring diversity should be encouraged to find functional bugs
 in JavaScript engines.
 
@@ -633,56 +633,73 @@ component.
 %% does not have an assertion in the test file
 %% \Fix{add code to explain}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
+  \vspace{-5ex}  
+  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+  \vspace{-2ex}
+\end{figure}
 
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
 
 This section describes the infrastructure we used for cross-engine
-differential testing. Figure~\ref{fig:workflow} illustrate the
+differential testing. Figure~\ref{fig:workflow} illustrates the
 workflow of the approach. It takes on input a list of JS files and
-generates warnings on output. Boxes in the figure denote
-encapsulation, arrowed lines denote data flow, and the cycle icons
-denote repetition--the leftmost icon indicates that each file in the
+generates warnings on output. Numbered boxes in the figure denote the
+data processors and arrowed lines denote data flows. The cycle icons
+indicate repetition--the leftmost icon indicates that each file in the
 input list will be analyzed in separate whereas the rightmost icon
-shows that a single file will be fuzzed multiple times.  The
-bug-finding process works as follows. New inputs are obtained for a
-given test input using some off-the-shelf input fuzzer;
-Section~\ref{sec:objects:fuzzers} describes the fuzzers we selected.
-The oracle checks whether or not the output produced for the fuzzed
-file is consistent across all engines. In case the test passes in all
-engines or fails in all engines (\ie{}, the output is consistent), the
-infrastructure ignores the input. Otherwise, it considers the input as
-potentially fault-revealing; hence, interesting for human
-inspection. The infrastructure uses the
-open-source tool eshost-cli~\cite{eshost-cli}, also used at
-Microsoft, for checking output discrepancy.\Mar{any difference in
-  output is considered for reporting? are there any
-  filtering?}\Igor{acho que nos equivocamos ao deixar o "eshost-cli", 
-  nao estamos mais utilizando isso devido a essa ferramenta nao 
-  capturar certos tipo de issues (e.g. crash), retirar tambem da Figura 2.
-  A respeito de filtros nos reports, nao. Nos so capturamos o output,
-  o que modificamos eh apenas a formatacao do output para coletar apenas a
-  mensagem e nao o stack trace.
-  }
+shows that a single file will be fuzzed multiple times.
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
-\end{figure}
-
-
-It is worth noting that a number of reasons exist, other than a bug,
-to explain discrepancy (see Tables~\ref{fig:piecharts-transplantation}
-and ~\ref{tab:false-positives}) and there is no clear automatic
-approach to precisely distinguish false and true positives. As such, a
-human needs to inspect the warning to classify the issue. As mentioned
+The bug-finding process works as follows. For a given test input, the
+toolchain produces new inputs using some off-the-shelf input fuzzer
+(step 1).  (Section~\ref{sec:objects:fuzzers} describes the fuzzers we
+selected.)  Then, the oracle checks whether or not the output produced
+for the fuzzed file is consistent across all engines (step 2). In case
+the test passes in all engines or fails in all engines (\ie{}, the
+output is consistent), the infrastructure ignores the
+input. Otherwise, it considers the input as potentially
+fault-revealing; hence, interesting for human inspection. Finally, to
+facilitate the human inspection process, the infrastructure
+prioritizes warnings and clusters them in groups (step 3). We describe
+these features in Sections~\ref{sec:prioritization} and
+\ref{sec:clusterization}. Note that a number of reasons exist, other
+than a bug, to explain discrepancy (see
+Tables~\ref{fig:piecharts-transplantation} and
+~\ref{tab:false-positives}) and there is no clear automatic approach
+to precisely distinguish false and true positives. As such, a human
+needs to inspect the warning to classify the issue. As mentioned
 earlier, this justifies why differential testing is challenging to
-automate at the functional level. To facilitate inspection, we
-prioritized warnings and clustered them in groups. We describe these
-strategies in the following.
+automate at the functional level.
+
+For step 2, we considered using the open-source tool
+eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
+output discrepancy. However, we noticed that eshost-cli does not
+handle discrepancies involving crashes. As such, we forked the
+eshost-cli GitHub project and implemented that functionality on it. It
+is also important to note that our checker does not support the case
+where the test fails in all engines but the kind of failure (\eg{},
+exception thrown) is different. Currently, our infrastructure does not
+report discrepancy for that case. For that, it would be necessary to
+properly parse the error message to retrieve the error types. We left
+that as future work as we already found several discrepancies even
+without that.
+
+%% \Mar{any difference in
+%%   output is considered for reporting? are there any
+%%   filtering?}\Igor{acho que nos equivocamos ao deixar o "eshost-cli", 
+%%   nao estamos mais utilizando isso devido a essa ferramenta nao 
+%%   capturar certos tipo de issues (e.g. crash), retirar tambem da Figura 2.
+%%   A respeito de filtros nos reports, nao. Nos so capturamos o output,
+%%   o que modificamos eh apenas a formatacao do output para coletar apenas a
+%%   mensagem e nao o stack trace.
+%%   }
+
 
 \subsection{Prioritization}
+\label{sec:prioritization}
 
 We prioritized warnings based on their types, reflecting likelihood of
 manifesting a real bug. We defined two types---``\hi{}'' and
