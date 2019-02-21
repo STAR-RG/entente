@@ -195,33 +195,35 @@ scenarios, on the practicality of the approach.
 %% system's implementations to detect anomalous behavior.
 \emph{Related Ideas.}~The idea of test set diversity dates back to the
 eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. In contrast
-to prior work on test set diversity, this paper explores diversity of
-sources of test cases and diversity of implementations with the goal
-of finding bugs. Section~\ref{sec:related-work} elaborates related
-work on this topic. Differential Testing~\cite{Brumley-etal-ss07} (DT)
-has been applied in a variety of contexts to find
+to prior work on this topic, this paper explores diversity of
+implementations and diversity of sources of test cases as opposed to
+diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
+elaborates related work on this topic. Differential
+Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
+contexts to find
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
 It has shown to be specially practical in scenarios where the
 observation of difference gives a strong signal of a real problem. For
-example, Mozilla runs JS files against different configurations of
-a given build of their \smonkey\ engine (\eg{}, trying to enable or
-not eager JIT compilation\footnote{These files are created with
-  the grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
-  ``compare\_jit'' from funfuzz.}). A positive aspect of the approach is that
-it can be fully automated---as only one engine is used, the outcomes
-of the test in both configurations are expected to be identical. The
-Mozilla team uses this approach since 2002; they have been able to
-find over 270 bugs since then~\cite{jsfunfuzz-at-mozilla}, including
-security bugs. Cross-engine differential testing, in contrast, has not
-been widely popularized. One possible reason is that it is still not
+example, Mozilla runs JS files against different configurations of a
+given build of their \smonkey\ engine (\eg{}, trying to enable or not
+eager JIT compilation\footnote{These files are created with the
+  grammar-based fuzzer jsfunfuzz~\cite{jsfunfuzz}. Look for option
+  ``compare\_jit'' from funfuzz.}). A positive aspect of the approach
+is that it can be fully automated---as only one engine is used, the
+outcomes of the test in both configurations are expected to be
+identical. The Mozilla team uses this approach since 2002; they have
+been able to find over 270 bugs since
+then~\cite{jsfunfuzz-at-mozilla}, including security
+bugs. Cross-engine differential testing, in contrast, has not been
+widely popularized. One possible reason is that it is still not
 practical to fully automate the technique. In contrast to other
 applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
 ~\ref{tab:false-positives}). To sum, variations of these ideas have
 been explored before in different contexts.  The goal of the paper is
-to assess the ability of the techniques aforementioned in finding
-bugs on \javascript\ engines.
+to assess the ability of the techniques aforementioned in finding bugs
+on \javascript\ engines.
 
 %% This paper evaluates the benefits of
 %% test case diversity and engine diversity in finding bugs on
@@ -251,31 +253,33 @@ bugs on \javascript\ engines.
   \vspace{-3ex}
 \end{figure}
 
-\emph{Results.}~We considered the following engines--Apple, Google,
-Microsoft, and Mozilla. Figure~\ref{fig:summary} shows the breakdown
-of bug reports per engine (\ref{fig:stacked-engine}) and per technique
-(\ref{fig:stacked-technique}). Additionally, each stacked bar breaks
-down the bugs per status (\eg{}, ``1-New''). The prefix number
-indicates the ordering that status labels are assigned. Note that
-several of these reports have the label ``3-Fixed'', indicating that
-bug fixes have been incorporated into the code already. Note that most
-of these bugs affected two engines--Microsoft's \chakra{} and Apple's
-JavaScriptCore (\jsc{}).  We reported \noBugsBugsReportedGoogle{} bugs in Google
-\veight{} (\noBugsBugsConfirmedGoogle{} confirmed) and none in
-Mozilla's \smonkey{}.  Furthermore, our results show that both
-techniques revealed several bugs, most of which confirmed by
-developers. Test transplantation revealed \noBugsTransplantation{}
-bugs (of which, \noBugsTransplantationConfirmed{} were confirmed and
+\sloppy \emph{Results.}~We considered the following engines--\chakra{}
+(Microsoft), JavaScriptCore (Apple), \veight{} (Google), and
+\smonkey{} (Mozilla). Figure~\ref{fig:summary} shows the breakdown of
+bug reports per engine (\ref{fig:stacked-engine}) and per technique
+(\ref{fig:stacked-technique}). Each stacked bar breaks down the bugs
+per status (\eg{}, ``1-New''). The prefix number indicates the
+ordering that status labels are assigned. Note that several of these
+reports have the label ``3-Fixed'', indicating that bug fixes have
+been incorporated into the code already. Note that most of these bugs
+affected two engines--\chakra{} and JavaScriptCore (\jsc{}).  We
+reported \noBugsBugsReportedGoogle{} bugs in \veight{}
+(\noBugsBugsConfirmedGoogle{} confirmed) and none in \smonkey{}.
+Furthermore, our results show that both techniques revealed several
+bugs, most of which confirmed by developers. Test transplantation
+revealed \noBugsTransplantation{} bugs (of which,
+\noBugsTransplantationConfirmed{} were confirmed and
 \noBugsTransplantationFixed{} were fixed) whereas differential testing
 revealed \noBugsDifferentialTesting{} bugs (of which,
 \noBugsDifferentialTestingConfirmed{} were confirmed and
 \noBugsDifferentialTestingFixed{} were fixed).  Overall, results
 indicate that both techniques were successful at finding bugs. The
 number of bug reports were similar, if we consider only those
-confirmed or fixed. Considering cost per bug found, we found that test
-transplantation, compared to differential testing, demanded less
-effort from the developers who inspected the alarms. Most bugs
-we found are of moderate severity.
+confirmed or fixed. Most bugs we found are of moderate severity.
+
+%% Considering cost per bug found, we found that test
+%% transplantation, compared to differential testing, demanded less
+%% effort from the developers who inspected the alarms. 
 
 %% All in all, these simple techniques
 %% seem promising to improve reliability of engines that continuously
@@ -1678,7 +1682,7 @@ industrial project.
 \section{Related Work}
 \label{sec:related-work}
 
-\subsection{Diversity in Testing}
+\subsection{\label{sec:related:diversity-testing}Diversity in Testing}
 The idea of test set diversity dates back to the
 eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. The
 assumption behind test set diversity is that faults often spread
