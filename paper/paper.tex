@@ -1331,10 +1331,10 @@ second places, respectively, in number of warnings.
     \toprule
     fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
     \midrule
-    \radamsa{} & 137 & 47 & 323 & 21 & 483 \\
-    \quickfuzz{} & 81 & 62 & 349 & 13 & 369 \\
+    \radamsa{} & 151 & 50 & 331 & 94 & 628 \\ % 137 & 47 & 323 & 21 & 483
+    \quickfuzz{} & 83 & 63 & 351 & 21 & 403 \\ % 81 & 62 & 349 & 13 & 369
     \midrule
-    \textbf{total} & 218 & 109 & 672 & 34 & 852 \\
+    \textbf{total} & 234 & 113 & 682 & 115 & 1031 \\ % 218 & 109 & 672 & 34 & 852
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1362,12 +1362,12 @@ expression (\eg{}, some string expression or regular expression).
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{4}{*}{FP} & Undefined Behavior & 26 & 9 \\
-    & Timeout/OME & 28 & 13 \\
-    & * Invalid Input & 39 & 48 \\    
-    & * Error Message Mismatch & 41 & 12 \\
+    \multirow{4}{*}{FP} & Undefined Behavior & 26 & 9 \\ % 26 & 9 
+    & Timeout/OME & 28 & 13 \\ % 28 & 13
+    & * Invalid Input & 39 & 48 \\ % 39 & 48
+    & * Error Message Mismatch & 41 & 12 \\ % 41 & 12
     \midrule
-    \multirow{2}{*}{TP} & Duplicate & 34 & 28\\
+    \multirow{2}{*}{TP} & Duplicate & 34 & 28\\ % 34 & 28
     & Bug & 12 & 6\\
     \bottomrule     
   \end{tabular}
