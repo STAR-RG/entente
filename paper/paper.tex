@@ -297,9 +297,8 @@ techniques to find functional bugs in popular \javascript\ engines.
 2)~A number of bugs found and fixed. We reported a total of
 \totalBugsReported{} bugs. Of these, \totalBugsConfirmed{} bugs were
 confirmed and \totalBugsFixed{} bugs were fixed. 3)~An infrastructure
-for diversity-aware testing. We made our testing infrastructure,
-results, and experimental scripts available to the public. (upon
-request for anonymity.)
+for diversity-aware testing. The scripts to run the experiments will
+be available upon request. The data is publicly available \dataRepo{}.
 
 \vspace{1ex} To sum, this paper provides initial, yet strong evidence
 that exploring diversity should be encouraged to find functional bugs
@@ -1437,6 +1436,10 @@ all of them were confirmed, with \noDiffVeightFixed{} fixed.
     }
 \end{center}
 
+\noindent
+\textbf{Data Availability.}~The data, including the tests, warning
+reports, and diagnostic outcomes, is publicly available from a
+preserved repository \dataRepo.
 
 \section{Discussion}
 \label{sec:bugs}
@@ -1444,12 +1447,12 @@ all of them were confirmed, with \noDiffVeightFixed{} fixed.
 
 \subsection{Example Bug Reports}
 
-This section discusses a selection of bugs reports. The selection
-criteria we used was: (i) to cover each engine that we found
-bugs--\chakra, \jsc, and \veight, (ii) to cover a different
-technique--test transplantation and differential testing (with
-\radamsa\ and with \quickfuzz), (iii) to cover a case of rejected bug
-report, and (iv) to use short test inputs (for space).
+This section discusses a sample of bugs reports. The selection
+criteria we used was: (i) to cover all engines we found bugs--\chakra,
+\jsc, and \veight, (ii) to cover each technique--test transplantation
+and differential testing (with \radamsa\ and with \quickfuzz), (iii)
+to cover a case of rejected bug report, and (iv) to use short tests
+(for space).
 
 %% \CodeIn{\{var a =
 %%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
@@ -1485,12 +1488,12 @@ version of the code modified by the \radamsa{} fuzzer~\cite{radamsa}
 returns a string representation of a null character (\CodeIn{NUL})\Comment{ in
 ascii}. The unary plus expression ``\CodeIn{+a}", used in the
 assertion, is equivalent to the operation
-\CodeIn{To Number(a.valueOf())} that converts a string to a number,
+\CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
 otherwise the operation returns NaN (Not a
 Number)~\cite{unary-plus}. This test fails in all engines but
 \chakra{}. For all three engines the string cannot be parsed as an
 hexadecimal. As such, they produce a NaN as result and the test fails
-as expected. \chakra{}, in contrast, incorrectly converts the string
+as expected. \chakra{}, instead, incorrectly converts the string
 to zero, making the test to pass. As Table~\ref{tab:bugs} shows, the
 \chakra{} team fixed the issue soon after we reported the problem.
 
@@ -1823,9 +1826,10 @@ students in the task of diagnosing these warnings. Using learning
 techniques for prioritization, similar to what Chen and
 colleagues~\cite{Chen:2017:LPT:3097368.3097451} did to prioritize the
 warnings reported by CSmith~\cite{Yang:2011:FUB:1993498.1993532},
-seems a promising starting point for this improvement. The result
-data, infrastructure, and experimental scripts we prepared to run this
-study will be available upon request.
+seems a promising starting point for this improvement.
+
+The scripts to run the experiments for this study will be available
+upon request. The data is publicly available \dataRepo{}.
 
 \balance \bibliographystyle{ACM-Reference-Format}
 \bibliography{references,../docs/google-research-awards-latam/tmp}
