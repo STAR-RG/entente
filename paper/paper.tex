@@ -285,12 +285,13 @@ confirmed or fixed. Most bugs we found are of moderate severity.
 %% seem promising to improve reliability of engines that continuously
 %% evolve with their specifications.
 
-\emph{Key Findings.}~1) Not only multiple different implementations
-can be leveraged in differential testing, but differences in test
-suites can also be important. 2) Even for problems with fairly clear
-specifications, as in \javascript{}, there is likely to be (a lot of)
-variation between different implementations. 3) Differential testing
-is feasible on real, complex, widely used pieces of
+\emph{Key Findings.}~The list of findings of this work includes--1)
+Not only multiple different implementations can be leveraged in
+differential testing, but differences in test suites can also be
+important. 2) Even for problems with fairly clear specifications, as
+in \javascript{}, there is likely to be (a lot of) variation between
+different implementations. 3) Differential testing is feasible on
+real, complex, widely used pieces of
 software. Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
 
@@ -759,20 +760,20 @@ similar warnings reported by our infrastructure. We only clustered
 ``\lo'' warnings as ``\hi'' warnings produce messages that arise from
 the test case, which are typically distinct.
 
-Figure~\ref{fig:lo-truepositive} shows, at the bottom, the identifier
-of an engine, the exception it raises, and the message it produces on
-a ``\lo'' warning.  This sequence of engine id, exception, and error
-message triples defines a warning signature that we use for
-clustering. It is worth mentioning that we filter references to code
-in messages as to increase ability to aggregate warnings from
-different test sources. Any warnings, including this one, that has
-this same signature will be included in the same
+Figure~\ref{fig:lo-truepositive} shows, at the bottom, a sequence of
+three elements that we use to characterize a warning--1) the
+identifier of an engine, 2) the exception it raises, and 3) the
+message it produces on a ``\lo'' warning.  This sequence of triples
+defines a warning signature that we use for clustering. It is worth
+mentioning that we filter references to code in messages as to
+increase ability to aggregate warnings. Any warnings, including this
+one, that has this same signature will be included in the same
 ``bucket''. Considering the example from
 Figure~\ref{fig:lo-truepositive}, the signature for that cluster will
 be [(JavaScriptCore, ``RangeError'', ``byteOffset cannot be
   negative''), (SpiderMonkey, ``RangeError'', ``invalid or
   out-of-range index''), (V8, ``RangeError'', ``Offset is outside the
-  bounds of the DataView'')]. 
+  bounds of the DataView'')].
 
 \begin{figure}[t!]
   \centering
@@ -1210,7 +1211,7 @@ However, the bugs the \jsc{} team confirmed were quickly fixed.
       \textit{Summary:}~Test transplantation was effective at finding
       functional bugs. Although the cost of classifying failures was
       non-negligible, the approach revealed several non-trivial bugs
-      in widely popular engines.
+      in three of the four engines we analyzed.
       \end{minipage}
     }
 \end{center}
@@ -1467,6 +1468,7 @@ to cover a case of rejected bug report, and (iv) to use short tests
 code snippet below shows a test that reveals a bug in \chakra.
 
 \begin{figure}[h!]
+  \vspace{-1ex}
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
@@ -1483,6 +1485,7 @@ code snippet below shows a test that reveals a bug in \chakra.
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
   %% \label{fig:hi-priority}
+  \vspace{-1ex}  
 \end{figure}
 
 The object property \CodeIn{valueOf} stores a function that returns a
@@ -1538,6 +1541,7 @@ originates from \jerry{} test suite; the bug was found during the test
 transplantation experiment.
 
 \begin{figure}[h!]
+  \vspace{-0.5ex}  
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
@@ -1555,6 +1559,7 @@ transplantation experiment.
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
   %% \label{fig:hi-priority}
+  \vspace{-1ex}  
 \end{figure}
 
 According to the specification~\cite{ecmas262-array-sort}, the
@@ -1569,6 +1574,7 @@ code snippet below shows an example input related to a bug report that
 we issued to the \chakra\ development team, but they did not accept.
 
 \begin{figure}[h!]
+  \vspace{-0.5ex}  
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
@@ -1586,6 +1592,7 @@ we issued to the \chakra\ development team, but they did not accept.
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
   %% \label{fig:hi-priority}
+  \vspace{-1ex}  
 \end{figure}
 
 
@@ -1690,8 +1697,8 @@ contiguously in the input domain. Consequently, it should be
 beneficial to partition the input domain and explore it more evenly as
 to find bugs faster. Later in the nineties, Chen and
 Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
-the continuity assumption. They found that faults, most often, manifest
-themselves in regular patterns across the input
+the continuity assumption. They found that faults, most often,
+manifest themselves in regular patterns across the input
 domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
 observations led researchers to investigate generalizations of the
 approach to non-numerical data types and strategies to explore the
@@ -1699,9 +1706,9 @@ input (or output) space to solve different problems in Software
 Engineering (\eg{}, test input generation and test
 selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
 paper explores diversity of sources of test cases and diversity of
-engines to test and find bugs. We remain to investigate the diversity
-of test cases themselves. In principle, that could help reduce the
-number of alarms to inspect, for example.
+engine implementations. We remain to investigate the diversity of test
+cases themselves. In principle, that could help reduce the number of
+alarms to inspect, for example.
 
 \subsection{Differential Testing}
 Several different applications of differential testing have been
@@ -1802,19 +1809,19 @@ Tables~\ref{tab:test-transplantation-bugs} and~\ref{tab:bugs}.
 %% although more research needs be done to automate
 %% parts of the inspection process (\eg{}, reduction of false alarms),}
 
-JavaScript is a very popular language. For that reason, bugs in engine
+JavaScript (\js{}) is very popular today. Bugs in engine
 implementations often affect lots of people and organizations.
 Implementing correct engines is challenging because the specification
 is intentionally incomplete and evolves frequently. Finding bugs in
 \js\ engines is challenging for similar reasons.
 
 This paper reports on a study to evaluate two diversity-aware
-techniques--test transplantation and cross-engine differential
-testing. The first technique explores diversity of test sources; it
-runs the test suite of one given engine in another engine. The second
-technique explores diversity of implementations; it fuzzes existing
-inputs and then compares the output produced by different engines with
-a differential oracle.
+techniques for finding bugs in \js{}--test transplantation and
+cross-engine differential testing. The first technique explores
+diversity of test sources; it runs the test suite of one given engine
+in another engine. The second technique explores diversity of
+implementations; it fuzzes existing inputs and then compares the
+output produced by different engines with a differential oracle.
 
 We found that both techniques were very effective at finding bugs in
 \js\ engines.  Overall, we reported \totalBugsReported\ bugs in this
