@@ -194,7 +194,7 @@ scenarios, on the practicality of the approach.
 %% implementations of a system exist. DT leverages diversity across
 %% system's implementations to detect anomalous behavior.
 \emph{Related Ideas.}~The idea of test set diversity dates back to the
-eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. In constrast
+eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. In contrast
 to prior work on test set diversity, this paper explores diversity of
 sources of test cases and diversity of implementations with the goal
 of finding bugs. Section~\ref{sec:related-work} elaborates related
@@ -557,20 +557,23 @@ Table~\ref{tab:test-suites}.
 
 For the classification of ``code'' vs. ``not code'', we used a
 pipeline of two Neural Networks (NN), a popular design for solving NLP
-classification problems~\Fix{cite}. The first net in the pipeline
-takes as input an arbitrary sentence and produces on output a
+classification problems~\cite{kusner2015word}. The first net in the
+pipeline takes as input an arbitrary sentence and produces on output a
 characterization vector for that sentence. The second net in the
-pipeline takes that vector on input and the class for that attribute
-(\ie{}, ``(not) code'') and produces a yes/no answer, determining
-whether or not the input sentence was code. More in detail, for the
-first net, we used word2vec~\cite{kusner2015word}, a popular NLP
+pipeline takes that vector on input and produces a yes/no answer,
+determining whether or not the input sentence was code.  During the
+training phase, the second neural net in the pipeline takes
+additionally on input the value for the class attribute for the sample;
+in this case, ``code'' or ``not code''. More in detail, for the first
+net, we used word2vec~\cite{mikolov2013distributed}, a popular NLP
 technique to produce word embeddings. A word embedding is a mapping of
 words to vectors of real numbers. For the second net, we used a
-multi-layer perceptron~\Fix{cite} to infer the probability of the
-input belonging or not to the class. We classify as code an input for
-which the pipeline produces a probability of 0.7 or higher. We used a
-corpus with 25K samples of English paragraphs and 25K snippets of
-\js{} code and obtained a classifier with accuracy of 98\%. This
+multi-layer perceptron~\cite{Rumelhart:1986:LIR:104279.104293} to
+infer the probability of the input belonging or not to the class. The
+classifier labels the input input as code if the predicted probability
+of the input being code is 0.7 or higher. We used a corpus with 25K
+samples of English paragraphs and 25K snippets of \js{} code to train
+and test the classifier and obtained an accuracy of 98\%. This
 classifier is publicly available from our website as a separate
 component.
 
@@ -1108,7 +1111,7 @@ includes the cases where the test was valid for some previous version
 of the spec but is no longer valid for the current spec.
 
 \begin{wraptable}[12]{r}{0.23\textwidth}
-  \vspace{-1ex}
+  \vspace{-3ex}
   \small
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
@@ -1131,14 +1134,16 @@ of the spec but is no longer valid for the current spec.
   \end{tabular}
 \end{wraptable}
 
-\Igor{
-  Os numeros da Tabela 5 correspondem ao numero de arquivos que falharam 
-  em test transplantation (nesse caso \failuresTestTransDistictFiles{}).
-  houveram \failuresTestTrans{} falhas que correspondem aos dados da Tabela 4.
-}
+%% \Igor{
+%%   Os numeros da Tabela 5 correspondem ao numero de arquivos que falharam 
+%%   em test transplantation (nesse caso \failuresTestTransDistictFiles{}).
+%%   houveram \failuresTestTrans{} falhas que correspondem aos dados da Tabela 4.
+%% }
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
-False Positives (FPs) and True Positives (TPs). Considering false
+False Positives (FPs) and True Positives (TPs). The sum of the numbers
+in this table correspond to the number of files that manifested
+failures, \ie{}, \failuresTestTransDistictFiles{}. Considering false
 positives, ``Undefined Behavior'' was the most predominant
 source. Considering true positives, we found a reasonable number of
 duplicate reports, but not high enough to justify attempting to
@@ -1362,7 +1367,7 @@ expression (\eg{}, some string expression or regular expression).
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{4}{*}{FP} & Undefined Behavior & 26 & 9 \\ % 26 & 9 
+    \multirow{4}{*}{FP} & Undefined Behavior & 26 & 13 \\ % 26 & 9 
     & Timeout/OME & 28 & 13 \\ % 28 & 13
     & * Invalid Input & 39 & 48 \\ % 39 & 48
     & * Error Message Mismatch & 41 & 12 \\ % 41 & 12
@@ -1480,7 +1485,7 @@ version of the code modified by the \radamsa{} fuzzer~\cite{radamsa}
 returns a string representation of a null character (\CodeIn{NUL})\Comment{ in
 ascii}. The unary plus expression ``\CodeIn{+a}", used in the
 assertion, is equivalent to the operation
-\CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
+\CodeIn{To Number(a.valueOf())} that converts a string to a number,
 otherwise the operation returns NaN (Not a
 Number)~\cite{unary-plus}. This test fails in all engines but
 \chakra{}. For all three engines the string cannot be parsed as an
@@ -1654,15 +1659,18 @@ understand those) and the availability of alternative implementations
 (for the cases warnings are revealed through differential testing)
 reduces the cost of diagnosis. We prefer to see such problem as an
 opportunity for future research. For example, applying learning
-techniques to prioritize the warnings more likely to be faulty may be
-a promising avenue to explore. Recall that most of those warnings are
-false positives.  5)~We learned that reporting real bugs is a great
-way to train (and encourage) students in software testing. Students
-praised the experience of diagnosing failures, understanding part of
-the specs (as needed), writing bug reports, participating in
-discussions on issue trackers, and observing the change of
-status. That was a relatively self-contained hands-on activity that
-enabled students to engage in a real-life serious industrial project.
+techniques to prioritize the warnings more likely to be faulty (in the
+spirit of the work of Chen and
+colleagues~\cite{Chen:2017:LPT:3097368.3097451}) may be a promising
+avenue to explore. Recall that the rate of true positives of the
+techniques we studied is rather small.  5)~We learned that reporting
+real bugs is a great way to train (and encourage) students in software
+testing. Students praised the experience of diagnosing failures,
+understanding part of the specs (as needed), writing bug reports,
+participating in discussions on issue trackers, and observing the
+change of status. That was a relatively self-contained hands-on
+activity that enabled students to engage in a real-life serious
+industrial project.
 
 \section{Related Work}
 \label{sec:related-work}
@@ -1694,7 +1702,7 @@ proposed in recent years. Chen and
 colleagues~\cite{Chen:2018:RDT:3180155.3180226} recently proposed a
 technique to generate X.509 certificates based on Request For
 Proposals (RFC) as specification with the goal of detecting bugs in
-different SSL/TLS implementations. Those bugs can comprimise security
+different SSL/TLS implementations. Those bugs can compromise security
 of servers which rely on these certificates to properly authenticate
 the parties involved in a communication session. Lidbury and
 colleagues~\cite{Lidbury:2015:MCF:2737924.2737986} and Donaldson and
@@ -1719,12 +1727,14 @@ original, but for which the compiler manifests
 discrepancy. Differential testing has also been applied to test
 refactoring engines~\cite{Daniel:2007:ATR:1287624.1287651}, to test
 symbolic engine implementations~\cite{Kapus:2017:ATS:3155562.3155636},
-and to test disassemblers and binary
-lifters~\cite{Paleari:2010:NDD:1831708.1831741,Kim:2017:TIR:3155562.3155609}. All
-in all, it has shown to be flexible and effective for a wide range of
+to test disassemblers and binary
+lifters~\cite{Paleari:2010:NDD:1831708.1831741,Kim:2017:TIR:3155562.3155609},
+and very recently to test JavaScript
+debuggers~\cite{DBLP:conf/sigsoft/LehmannP18}. All in all, it has
+shown to be flexible and effective for a wide range of
 applications. Surprisingly, not much work has been done on
 differential testing of \js\ engines. Mozilla uses differential
-testing to look for discrepanices across different configurations of
+testing to look for discrepancies across different configurations of
 the same version of its \smonkey\ engine (using the ``compare\_jit''
 flag of jsfunfuzz~\cite{jsfunfuzz}) whereas we focus on discrepancy
 across engines. Patra and Pradel evaluated their language-agnostic
@@ -1733,7 +1743,7 @@ differential bugs across multiple
 browsers~\cite{patra2016learning}. As such they specialized their
 fuzzer to HTML and JS (see Section~\ref{sec:testing-js-engines}). In
 contrast to Patra and Pradel, we did not propose new techniques; our
-contribution was empirical. \Fix{differential testing of debuggers...}
+contribution was empirical.
 
 \subsection{Testing \js\ Programs}
 Patra and colleagues~\cite{Patra:2018:CFU:3180155.3180184} proposed a
@@ -1781,38 +1791,61 @@ Tables~\ref{tab:test-transplantation-bugs} and~\ref{tab:bugs}.
 
 \section{Conclusions}
 
-\Fix{
-although more research needs be done to automate
-parts of the inspection process (\eg{}, reduction of false alarms),}
+%% \Fix{
+%% although more research needs be done to automate
+%% parts of the inspection process (\eg{}, reduction of false alarms),}
 
 JavaScript is a very popular language. For that reason, bugs in engine
 implementations often affect lots of people and organizations.
 Implementing correct engines is challenging because the specification
-is intentionally incomplete and evolves frequently. Finding bugs is
-challenging for similar reasons. We conducted a study to evaluate two
-simple diversity-aware techniques--test transplantation and
-cross-engine differential testing. The first technique runs test
-suites of a given engine in another engine. The second technique
-fuzzes existing inputs and then compares the output produced by
-different engines with a differential oracle.
+is intentionally incomplete and evolves frequently. Finding bugs in
+\js\ engines is challenging for similar reasons.
 
-Overall, we reported \totalBugsReported\ bugs in this study. Of which,
-\totalBugsConfirmed\ were confirmed by developers and
-\totalBugsFixed\ were fixed. Although more work is necessary to
-reduce cost of manual analysis, we found that both techniques we used
-are effective at finding bugs in
-\js\ engines. Section~\ref{sec:lessons} elaborates on the lessons
-learned from this study. The result data, infrastructure, and
-experimental scripts we prepared to run this study are available upon
-request. Future work includes mining test inputs from alternative
-sources (\eg{}, bug trackers) and predicting likelihood of false
-positives as to guide human effort on the most promising warnings
-first.
+This paper reports on a study to evaluate two diversity-aware
+techniques--test transplantation and cross-engine differential
+testing. The first technique explores diversity of test sources; it
+runs the test suite of one given engine in another engine. The second
+technique explores diversity of implementations; it fuzzes existing
+inputs and then compares the output produced by different engines with
+a differential oracle.
 
-\balance
-\bibliographystyle{ACM-Reference-Format}
+We found that both techniques were very effective at finding bugs in
+\js\ engines.  Overall, we reported \totalBugsReported\ bugs in this
+study. Of which, \totalBugsConfirmed\ were confirmed by developers and
+\totalBugsFixed\ were fixed. Although more work is necessary to reduce
+cost of manual analysis, we found that our results provide strong
+evidence that exploring diversity should be encouraged to find
+functional bugs in JavaScript engines.
+
+In the near future, we plan to explore techniques to prioritize the
+warnings reported by these techniques and to continue involving
+students in the task of diagnosing these warnings. Using learning
+techniques for prioritization, similar to what Chen and
+colleagues~\cite{Chen:2017:LPT:3097368.3097451} did to prioritize the
+warnings reported by CSmith~\cite{Yang:2011:FUB:1993498.1993532},
+seems a promising starting point for this improvement. The result
+data, infrastructure, and experimental scripts we prepared to run this
+study will be available upon request.
+
+\balance \bibliographystyle{ACM-Reference-Format}
 \bibliography{references,../docs/google-research-awards-latam/tmp}
 
 \end{document}
 
-%%  LocalWords:  formedness Embeddings NLP Convolutional dataset
+%%  LocalWords:  formedness Embeddings NLP Convolutional dataset DT
+%%  LocalWords:  JS JIT fuzzer jsfunfuzz jit funfuzz JavaScriptCore
+%%  LocalWords:  bytecodes JScript Ecma toPrecision Kangax JSVU cccrr
+%%  LocalWords:  WebKit ReferenceError TypeError drainMicrotasks sep
+%%  LocalWords:  lineNumber ccrrrr Duktape JSI js runtime NN arrowed
+%%  LocalWords:  embeddings perceptron toolchain fuzzers eshost cli
+%%  LocalWords:  pre ArrayBuffer RangeError ToIndex getInt byteOffset
+%%  LocalWords:  Clusterization SpiderMonkey DataView setInt Radamsa
+%%  LocalWords:  QuickFuzz Grammarinator LangFuzz Megadeth AFL RQ crr
+%%  LocalWords:  libFuzzer sanitizers subtrees conformant crrrr OME
+%%  LocalWords:  ome FP TP ccr FPs TPs crrrrr ccrr escapeinside NUL
+%%  LocalWords:  basicstyle boxpos numberstyle morekeywords assertEq
+%%  LocalWords:  typeof valueOf ascii unary NaN eval SyntaxError Yu
+%%  LocalWords:  iterable instanceof foofoofoo testcase SSL TLS SIMD
+%%  LocalWords:  Lidbury OpenCL GPUs Purdom parsers Lammel Shulte PHP
+%%  LocalWords:  Geno XPath combinatorial CSmith LLVM disassemblers
+%%  LocalWords:  Patra Pradel namespaces Eshkevari WordPress
