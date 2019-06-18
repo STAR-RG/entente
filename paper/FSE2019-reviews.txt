@@ -1,0 +1,201 @@
+We regret to inform you that your submission
+
+  PAPER ID: 156
+  TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+
+was not accepted for inclusion in the ESEC/FSE 2019 technical program.
+
+The competition was very strong. This year, ESEC/FSE 2019 received 303 submissions (excluding desk rejections). Each submission went through a thorough reviewing process, with each paper receiving at least three reviews. After an intensive reviewing, rebuttal, and discussion period, 74 submissions have been accepted.
+
+We enclose below the reviews on your paper as well as a meta-review summarizing the discussions of the program committee. We hope that they will be a source of useful feedback and will help you to improve your work.
+
+We hope that you consider submitting to the many other tracks available at ESEC/FSE 2019. For more information, please visit https://esec-fse19.ut.ee/.
+
+Despite the bad news, we still hope to see you at ESEC/FSE 2019 in August in the beautiful Tallinn, Estonia.
+
+Best Regards,
+
+Sven Apel and Alessandra Russo
+ESEC/FSE 2019 PC Co-Chairs
+
+SUBMISSION: 156
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+
+-------------------------  METAREVIEW  ------------------------
+The reviewers discussed this paper and agree that the techniques used in this paper have already been used in a similar context. Therefore, the main contribution of this paper lies in the empirical study and there were several concerns about its rigour. It does not analyze issues such as false positive rates and/or perform a comparison with alternative types of testing techniques (please see individual reviews for more detail). To improve this paper the reviewers suggest that the authors focus on the study and include these other elements.
+
+The authors did not provide a rebuttal, therefore the discussion was based only on the reviewers interpretation of this work.
+
+
+
+----------------------- REVIEW 1 ---------------------
+SUBMISSION: 156
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+AUTHORS: Igor Lima and Marcelo d'Amorim
+
+----------- Overall Recommendation -----------
+SCORE: -1 (Weak Reject)
+----------- Reviewer's Confidence -----------
+SCORE: 3 (High)
+----------- Summary -----------
+The paper reports on an effort to test four production-quality JavaScript engines. To this end, two techniques are explored: (i) test transplantation, where test cases from one engine are run in other engines and (ii) cross-engine differential testing, where inputs of passing test cases in all engines are fuzzed, re-run, and the results are analyzed for any deviance in the output. The results are presented in terms of number of test failures with a discussion of true and false positive rates. Overall, 27 and 22 new bugs were found with test transplantation and cross-engine differential testing, respectively. Most have been confirmed and fixed already.
+----------- Detailed Evaluation -----------
+The paper reports on a significant undertaking of testing 4 industrial Javascript engines. The paper is well-written. New bugs were found, which is likely relevant for the respective developers.
+
+However, while I greatly appreciate all the effort behind this work (and seems a lot of manual effort behind this), it is unclear what is novel in this paper. Differential testing, fuzzing, and reusing test cases are well understood in academia and also used to some degree in practice. For example, the paper itself reports that some projects already use transplanted test cases. In the end, it appears more like an experience report indicating that existing state of the art approaches in testing can actually find bugs in practice (though also producing a massive amount of false positives). The prioritization of bugs seems the main novel aspect (though even that is framed mostly as opportunity for future work in Sec 7.3). Overall, it is not clear what insights can be gained from this paper beyond "we found bugs" or "techniques that work for C compilers also work for Javascript engines".
+
+In a nutshell, there are three techniques that are combined here:
+- solving the oracle problem by comparing multiple implementations; this has been used frequently, for example in compiler testing, as the paper indicates
+- reusing test cases across implementations; again this has been used before and is even used in practice among the systems studied
+- fuzzing to create test cases; again a lot of research exists and is used here in a somewhat shallow way without any further recognizable innovation
+For example, when comparing this paper to the CSmith paper, CSmith had to innovate many aspects of the fuzzer to produce interesting programs that are more likely to trigger bugs of interest and align with the language specification, and they also discussed issues of how bugs in those generated programs were or were not appreciated by developers.
+
+If diversity would be a key theme of the paper, I would have expected a comparison of coverage achieved by the different tests or approaches, maybe even coverage of the specification (see KJS semantics and similar projects). If the empirical evaluation is the key (as claimed on the last page) then it is unclear what novel research question are explored beyond the state of the art.
+
+
+Minor comments:
+
+"Cross-engine differential testing has not been widely popularized" - even if that were true (and I think for example the CSmith work is widely known and many others have used this strategy as listed also in related work; testing lectures and textbooks that cover the oracle problem tend to always discuss using other implementations as an oracle and often discuss voting among multiple implementations as well) it does not frame a research problem.
+
+"provides initial, yet strong evidence that exploring diversity should be encouraged for finding functional bugs in Javascript engines" -- very narrow claim of questionable importance
+
+is the prioritization into hi/lo a key contribution here? It is usually a good idea to be explicit about intended contributions
+
+how are missing features distinguished from bugs?
+
+lessons learned could be discussed in more depth. there is likely an opportunity to discuss more broadly the steps that could be taken to increase the automation of parts of the differential testing process. For example, consider discussing how the use of generational fuzzers might increase the number of false positives and increase developer review effort.
+
+it might be useful discussing what steps could be taken to reduce the number of false positives (e.g., in cases that involve TypeError, OME, Invalid input, or message mismatch errors).
+
+Abstract: “diversity-aware techniques are easy to apply and effective in finding bugs” -> This claim is too simplistic. I would suggest mentioning that *confirming* bugs involves considerable manual inspection effort and that fuzzing is also expensive as a technique itself to maybe justify the effort.
+
+Section 7.3, line 1007: “each warning required a substantial amount of time to analyze for potential false alarms” -> estimate of effort in work hours?
+
+Sections 2, 3, 4 and 5 mix background information with evaluation setup. Consider differentiating them (it might be reasonable to move the research questions to an earlier point where the evaluation setup begins). It was somewhat confusing reading all details before the research questions were presented.
+
+Conformance adequacy (RQ1) should likely not be treated as a research question , but rather as a pre-evaluation step taken to reduce construct validity.
+
+It's usually a good idea to justify or motivate the research question and explain their importance, instead of merely stating them.
+
+The examples in section 7 could be presented earlier in the paper to provide more context to the kind of bugs that the techniques can find and to also show how finding these kind of bugs is hard.
+
+It would be worthy discussing why test cases in the “Other” category, specially the ones that were valid in a previous version of the specification, are still encoded as failing tests by developers. Having negative cases in the code is important, but they should somehow be encoded as passing tests. Is there a reason why developers do not do it?
+
+"naturally many test scenarios are not covered in the suite" -> didn't the KJS work show that the test suite has a pretty high (though not perfect) specification coverage?
+
+If a lot of tests already fail for existing engines, doesn't this indicate that they don't meet the specs and are buggy? What partial specification do they implement then and what would be considered as a bug?
+
+A lot of manual analysis could likely be avoided by using a semantic model of the language, as in the CSmith work.
+
+The approach was effective, but was it efficient? How many bugs were investigated compared to the small number of reported ones?
+
+Wouldn't the example in Sec 7 be covered by the reference test suite? It seems like a clear spec violation.
+
+"surprisingly interesting inputs" -- neither surprising nor interesting is obvious in this claim
+
+Nitpicking:
+
+Consider using complete words or capital letters instead of reductions. For example, consider using high and low (or H and L) over “hi” and “lo”.
+
+“ome”  in the footnote is in lowercase -> “OME”
+
+the Outlook issue in the first paragraph: is this a bug in the engine or in the application?
+----------- Strengths and Weaknesses -----------
++ empirical evidence to support the usefulness of diversity-aware techniques to find bugs
++ careful research setup and comprehensive evaluation data (also available for reproducibility)
+- differential testing, fuzzing, and reusing tests from other projects are all common and frequently used in testing, novelty of the paper unclear
+- finding bugs is useful, but little more general insights to be derived
+
+
+
+----------------------- REVIEW 2 ---------------------
+SUBMISSION: 156
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+AUTHORS: Igor Lima and Marcelo d'Amorim
+
+----------- Overall Recommendation -----------
+SCORE: 1 (Weak Accept)
+----------- Reviewer's Confidence -----------
+SCORE: 2 (Medium)
+----------- Summary -----------
+JavasScript has become one of the most popular programming platforms today. Given this, bugs in the JavaScript engine has the potential to impact a large number of programs across a wide range of platforms. This paper examines the use of test transplantation and differential testing to find bugs in JavaScript engines. The study finds that both techniques are effective at finding bugs. Of the 27 bugs reported, 18 were confirmed and 12 fixed by developers.
+----------- Detailed Evaluation -----------
+The topic of this work is relevant and important.  Improving our ability to find bugs in JavaScript engines is a worthy goal. However, I have a harder time understanding what I learned and can use from this particular study.  The related work section says that the goal is not to develop a new technique but is an empirical study. But a purely empirical study like this should have some actionable outcome and compare/analyze strengths and weaknesses again existing techniques and it does not really do this. The techniques studied already exist (in fact differential fuzzing is already used for Mozilla, although in a slightly different context – configurations) and #64  already used differential fuzzing across browsers in JavaScript.  So we are left with a contribution of finding some new bugs. While that is a good outcome, could those bugs have been found using different state of the art techniques rather than diversity-based testing/ The paper does not evaluate whether or not !
+ alternative methods would have found the same bugs. So while the paper tells me that these are effective techniques I do not learn ‘how effective’ in comparison with other approaches.  There is also no mention of the time required to find bugs (once differences are revealed).
+
+- The introduction argues that JavaScript engines need to be tested, however, it doesn’t tell the reader what the state of the art in testing JavaScript engines is, and or why diversity is the right approach.
+
+- The introduction provides a long discussion of the findings/results, but the reader has not read the full paper yet so it is hard to fully understand at this point. I would shorten this and just provide a short summary and list of contributions and include the full results later on.
+
+- Section 4- mining tests and table 2 is a bit this confusing. It seems like there were a lot of ways that tests were chosen (and removed from consideration) and it is hard to follow. For instance, when describing the type-in-all example it seems that you removed these from consideration (based on the textual description – these tests were captured by.. ) but in the end I realized that these are actually the tests you kept. This can be fixed by some rewriting I believe.
+
+- I would include a list somewhere (external website is fine) with all of the criteria used and the exact tests discarded in this process to make this section more repeatable
+
+-In section 4.1 you add in mining tests from issue trackers and bring in both natural language processing and deep learning to achieve this. It seems like this is just making the study more complex rather than providing benefit in understanding if your techniques work. Does this mean that the only way diversity testing works is if every possible test is used? These tests are not broken out in table 2 which makes it harder to evaluate. I would rather see simple test selection and a more in-depth analysis of the bugs found/not found then having every possible test thrown into the mix.   
+
+-Section 5.2 – the idea of clusterization is interesting. The example does not provide the reader with enough information about how you did your clustering and what templates you used. This would be interesting to add to the paper.
+
+6.1 – ran the test suite for 7 days and averaged. Was this run using the same test data/versions of the engine or did you use overnight regression fixes and/or different test cases?  The rationale for this design choice is not stated
+
+6.1 – based on the results of 6.1 I would expect differences between the engines when running other test (later RQs) so how does this impact the results? It does seem to lead to a lot of the false positives later on
+
+6.2  - states that the cost of classifying failures is non-negligible. Did you quantify this? Is there some ‘time per bug’ you can report?
+----------- Strengths and Weaknesses -----------
+Strengths
++ important and relevant topic
++ found real bugs that were reported/fixed
++ appears that cross JS engine testing is effective
+
+Weaknesses
+- No comparison with any other techniques other than diversity approaches
+- The choice of diversity is not well justified
+- The methodology is hard to understand in some places (see comments)
+----------- Questions to Authors -----------
+- Did you quantify the time taken to work through the false positives?
+
+- Did you split out the data for the original sets of tests and those obtained by mining? Do you really need both and/or would the results change if only one set was used? If so, can you provide a deeper analysis?
+
+- Why only evaluate diversity techniques?
+
+
+
+----------------------- REVIEW 3 ---------------------
+SUBMISSION: 156
+TITLE: Leveraging Diversity to Find Bugs in JavaScript Engines
+AUTHORS: Igor Lima and Marcelo d'Amorim
+
+----------- Overall Recommendation -----------
+SCORE: -1 (Weak Reject)
+----------- Reviewer's Confidence -----------
+SCORE: 3 (High)
+----------- Summary -----------
+The authors report the experience done and the results obtained while testing four popular JavaScript engines. They executed two separate testing campaigns. In the first campaign (named "test transplantation"), they run test cases defined for one engine against another engine. In the second campaign (named "differential testing") they use existing black box fuzzers to mutate existing test cases, producing new ones that are run against all tested engines. They found and submitted 27 (resp. 22) bugs found in the two testing campaigns. Many of the reported bugs have been confirmed/fixed by developers.
+----------- Detailed Evaluation -----------
+The content of this paper is almost exclusively experimental. In fact, the authors do not propose any new technique for diversity based test selection/generation or for test fuzzing. Indeed, some test diversity is assumed to descend from the usage of test cases defined for one engine and run against another engine. However, the authors did not control/enhance/enforce such diversity in any way. In Sec. 8.1, they mention that the study of diversity of test cases remains to be investigated.
+
+In both testing campaigns, the rate of false positives is very high (in the first campaign, out of 612 failures, only 27 were true positives) and the cost for manual inspection of the reported warnings (potential bugs) is high (in the second campaign, only a small fraction of the total hi warnings reported in Table 7 could be analyzed manually). However, automated prioritization/selection was not investigated for this work and is reported as a possible direction for future work.
+
+Overall, this paper is an experience report that presents results obtained in two testing campaigns conducted using state of the art approaches, but no work was carried out to actually leverage/control/study diversity and to reduce the manual effort associated with the high false positive rate of the output.
+
+Being an empirical oriented work, this paper should focus on relevant/important research questions. The ones reported in Sec. 6 are not that convincing. All three RQs are basically about the possibility to find bugs (by test transplantation and fuzzing) - the short answer being: yes, the considered techniques can find real bugs of moderate severity (mostly level 2). I think there are other, more interesting research questions, that could have been investigated, such as RQs on the source of false positives (the related analysis is already done in the paper - see Sec. 6.2.2) and on ways to get rid of them (this would require novel research, all to be done). In its current form, the paper delivers some interesting information (e.g., analysis of false positives in Sec. 6.2.2), but it contains mostly an experience report on testing existing JavaScript engines. I found such experience interesting, but not particularly innovative from a research perspective. Moreover, the chosen do!
+ main - JavaScript engines - is quite narrow and results are not likely to generalize easily to other domains.
+
+Assessment of the failures discovered in the testing campaigns was carried out manually and required substantial effort. However, the authors did not analyze in depth the manual activities carried out while deciding if a reported failure was a true or a false positive. A detailed investigation of such manual activity might provide insights for the development of automated filtering/prioritization techniques that could alleviate the manual effort.
+
+Other issues:
+
+- Page 3, par. below Tab. 1: Column "full" shows... -> Column "total" shows...
+
+- Sec. 5.3: the authors say that a fundamental issue of generational fuzzers is that they produce tests that do not contain assertions. However, the same issue affects mutational fuzzers, since they consider errors like crashes and buffer overflow as indicators of assertion violations. Hence, I do not think lack of assertion is a distinguishing limitation of generational fuzzers and I would not consider it as a reason to prefer mutational over generational fuzzers.
+
+- There is a mismatch between the number of TP bugs reported in Table 5 (24) and those listed in Table 6 (27).
+----------- Strengths and Weaknesses -----------
++ interesting experience report
+- no novel testing technique
+- research questions focused just on whether bugs can be found or not
+
+
+
+	
+	
+	
