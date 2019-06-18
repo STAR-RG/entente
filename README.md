@@ -1,4 +1,5 @@
-# JSFuzz
+# Instructions on how to use the differential testing infrastructure
+
 ### Requirements
 - Linux
 - Python3.6
@@ -16,7 +17,6 @@
 
 ### Running
 - Open a terminal window, go to project folder and run: `$> tox`
-
 
 ### Docker
 1. Download and extract the js engines (see js_engines/README files)
