@@ -6,7 +6,7 @@ consequences. Implementing correct
 engines is challenging because the spec is intentionally
 incomplete and evolves frequently.
 
-%reports on a study we ran to 
+\sloppy
 This paper evaluates the importance of
 diversity to find functional bugs in JavaScript engines. For that, we
 explored two existing diversity-aware techniques---test transplantation and
@@ -14,8 +14,6 @@ cross-engine differential testing. The first technique runs test
 suites of a given engine in another engine. The second technique
 fuzzes existing inputs and then compares the output produced by
 different engines with a differential oracle.
-
-\sloppy
 We considered engines from four major players in our
 experiments--Apple, Google, Microsoft, and Mozilla. Our results
 indicate that both techniques revealed several bugs, many of which

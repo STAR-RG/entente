@@ -10,6 +10,10 @@
 \newif\ifdraftmode
 \draftmodetrue
 
+%% avoid footnotes across pages
+\interfootnotelinepenalty=10000
+%\raggedbottom
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Uncomment \showsplattexttrue to show text from our splat paper
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -18,6 +22,9 @@
 
 \pagenumbering{arabic}
 
+%% paragraphs within margins
+\usepackage[english]{babel}
+\setlength{\emergencystretch}{2pt}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{tikz}
@@ -154,7 +161,7 @@ practical to fully automate the technique. In contrast to other
 applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
-~\ref{tab:false-positives}). To sum, variations of these ideas have
+~\ref{tab:false-positives}). To sum up, variations of these ideas have
 been explored before in different contexts.  The goal of the paper is
 to assess the ability of the techniques aforementioned in finding bugs
 on \javascript\ engines.
@@ -239,7 +246,7 @@ confirmed and \totalBugsFixed{} bugs were fixed. 3)~An infrastructure
 for diversity-aware testing. The scripts to run the experiments will
 be available upon request. The data is publicly available \dataRepo{}.
 
-\vspace{1ex} To sum, this paper provides initial, yet strong evidence
+\vspace{1ex} To summarize, this paper provides initial, yet strong evidence
 that exploring diversity should be encouraged to find functional bugs
 in JavaScript engines.
 
@@ -755,7 +762,7 @@ contains some heuristics to circumvent violations of certain typing
 rules.\Comment{ such as \Fix{variable used must be defined?}.}
 Nonetheless, running those inputs in our infrastructure we were unable
 to find discrepancies. Inspecting those inputs, we realized that they
-reflected very simple scenarios. To sum, a high percentage of inputs
+reflected very simple scenarios. To sum up, a high percentage of inputs
 that Grammarinator and Megadeth generated were semantically-invalid
 that we needed to discard whereas the valid inputs manifested no
 discrepancies. Considering jsfunfuzz~\cite{jsfunfuzz}, we noticed
@@ -839,7 +846,7 @@ limited by the quality of the test suite and the supported mutation
 operators, which are typically simple. We chose these specific fuzzers
 because, conceptually, one complements the other. \quickfuzz\ creates
 mutations like \radamsa. However, in contrast to \radamsa, \quickfuzz\ is aware
-of the \js\ syntax; it is able to replace subtrees of the syntax
+of the \js\ syntax; it is able to replace sub-trees of the syntax
 tree~\cite{grieco2016quickfuzz} with trees created anew.
 
 \section{Results}
@@ -1761,13 +1768,24 @@ The scripts to run the experiments for this study will be available
 upon request. The data is publicly available \dataRepo{}.
 
 \vspace{1ex}
-\noindent\textbf{Acknowledgments.~}Igor was supported by the FACEPE
-fellowship \Fix{...}  This research was partially funded by INES 2.0,
-FACEPE grants PRONEX APQ 0388-1.03/14 and APQ-0399-1.03/17, and CNPq
-grant 465614/2014-0.
+\sloppy
+\noindent\textbf{Acknowledgments.~}Igor is supported by the FACEPE
+fellowship IBPG-0123-1.03/17. This research was partially funded by
+INES 2.0, FACEPE grants PRONEX APQ 0388-1.03/14 and APQ-0399-1.03/17,
+and CNPq grant 465614/2014-0.
 
 \balance
 \bibliographystyle{elsarticle-num}
-\bibliography{references,../docs/google-research-awards-latam/tmp}
+\bibliography{references,tmp}
 
 \end{document}
+
+%%  LocalWords:  IoT DT JS JIT fuzzer jsfunfuzz jit funfuzz bytecodes
+%%  LocalWords:  JavaScriptCore JScript Ecma toPrecision Kangax JSVU
+%%  LocalWords:  cccrr WebKit ReferenceError TypeError lineNumber sep
+%%  LocalWords:  drainMicrotasks ccrrrr Duktape js runtime formedness
+%%  LocalWords:  NN NLP vec embeddings perceptron arrowed toolchain
+%%  LocalWords:  fuzzers eshost cli pre ArrayBuffer RangeError getInt
+%%  LocalWords:  ToIndex Clusterization byteOffset SpiderMonkey AFL
+%%  LocalWords:  DataView setInt Radamsa QuickFuzz Grammarinator
+%%  LocalWords:  LangFuzz Megadeth libFuzzer sanitizers
