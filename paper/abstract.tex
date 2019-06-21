@@ -1,20 +1,18 @@
-JavaScript is a very popular programming language today with several
+\textbf{Context.} JavaScript is a very popular programming language today with several
 implementations competing for market dominance. Although a
 specification document and a conformance test suite exist to guide
 engine development, bugs occur and have important practical
 consequences. Implementing correct
 engines is challenging because the spec is intentionally
 incomplete and evolves frequently.
-
-\sloppy
-This paper evaluates the importance of
-diversity to find functional bugs in JavaScript engines. For that, we
+\textbf{Objective.} This paper evaluates the importance of
+diversity to find functional bugs in JavaScript engines. \textbf{Method.} For that, we
 explored two existing diversity-aware techniques---test transplantation and
 cross-engine differential testing. The first technique runs test
 suites of a given engine in another engine. The second technique
 fuzzes existing inputs and then compares the output produced by
 different engines with a differential oracle.
-We considered engines from four major players in our
+\textbf{Results.} We considered engines from four major players in our
 experiments--Apple, Google, Microsoft, and Mozilla. Our results
 indicate that both techniques revealed several bugs, many of which
 confirmed by developers. We reported \noBugsTransplantation{} bugs
