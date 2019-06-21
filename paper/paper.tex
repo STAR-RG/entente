@@ -110,23 +110,24 @@ diversity-aware testing techniques.
 %noitemsep,
 \begin{itemize}[topsep=0pt,parsep=0pt,partopsep=2pt,labelwidth=0cm,align=left,itemindent=-0.25cm]
 \item \emph{Test transplantation} leverages diversity of test
-  cases. It evaluates the effects that running test files from a given
-  engine have in detecting bugs in other engines. The intuition is
-  that developers design test cases with different objectives in
-  mind. As such, replaying these tests in different engines could
-  reveal unanticipated problems.
+  cases. This technique evaluates the effect of running test files
+  written for a given engine in other engines. The intuition is that
+  developers design test cases with different objectives in mind. As
+  such, replaying these tests in different engines could reveal
+  unanticipated problems.
 
 \item \emph{Cross-engine differential testing} leverages diversity of
-  engine implementations. More precisely, it fuzzes existing test
+  engine implementations. This technique fuzzes existing test
   inputs~\cite{fuzz-testing-history} and then compares the output
-  produced by different engines using a differential oracle. The
-  intuition is that similar inputs to those already tested may reveal
-  problems.
+  produced by different engines.\Comment{ using a differential
+    oracle.} The intuition is that interesting inputs can be created
+  from existing inputs and multiple engines can be used to address the
+  lack of oracles.
 \end{itemize}
 
 Our study measures the ability of these techniques in finding bugs and
 the impact of false positives, which can arise in both testing
-scenarios, on the practicality of the approach.
+scenarios, on their practicality.
 
 %One of
 %various causes of output discrepancy is a bug.
