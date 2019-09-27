@@ -1,5 +1,6 @@
-\documentclass[final,5p,times,twocolumn]{elsarticle}
-\biboptions{numbers,sort&compress}
+%\documentclass[final,5p,times,twocolumn]{elsarticle}
+\documentclass[smallextended]{svjour3}
+%\biboptions{numbers,sort&compress}
 %\documentclass[sigconf,review, anonymous]{acmart}
 %\hyphenation{on-tol-o-gy ad-di-tion-al in-fra-struc-ture an-a-lyze a-nal-y-sis} 
 %\input{packages}
@@ -56,25 +57,36 @@
 
 \input{macros}
 
+\journalname{Software Quality Journal}
+
 \begin{document}
 
 \title{Leveraging Diversity to Find Bugs in JavaScript Engines}
+%\titlerunning{Leveraging Diversity to Find Bugs in JavaScript Engines}        % if too long for running head
 
-\author[ufpe]{Igor Lima}
-\ead{isol2@cin.ufpe.br}
-\author[ufpe]{Breno Miranda}
-\ead{bafm@cin.ufpe.br}
-\author[ufpe]{Marcelo d'Amorim}
-\ead{damorim@cin.ufpe.br}
-\address[ufpe]{Universidade Federal de Pernambuco, Recife, PE, Brazil}
+\author{Igor Lima \and Breno Miranda \and Marcelo d'Amorim}
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{Igor Lima \and \email{isol2@cin.ufpe.br} \\
+Breno Miranda \and \email{bafm@cin.ufpe.br} \\
+Marcelo d'Amorim \and \email{damorim@cin.ufpe.br} \\
+\at Universidade Federal de Pernambuco, Recife, PE, Brazil}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
 
 %\renewcommand{\shortauthors}{Lima et al.}
 
+\maketitle
+
+
 \begin{abstract}
   \input{abstract}
+  \keywords{Diversity \and Test Transplantation \and Differential Testing \and JavaScript}
 \end{abstract}
 
-\maketitle
+
 
 \section{Introduction}
 
@@ -102,7 +114,7 @@ most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
 %% WHAT WE DID
-This paper reports on a study to evaluate the importance of diversity
+This work, which is empirical in nature, reports on a study to evaluate the importance of diversity
 to find bugs in JavaScript engines; it covers two complementary
 diversity-aware testing techniques.
 
@@ -135,7 +147,7 @@ the impact of false positives on their practicality.
 %% implementations of a system exist. DT leverages diversity across
 %% system's implementations to detect anomalous behavior.
 \emph{Related Ideas.}~The idea of test set diversity dates back to the
-eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. In contrast
+eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. In contrast
 to prior work on this topic, this paper explores diversity of
 implementations and diversity of sources of test cases as opposed to
 diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
@@ -183,11 +195,11 @@ on \javascript\ engines.
 %  \vspace{-2ex}  
   \centering
   \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
-    \includegraphics[trim=0 190 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
+    \includegraphics[trim=0 190 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
     \vspace{-5ex}
   }\\
   \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
-    \includegraphics[trim=0 180 0 180,clip,width=0.45\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
+    \includegraphics[trim=0 180 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
     \vspace{-5ex}        
   }
   \caption{\label{fig:summary}Summary of bug reports.}
@@ -200,7 +212,7 @@ on \javascript\ engines.
 bug reports per engine (\ref{fig:stacked-engine}) and per technique
 (\ref{fig:stacked-technique}). Each stacked bar breaks down the bugs
 per status (\eg{}, ``1-New''). The prefix number indicates the
-ordering that status labels are assigned. Note that several of these
+ordering that status labels are assigned. Several of these
 reports have the label ``3-Fixed'', indicating that bug fixes have
 been incorporated into the code already. Note that most of these bugs
 affected two engines--\chakra{} and JavaScriptCore (\jsc{}).  We
@@ -237,14 +249,16 @@ software. Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
-\emph{Contributions.}~This paper contributes the following: 1)~A
-comprehensive study to analyze the effectiveness of diversity-aware
+\emph{Contributions.}~The most important contribution of this work is empirical: 
+we provide a comprehensive study analyzing the effectiveness of diversity-aware
 techniques to find functional bugs in popular \javascript\ engines.
-2)~A number of bugs found and fixed. We reported a total of
-\totalBugsReported{} bugs. Of these, \totalBugsConfirmed{} bugs were
-confirmed and \totalBugsFixed{} bugs were fixed. 3)~An infrastructure
-for diversity-aware testing. The scripts to run the experiments will
-be available upon request. The data is publicly available \dataRepo{}.
+Additional contributions are:
+1)~A number of bugs found and fixed. 
+We reported a total of \totalBugsReported{} bugs. 
+Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed. 
+2)~An infrastructure for diversity-aware testing.
+The scripts to run the experiments will be available upon request. 
+The data is publicly available \dataRepo{}.
 
 \vspace{1ex} To summarize, this paper provides initial, yet strong evidence
 that exploring diversity should be encouraged to find functional bugs
@@ -582,7 +596,7 @@ component.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[trim=0 350 0 0,clip,width=0.65\textwidth]{diff-testing-runtimes}
+  \includegraphics[trim=0 350 0 0,clip,width=1.0\textwidth]{diff-testing-runtimes}
   \vspace{-5ex}  
   \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
   \vspace{-2ex}
@@ -894,13 +908,13 @@ variant of the Test262 suite as part of their regression process, but
 we used the same version in this
 experiment~\cite{ecma262-conformance-suite}. 
 
-\begin{wraptable}[8]{r}{0.22\textwidth}
-  \vspace{-4ex}
+\begin{table}
+  %\vspace{-4ex}
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
-  \small
-  \begin{tabular}{crr}
+  %\small
+  \begin{tabular}{rr}
     \toprule
     engine & \% passing \\
     \midrule
@@ -910,8 +924,8 @@ experiment~\cite{ecma262-conformance-suite}.
     \smonkey{} & \percentSuiteTestSM{} \\
     \bottomrule
   \end{tabular}
-  \normalsize
-\end{wraptable}
+  %\normalsize
+\end{table}
 
 Results show that there are still many unsupported scenarios as can be observed from the
 percentages in the table. The number of passing tests is high and
@@ -1051,13 +1065,11 @@ includes other sources of false positives. For example, it includes
 the cases where the test was valid for some previous version of the
 spec but is no longer valid for the current spec.
 
-\begin{wraptable}[11]{r}{0.23\textwidth}
-  \vspace{-4ex}
-  \small
+\begin{table}
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
     of False (FP) and True Positives (TP).}
-  \setlength{\tabcolsep}{3pt}      
+  %\setlength{\tabcolsep}{3pt}      
   \renewcommand*{\arraystretch}{0.9}
   \begin{tabular}{ccr}
     \toprule
@@ -1073,7 +1085,7 @@ spec but is no longer valid for the current spec.
     & Bug & \noTransTPBugs{} \\
     \bottomrule
   \end{tabular}
-\end{wraptable}
+\end{table}
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 False Positives (FPs) and True Positives (TPs). The sum of the numbers
@@ -1615,7 +1627,7 @@ industrial project.
 
 \subsection{\label{sec:related:diversity-testing}Diversity in Testing}
 The idea of test set diversity dates back to the
-eighties~\cite{white-cohen-tse1980, ostrand-balcer-1988}. The
+eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. The
 assumption behind test set diversity is that faults often spread
 contiguously in the input domain. Consequently, it should be
 beneficial to partition the input domain and explore it more evenly as
@@ -1774,7 +1786,8 @@ INES 2.0, FACEPE grants PRONEX APQ 0388-1.03/14 and APQ-0399-1.03/17,
 and CNPq grant 465614/2014-0.
 
 \balance
-\bibliographystyle{elsarticle-num}
+%\bibliographystyle{elsarticle-num}
+\bibliographystyle{spmpsci}
 \bibliography{references,tmp}
 
 \end{document}
