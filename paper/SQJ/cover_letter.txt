@@ -1,0 +1,11 @@
+Dear Editors, 
+
+This letter accompanies our submission of a paper for consideration by the Software Quality Journal (SQJ), entitled “Leveraging Diversity to Find Bugs in JavaScript Engines”.
+
+JavaScript is a very popular programming language today with several implementations competing for market dominance. Although a specification document and a conformance test suite exist to guide engine development, bugs occur and have important practical consequences. Implementing correct engines is challenging because the spec is intentionally incomplete and evolves frequently. This paper, which is empirical in nature, evaluates two complementary diversity-aware techniques considering their ability to find bugs and associated costs. Results indicate that both techniques were effective. They revealed several bugs, many of which confirmed by engine developers. We reported 27 bugs with test transplantation (18 of these bugs confirmed and 12 fixed) and reported 22 bugs with differential testing (15 of these confirmed and 10 fixed). To summarize, our results show that diversity-aware techniques are easy to apply and very effective in finding bugs in complex software, such as JavaScript engines.
+
+This manuscript has not been published and is not under consideration for publication elsewhere. It reports completely new research results and does not extend prior work.
+
+Sincerely yours,
+
+Igor Lima, Breno Miranda, and Marcelo d'Amorim

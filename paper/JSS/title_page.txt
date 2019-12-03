@@ -1,0 +1,19 @@
+Title: Leveraging Diversity to Find Bugs in JavaScript Engines
+
+Author names and affiliations:
+
+ Igor Lima, Universidade Federal de Pernambuco
+ Breno Miranda, Universidade Federal de Pernambuco
+ Marcelo d'Amorim, Universidade Federal de Pernambuco
+
+Corresponding author:
+
+ Marcelo d'Amorim (damorim@cin.ufpe.br)
+
+Permanent address:
+
+ Universidade Federal de Pernambuco (UFPE)
+ Centro de Informática - CIn
+ Av. Jornalista Anibal Fernandes, S/N
+ Cidade Universitária, PE, Brazil
+ 50.740-560
