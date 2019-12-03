@@ -1,4 +1,300 @@
 =====
+BUG #33 (CONFIRMED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5630
+
+Original: jsfuzz/seeds/test262/annexB/language/global-code/switch-case-global-existing-block-fn-update.js
+
+Fuzzed: fuzzed_test262_annexB_language_global-code_switch-case-global-existing-block-fn-update.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+-------------SpiderMonkey
+Error: Expected SameValue(«first declaration», «second declaration») to be true
+-------------v8
+Error: Expected SameValue(«first declaration», «second declaration») to be true
+
+Explanation: 
+There is an inconsistency in Chakra and JSC if a switch statement with only one case block evaluation that could be not reached.
+
+
+
+=====
+BUG #32 (CONFIRMED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://bugs.chromium.org/p/v8/issues/detail?id=8088
+
+Original: 
+
+Fuzzed: fuzzed_DukTape_ecmascript_test-bi-math-imul.js
+fuzzed_test262_annexB_language_global-code_block-decl-global-existing-var-no-init.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+Error: 'break' is only valid inside a switch or loop statement.
+-------------Chakra
+Error: Can't have 'break' outside of loop
+-------------SpiderMonkey
+Error: unlabeled break must be inside loop or switch:
+-------------v8
+
+Explanation: 
+There is an inconsistency if it evaluate a `break` outside of loop, V8 should throw a SyntaxError.
+
+=====
+BUG #31 (NEW)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=188899
+
+Original: jsfuzz/seeds/test262/annexB/built-ins/Function/createdynfn-html-open-comment-body.js
+
+Fuzzed: fuzzed_test262_annexB_built-ins_Function_createdynfn-html-open-comment-body.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+Error: Unexpected token '}'. Expected a parameter pattern or a ')' in parameter list.
+-------------Chakra
+-------------SpiderMonkey
+-------------v8
+
+Explanation: 
+JSC throws a SyntaxError when it try to parsing the HTML comment block as a Function param.
+
+=====
+BUG #30 (FIXED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: 
+https://github.com/Microsoft/ChakraCore/issues/5617
+https://bugs.chromium.org/p/v8/issues/detail?id=8078
+
+Original: jsfuzz/seeds/test262/built-ins/String/prototype/padEnd/fill-string-empty.js
+
+Fuzzed: fuzzed_test262_built-ins_String_prototype_padEnd_fill-string-empty.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: String length is out of bound
+-------------SpiderMonkey
+-------------v8
+Error: Invalid string length
+
+Explanation: 
+According to ecma specs (21.1.3.13) on step `8. If filler is the empty String, return S.`
+V8 and Chakra throws a RangeError instead of return the original string.
+In specs, if the maxLength is reached the maxLength should be converted to min(len, 2**53 - 1) but in this case the filler is an empty string, so Chakra should return the original string.
+
+=====
+BUG #29 (CONFIRMED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5968
+
+Original: jsfuzz/seeds/v8/attached/6651_simple.js
+
+Fuzzed: fuzzed_attached_v8_6651_simple.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+Error: Wasm validation failure expected
+-------------Chakra
+Error: Wasm validation failure expected
+-------------SpiderMonkey
+-------------v8
+
+Explanation: 
+it was observed that Chakra didn't raised a WASM.CompileError due 31 offset.
+
+=====
+BUG #28 (NEW)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=188930
+
+Original: jsfuzz/seeds/test262/annexB/language/eval-code/direct/global-if-decl-else-decl-b-eval-global-existing-block-fn-update.js
+
+Fuzzed: fuzzed_test262_annexB_language_eval-code_direct_global-if-decl-else-decl-b-eval-global-existing-block-fn-update.js
+
+Patch: 
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Expected SameValue(«first declaration», «second declaration») to be true
+-------------SpiderMonkey
+Error: Expected SameValue(«first declaration», «second declaration») to be true
+-------------v8
+Error: Expected SameValue(«first declaration», «second declaration») to be true
+
+Explanation:
+I found out an inconsistency if we try to evaluate a scoped function block after an eval statement. If I remove the first line (eval line), JSC works as expected.
+If we declare a function using eval method, JSC does note redeclare this function if it is a scoped block function
+
+=====
+BUG #27 (FIXED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=188378
+
+Original: jsfuzz/seeds/JerryJS/regression/date-utc.js
+
+Fuzzed: None
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
+
+Explanation:
+According to ES6 specs, the Year param is required in function Date.UTC, the others params are optional. JavascriptCore returns NaN if only the Year param is passed.
+
+=====
+BUG #26 (FIXED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5576
+
+Original: jsfuzz/seeds/JerryJS/regression/regression-test-issue-1387.js
+
+Fuzzed: None
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+TypeError: Attempted to assign to readonly property.
+-------------Chakra
+-------------SpiderMonkey
+TypeError: cannot declare global binding `undefined': property must be configurable or both writable and enumerable
+-------------v8
+SyntaxError: Identifier 'undefined' has already been declared
+
+Explanation:
+Chakra should not redeclare global binding “undefined”
+
+=====
+BUG #25 (FIXED)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5549
+
+Original: jsfuzz/seeds/test262/built-ins/TypedArrayConstructors/internals/DefineOwnProperty/key-is-numericindex-desc-not-writable.js
+
+Fuzzed: None
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+TypeError: Cannot redefine non-configurable property '0'
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+According to es6 specs (9.4.5.3) it is possible define a property key if it is a numeric index, Chakra throws a TypeError instead.
+
+=====
+BUG #24 (NEW)
+
+Date reported:
+
+Type: Assertion failure
+
+URLs: https://bugs.webkit.org/show_bug.cgi?id=187777
+
+Original: jsfuzz/seeds/JerryJS/regression/array-prototype-push.js
+
+Fuzzed: None
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Test failed
+-------------SpiderMonkey
+Error: Test failed
+-------------v8
+Error: Test failed
+
+Explanation:
+We found an inconsistency on JSC when we try to push a new element into an Object that uses Array.prototype.push method. Seems like a conversion ToUint32 on JSC while the others engines exceed this value. In addiction, it was observed that JSC push the element in index 0 and index length-1.
+
+=====
+BUG #23 (FIXED)
+
+Date reported:
+
+Type: Parser error
+
+URLs: https://github.com/Microsoft/ChakraCore/issues/5478
+
+Original: jsfuzz/seeds/mozilla/non262/expressions/trailing_comma_arrow.js
+
+Fuzzed: None
+
+Patch: None
+
+Pattern:
+-------------JavaScriptCore
+-------------Chakra
+Error: Syntax error
+-------------SpiderMonkey
+-------------v8
+
+Explanation:
+Chakra should eval function with comma after params. It was observed that the issue appears on trailing comma in an arrow function.
+
+=====
 BUG #22 (CONFIRMED)
 
 Date reported: July 10, 2018
@@ -7,7 +303,7 @@ Type: Assertion failure
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5442
 
-Original:
+Original: DukTape/ecmascript/test-bi-date-timeclip-zero.js
 
 Fuzzed: ./seeds/quickfuzz/ecma_edited/test_3183201ee05ec7573387939c7e48ba88.js
 
@@ -34,7 +330,7 @@ Type: Assertion failure
 
 URLs: https://github.com/Microsoft/ChakraCore/issues/5443
 
-Original:
+Original: jsfuzz/seeds/DukTape/ecmascript/test-bi-date-timeclip-zero.js
 
 Fuzzed: ./seeds/quickfuzz2/ecma_edited/test_86fa37f728125aa1ef258a192560e0e6.js
 
@@ -42,6 +338,7 @@ Patch:None
 
 Pattern:
 -------------JavaScriptCore
+Error: null
 -------------Chakra
 -------------SpiderMonkey
 Error: null
@@ -62,9 +359,9 @@ Type: Assertion failure
 
 URLs: https://bugs.webkit.org/show_bug.cgi?id=187520
 
-Original:
+Original: jsfuzz/seeds/JerryJS/ecma$ code 22.02.01-021.js
 
-Fuzzed: ./seeds/quickfuzz2/ecma/test_33e9a90bb4616578222d07862c1d1b9c.js
+Fuzzed: ./seeds/quickfuzz2/ecma/test_33e9a90bb4616578222d07862c1d1b9c.js (not fuzzed)
 
 Patch: None
 
@@ -78,6 +375,7 @@ Error: Test failed
 Explanation:
 Inconsistence in jsc when we try to get an invalid property in a TypedArray, 
 in this case a Float32Array.
+hasOwnProperty returns true for out of bounds property index on TypedArray
 
 =======
 BUG #19 (CONFIRMED)
