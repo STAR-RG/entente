@@ -1,0 +1,120 @@
+\chapter{Related Work}
+\label{sec:related}
+\section{Diversity in Testing}
+\label{sec:related:diversity-testing}
+The idea of test set diversity dates back to the
+eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. The
+assumption behind test set diversity is that faults often spread
+contiguously in the input domain. Consequently, it should be
+beneficial to partition the input domain and explore it more evenly as
+to find bugs faster. Later in the nineties, Chen and
+Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
+the continuity assumption. They found that faults, most often,
+manifest themselves in regular patterns across the input
+domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
+observations led researchers to investigate generalizations of the
+approach to non-numerical data types and strategies to explore the
+input (or output) space to solve different problems in Software
+Engineering (\eg{}, test input generation and test
+selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
+study explores diversity of sources of test cases and diversity of
+engine implementations. We remain to investigate the diversity of test
+cases themselves. In principle, that could help reduce the number of
+alarms to inspect, for example.
+
+\section{Differential Testing}
+Several different applications of differential testing have been
+proposed in recent years. Chen and
+colleagues~\cite{Chen:2018:RDT:3180155.3180226} recently proposed a
+technique to generate X.509 certificates based on Request For
+Proposals (RFC) as specification with the goal of detecting bugs in
+different SSL/TLS implementations. Those bugs can compromise security
+of servers which rely on these certificates to properly authenticate
+the parties involved in a communication session. Lidbury and
+colleagues~\cite{Lidbury:2015:MCF:2737924.2737986} and Donaldson and
+colleagues~\cite{Donaldson:2017:ATG:3152284.3133917} have been
+focusing on finding bugs in programs for graphic cards (\eg{},
+OpenCL). These programs use the Single-Instruction Multiple-Data
+(SIMD) programming abstraction and typically run on GPUs.  Perhaps the
+application of differential testing that received most attention to
+date was compiler testing. In 1972, Purdom~\cite{Purdom1972} proposed
+the use of a generator of sentences from grammars to test correctness
+of automatically generated parsers. After that, significant progress
+has been made. Lammel and Shulte proposed Geno to cross-check XPath
+implementations using grammar-based testing with controllable
+combinatorial coverage~\cite{10.1007/11754008_2}. Yang and
+colleagues~\cite{Yang:2011:FUB:1993498.1993532} proposed CSmith to
+randomly create C programs from a grammar, for a subset of C, and then
+check the output of these programs in different compilers (\eg{}, GCC
+and LLVM). Le and colleagues~\cite{Le:2014:CVV:2594291.2594334}
+proposed ``equivalence modulo inputs'', which creates variants of
+program which should have equivalent behavior compared to the
+original, but for which the compiler manifests
+discrepancy. Differential testing has also been applied to test
+refactoring engines~\cite{Daniel:2007:ATR:1287624.1287651}, to test
+symbolic engine implementations~\cite{Kapus:2017:ATS:3155562.3155636},
+to test disassemblers and binary
+lifters~\cite{Paleari:2010:NDD:1831708.1831741,Kim:2017:TIR:3155562.3155609},
+and very recently to test JavaScript
+debuggers~\cite{DBLP:conf/sigsoft/LehmannP18}. All in all, it has
+shown to be flexible and effective for a wide range of
+applications. Surprisingly, not much work has been done on
+differential testing of \js\ engines. Mozilla uses differential
+testing to look for discrepancies across different configurations of
+the same version of its \smonkey\ engine (using the ``compare\_jit''
+flag of jsfunfuzz~\cite{jsfunfuzz}) whereas we focus on discrepancy
+across engines. \citeonline{patra2016learning} evaluated their language-agnostic
+fuzzing strategy using differential testing. Their focuses on finding
+differential bugs across multiple
+browsers. As such they specialized their
+fuzzer to HTML and JS (see Section~\ref{sec:testing-js-engines}).
+\Igor{In \citeonline{Chen-etal-pldi16} is presented the \textit{classfuzz}, a tool
+that uses coverage-directed fuzzing technique to improving the generation
+of valid mutants on different JVM implementations. In this case, their focuses
+is the Java environment and evaluate their technique with another coverage-directed
+fuzzing. In contrast to \citeonline{patra2016learning} and \citeonline{Chen-etal-pldi16}, we did not propose new techniques; our
+contribution was empirical.
+}
+
+\section{Testing \js\ Programs}
+Patra and colleagues~\cite{Patra:2018:CFU:3180155.3180184} proposed a
+lightweight approach to detect conflicts in \js\ libraries that occur
+when names introduced by different libraries collide. This problem was
+found to be common as the design of \js\ allows for overlaps in
+namespaces. A similar problem has been investigated by Nguyen and
+colleagues~\cite{nguyen-etal-icse2014} and Eshkevari and
+colleagues~\cite{eshkevari-etal-icpc2014} in the context of PHP
+programs, which are popular in the context of Content Management
+Systems as WordPress. The focus of this work is on testing
+\js\ engines as opposed to \js\ programs. Our goal is therefore
+orthogonal to theirs.
+
+\section{Testing \js{} Engines}
+\label{sec:testing-js-engines}
+The closest work to ours was done by \citeonline{patra2016learning}. Their work proposes a
+language-agnostic fuzzer to find cross-browser HTML+JS
+discrepancies.%\Comment{ They applied the proposed fuzzer to find bugs in JS engines and Web Assembly engines.}
+The sensible parts of the infrastructure they
+built are the checks of input validity (as to reduce waste/cost) and
+output correctness (as to reduce FP). Patra and Pradel
+work is complementary to ours--in principle, we could use their fuzzer
+in our evaluation. The main difference of our work to theirs is in
+goal--we aim at assessing reliability of \js\ engines and find bugs on
+them using simple approaches whereas they aim at proposing a new
+technique.
+
+Fuzzing is an active area of investigation with development of new
+techniques both in academia and industry. Several fuzzing tools exist
+focused on \js. Section~\ref{sec:objects:fuzzers} briefly explain
+different fuzzing strategies and tools. Existing techniques prioritize
+automation with a focus on finding crashes; see the sanitizers used in
+libFuzzer~\cite{libfuzzer-tutorial}, for instance. In general, it is
+important for these tools that a warning reveals something potentially
+alarming as a crash given that fuzzing is a time-consuming operation,
+\ie{}, the ratio of bugs found per inputs generated is often very low.
+Our approach contrasts with that aim as we focus on finding errors
+manifested on the output, which rarely result in crashes and,
+consequently, would go undetected by current fuzzing approaches. It is
+should be noted, however, that such problems are not unimportant as
+per the severity levels reported in
+Tables~\ref{tab:test-transplantation-bugs} and~\ref{tab:bugs}.

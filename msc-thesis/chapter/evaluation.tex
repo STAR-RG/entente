@@ -1,0 +1,692 @@
+\chapter{Evaluation}
+
+\section{Results}
+\label{sec:results}
+
+The goal of this work is to assess ability of techniques that
+leverage diversity to find functional bugs
+in \javascript\ engines. Based on that, we pose three questions:
+\begin{description}[leftmargin=.5in]
+\item[RQ1.] How conformant are the engines to the Test262 suite?
+\item[RQ2.] How effective is test transplantation to find bugs?
+\item[RQ3.] How effective is cross-engine differential testing to find bugs?  
+\end{description}
+
+The first question focuses on the conformance of our selected engines
+to the official Test262 suite~\cite{ecma262-conformance-suite}
+(Section~\ref{sec:stability}). In the limit, bugs would have low
+relevance if the engines are too unreliable. The second question
+focuses on the effectiveness of test transplantation
+(Section~\ref{sec:transplantation}). The rationale for using inputs
+from different engines is that developers consider different goals
+when writing tests---suites written for a given engine may cover
+scenarios not covered by a different engine. The third question
+evaluates the effectiveness of cross-engine differential testing to
+find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
+rationale for this question is that fuzzing inputs may explore
+scenarios not well-tested by at least one of the engines.
+
+\subsection{Answering RQ1 (Conformance)}
+\label{sec:stability}
+
+The ECMA Test262~\cite{ecma262-conformance-suite} test suite serves to
+check conformance of engines to the \js\ standard. It is
+acceptable to release engines fulfilling the specification only
+partially~\cite{kangax}. We expect that the pass rate on this suite
+provide some indication of the engine's maturity. In the limit, it is
+not desirable to flood bug reports on engines at early stages of
+development. 
+\Igor{R1 criticou o pq este experimento. Não faz muito sentido deixar
+isso, já que nao houve quase nenhum progresso durante a semana.
+Ou podemos deixar executando varias vezes por dia, durante uns 15 dias ou 1 mes
+para monitorar o progresso.
+}
+For this experiment, we ran the suite once a day for seven consecutive
+days and averaged the passing ratios. Table~\ref{tab:test262} shows
+the average number of passing tests over this period. The variance of
+results was negligible; for that reason, we omitted standard
+deviations. We noticed that all four engines but \chakra{} used some
+variant of the Test262 suite as part of their regression process, but
+we used the same version in this
+experiment~\cite{ecma262-conformance-suite}. 
+
+\begin{table}
+  %\vspace{-4ex}
+  \centering
+  \caption{\label{tab:test262}Percentage of passing tests on
+    the Test262 conformance suite.}
+  %\small
+  \begin{tabular}{rr}
+    \toprule
+    engine & \% passing \\
+    \midrule
+    \jsc{} & \percentSuiteTestJSC{}\\
+    \veight{} & \percentSuiteTestVeight{} \\
+    \chakra{} & \percentSuiteTestChakra{} \\    
+    \smonkey{} & \percentSuiteTestSM{} \\
+    \bottomrule
+  \end{tabular}
+  %\normalsize
+\end{table}
+
+Results show that there are still many unsupported scenarios as can be observed from the
+percentages in the table. The number of passing tests is high and
+similar for \jsc{}, \veight{}, and \smonkey\ whereas \chakra\ performs
+worse compared to the other engines. Note also that \chakra\ is both
+the engine that has the lowest passing ratio in this test suite and
+the one we were able to find more bugs (as per
+Figure~\ref{fig:summary}). Although it is plausible to find
+correlation between the passing ratios and reliability as measured by
+the number of bugs found, we do not imply causality. It is important
+to note that failures in this conformance test suite indicates missing
+features as opposed to bugs.
+
+\begin{center}
+  \fbox{
+    \begin{minipage}{8cm}
+      \textit{Summary:}~All engines seem to adhere well to the
+      \js\ standard. Except for \chakra, the passing ratio of all
+      engines is above 90\%.
+      \end{minipage}
+    }
+\end{center}
+
+
+\subsection{Answering RQ2 (Test Transplantation)}
+\label{sec:transplantation}
+
+This section reports results of test transplantation. More
+specifically, we analyzed the failures observed when running a test
+suite original from a given engine in another engine. Intuitively, we
+want to assess how effective is the idea of cross-fertilization of
+testing knowledge among \js\ developers.
+
+%\vspace{0.5ex}
+\subsubsection{Methodology}
+\label{sec:methodology}
+\Igor{manter isso?}
+\Fix{In this experiment, a developer with experience in \js\ analyzed each
+test failure, affecting a particular engine, and classified that
+failure as potentially fault-revealing or not. The authors supervised
+the classification process to validate correctness. For the
+potentially fault-revealing cases, one of the authors inspected the
+scenario and, if agreed on the classification, reported the bug to the
+issue tracker of the affected engine.}
+% In this experiment, we analyzed each test failure,
+% affecting a particular engine, and classified that
+% failure as potentially fault-revealing or not. This methodology
+% was supervised the classification process to validate correctness. For the
+% potentially fault-revealing cases, if agreed on the classification, we 
+% reported the bug to the issue tracker of the affected engine.
+
+
+\begin{table}[t]
+  \small
+  \centering
+  \caption{\label{tab:cross-testing}Number of failures with
+    Test Transplantation.}
+  \renewcommand*{\arraystretch}{0.9}
+  \begin{tabular}{crrrr}
+    \toprule
+    test suite\textbackslash{}engine & \jsc{} & \veight{} & \smonkey{} & \chakra{}\\
+    \midrule
+    % \Fix{Versions (03.08)} & 234555 & 7.0.158 & 62.0b14 & 1.10.1 \\
+    % \Comment{
+    %   Lembrar dos testes que os testes da propria engine falham:
+    %   V8 0 
+    %   JSC 2 
+    %   Spidermonkey 58
+    % }
+    \jsc{} & - & 10 & 10 & 59   \\
+    \veight{} & 41 & - & 3 & 5  \\
+%    \chakra{} & - & - & - & -  \\
+    \smonkey{} & 218 & 107 & - & 281 \\
+    Duktape & 0 & 4 & 4 & 1   \\
+    \jerry{} & 23 & 25 & 22 & 23   \\
+    JSI & 0 & 0 & 0 & 0   \\ 
+   Tiny-js & 0 & 0 & 0 & 0  \\
+    \midrule
+   \textbf{total} & 282 & 146 & 39 & 369 \\
+    \bottomrule 
+  \end{tabular}
+  \vspace{-3ex}
+\end{table}
+
+\subsubsection{Results}
+\label{sec:results}
+
+Table~\ref{tab:cross-testing} shows the number of failures observed
+for each pair of test suite and engine. The first column shows the
+test suites and the first row shows the engines that run those
+tests. We use a dash (``-'') to indicate that we did not consider the
+combinations that associate a test suite with its parent engine;
+failures in those cases would either indicate regressions or flaky
+tests as opposed to unknown bugs for that engine. As explained in
+Section~\ref{sec:seeds}, we used in this experiment the
+\totalTestFilesForTestTransplantation{} tests included in the
+rectangle area under column ``type-in-all'' from
+Table~\ref{tab:test-suites}. Running those tests we observed a total
+of \failuresTestTrans{} failures manifested across
+\failuresTestTransDistictFiles{} distinct files
+(\failuresTestTransPercent{} of total).  Table~\ref{tab:cross-testing}
+shows that \smonkey\ was the engine that failed the least whereas
+\chakra\ was the engine that failed the most. The \smonkey\ test suite
+also revealed more failures than any other, as expected, given
+that it is the suite with more tests (see
+Table~\ref{tab:test-suites}).
+
+
+%%  As another example, some tests from \Fix{Y} use the
+%% implementation-dependent description message\Mar{what is the name of
+%%   the property?} encapsulated in an \CodeIn{Error} object in
+%% assertions. As such, those tests fail in all engines but
+%% \Fix{Y}. 
+
+\sloppy The sources of FP found in this experiment are as
+follows: \textbf{Undefined Behavior.} FP of this kind are
+manifested when tests cover implementation-dependent behavior, as
+defined in the ECMA262 specification~\cite{ecmas262-spec}. For
+example, one of the tests from \jerry\ uses the function
+\CodeIn{Number.toPrecision([precision])}, which translates a number to
+a string, considering a given number of significant digits. The
+floating-point approximation of the real value is
+implementation-dependent, making that test to pass only in
+\chakra. \textbf{Timeout/OME\footnote{ome is for out of memory
+    error.}.} FP of this kind typically manifest when the
+engine that runs the test does not optimize the code as the original
+engine of the test. As result, the test fails to finish at the
+specified time budget or it exceeds the memory budget. For example, a
+test case from \jsc{} defines a function with a tail-call
+recursion. The test fails in all engines but \jsc{}, which implements
+tail-call optimization. \textbf{Not implemented.} FP of
+this kind manifest when a test fails because it covers a function that
+is part of the official spec, but is not implemented in the target
+engine yet. For example, at the time of writing, \chakra{} did not
+implement by default various properties from the \mcodeid{Symbol}
+object. These properties are only available activating the ES6
+experimental mode with the flag \CodeIn{-ES6Experimental}.
+\textbf{Non-Standard Element.} These cases manifest when a function or
+an object property is undefined in the execution engine but we were
+unable to capture that by looking for error types like
+\CodeIn{ReferenceError} and \CodeIn{TypeError}.
+% \Comment{ For example,
+%   we found cases where the test (or its harness) fails in an assertion
+%   because of an undefined property.}
+\textbf{Other.} This category
+includes other sources of FP. For example, it includes
+the cases where the test was valid for some previous version of the
+spec but is no longer valid for the current spec.
+
+\begin{table}
+  \centering
+  \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
+    of FP and TP.}
+  %\setlength{\tabcolsep}{3pt}      
+  \renewcommand*{\arraystretch}{0.9}
+  \begin{tabular}{ccr}
+    \toprule
+    & source &  \#\\
+    \midrule
+    \multirow{5}{*}{FP} & Undefined Behavior & \noTransUndefined{} \\
+    & Timeout/OME & \noTransTimeout{} \\
+    & Not Implemented & \noTransNotImplemented{} \\
+    & Non-Standard Element & \noTransNonStandard{} \\
+    & Other & \noTransOther{} \\
+    \midrule
+    \multirow{2}{*}{TP} & Duplicate & \noTransTPDuplicated{} \\
+    & Bug & \noTransTPBugs{} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Table~\ref{fig:piecharts-transplantation} shows the distribution of
+\gls{fp} and \gls{tp}. The sum of the numbers
+in this table correspond to the number of files that manifested
+failures, \ie{}, \failuresTestTransDistictFiles{}. Considering false
+positives, ``Undefined Behavior'' was the most predominant
+source. Considering TP, we found a reasonable number of
+duplicate reports, but not high enough to justify attempting to
+automate the detection of duplicates.
+
+\input{table_transplantation}
+
+
+Table~\ref{tab:test-transplantation-bugs} lists all bugs we found with
+test transplantation. The first column shows the identifier we
+assigned to the bug,%\Comment{, column ``Date'' shows the date the bug was reported in the format ``m/dd'',}
+column ``Engine'' shows the
+affected engine, column ``Status'' shows the status of the bug report
+at the time of the writing. The status string appears in bold face for
+status ``Confirmed'' or higher, \ie{}, ``Assigned'' and ``Fixed''.
+Column ``Severity'' shows the severity of confirmed bugs, and,
+finally, column ``Suite'' shows the name of the engine that originated
+the test.  (We omitted the URLs of the issues to protect anonymity.)
+Considering severity levels, we found that \jsc{}~\cite{jsc-severity}
+and \smonkey{}~\cite{mozilla-severity} developers use five levels,
+whereas \chakra{}~\cite{chakra-severity} and
+\veight{}~\cite{v8-severity} developers use only three. As usual, the
+smallest the severity value the highest the severity of the bug. We
+use a dash (``-'') in place of the severity level for the cases where
+the bug report is pending confirmation. Of the
+\noBugsTransplantation{} bugs we reported in this experiment,
+\noBugsTransplantationConfirmed\ were promoted from the status ``New''
+to ``Confirmed''. Of these, \noBugsTransplantationSeverityTwo{} are severity-2 bugs.  Although we did
+not find any critical bugs, most of the bugs are seemingly important
+as per the categorization given by engineers. Analyzing the issue
+tracker of \chakra, we found that severity-1 bugs are indeed
+rare. Considering the number of bug reports confirmed by developers,
+\chakra{} was the engine with the highest number--\bugsChakra{} (with \bugsChakraFixed{} bugs
+fixed). Considering the remaining engines, \veight{} developers
+confirmed the \noTransVeightBugsReported{} bugs we reported, fixing 
+\noTransVeightBugsFixed{}. Curiously, Google
+engineers confirmed the issued bug reports in a few hours. Overall, we
+found that development teams of other engines, specially \jsc\, took
+much longer to analyze bug reports as can be observed in the
+\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}. 
+However, the bugs the \jsc{} team confirmed were quickly fixed.
+
+%% Overall, we found these results promising given that precision (\ie{},
+%% the ratio of true positives over all reports) needs to take into
+%% account the cost of inspecting the failure~\cite{harman-ohearn-2018};
+%% it took a week for the developer to inspect the entire set of
+%% failures. The precision for \jsc\ was \Fix{X\%} (\ie, XX/270), which
+%% seems a low rate, but it took approximately \Fix{x} days to find
+%% \Fix{y} real bugs on this engine. Section~\ref{sec:bugs} shows samples
+%% of false and true positives.
+
+\begin{center}
+  \fbox{
+    \begin{minipage}{8cm}
+      \textit{Summary:}~Test transplantation was effective at finding
+      functional bugs. Although the cost of classifying failures was
+      non-negligible, the approach revealed several non-trivial bugs
+      in three of the four engines we analyzed.
+      \end{minipage}
+    }
+\end{center}
+
+
+\subsection{Answering RQ3 (Differential Testing)}
+\label{sec:cross-engine-diff-testing-results}
+
+This section reports the results obtained with cross-engine differential
+testing. More precisely, we report results obtained by fuzzing test
+inputs, running those inputs on different engines, and checking the
+outcomes with a differential oracle.
+
+\vspace{0.5ex}
+\subsubsection{Methodology}
+The experimental methodology we used is as follows. As explained in
+Section~\ref{sec:objects:fuzzers}, we used Radamsa~\cite{radamsa} and
+QuickFuzz~\cite{grieco2016quickfuzz} for fuzzing. To avoid experimental noise,
+we only fuzz test files that pass in all engines--a total of
+\totalTestFilesPassInAll\ tests satisfy this restriction. Those tests
+appear under the column ``no-fail-in-all'' on
+Table~\ref{tab:test-suites}.  We want to avoid the scenario where
+fuzzing produces a fault-revealing input based on a test that was
+already revealing failures on some engine. This decision facilitates
+our inspection task; it helps us establish cause-effect relationship
+between fuzzing and the observation of discrepancy.  We configured our
+infrastructure (see Figure~\ref{fig:workflow}) to produce 20
+well-formed fuzzed files per input file, \ie{}, the number of fuzzing
+iterations can exceed the number above as we discard generated files
+that are syntactically invalid.
+
+%%  That
+%% finding would be important to reduce inspection cost and guide future
+%% developments of this approach. 
+
+\vspace{0.5ex} \lbrack{}Exploratory Phase.\rbrack{} For the first
+three months of the study, our inspection process was exploratory.  In
+this phase, we wanted to learn whether or not black-box fuzzers could
+reveal real bugs and how effective was the \hi{}-\lo\ warning
+classification.  We expected the number of warnings to increase
+dramatically compared to the previous experiment and, if we realized
+that the ratio of bugs from \lo\ warnings was rather low, we could
+focus our inspection efforts on \hi\ warnings. To run this experiment,
+we trained eight students in analyzing the warnings that our
+infrastructure produces. The students were enrolled in a
+graduate-level testing class. We listed warnings in a spreadsheet and
+requested the students to update an ``owner'' column indicating who
+was working on it, but we did not enforce a strict order on the
+warnings the students should inspect. Recall from
+Section~\ref{sec:clusterization} that we clustered \lo\ warnings in
+buckets. For that reason, we only listed one \lo\ warning per
+representative class/bucket in the spreadsheet. First, we explained,
+through examples, the possible sources of false alarms they could find
+and then we asked the students to use the following procedure when
+finding a suspicious warning. Analyze the parts of the spec related to
+the problem and, if still suspicious, look for potential duplicates on
+the bug tracker of the affected engine using related keywords. If none
+was reported, indicate in the spreadsheet that that warning is
+potentially fault-revealing. We encouraged students to use
+lithium~\cite{lithium} to minimize long test cases.
+% \Comment{; the tests from the Mozilla suite are often longer than others}
+A bug report was filed only after one of the authors reviewed the diagnosis.
+Each student found at least one bug using this methodology.
+
+\vspace{0.5ex}
+\lbrack{}Non-Exploratory Phase.\rbrack{} Results obtained in the
+exploratory phase confirmed our expectations that most of the bugs
+found during the initial period of investigation were related to
+\hi\ warnings. For that reason, we changed our inspection
+strategy. This time, only the co-authors inspected the bugs using a
+similar discipline as before. However, the set of warnings inspected
+and the order of inspection changed. We restricted our analysis to
+\hi\ warnings and, aware that we would be unable to analyze each and
+every warning reported, we grouped those warnings per engine,
+analyzing each group in a round-robin fashion.  At each iteration, we
+analyzed \warningsIteration{} warnings in each group. A warning
+belongs to the group of a given engine if only that engine manifests
+distinct behavior, \ie{}, it produces a distinct output compared to
+others. We separated in a distinct group the warnings for which two
+engines diverge. The rationale for this methodology was to give
+attention to each engine more uniformly, enabling more fair comparison
+across engines.
+
+%% Table~\ref{tab:summary-lo}
+%% shows statistics of \lo\ warnings obtained when fuzzing inputs with
+%% different tools. Column ``\# buckets'' shows the number of buckets
+%% associated with ``\lo'' warnings, column ``\# files'' shows the total
+%% number of files involved in these warnings, and column ``avg. \# files
+%% per bucket'' shows the average number of files per bucket. Note that,
+%% although the number of buckets and files differ substantially across
+%% fuzzers, the difference of files per bucket was not very high.\Mar{not
+%% sure how relevant is this par.}
+
+%% \begin{table}[t]
+%%   \small
+%%   \centering
+%%   \caption{\label{tab:summary-lo}Summary of \lo\ warning reports.}
+%%   \begin{tabular}{crrr}
+%%     \toprule
+%%     & \# buckets & \# files & avg. \# files per bucket \\
+%%     \midrule
+%%     \radamsa{} & 82 & 319 & 3.8 \\
+%%     \quickfuzz{} & 78 & 218 & 2.7 \\
+%%     \bottomrule
+%%   \end{tabular}
+%% \end{table}
+
+\vspace{0.5ex}
+\subsubsection{Results}~Table~\ref{tab:summary-hi} shows statistics of \hi\ warnings. The table breaks down \hi\ warning by the affected
+engine, \ie, the engine manifesting distinct output among those
+analyzed. Column ``+1'' shows the cases where more than one engine
+disagree on the output. Note from the totals that the ordering of
+engines is consistent with the one observed on
+Table~\ref{tab:cross-testing}, with \chakra\ and \jsc\ in first and
+second places, respectively, in number of warnings.
+
+
+\begin{table}[t]
+  \small
+  \setlength{\tabcolsep}{4.5pt}
+  \centering
+  \caption{\label{tab:summary-hi}Number of \hi\ warning
+    reports per engine.}
+  \begin{tabular}{crrrrr}
+    \toprule
+    fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
+    \midrule
+    \radamsa{} & 151 & 50 & 331 & 94 & 628 \\ % 137 & 47 & 323 & 21 & 483
+    \quickfuzz{} & 83 & 63 & 351 & 21 & 403 \\ % 81 & 62 & 349 & 13 & 369
+    \midrule
+    \textbf{total} & 234 & 113 & 682 & 115 & 1031 \\ % 218 & 109 & 672 & 34 & 852
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+Table~\ref{tab:false-positives} shows the distribution of false
+positives per source. The sources of imprecision are as defined in
+Section~\ref{sec:transplantation} with the addition of two new
+sources, which we did not observe before. These new sources are
+marked with a ``*'' in the table. The source ``Invalid Input''
+indicates that the test input violated some part of the
+specification. For example, the test indirectly invoked some function
+with unexpected arguments; this happens because fuzzing is not
+sensitive to function specifications. Consequently, it can replace
+valid with invalid inputs. The source ``Error Message Mismatch''
+corresponds to the cases where the fuzzer modifies the assertion
+expression (\eg{}, some string expression or regular expression).
+
+\begin{table}[t]
+  \small
+  \centering
+  \caption{\label{tab:false-positives}Distribution of FP and TP.}
+  \begin{tabular}{ccrr}
+    \toprule
+    & & \radamsa\ & \quickfuzz\ \\
+    \midrule
+    \multirow{4}{*}{FP} & Undefined Behavior & 42 & 16 \\ % 26 & 9 
+    & Timeout/OME & 30 & 15 \\ % 28 & 13
+    & * Invalid Input & 46 & 55 \\ % 39 & 48
+    & * Error Message Mismatch & 41 & 12 \\ % 41 & 12
+    \midrule
+    \multirow{2}{*}{TP} & Duplicate & 36 & 28\\ % 34 & 28
+    & Bug & 15 & 7\\
+    \bottomrule     
+  \end{tabular}
+\end{table}
+
+%% \Igor{devemos remover isso da 
+%% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
+%% The source ``Upcoming Feature''
+%% indicates that the test fails because it uses a feature that is
+%% available in the original engine, but it is still not standard, and
+%% the target engine does not support that feature}. For example,
+%% \Fix{provide concrete example}. \Fix{explain error message mismatch}
+
+
+%% The table is
+%% organized in two sections. The top section shows results obtained
+%% during the exploratory phase of the study and the bottom section shows
+%% the results obtained during the non-exploratory phase.
+
+
+Table~\ref{tab:bugs} shows the list of bugs we reported. The table
+shows the fuzzing tool used
+(``Fuzzer''), the \js\ engine affected (``Engine''), the status of the
+bug report (``Status''),
+% \Comment{ as of Aug. 24, 2018, the Url of the bug report (``Url'')}
+the severity of the bug report (``Sev.''), the priority
+that we assigned to the warning that revealed the bug (``Priority''),
+and the test suite from the original test input (``Suite''). So far,
+\noDiffConfirmed{} of the bugs we reported were confirmed, \noDiffFixed{} of which
+were fixed. Note that one bug report that we submitted was rejected on
+the basis that the offending JS file manifested an incompatibility
+across engine implementations that was considered to be acceptable. As
+of now, we did not find any new bugs on \smonkey{}; the bugs we found
+were duplicates and were not reported. For \veight{}, 
+we reported \noDiffVeight{} bugs, 
+all of them confirmed, with \noDiffVeightFixed{} fixed.
+
+\input{table_differential}
+
+%% Note from the table that all bug reports still waiting for
+%% confirmation are associated with the \jsc{} engine. A closer look at
+%% the \jsc{} issue tracker showed that their triage process is slow
+%% relative to \chakra's.\Comment{\Igor{ The bugs reported on \chakra{}'s
+%%     bug tracker was defined as confirmed, however the bugs are
+%%     included on a milestone for the next release following an internal
+%%     priority.  }} 
+
+%% Finally, it is worth noting that \Fix{11 of the 19}
+%% JS files that manifested discrepancies were \emph{not} produced with
+%% fuzzing (column ``Fuzz''). These are test files from suites of
+%% different engines. This observation emphasizes the importance of
+%% continuously collecting test suites from multiple sources; today, we
+%% use test suites from seven different open source engines, including a
+%% total of 30K test files.
+
+\begin{center}
+  \fbox{
+    \begin{minipage}{8cm}
+      \textit{Summary:}~Cross-engine differential testing was
+      effective at finding \js\ engines bugs, several of which have
+      been fixed already.
+      \end{minipage}
+    }
+\end{center}
+
+\noindent
+\textbf{Data Availability.}~The data, including the tests, warning
+reports, and diagnostic outcomes, is publicly available from a
+preserved repository \dataRepo.
+
+\section{Discussion}
+\label{sec:bugs}
+
+
+\subsection{Example Bug Reports}
+
+This section discusses a sample of bugs reports. The selection
+criteria we used was: (i) to cover all engines we found bugs--\chakra,
+\jsc, and \veight, (ii) to cover each technique--test transplantation
+and differential testing (with \radamsa\ and with \quickfuzz), (iii)
+to cover a case of rejected bug report, and (iv) to use short tests
+(for space).
+
+%% \CodeIn{\{var a =
+%%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
+%%   assert(+a === 0)\}}
+
+\sloppy
+\vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
+code snippet below shows a test that reveals a bug in \chakra.
+
+\begin{figure}[h!]
+  \vspace{-1ex}
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+ { var a = {valueOf: function(){ return "\x00"}}
+   assert(+a === 0) }
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+  \vspace{-1ex}  
+\end{figure}
+
+The object property \CodeIn{valueOf} stores a function that returns a
+primitive value identifying the target object~\cite{valueof}. The
+original version of this code returns an empty string whereas the
+version of the code modified by the \radamsa{} fuzzer~\cite{radamsa}
+returns a string representation of a null character (\CodeIn{NUL}).%\Comment{ in ascii}
+The unary plus expression ``\CodeIn{+a}", used in the
+assertion, is equivalent to the operation
+\CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
+otherwise the operation returns \gls{nan}~\cite{unary-plus}.
+This test fails in all engines but
+\chakra{}. For all three engines the string cannot be parsed as an
+hexadecimal. As such, they produce a NaN as result and the test fails
+as expected. \chakra{}, instead, incorrectly converts the string
+to zero, making the test to pass. As Table~\ref{tab:bugs} shows, the
+\chakra{} team fixed the issue soon after we reported the problem.
+
+\vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.}  The
+code {\footnotesize\ttfamily{eval(function b(a)\{break;\});}} shows
+the test input we used to reveal a bug in \veight{}. This code snippet
+was obtained by fuzzing a Test262 test with \quickfuzz. In its
+original version, a string (omitted for space), passed as argument to
+the \CodeIn{eval} function, encoded the actual test. The fuzzer
+replaced the string argument with a function whose body is a
+\CodeIn{break} statement outside a valid block statement. Section
+B.3.3.3 from the spec~\cite{spec-b333} documents how eval should
+handle code containing function declarations.  According to the
+spec~\cite{break-statement}, the virtual machine should throw an early
+error--in this case, a SyntaxError--if the break statement is not
+nested in an iterable or a switch statement. All engines, but
+\veight{}, behave as expected in this case.
+
+%% \Igor{
+%%   Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
+%%   Este test case oriundo da suite Test262 foi fuzzado pelo \quickfuzz{}
+%%   que por ser um fuzzer mutacional, usa uma gramatica \js{} que auxilia na geracao
+%%   de entradas validas. In Figure~\ref{fig:bug-veight}, we observed a \CodeIn{eval} statement
+%%   that try to evaluate a \CodeIn{function f()}, this test case specify the ecma spec
+%%   B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a 
+%%   function declaration. The fuzzer removes the function declaration and 
+%%   injects a function with a break statement outside a loop. According to specification~\cite{break-statement},
+%%   the break statement should throw an early error (in this case a SyntaxError) 
+%%   if the break statement is not nested in an iterational or a switch statement. All engines works
+%%   as expected but \veight{} pass without failures.
+%% }
+
+
+\vspace{1ex}\noindent\textbf{Issue \#18,
+  Table~\ref{tab:test-transplantation-bugs}.}  The code snippet below
+shows the test input we used to reveal a bug in \jsc{}. This test
+originates from \jerry{} test suite; the bug was found during the test
+transplantation experiment.
+
+\begin{figure}[h!]
+  \vspace{-0.5ex}  
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+ var obj = {}; var arr = [];
+ try { arr.sort(obj); assert(false);}
+ catch (e) { assert(e instanceof TypeError); }
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+  \vspace{-1ex}  
+\end{figure}
+
+According to the specification~\cite{ecmas262-array-sort}, the
+parameter to the \CodeIn{Array.sort} function should be a comparable
+object or an undefined value, otherwise it should throw a
+\CodeIn{TypeError}. In this case, \jsc{} accepts a non-callable object
+as argument to \CodeIn{sort} and the test fails in the subsequent
+step. The other engines raise a \CodeIn{TypeError} as expected.
+
+\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
+code snippet below shows an example input related to a bug report that
+we issued to the \chakra\ development team, but they did not accept.
+
+\begin{figure}[h!]
+  \vspace{-0.5ex}  
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function, 
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+ function test() {
+   return typeof String.prototype.repeat === "function"
+     && "foo".repeat(657604378) === "foofoofoo"; }
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+  \vspace{-1ex}  
+\end{figure}
+
+
+This is a testcase original from the \jsc{} suite that the
+\radamsa\ fuzzer modified. The original test used the integer literal
+3 as argument to \CodeIn{repeat()}, but this test uses a long integer
+instead. As result, the engine crashes. The team answered that this
+was an incompatibility by design as the function was not expected to
+receive such a long value.

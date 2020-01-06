@@ -1,0 +1,572 @@
+\providecommand{\abntreprintinfo}[1]{%
+ \citeonline{#1}}
+\setlength{\labelsep}{0pt}\begin{thebibliography}{}
+\providecommand{\abntrefinfo}[3]{}
+\providecommand{\abntbstabout}[1]{}
+\abntbstabout{v-1.9.6 }
+
+\bibitem[Alshahwan e Harman 2012]{alshahwan-harman-icse2012}
+\abntrefinfo{Alshahwan e Harman}{ALSHAHWAN; HARMAN}{2012}
+{ALSHAHWAN, N.; HARMAN, M. Augmenting test suites effectiveness by increasing
+  output diversity. In:  \emph{Proceedings of the 34th International Conference
+  on Software Engineering}. Piscataway, NJ, USA: IEEE Press, 2012.  (ICSE '12),
+  p. 1345--1348.
+ISBN 978-1-4673-1067-3. Dispon{\'\i}vel em:
+  \url{http://dl.acm.org/citation.cfm?id=2337223.2337414}.}
+
+\bibitem[Alshahwan e Harman 2014]{alshahwan-harman-issta2014}
+\abntrefinfo{Alshahwan e Harman}{ALSHAHWAN; HARMAN}{2014}
+{ALSHAHWAN, N.; HARMAN, M. Coverage and fault detection of the
+  output-uniqueness test selection criteria. In:  \emph{Proceedings of the 2014
+  International Symposium on Software Testing and Analysis}. New York, NY, USA:
+  ACM, 2014.  (ISSTA 2014), p. 181--192.
+ISBN 978-1-4503-2645-2. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2610384.2610413}.}
+
+\bibitem[{Apple} 2018]{jsc-severity}
+\abntrefinfo{{Apple}}{{Apple}}{2018}
+{{Apple}. \emph{{Severity levels WebKit bugs (JavaScriptCore)}}. 2018.
+  Available at \url{https://webkit.org/bug-prioritization/}.}
+
+\bibitem[Argyros et al. 2016]{Argyros-etla-ccs16}
+\abntrefinfo{Argyros et al.}{ARGYROS et al.}{2016}
+{ARGYROS, G.; STAIS, I.; JANA, S.; KEROMYTIS, A.~D.; KIAYIAS, A. Sfadiff:
+  Automated evasion attacks and fingerprinting using black-box differential
+  automata learning. In:  \emph{Proceedings of the 2016 ACM SIGSAC Conference
+  on Computer and Communications Security}. New York, NY, USA: ACM, 2016.  (CCS
+  '16), p. 1690--1701.
+ISBN 978-1-4503-4139-4. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2976749.2978383}.}
+
+\bibitem[Beckett 1983]{beckett1983worstward}
+\abntrefinfo{Beckett}{BECKETT}{1983}
+{BECKETT, S. \emph{Worstward ho}. [S.l.]: John Calder London, 1983.}
+
+\bibitem[{Brian Terlson}]{eshost-cli}
+\abntrefinfo{{Brian Terlson}}{{Brian Terlson}}{}
+{{Brian Terlson}. \emph{{escli-host}}. Available at
+  \url{https://github.com/bterlson/eshost-cli}.}
+
+\bibitem[Brumley et al. 2007]{Brumley-etal-ss07}
+\abntrefinfo{Brumley et al.}{BRUMLEY et al.}{2007}
+{BRUMLEY, D.; CABALLERO, J.; LIANG, Z.; NEWSOME, J.; SONG, D. Towards automatic
+  discovery of deviations in binary implementations with applications to error
+  detection and fingerprint generation. In:  \emph{Proceedings of 16th USENIX
+  Security Symposium on USENIX Security Symposium}. Berkeley, CA, USA: USENIX
+  Association, 2007.  (SS'07), p. 15:1--15:16.
+ISBN 111-333-5555-77-9. Dispon{\'\i}vel em:
+  \url{http://dl.acm.org/citation.cfm?id=1362903.1362918}.}
+
+\bibitem[Bueno, Wong e Jino 2007]{bueno-etal-ase2007}
+\abntrefinfo{Bueno, Wong e Jino}{BUENO; WONG; JINO}{2007}
+{BUENO, P. M.~S.; WONG, W.~E.; JINO, M. Improving random test sets using the
+  diversity oriented test data generation. In:  \emph{Proceedings of the 2nd
+  international workshop on Random testing: co-located with the 22nd IEEE/ACM
+  International Conference on Automated Software Engineering (ASE 2007)}.
+  Association for Computing Machinery, 2007.  (ASE07), p. 10–17.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1145/1292414.1292419}.}
+
+\bibitem[{Camilo Bruni--V8 engineer} 2018]{for-in-undefined}
+\abntrefinfo{{Camilo Bruni--V8 engineer}}{{Camilo Bruni--V8 engineer}}{2018}
+{{Camilo Bruni--V8 engineer}. \emph{{for-in undefined behavior}}. 2018.
+  Available at
+  \url{https://v8project.blogspot.com/2017/03/fast-for-in-in-v8.html}.}
+
+\bibitem[Chen et al. 2018]{Chen:2018:RDT:3180155.3180226}
+\abntrefinfo{Chen et al.}{CHEN et al.}{2018}
+{CHEN, C.; TIAN, C.; DUAN, Z.; ZHAO, L. Rfc-directed differential testing of
+  certificate validation in ssl/tls implementations. In:  \emph{Proceedings of
+  the 40th International Conference on Software Engineering}. New York, NY,
+  USA: ACM, 2018.  (ICSE '18), p. 859--870.
+ISBN 978-1-4503-5638-1. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/3180155.3180226}.}
+
+\bibitem[Chen et al. 2017]{Chen:2017:LPT:3097368.3097451}
+\abntrefinfo{Chen et al.}{CHEN et al.}{2017}
+{CHEN, J.; BAI, Y.; HAO, D.; XIONG, Y.; ZHANG, H.; XIE, B. Learning to
+  prioritize test programs for compiler testing. In:  \emph{Proceedings of the
+  39th International Conference on Software Engineering}. Piscataway, NJ, USA:
+  IEEE Press, 2017.  (ICSE '17), p. 700--711.
+ISBN 978-1-5386-3868-2. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1109/ICSE.2017.70}.}
+
+\bibitem[Chen et al. 2010]{Chen:2010:ART:1663656.1663914}
+\abntrefinfo{Chen et al.}{CHEN et al.}{2010}
+{CHEN, T.~Y.; KUO, F.-C.; MERKEL, R.~G.; TSE, T.~H. Adaptive random testing:
+  The art of test case diversity.
+\emph{J. Syst. Softw.}, Elsevier Science Inc., New York, NY, USA, v.~83, n.~1,
+  p. 60--66, jan. 2010.
+ISSN 0164-1212.
+Dispon{\'\i}vel em: \url{http://dx.doi.org/10.1016/j.jss.2009.02.022}.}
+
+\bibitem[{Chen} e {Yu} 1996]{chen-yu-tse1996}
+\abntrefinfo{{Chen} e {Yu}}{{Chen}; {Yu}}{1996}
+{{Chen}, T.~Y.; {Yu}, Y.~T. On the expected number of failures detected by
+  subdomain testing and random testing.
+\emph{IEEE Transactions on Software Engineering}, v.~22, n.~2, p. 109--119, Feb
+  1996.
+ISSN 0098-5589.}
+
+\bibitem[Chen et al. 2016]{Chen-etal-pldi16}
+\abntrefinfo{Chen et al.}{CHEN et al.}{2016}
+{CHEN, Y.; SU, T.; SUN, C.; SU, Z.; ZHAO, J. Coverage-directed differential
+  testing of jvm implementations. In:  \emph{Proceedings of the 37th ACM
+  SIGPLAN Conference on Programming Language Design and Implementation}. New
+  York, NY, USA: ACM, 2016.  (PLDI '16), p. 85--99.
+ISBN 978-1-4503-4261-2. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2908080.2908095}.}
+
+\bibitem[Chen e Su 2015]{Chen-etal-fse2015}
+\abntrefinfo{Chen e Su}{CHEN; SU}{2015}
+{CHEN, Y.; SU, Z. Guided differential testing of certificate validation in
+  ssl/tls implementations. In:  \emph{Proceedings of the 2015 10th Joint
+  Meeting on Foundations of Software Engineering}. New York, NY, USA: ACM,
+  2015.  (ESEC/FSE 2015), p. 793--804.
+ISBN 978-1-4503-3675-8. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2786805.2786835}.}
+
+\bibitem[{Chromium}]{v82018repo}
+\abntrefinfo{{Chromium}}{{Chromium}}{}
+{{Chromium}. \emph{{V8 JavaScript Engine}}. Available at
+  \url{https://chromium.googlesource.com/v8/v8.git}.}
+
+\bibitem[{Chromium} 2015]{array-bug-chromium-issue4247}
+\abntrefinfo{{Chromium}}{{Chromium}}{2015}
+{{Chromium}. \emph{{Issue 4247}}. 2015. Available at
+  \url{https://bit.ly/2O08uW2}.}
+
+\bibitem[Ciupa et al. 2008]{ciupa-etal-icse08}
+\abntrefinfo{Ciupa et al.}{CIUPA et al.}{2008}
+{CIUPA, I.; LEITNER, A.; ORIOL, M.; MEYER, B. Artoo: Adaptive random testing
+  for object-oriented software. In:  \emph{Proceedings of the 30th
+  International Conference on Software Engineering}. New York, NY, USA: ACM,
+  2008.  (ICSE '08), p. 71--80.
+ISBN 978-1-60558-079-1. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/1368088.1368099}.}
+
+\bibitem[Daniel et al. 2007]{Daniel:2007:ATR:1287624.1287651}
+\abntrefinfo{Daniel et al.}{DANIEL et al.}{2007}
+{DANIEL, B.; DIG, D.; GARCIA, K.; MARINOV, D. Automated testing of refactoring
+  engines. In:  \emph{Proceedings of the the 6th Joint Meeting of the European
+  Software Engineering Conference and the ACM SIGSOFT Symposium on The
+  Foundations of Software Engineering}. New York, NY, USA: ACM, 2007.
+  (ESEC-FSE '07), p. 185--194.
+ISBN 978-1-59593-811-4. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/1287624.1287651}.}
+
+\bibitem[Donaldson et al. 2017]{Donaldson:2017:ATG:3152284.3133917}
+\abntrefinfo{Donaldson et al.}{DONALDSON et al.}{2017}
+{DONALDSON, A.~F.; EVRARD, H.; LASCU, A.; THOMSON, P. Automated testing of
+  graphics shader compilers.
+\emph{Proc. ACM Program. Lang.}, ACM, New York, NY, USA, v.~1, n. OOPSLA, p.
+  93:1--93:29, out. 2017.
+ISSN 2475-1421.
+Dispon{\'\i}vel em: \url{http://doi.acm.org/10.1145/3133917}.}
+
+\bibitem[{Ecma Internacional}]{spec-b333}
+\abntrefinfo{{Ecma Internacional}}{{Ecma Internacional}}{a}
+{{Ecma Internacional}. \emph{{Changes to EvalDeclarationInstantiation}}.
+  Available at
+  \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#sec-web-compat-evaldeclarationinstantiation}.}
+
+\bibitem[{Ecma Internacional}]{es6-website}
+\abntrefinfo{{Ecma Internacional}}{{Ecma Internacional}}{b}
+{{Ecma Internacional}. \emph{{Ecma Internacional}}. Available at
+  \url{https://www.ecma-international.org}.}
+
+\bibitem[{Ecma Internacional}]{es6-toPrecision}
+\abntrefinfo{{Ecma Internacional}}{{Ecma Internacional}}{c}
+{{Ecma Internacional}. \emph{{Number.toPrecision specification}}. Available at
+  \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#sec-number.prototype.toprecision}.}
+
+\bibitem[{Ecma Internacional}]{break-statement}
+\abntrefinfo{{Ecma Internacional}}{{Ecma Internacional}}{d}
+{{Ecma Internacional}. \emph{{Static Semantics: Early Errors}}. Available at
+  \url{https://www.ecma-international.org/ecma-262/8.0/index.html\#sec-break-statement-static-semantics-early-errors}.}
+
+\bibitem[Elliott 2019]{github-ml}
+\abntrefinfo{Elliott}{ELLIOTT}{2019}
+{ELLIOTT, T. \emph{The State of the Octoverse: machine learning}. 2019.
+Available at
+  \url{https://github.blog/2019-01-24-the-state-of-the-octoverse-machine-learning/}.}
+
+\bibitem[{ESDiscuss} 2014]{array-bug-discussion}
+\abntrefinfo{{ESDiscuss}}{{ESDiscuss}}{2014}
+{{ESDiscuss}. \emph{{Array new attributed caused bugs}}. 2014. Available at
+  \url{https://esdiscuss.org/topic/array-prototype-values-is-not-web-compat-even-with-unscopables}.}
+
+\bibitem[Eshkevari et al. 2014]{eshkevari-etal-icpc2014}
+\abntrefinfo{Eshkevari et al.}{ESHKEVARI et al.}{2014}
+{ESHKEVARI, L.; ANTONIOL, G.; CORDY, J.~R.; PENTA, M. D. Identifying and
+  locating interference issues in php applications: The case of wordpress. In:
+  \emph{Proceedings of the 22Nd International Conference on Program
+  Comprehension}. New York, NY, USA: ACM, 2014.  (ICPC 2014), p. 157--167.
+ISBN 978-1-4503-2879-1. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2597008.2597153}.}
+
+\bibitem[Feldt et al. 2016]{7515474}
+\abntrefinfo{Feldt et al.}{FELDT et al.}{2016}
+{FELDT, R.; POULDING, S.; CLARK, D.; YOO, S. Test set diameter: Quantifying the
+  diversity of sets of test cases. In:  \emph{2016 IEEE International
+  Conference on Software Testing, Verification and Validation (ICST)}. [S.l.:
+  s.n.], 2016. p. 223--233.}
+
+\bibitem[Google]{libFuzzer-chromium-google}
+\abntrefinfo{Google}{GOOGLE}{a}
+{GOOGLE. \emph{Getting Started with libFuzzer at Chromium}.
+\url{https://chromium.googlesource.com/chromium/src/+/master/testing/libfuzzer/getting_started.md}.}
+
+\bibitem[Google]{libFuzzer-tutorial-google}
+\abntrefinfo{Google}{GOOGLE}{b}
+{GOOGLE. \emph{libFuzzer Tutorial}.
+\url{https://github.com/google/fuzzer-test-suite/blob/master/tutorial/libFuzzerTutorial.md}.}
+
+\bibitem[{Google}]{libfuzzer-tutorial}
+\abntrefinfo{{Google}}{{Google}}{}
+{{Google}. \emph{{libFuzzer Tutorial}}. Available at
+  \url{https://github.com/google/fuzzer-test-suite/blob/master/tutorial/libFuzzerTutorial.md}.}
+
+\bibitem[{Google Chrome Lab}]{jsvu}
+\abntrefinfo{{Google Chrome Lab}}{{Google Chrome Lab}}{}
+{{Google Chrome Lab}. \emph{{JSVU--JavaScript (engine) Version Updater}}.
+  Available at \url{https://github.com/GoogleChromeLabs/jsvu}.}
+
+\bibitem[Grieco, Ceresa e Buiras 2016]{grieco2016quickfuzz}
+\abntrefinfo{Grieco, Ceresa e Buiras}{GRIECO; CERESA; BUIRAS}{2016}
+{GRIECO, G.; CERESA, M.; BUIRAS, P. Quickfuzz: an automatic random fuzzer for
+  common file formats. In:  ACM. \emph{Proceedings of the 9th International
+  Symposium on Haskell}. [S.l.], 2016. p. 13--20.}
+
+\bibitem[Group 2011]{radamsa}
+\abntrefinfo{Group}{GROUP}{2011}
+{GROUP, O. U. S.~P. \emph{A general-purpose fuzzer}. 2011.
+Available at \url{https://github.com/aoh/radamsa}.}
+
+\bibitem[Hodovan]{grammarinator}
+\abntrefinfo{Hodovan}{HODOVAN}{}
+{HODOVAN, R. \emph{Grammarinator}.
+Available at \url{https://github.com/renatahodovan/grammarinator}.}
+
+\bibitem[Holler, Herzig e Zeller 2012]{Holler:2012:FCF:2362793.2362831}
+\abntrefinfo{Holler, Herzig e Zeller}{HOLLER; HERZIG; ZELLER}{2012}
+{HOLLER, C.; HERZIG, K.; ZELLER, A. Fuzzing with code fragments. In:
+  \emph{Proceedings of the 21st USENIX Conference on Security Symposium}.
+  Berkeley, CA, USA: USENIX Association, 2012.  (Security'12), p. 38--38.
+  Dispon{\'\i}vel em: \url{http://dl.acm.org/citation.cfm?id=2362793.2362831}.}
+
+\bibitem[{John Resig} 2018]{javascript-in-chrome}
+\abntrefinfo{{John Resig}}{{John Resig}}{2018}
+{{John Resig}. \emph{{JavaScript in Chrome}}. 2018. Available at
+  \url{https://johnresig.com/blog/javascript-in-chrome/}.}
+
+\bibitem[{Kangax} 2018]{kangax}
+\abntrefinfo{{Kangax}}{{Kangax}}{2018}
+{{Kangax}. \emph{ECMAScript6 compatibility}. 2018.
+Available at \url{http://kangax.github.io/compat-table/es6/}.}
+
+\bibitem[Kapus e Cadar 2017]{Kapus:2017:ATS:3155562.3155636}
+\abntrefinfo{Kapus e Cadar}{KAPUS; CADAR}{2017}
+{KAPUS, T.; CADAR, C. Automatic testing of symbolic execution engines via
+  program generation and differential testing. In:  \emph{Proceedings of the
+  32Nd IEEE/ACM International Conference on Automated Software Engineering}.
+  Piscataway, NJ, USA: IEEE Press, 2017.  (ASE 2017), p. 590--600.
+ISBN 978-1-5386-2684-9. Dispon{\'\i}vel em:
+  \url{http://dl.acm.org/citation.cfm?id=3155562.3155636}.}
+
+\bibitem[Kim et al. 2017]{Kim:2017:TIR:3155562.3155609}
+\abntrefinfo{Kim et al.}{KIM et al.}{2017}
+{KIM, S.; FAEREVAAG, M.; JUNG, M.; JUNG, S.; OH, D.; LEE, J.; CHA, S.~K.
+  Testing intermediate representations for binary analysis. In:
+  \emph{Proceedings of the 32Nd IEEE/ACM International Conference on Automated
+  Software Engineering}. Piscataway, NJ, USA: IEEE Press, 2017.  (ASE 2017), p.
+  353--364.
+ISBN 978-1-5386-2684-9. Dispon{\'\i}vel em:
+  \url{http://dl.acm.org/citation.cfm?id=3155562.3155609}.}
+
+\bibitem[Kusner et al. 2015]{kusner2015word}
+\abntrefinfo{Kusner et al.}{KUSNER et al.}{2015}
+{KUSNER, M.; SUN, Y.; KOLKIN, N.; WEINBERGER, K. From word embeddings to
+  document distances. In:  \emph{International Conference on Machine Learning}.
+  [S.l.: s.n.], 2015. p. 957--966.}
+
+\bibitem[L{\"a}mmel e Schulte 2006]{10.1007/11754008_2}
+\abntrefinfo{L{\"a}mmel e Schulte}{L{\"A}MMEL; SCHULTE}{2006}
+{L{\"A}MMEL, R.; SCHULTE, W. Controllable combinatorial coverage in
+  grammar-based testing. In:  UYAR, M.~{\"U}.; DUALE, A.~Y.; FECKO, M.~A.
+  (Ed.). \emph{Testing of Communicating Systems}. Berlin, Heidelberg: Springer
+  Berlin Heidelberg, 2006. p. 19--38.
+ISBN 978-3-540-34185-7.}
+
+\bibitem[Le, Afshari e Su 2014]{Le:2014:CVV:2594291.2594334}
+\abntrefinfo{Le, Afshari e Su}{LE; AFSHARI; SU}{2014}
+{LE, V.; AFSHARI, M.; SU, Z. Compiler validation via equivalence modulo inputs.
+  In:  \emph{Proceedings of the 35th ACM SIGPLAN Conference on Programming
+  Language Design and Implementation}. New York, NY, USA: ACM, 2014.  (PLDI
+  '14), p. 216--226.
+ISBN 978-1-4503-2784-8. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2594291.2594334}.}
+
+\bibitem[Lehmann e Pradel 2018]{DBLP:conf/sigsoft/LehmannP18}
+\abntrefinfo{Lehmann e Pradel}{LEHMANN; PRADEL}{2018}
+{LEHMANN, D.; PRADEL, M. Feedback-directed differential testing of interactive
+  debuggers. In:  \emph{Proceedings of the 2018 {ACM} Joint Meeting on European
+  Software Engineering Conference and Symposium on the Foundations of Software
+  Engineering, {ESEC/SIGSOFT} {FSE} 2018, Lake Buena Vista, FL, USA, November
+  04-09, 2018}. [s.n.], 2018. p. 610--620. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1145/3236024.3236037}.}
+
+\bibitem[LibFuzzer]{libfuzzer}
+\abntrefinfo{LibFuzzer}{LIBFUZZER}{}
+{LIBFUZZER. \emph{LibFuzzer}.
+\url{https://llvm.org/docs/LibFuzzer.html}.}
+
+\bibitem[Lidbury et al. 2015]{Lidbury:2015:MCF:2737924.2737986}
+\abntrefinfo{Lidbury et al.}{LIDBURY et al.}{2015}
+{LIDBURY, C.; LASCU, A.; CHONG, N.; DONALDSON, A.~F. Many-core compiler
+  fuzzing. In:  \emph{Proceedings of the 36th ACM SIGPLAN Conference on
+  Programming Language Design and Implementation}. New York, NY, USA: ACM,
+  2015.  (PLDI '15), p. 65--76.
+ISBN 978-1-4503-3468-6. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/2737924.2737986}.}
+
+\bibitem[{LLVM}]{clang-documentation}
+\abntrefinfo{{LLVM}}{{LLVM}}{}
+{{LLVM}. \emph{{clang documentation}}. Available at
+  \url{http://clang.llvm.org/docs/}.}
+
+\bibitem[Mayer 2005]{mayer-ase2005}
+\abntrefinfo{Mayer}{MAYER}{2005}
+{MAYER, J. Lattice-based adaptive random testing. In:  \emph{Proceedings of the
+  20th IEEE/ACM International Conference on Automated Software Engineering}.
+  New York, NY, USA: ACM, 2005.  (ASE '05), p. 333--336.
+ISBN 1-58113-993-4. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/1101908.1101963}.}
+
+\bibitem[MDN]{valueof}
+\abntrefinfo{MDN}{MDN}{a}
+{MDN. \emph{Object.valueOf documentation}.
+\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/ValueOf}.}
+
+\bibitem[MDN]{unary-plus}
+\abntrefinfo{MDN}{MDN}{b}
+{MDN. \emph{Unary Plus - ES6 specifications}.
+\url{https://www.ecma-international.org/ecma-262/8.0/index.html\#sec-unary-plus-operator}.}
+
+\bibitem[{Microsoft}]{chakra2018repo}
+\abntrefinfo{{Microsoft}}{{Microsoft}}{}
+{{Microsoft}. \emph{{ChakraCore}}. Available at
+  \url{https://github.com/Microsoft/ChakraCore}.}
+
+\bibitem[{Microsoft} 2018]{chakra-severity}
+\abntrefinfo{{Microsoft}}{{Microsoft}}{2018}
+{{Microsoft}. \emph{Severity levels Chakra bugs}. 2018. Available at
+  \url{https://github.com/Microsoft/ChakraCore/wiki/Label-Glossary}.}
+
+\bibitem[Mikolov et al. 2013]{mikolov2013distributed}
+\abntrefinfo{Mikolov et al.}{MIKOLOV et al.}{2013}
+{MIKOLOV, T.; SUTSKEVER, I.; CHEN, K.; CORRADO, G.; DEAN, J. Distributed
+  representations of words and phrases and their compositionality. In:
+  \emph{Advances in Neural Information Processing Systems 26: 27th Annual
+  Conference on Neural Information Processing Systems 2013}. Lake Tahoe,
+  Nevada, USA: Curran Associates Inc., 2013. p. 3111--3119.}
+
+\bibitem[Miller]{fuzz-testing-history}
+\abntrefinfo{Miller}{MILLER}{}
+{MILLER, B.~P. \emph{Fuzz Testing}.
+Available at \url{http://pages.cs.wisc.edu/~bart/fuzz/}.}
+
+\bibitem[Mozilla]{jsfunfuzz}
+\abntrefinfo{Mozilla}{MOZILLA}{}
+{MOZILLA. \emph{jsfunfuzz}.
+Available at
+  \url{https://github.com/MozillaSecurity/funfuzz/tree/master/src/funfuzz/js/jsfunfuzz}.}
+
+\bibitem[{Mozilla}]{jsfunfuzz-at-mozilla}
+\abntrefinfo{{Mozilla}}{{Mozilla}}{}
+{{Mozilla}. \emph{{jsfunfuzz at Mozilla}}. Available at
+  \url{https://mzl.la/2LsctZL}.}
+
+\bibitem[Mozilla]{lithium}
+\abntrefinfo{Mozilla}{MOZILLA}{}
+{MOZILLA. \emph{Lithium}.
+\url{https://github.com/MozillaSecurity/lithium}.}
+
+\bibitem[{Mozilla}]{spidermonkey2018repo}
+\abntrefinfo{{Mozilla}}{{Mozilla}}{}
+{{Mozilla}. \emph{{SpiderMonkey Project}}. Available at
+  \url{https://github.com/mozilla/gecko-dev}.}
+
+\bibitem[{Mozilla} 2018]{mozilla-severity}
+\abntrefinfo{{Mozilla}}{{Mozilla}}{2018}
+{{Mozilla}. \emph{Triage Process for Firefox Components in Mozilla-central and
+  Bugzilla}. 2018. Available at
+  \url{https://github.com/mozilla/bug-handling/blob/master/policy/triage-bugzilla.md}.}
+
+\bibitem[Nguyen, K\"{a}stner e Nguyen 2014]{nguyen-etal-icse2014}
+\abntrefinfo{Nguyen, K\"{a}stner e Nguyen}{NGUYEN; K\"{a}STNER; NGUYEN}{2014}
+{NGUYEN, H.~V.; K\"{a}STNER, C.; NGUYEN, T.~N. Exploring variability-aware
+  execution for testing plugin-based web applications. In:  \emph{ICSE}. [S.l.:
+  s.n.], 2014. p. 907--918.}
+
+\bibitem[Ostrand e Balcer 1988]{ostrand-balcer-1988}
+\abntrefinfo{Ostrand e Balcer}{OSTRAND; BALCER}{1988}
+{OSTRAND, T.~J.; BALCER, M.~J. The category-partition method for specifying and
+  generating fuctional tests.
+\emph{Commun. ACM}, ACM, New York, NY, USA, v.~31, n.~6, p. 676--686, jun.
+  1988.
+ISSN 0001-0782.
+Dispon{\'\i}vel em: \url{http://doi.acm.org/10.1145/62959.62964}.}
+
+\bibitem[Paleari et al. 2010]{Paleari:2010:NDD:1831708.1831741}
+\abntrefinfo{Paleari et al.}{PALEARI et al.}{2010}
+{PALEARI, R.; MARTIGNONI, L.; ROGLIA, G. F.; BRUSCHI, D. N-version disassembly:
+  Differential testing of x86 disassemblers. In:  \emph{Proceedings of the 19th
+  International Symposium on Software Testing and Analysis}. New York, NY, USA:
+  ACM, 2010.  (ISSTA '10), p. 265--274.
+ISBN 978-1-60558-823-0. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/1831708.1831741}.}
+
+\bibitem[Patra, Dixit e Pradel 2018]{Patra:2018:CFU:3180155.3180184}
+\abntrefinfo{Patra, Dixit e Pradel}{PATRA; DIXIT; PRADEL}{2018}
+{PATRA, J.; DIXIT, P.~N.; PRADEL, M. Conflictjs: Finding and understanding
+  conflicts between javascript libraries. In:  \emph{Proceedings of the 40th
+  International Conference on Software Engineering}. New York, NY, USA: ACM,
+  2018.  (ICSE '18), p. 741--751.
+ISBN 978-1-4503-5638-1. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/3180155.3180184}.}
+
+\bibitem[Patra e Pradel 2016]{patra2016learning}
+\abntrefinfo{Patra e Pradel}{PATRA; PRADEL}{2016}
+{PATRA, J.; PRADEL, M. \emph{Learning to fuzz: Application-independent fuzz
+  testing with probabilistic, generative models of input data}.
+[S.l.], 2016.}
+
+\bibitem[Petsios et al. 2017]{petsios-etal-sp2017}
+\abntrefinfo{Petsios et al.}{PETSIOS et al.}{2017}
+{PETSIOS, T.; TANG, A.; STOLFO, S.; KEROMYTIS, A.~D.; JANA, S. Nezha: Efficient
+  domain-independent differential testing. In:  \emph{2017 IEEE Symposium on
+  Security and Privacy (SP)}. [S.l.: s.n.], 2017. p. 615--632.}
+
+\bibitem[Purdom 1972]{Purdom1972}
+\abntrefinfo{Purdom}{PURDOM}{1972}
+{PURDOM, P. A sentence generator for testing parsers.
+\emph{BIT Numerical Mathematics}, v.~12, n.~3, p. 366--375, Sep 1972.
+ISSN 1572-9125.
+Dispon{\'\i}vel em: \url{https://doi.org/10.1007/BF01932308}.}
+
+\bibitem[{RedMonk} 2018]{redmonk-javascript}
+\abntrefinfo{{RedMonk}}{{RedMonk}}{2018}
+{{RedMonk}. \emph{{The RedMonk Programming Language Rankings: June 2018}}.
+  2018. Available at
+  \url{https://redmonk.com/sogrady/2018/08/10/language-rankings-6-18/}.}
+
+\bibitem[Rumelhart, Hinton e Williams 1986]{Rumelhart:1986:LIR:104279.104293}
+\abntrefinfo{Rumelhart, Hinton e Williams}{RUMELHART; HINTON; WILLIAMS}{1986}
+{RUMELHART, D.~E.; HINTON, G.~E.; WILLIAMS, R.~J. Parallel distributed
+  processing: Explorations in the microstructure of cognition, vol. 1. In:
+  RUMELHART, D.~E.; MCCLELLAND, J.~L.; GROUP, C. P.~R. (Ed.). Cambridge, MA,
+  USA: MIT Press, 1986. cap. Learning Internal Representations by Error
+  Propagation, p. 318--362.
+ISBN 0-262-68053-X.
+Dispon{\'\i}vel em: \url{http://dl.acm.org/citation.cfm?id=104279.104293}.}
+
+\bibitem[{Simply Technologies} 2018]{simply-technologies}
+\abntrefinfo{{Simply Technologies}}{{Simply Technologies}}{2018}
+{{Simply Technologies}. \emph{{Why is JavaScript So Popular?}} 2018. Available
+  at
+  \url{https://www.simplytechnologies.net/blog/2018/4/11/why-is-javascript-so-popular}.}
+
+\bibitem[Sivakorn et al. 2017]{SivakornAPKJ17}
+\abntrefinfo{Sivakorn et al.}{SIVAKORN et al.}{2017}
+{SIVAKORN, S.; ARGYROS, G.; PEI, K.; KEROMYTIS, A.~D.; JANA, S. Hvlearn:
+  Automated black-box analysis of hostname verification in {SSL/TLS}
+  implementations. In:  \emph{2017 {IEEE} Symposium on Security and Privacy,
+  {SP} 2017, San Jose, CA, USA, May 22-26, 2017}. [s.n.], 2017. p. 521--538.
+  Dispon{\'\i}vel em: \url{https://doi.org/10.1109/SP.2017.46}.}
+
+\bibitem[{Stackify} 2018]{stackify}
+\abntrefinfo{{Stackify}}{{Stackify}}{2018}
+{{Stackify}. \emph{Most Popular and Influential Programming Languages of 2018}.
+  2018.
+Available at \url{https://stackify.com/popular-programming-languages-2018/}.}
+
+\bibitem[{StackOverflow community} 2018]{so-forin-undefined}
+\abntrefinfo{{StackOverflow community}}{{StackOverflow community}}{2018}
+{{StackOverflow community}. \emph{{Elements order in a “for (… in …)”
+  loop}}. 2018. Available at
+  \url{https://stackoverflow.com/questions/280713/elements-order-in-a-for-in-loop}.}
+
+\bibitem[{TC39}]{ecma262-conformance-suite}
+\abntrefinfo{{TC39}}{{TC39}}{a}
+{{TC39}. \emph{{Official ECMA262 Conformance Test Suite}}. Available at
+  \url{https://github.com/tc39/test262}.}
+
+\bibitem[{TC39}]{tc39-github}
+\abntrefinfo{{TC39}}{{TC39}}{b}
+{{TC39}. \emph{{TC39 GitHub repo}}. Available at \url{http://tc39.github.io/}.}
+
+\bibitem[{TC39} 2018]{ecmas262-array-sort}
+\abntrefinfo{{TC39}}{{TC39}}{2018a}
+{{TC39}. \emph{{Array sort}}. 2018. Available at
+  \url{https://tc39.github.io/ecma262/\#sec-array.prototype.sort}.}
+
+\bibitem[{TC39} 2018]{ecmas262-spec-repo}
+\abntrefinfo{{TC39}}{{TC39}}{2018b}
+{{TC39}. \emph{{ECMA262 repository}}. 2018. Available at
+  \url{https://tc39.github.io/ecma262/}.}
+
+\bibitem[{TC39} 2018]{ecmas262-spec}
+\abntrefinfo{{TC39}}{{TC39}}{2018c}
+{{TC39}. \emph{{ECMAScript 2017 Language Specification }}. 2018. Available at
+  \url{https://www.ecma-international.org/ecma-262/8.0/}.}
+
+\bibitem[{TC39} 2018]{ecmas262-getviewvalue}
+\abntrefinfo{{TC39}}{{TC39}}{2018d}
+{{TC39}. \emph{{TypeConversion, ToIndex function}}. 2018. Available at
+  \url{https://tc39.github.io/ecma262/\#sec-toindex}.}
+
+\bibitem[{The Chromium Project} 2018]{v8-severity}
+\abntrefinfo{{The Chromium Project}}{{The Chromium Project}}{2018}
+{{The Chromium Project}. \emph{Chromium Bug Labels}. 2018. Available at
+  \url{https://www.chromium.org/for-testers/bug-reporting-guidelines/chromium-bug-labels}.}
+
+\bibitem[{WebKit}]{jsc2018repo}
+\abntrefinfo{{WebKit}}{{WebKit}}{}
+{{WebKit}. \emph{{WebKit Project}}. Available at
+  \url{https://github.com/WebKit/webkit/tree/master/Source/JavaScriptCore}.}
+
+\bibitem[White e Cohen 1980]{white-cohen-tse1980}
+\abntrefinfo{White e Cohen}{WHITE; COHEN}{1980}
+{WHITE, L.~J.; COHEN, E.~I. A domain strategy for computer program testing.
+\emph{IEEE Transactions on Software Engineering}, SE-6, n.~3, p. 247--257, May
+  1980.
+ISSN 0098-5589.}
+
+\bibitem[Yang et al. 2011]{Yang-etal-pldi11}
+\abntrefinfo{Yang et al.}{YANG et al.}{2011a}
+{YANG, X.; CHEN, Y.; EIDE, E.; REGEHR, J. Finding and understanding bugs in c
+  compilers. In:  \emph{Proceedings of the 32Nd ACM SIGPLAN Conference on
+  Programming Language Design and Implementation}. New York, NY, USA: ACM,
+  2011.  (PLDI '11), p. 283--294.
+ISBN 978-1-4503-0663-8. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/1993498.1993532}.}
+
+\bibitem[Yang et al. 2011]{Yang:2011:FUB:1993498.1993532}
+\abntrefinfo{Yang et al.}{YANG et al.}{2011b}
+{YANG, X.; CHEN, Y.; EIDE, E.; REGEHR, J. Finding and understanding bugs in c
+  compilers. In:  \emph{Proceedings of the 32Nd ACM SIGPLAN Conference on
+  Programming Language Design and Implementation}. New York, NY, USA: ACM,
+  2011.  (PLDI '11), p. 283--294.
+ISBN 978-1-4503-0663-8. Dispon{\'\i}vel em:
+  \url{http://doi.acm.org/10.1145/1993498.1993532}.}
+
+\bibitem[Zhang e Kim 2017]{Zhang:2017:ATD:3097368.3097448}
+\abntrefinfo{Zhang e Kim}{ZHANG; KIM}{2017}
+{ZHANG, T.; KIM, M. Automated transplantation and differential testing for
+  clones. In:  \emph{Proceedings of the 39th International Conference on
+  Software Engineering}. Piscataway, NJ, USA: IEEE Press, 2017.  (ICSE '17), p.
+  665--676.
+ISBN 978-1-5386-3868-2. Dispon{\'\i}vel em:
+  \url{https://doi.org/10.1109/ICSE.2017.67}.}
+
+\end{thebibliography}

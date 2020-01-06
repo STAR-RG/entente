@@ -1,0 +1,192 @@
+Reviewer #1: 
+This paper presents an empirical study on the use of test reuse,
+fuzzy generators and differential testing to expose bugs in popular JS engines.
+This paper is well written and presents interesting experiments that exposed confirmed JS engine bugs.
+The experiments are well designed and clearly explained.
+
+>>> My main criticism of this paper is the concept of "diversity" that the authors used to frame this work.
+As stated in the paper this work has the objective to evaluate the importance of diversity to find functional bugs.
+
+>>> Claiming that test transplantation and cross-engine differential testing are "diversity-aware techniques" Why is that?
+Test transplantation simply re-uses tests for one engine to test another engine, it does not make sure that the tests are different.
+It just passively re-use tests without promoting diversity.
+Differential testing compares the results of executing the same tests on different engines, it is not a diversity aware technique.
+
+>>> As such, the explanation in the introduction of why test transplantation and differential testing are diversity-aware is a bit artificial.
+Moreover, the authors at page 2 stated that "this paper explores diversity of implementations and diversity of sources of test cases as opposed to diversity of the test cases themselves."
+I think this creates an overload and confusion of the term diversity.
+
+>>> Framing the work on this concept of diversity is artificial and distracts the reader from the 
+main objective of this paper: showing that test transplantation and differential testing can be 
+useful in exposing bugs in JS engines.
+
+The technical contribution of this paper is not well stated,
+>>> what are the challenges of applying test transplantation, fuzzy and differential testing for JS engines?
+
+Since the input of a JS engine is a JS program, why we need test transplantation or fuzzy generators?
+>>> Why we cannot rely on a corpus of JS programs as tests?
+
+Please, find below my detailed comments on how to improve this work.
+
+>>> Page 3 line 24, please explain this sentence: "One possible reason is that it is still not practical to fully automate the technique."
+why is not practical, what are the challenges of differential testing in this context?
+
+>>> Page 4, some claiming in the key findings are not justified.
+Did you check if the tests implemented for different JS engines are really different?
+How to measure test diversity across different implementations?
+Again the concept of diversity is not clear in this paper.
+
+>>> Page 6 line 40, why discard tests that require external libraries?
+
+>>> Page 7 Section 4.1. Indeed, issue trackers contain many tests, 
+but usually, these tests are added to the test suite for regression. 
+Did you check if the tests extracted from the issue tracker were duplicates with the one in the test suite?
+
+>>> Page 7 Lines 24 to 41. The NN to recognise ``code'' and ``non code'' is not well-motivated.
+Why don't just assume that all file is "code"? Since for differential testing, 
+you will exclude those tests that fail on all engines, in this case, 
+invalid inputs will be automatically ignored.
+Is this approach motivated? 
+Is it really needed?
+Or all "non code" files will make all engine fails?
+Please provide empirical evidence that this extra step is needed.
+
+>>> Page 7 It is also unclear why you use word2vec. 
+Word2vec is used to measure the semantic similarity between two words.
+Word2vec analyzes a set of documents and trains a model that embeds words into a vector space,
+where words with similar semantics are close in the space. Why you need semantic similarity?
+
+>>> Page 8 You mentioned that differential testing is challenging because a 
+human need to inspect the differences? How you addressed the challenge? Do you address the challenge?
+
+* We inspect and discuss all of the files results.
+
+>>> Page 9 I don't understand why you didn't mine JS programs from github,
+these would have yielded to a larger set of tests.
+
+* On Github, there are a lot of JavaScript projects. However, the most 
+found are the frontend libraries and nodeJS modules. The tests supported by 
+the engines shouldn't use any nodejs library (Jest, Mocha, Karma, Jasmine and others
+are invalid). Finally, simple JS files are valid, but without assertion 
+we could not check for issues.
+
+>>> Page 11 It is unclear why you ran the suite once a day for seven consecutive days
+and averaged the passing ratios. Why once a day? and why you do this?
+For detecting and avoid flakiness tests? Why you didn't run the tests 7 times the same day?
+
+* pra mim, removeria essa tabela. Não vejo necessidade, a menos que fosse 1 vez na semana,
+durante 1 mês por exemplo.
+
+>>> Page 14 how did you decided FP and TP?
+One author or multiple authors of this paper participated in the labelling?
+* The authors inspected all those results to classify as a true bug or not.
+
+>>> Page 21 Given lesson 3) why you motivated the paper saying that differential 
+testing is challenging? What are the technical challenges entailed by 
+differential test JS engines that this paper address?
+
+========================================================
+Reviewer #2: This paper proposes two techniques for finding bugs in JavaScript engines:
+ 1. Transplanting test suites from one JavaScript engine from another
+ 2. Combining fuzzing testing and differential testing
+The authors mined test files from different engines and conducted empirical studies on four major JavaScript engines (i.e., JavaScriptCore, V8, ChakraCore, and SpiderMonkey). The paper claims to get dozens of bugs confirmed and fixed.
+
+Overall, the authors did non-trivial engineering work, conducted an interesting experiment,
+and made a good contribution to the open-source community by reporting those bugs.
+
+>>> However, as a scientific study, the key findings listed in Section 1 are not very novel:
+1. It is not surprising to find some bugs if running a different set of test suites (with thousands of test cases) from a different engine.
+2. Although the ECMAScript is very well-defined (most parts of the specification are pseudocode),
+it is also well-known that the specification does not define everything and that JavaScript engines
+vary in those undefined behaviors. Therefore, the results obtained in RQ1 are not novel.
+3. "Differential testing is feasible on real, complex, widely used pieces of software."
+This is also not a novel finding. People have been using differential testing 
+on C/C++ compilers and JVMs. The following paper is one example:
+Coverage-Directed Differential Testing of JVM Implementations [PLDI'16]
+
+I think a more impactful contribution would be to categorize all those extracted 
+test files and to release an open-source project that automates the testing techniques
+proposed in this paper on any JavaScript engine binary (e.g., Hermes, JerryScript, or Duktape, etc.).
+
+In Section 3, the paper claimed to have tested the Microsoft Chakra engine.
+However, I believe the authors meant the ChakraCore engine,
+which is the open-sourced variation of the Chakra engine.
+Moreover, Microsoft announced a year ago that the Edge browser will be based on Chromium.
+I believe ChakraCore is not being actively developed anymore.
+I understand that the experiment might be done a while ago.
+The paper should clarify the version number of JavaScript engines under test
+and document when the bug reports got confirmed.
+
+Facebook released Hermes, which is a JavaScript engine designed for ReactNative and mobile devices.
+It would be interesting to see how many bugs can be found on Hermes.
+
+Section 4
+The structure of this section could be improved. The authors should probably put the description of test cases from all engines in one subsection, and description of test files mined from issue tracker in a parallel subsection.
+
+"We did not consider tests from the Chakra repository because they dependent on non-portable objects".
+Please explain in detail and give an example of the non-portable objects.
+
+"This classifier is publicly available from our website as a separate component".
+Not sure which website the author is referring to. It would be great to provide a permanent link.
+
+Section 4.1
+The paper also mentioned that 1,240 JavaScript files are crawled from the issue tracker.
+Those files are used as test drivers in the experiment.
+How many bugs come from the issue tracker?
+If a bug is revealed by a file uploaded to the issue tracker,
+why the JavaScript engine maintainers didn't fix them in the first place?
+
+Section 5.1
+Is the test case in Figure 3 crawled from ChakraCore's codebase?
+Or is it revealed after a fuzzer mutates the argument of getView?
+
+Section 5.2
+How effective is the clusterization?
+
+Section 5.3
+The selection of fuzzer does not sound convincing to me.
+The authors mentioned that some fuzzers (e.g., AFL)
+are not used in the experiments because they produce test input that is not syntactically valid.
+However, they chose radamsa, which is a general-purpose fuzzer that may also produce
+syntactically invalid inputs.
+
+Section 6.1
+The ECMAScript conformance statistics of JavaScript engines are 
+already publicly available on the Internet from multiple sources.
+Therefore, the findings in Section 6.1 are not novel.
+Moreover, JavaScript engines are evolving quickly, the manuscript should report
+date and engine versions associated with those conformance numbers.
+
+Section 6.2
+Since the authors mined test files from Duktape, JerryScript, JSI, and Tiny-js.
+It seems natural to run test transplantation on these engines, which may reveal more bugs.
+It would be good to explain why the authors did not do so.
+
+Since the manuscript is suggesting that test transplantation is effective for testing complex software.
+It would be great to quantify the manual work required to transplant tests (written in JavaScript)
+from one engine to another. For example, how many non-portable harness functions 
+are mocked for each transplantation?
+
+Section 6.3
+Please provide a more detailed description of the configuration of the
+two black-box mutation fuzzers. How many valid and invalid inputs are generated by the fuzzers?
+The description should also report the time spent in fuzzing and the number of machines
+(including hardware configuration) used for differential testing.
+
+In the first row of Table 7, the total number of "hi" warnings of JSC, V8, ChakraCore, and SpiderMonkey is only 626, while the "+1" column is 628, which is more than the total number of the previous columns combined. Please double-check the data.
+
+Section 7 looks more like a "Case Study" section instead of a "Discussion" section.
+It would be interesting to analyze why test transplantation could reveal some bugs. Does each engine focus on testing different aspects? What kind of tests are more likely to expose bugs?
+
+
+Some minor issues:
+Please clean up or use a consistent format for the following text:
+"[Cleansing]" on line 40 of page 6.
+"[Test Harness]" on line 46-47 of page 6.
+"[Exploratory Phase.]" on line 23, page 16
+"[Non-Exploratory Phase.]" on line 46-47, page 16
+
+Ecmascript 6 -> "ECMAScript 6"
+"well tested" -> "well-tested"
+
+The references use too many external links to websites, which may not be available in the next few years or decades.

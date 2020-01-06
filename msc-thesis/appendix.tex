@@ -1,0 +1,24 @@
+
+
+% ----------------------
+% força para que não exiba subtítulos em apêndices no sumário
+% -----------------------
+
+\begin{apendicesenv}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{1}}
+\makeatletter
+\addtocontents{toc}{%
+  \begingroup
+  \let\protect\l@chapter\protect\l@section
+  \let\protect\l@section\protect\l@subsection
+}
+\makeatother
+% Imprime uma página indicando o início dos apêndices
+% \partapendices
+
+% \input{appendix/JAVA/dde}
+\addtocontents{toc}{\endgroup}
+\end{apendicesenv}
+
+
+

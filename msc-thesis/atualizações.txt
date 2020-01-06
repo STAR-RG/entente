@@ -1,0 +1,168 @@
+
+%----------------------------------------------------
+
+02/07/2019 - foram resolvidos os problemas reportado por Filipe, segue:
+
+- o nome da autoria deve estar em negrito na capa e folha de rosto
+- a dedicatória deve ser alinhado ao fundo e o texto pode se alinhado a direita ou a esquerda.
+- epígrafe deve ser alinhada ao fundo, também pode ser alinhado a direita ou esquerda. Se usar citação, deve está na lista de referências e está no formato ABNT p/ citação de referência.
+- o resumo deve ter apenas 1 parágrafo e com recuo de texto na primeira linha. Não pode haver quebra de linha.
+- a lista de figuras deve ter o nome "Lista de Figuras", antes estava lista de ilustrações.
+- não é mais permitido haver epígrafe dentro da parte textual. Em outras palavras, não pode haver aquele texto no início de cada parágrafo.
+
+[Procuramos a biblioteca do CCEN e lá confirmamos as alterações e não há outras a serem feitas]
+- também foi feita outra ata de defesa, no modelo da atual que é fornecida pela secretaria da pós-graduação 
+
+Arquivos alterados:
+
+-p/ os ajustes na capa, folha de rosto
+abntex2/abntex2-cin.ufpe.sty
+-p/ os ajustes na lista de figuras
+abntex2/abntex2.cls
+-p/ os ajustes da nova ata de defesa
+custom.tex
+-p/ o novo modelo de ata de defesa
+others/ata_defesa.tex
+-p/ os ajustes em epigrafe
+others/epigrafe.tex
+-p/ os ajuste na dedicatória
+others/dedicatoria.tex
+-p/ retirar epigrafe da introdução
+-chapter/introduction.tex
+
+os ajustes nos resumos precisam ser feitos pelo autor no ato da escrita.
+
+%----------------------------------------------------
+
+
+28/06/2019 - foram resolvidos os problemas reportado por Filipe, segue:
+CAPA
+
+- o nome da autoria deve estar em negrito na capa e folha de rosto
+- a dedicatória deve ser alinhado ao fundo e o texto pode se alinhado a direita ou a esquerda.
+
+DEDICATÓRIA
+
+- a dedicatória deve ficar ou na parte superior ou na parte inferior da página e deve ser alinhada à esquerda;
+
+
+EPÍGRAFE
+
+- a epígrafe é um elemento opcional, porém é uma citação de algo obrigatoriamente relacionado com o trabalho e se colocada no trabalho deve ser apresentada conforme a NBR 10520 de citações e a obra deve obrigatoriamente constar nas referências. 
+
+ NBR 10520:
+
+ 5.2 As citações diretas, no texto, de até três linhas, devem estar contidas entre aspas duplas. As aspas simples são utilizadas para indicar citação no interior da citação.
+
+Exemplos: 
+
+“Não se mova, faça de conta que está morta.” (CLARAC, 1985, p. 72).
+
+ 5.3 As citações diretas, no texto, com mais de três linhas, devem ser destacadas com recuo de 4 cm da margem esquerda, com letra menor que a do texto utilizado e sem as aspas. No caso de documentos datilografados, deve-se observar apenas o recuo.
+
+
+Exemplo:                          A teleconferência permite ao indivíduo participar de um encontro nacional ou regional sem a  
+                                          necessidade de deixar seu local de origem. Tipos comuns de teleconferência incluem o uso            
+                                          da televisão, telefone, e computador. Através de áudio-conferência, utilizando a companhia    
+                                          local de telefone, um sinal de áudio pode ser emitido em um salão de qualquer dimensão.      
+                                         (NICHOLS, 1993, p. 181).
+
+
+RESUMO
+
+- tanto o resumo como o 'abstract' devem ter um recuo inicial no texto (parágrafo);
+
+- tanto o resumo como o 'abstract' devem ter o texto corrido, justificado, sem tópicos;
+
+%----------------------------------------------------
+
+15/06/2019 - problema reportado por Ronierison Maciel em relação a contagem da lista de tabelas. O contador estava começando a partir do 2. Exemplo. Tabela 2, Tabela 3, em diante.
+
+17/05/2019 - incluído o comando \setcounter{table}{0} p/ reiniciar a contagem da lista de tabelas.
+
+%----------------------------------------------------
+
+25/08/2017 - criado documento para registro das atualizações
+25/08/2017 - corrigido o problema com acrônimos. Apenas o arquivo /main.tex foi modificado.
+foi substituído 
+\makeglossaries por \makenoidxglossaries
+e
+\printglossary por \printnoidxglossary
+
+http://latex.org/know-how/latex/55-latex-general/263-glossaries-nomenclature-lists-of-symbols-and-acronyms
+http://mirrors.concertpass.com/tex-archive/macros/latex/contrib/glossaries/glossariesbegin.pdf
+31/08/2017 - ajustes na contra capa
+foi modificado o arquivo abntex2/abntex2-cin-ufpe.sty
+
+%----------------------------------------------------
+28/06/2018 início dos ajustes
+
+Novos ajustes para adequação aos requisitos da biblioteca
+* foram ajustados os tamanhos dos textos de todo o documento
+** sofreram ajustes os elementos pré-textuais, textuais e pós-textuais.
+* no sumário, aparece até o quinto nível de subtítulos
+** foram ajustados os textos de entradas no sumário para ficarem iguais ao escrito no documento * inclusão de epigrafe em capítulo
+* em apêndices, a recomendação é não utilizar a tag \section{}, use apenas o recurso de negrito para destaque, pois ainda não existe um consenso em relação a exibição da numeração no sumário
+* 
+
+%----------------------------------------------------
+foram modificados os arquivos
+
+abntex2/abntex2-cin-ufpe.sty
+abntex2/abntex2.sty
+main.text
+
+para atualizar sua versão, basta COPIAR e COLAR esses arquivos. Se algum desses arquivos foi modificado por você, sugiro que faça um backup dos arquivos antes de fazer a atualização.
+
+%----------------------------------------------------
+28/06/2018 fim dos ajustes
+%----------------------------------------------------
+
+
+
+%----------------------------------------------------
+06/07/2018 início dos ajustes
+
+Novos ajustes para adequação aos requisitos da biblioteca
+* ajuste na folha de rosto: foi removido o nome da ufpe e posicionado o nome do orientador em outro local
+* removido o título dedicatória.
+* colocado o "tab" no resumo. A norma exige que o resumo tenha entre 150 e 500 palavras em texto único, ou seja, tudo em apenas um (1) parágrafo.
+* na lisa de abreviaturas e siglas, fiz o alinhamento de todos os itens, algo parecido com o sumário.
+* coloquei novamente a numeração em todas as páginas, após a parte pré-textual.
+* em relação aos apêndices: não existem subtítulos. Caso seja preciso, criar outro apêndice.
+* logo, no sumário não deve aparecer subtítulos.
+* arquivos renomeados:
+others/acronym.tex -> acronimos.tex
+others/dedication.text -> dedicatoria.tex
+others/acknowledgements.tex -> agradecimentos.tex
+others/epigraph.tex -> epigrafe.tex
+others/abstract.text -> resumo.tex
+* não irei modificar os nomes de todos os arquivos e diretórios agora, farei de maneira mais gradual.
+%----------------------------------------------------
+foi modificado o conteúdo dos arquivos
+
+abntex2/abntex2-cin-ufpe.sty
+abntex2/abntex2.sty
+main.text
+
+para atualizar sua versão, basta COPIAR e COLAR esses arquivos. Se algum desses arquivos foi modificado por você, sugiro que faça um backup dos arquivos antes de fazer a atualização. Siga as orientações para renomear os arquivos.
+
+%----------------------------------------------------
+06/07/2018 fim dos ajustes
+%----------------------------------------------------
+
+
+%----------------------------------------------------
+09/10/2018 início dos ajustes
+%----------------------------------------------------
+Nova solicitação da biblioteca em relação a folha de rosto
+e cabeçalho das páginas.
+
+Na folha de rosto a orientação é em relação ao título. caso exista ":" no título, deve ser deixado em negrito o que vem antes dos dois pontos e o que vem depois fica em texto normal.
+Na folha de rosto também foi solicitado incluir "área de concentração"
+Nas páginas a palavra capítulo, número do capítulo e título foram removidas, ficando apenas a numeração.
+
+%----------------------------------------------------
+09/10/2018 fim dos ajustes
+%----------------------------------------------------
+

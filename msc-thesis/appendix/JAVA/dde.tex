@@ -1,0 +1,98 @@
+% % ----------------------------------------------------------
+\chapter{Código Java do DDE2}
+\label{sec:dde2java}
+% % ----------------------------------------------------------
+
+
+
+
+
+
+\begin{lstlisting}[caption={Código em linguagem de programação Java do DDE2},label=dde2java]
+
+/*
+ *    DDE.java
+ *    Copyright (C) 2015 Maciel, Santos, Barros 
+ *    @authors Bruno I. F. Maciel (bifm@cin.ufpe.br)
+ *    			Silas Garrido T. de Carvalho Santos (sgtcs@cin.ufpe.br)
+ *             	Roberto S. M. Barros (roberto@cin.ufpe.br) 
+ *             
+ *    @version $Version: 1 $
+ *
+ *    This program is free software; you can redistribute it and/or modify
+ *    it under the terms of the GNU General Public License as published by
+ *    the Free Software Foundation; either version 3 of the License, or
+ *    (at your option) any later version.
+ *
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU General Public License for more details.
+ *
+ *    You should have received a copy of the GNU General Public License
+ *    along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Drift Detection Ensemble (DDE),
+ * published as:
+ * <p> Bruno I. F. Maciel, Silas Garrido T. C. Santos and Roberto S. M. Barros: 
+ *     A Lightweight Concept Drift Detection Ensemble. 
+ *     27th IEEE International Conference on Tools with Artificial Intelligence 
+ *     (ICTAI) Vietri sul Mare, Italy, November 9-11, 2015</p>
+ */
+
+package moa.classifiers.drift;
+
+import moa.classifiers.meta.WEKAClassifier;
+import java.util.LinkedList;
+import java.util.List;
+import moa.classifiers.AbstractClassifier;
+import moa.classifiers.Classifier;
+import moa.classifiers.core.driftdetection.ChangeDetector;
+import moa.core.Measurement;
+import moa.options.ClassOption;
+import moa.options.IntOption;
+import weka.core.Instance;
+import weka.core.Utils;
+
+public class DDE2 extends AbstractClassifier  {
+    private static final long serialVersionUID = 1L;
+	
+   
+    
+    public double[] getVotesForInstance(Instance inst) {
+        return this.classifier.getVotesForInstance(inst);
+    }
+
+    @Override
+    public boolean isRandomizable() {
+        return true;
+    }
+
+    @Override
+    public void getModelDescription(StringBuilder out, int indent) {
+        ((AbstractClassifier) this.classifier).getModelDescription(out, indent);
+    }
+
+    @Override
+    protected Measurement[] getModelMeasurementsImpl() {
+        List<Measurement> measurementList = new LinkedList<Measurement>();
+        measurementList.add(new Measurement("Change detected", this.changeDetected));
+        measurementList.add(new Measurement("Warning detected", this.warningDetected));
+        Measurement[] modelMeasurements = ((AbstractClassifier) this.classifier).getModelMeasurements();
+        if (modelMeasurements != null) {
+            for (Measurement measurement : modelMeasurements) {
+                measurementList.add(measurement);
+            }
+        }
+        this.changeDetected = 0;
+        this.warningDetected = 0;
+        return measurementList.toArray(new Measurement[measurementList.size()]);
+    }}
+
+
+
+\end{lstlisting}
+
+
