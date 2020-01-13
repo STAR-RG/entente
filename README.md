@@ -23,3 +23,6 @@
 2. Build the image (`docker build -t jsfuzz .`)
 3. Run the container (`docker run -t --rm -v /path/to/jsfuzz/repo:/jsfuzz jsfuzz`
 4. See the output + logs
+
+### Data
+https://drive.google.com/open?id=1YHXatZ5KO19yHxg73FN32Xtn5ayEXw7F
