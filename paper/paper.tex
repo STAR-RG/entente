@@ -61,7 +61,8 @@
 
 \begin{document}
 
-\title{Leveraging Diversity to Find Bugs in JavaScript Engines}
+%\title{Leveraging Diversity to Find Bugs in JavaScript Engines}
+\title{New title}
 %\titlerunning{Leveraging Diversity to Find Bugs in JavaScript Engines}        % if too long for running head
 
 \author{Igor Lima \and Breno Miranda\footnotemark \and Marcelo d'Amorim}
@@ -87,7 +88,8 @@ Marcelo d'Amorim \and \email{damorim@cin.ufpe.br} \\
 
 \begin{abstract}
   \input{abstract}
-  \keywords{Diversity \and Test Transplantation \and Differential Testing \and JavaScript}
+  %\keywords{Diversity \and Test Transplantation \and Differential Testing \and JavaScript}
+  \keywords{Test Transplantation \and Differential Testing \and JavaScript}
 \end{abstract}
 
 
@@ -118,25 +120,24 @@ most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
 %% WHAT WE DID
-This work, which is empirical in nature, reports on a study to evaluate the importance of diversity
-to find bugs in JavaScript engines; it covers two complementary
-diversity-aware testing techniques.
+This work, which is empirical in nature, reports on a study to evaluate
+the ability of two testing techniques to expose bugs in JavaScript engines.
 
 %\vspace{-1ex}
 %noitemsep,
 \begin{itemize}[topsep=0pt,parsep=0pt,partopsep=2pt,labelwidth=0cm,align=left,itemindent=-0.25cm]
-\item \emph{Test transplantation} leverages diversity of test
-  cases. This technique evaluates the effect of running test files
+\item \emph{Test transplantation}. 
+  This technique evaluates the effect of running test files
   written for a given engine in other engines. The intuition is that
   developers design test cases with different objectives in mind. As
   such, replaying these tests in different engines could reveal
   unanticipated problems.
 
-\item \emph{Cross-engine differential testing} leverages diversity of
-  engine implementations. This technique fuzzes existing test
+\item \emph{Cross-engine differential testing}. 
+  This technique fuzzes existing test
   inputs~\cite{fuzz-testing-history} and then compares the output
-  produced by different engines.\Comment{ using a differential
-    oracle.} The intuition is that interesting inputs can be created
+  produced by different engines using a differential
+  oracle. The intuition is that interesting inputs can be created
   from existing inputs and multiple engines can be used to address the
   lack of oracles.
 \end{itemize}
@@ -150,14 +151,15 @@ the impact of false positives on their practicality.
 %% It automates test generation in scenarios where multiple
 %% implementations of a system exist. DT leverages diversity across
 %% system's implementations to detect anomalous behavior.
-\emph{Related Ideas.}~The idea of test set diversity dates back to the
-eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. In contrast
-to prior work on this topic, this paper explores diversity of
-implementations and diversity of sources of test cases as opposed to
-diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
-elaborates related work on this topic. Differential
-Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
-contexts to find
+%\emph{Related Ideas.}~The idea of test set diversity dates back to the
+%eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. In contrast
+%to prior work on this topic, this paper explores diversity of
+%implementations and diversity of sources of test cases as opposed to
+%diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
+%elaborates related work on this topic.
+%
+\emph{Related Ideas.}~Differential Testing~\cite{Brumley-etal-ss07} (DT) 
+has been applied in a variety of contexts to find
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
 It has shown to be specially practical in scenarios where the
 observation of difference gives a strong signal of a real problem. For
@@ -177,7 +179,7 @@ practical to fully automate the technique. In contrast to other
 applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
-~\ref{tab:false-positives}). To sum up, variations of these ideas have
+~\ref{tab:false-positives}). Variations of these ideas have
 been explored before in different contexts.  The goal of the paper is
 to assess the ability of the techniques aforementioned in finding bugs
 on \javascript\ engines.
@@ -254,18 +256,20 @@ findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
 \emph{Contributions.}~The most important contribution of this work is empirical: 
-we provide a comprehensive study analyzing the effectiveness of diversity-aware
-techniques to find functional bugs in popular \javascript\ engines.
+we provide a comprehensive study analyzing the effectiveness of 
+test transplantation and differential testing
+in revealing functional bugs in popular \javascript\ engines.
 Additional contributions are:
 1)~A number of bugs found and fixed. 
 We reported a total of \totalBugsReported{} bugs. 
 Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed. 
-2)~An infrastructure for diversity-aware testing.
+2)~An infrastructure for performing test transplantation and differential testing.
 The scripts to run the experiments will be available upon request. 
 The data is publicly available \dataRepo{}.
 
 \vspace{1ex} To summarize, this paper provides initial, yet strong evidence
-that exploring diversity should be encouraged to find functional bugs
+that exploring test transplantation and differential testing
+should be encouraged to find functional bugs
 in JavaScript engines.
 
 \section{JavaScript}
@@ -869,8 +873,9 @@ tree~\cite{grieco2016quickfuzz} with trees created anew.
 \section{Results}
 \label{sec:results}
 
-The goal of this paper is to assess ability of techniques that
-leverage diversity to find functional bugs
+The goal of this paper is to assess ability of 
+test transplantation and differential testing
+to find functional bugs
 in \javascript\ engines. Based on that, we pose three questions:
 \begin{description}[leftmargin=.5in]
 \item[RQ1.] How conformant are the engines to the Test262 suite?
@@ -890,7 +895,7 @@ scenarios not covered by a different engine. The third question
 evaluates the effectiveness of cross-engine differential testing to
 find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
 rationale for this question is that fuzzing inputs may explore
-scenarios not well tested by at least one of the engines.
+scenarios not well-tested by at least one of the engines.
 
 \subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
@@ -1188,7 +1193,7 @@ that are syntactically invalid.
 %% finding would be important to reduce inspection cost and guide future
 %% developments of this approach. 
 
-\vspace{0.5ex} \lbrack{}Exploratory Phase.\rbrack{} For the first
+\vspace{0.5ex} \lbrack{}Exploratory Phase\rbrack{} For the first
 three months of the study, our inspection process was exploratory.  In
 this phase, we wanted to learn whether or not black-box fuzzers could
 reveal real bugs and how effective was the \hi{}-\lo\ warning
@@ -1218,7 +1223,7 @@ was filed only after one of the authors reviewed the diagnosis. Each
 student found at least one bug using this methodology.
 
 \vspace{0.5ex}
-\lbrack{}Non-Exploratory Phase.\rbrack{} Results obtained in the
+\lbrack{}Non-Exploratory Phase\rbrack{} Results obtained in the
 exploratory phase confirmed our expectations that most of the bugs
 found during the initial period of investigation were related to
 \hi\ warnings. For that reason, we changed our inspection
@@ -1629,26 +1634,26 @@ industrial project.
 \section{Related Work}
 \label{sec:related-work}
 
-\subsection{\label{sec:related:diversity-testing}Diversity in Testing}
-The idea of test set diversity dates back to the
-eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. The
-assumption behind test set diversity is that faults often spread
-contiguously in the input domain. Consequently, it should be
-beneficial to partition the input domain and explore it more evenly as
-to find bugs faster. Later in the nineties, Chen and
-Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
-the continuity assumption. They found that faults, most often,
-manifest themselves in regular patterns across the input
-domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
-observations led researchers to investigate generalizations of the
-approach to non-numerical data types and strategies to explore the
-input (or output) space to solve different problems in Software
-Engineering (\eg{}, test input generation and test
-selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
-paper explores diversity of sources of test cases and diversity of
-engine implementations. We remain to investigate the diversity of test
-cases themselves. In principle, that could help reduce the number of
-alarms to inspect, for example.
+%\subsection{\label{sec:related:diversity-testing}Diversity in Testing}
+%The idea of test set diversity dates back to the
+%eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. The
+%assumption behind test set diversity is that faults often spread
+%contiguously in the input domain. Consequently, it should be
+%beneficial to partition the input domain and explore it more evenly as
+%to find bugs faster. Later in the nineties, Chen and
+%Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
+%the continuity assumption. They found that faults, most often,
+%manifest themselves in regular patterns across the input
+%domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
+%observations led researchers to investigate generalizations of the
+%approach to non-numerical data types and strategies to explore the
+%input (or output) space to solve different problems in Software
+%Engineering (\eg{}, test input generation and test
+%selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
+%paper explores diversity of sources of test cases and diversity of
+%engine implementations. We remain to investigate the diversity of test
+%cases themselves. In principle, that could help reduce the number of
+%alarms to inspect, for example.
 
 \subsection{Differential Testing}
 Several different applications of differential testing have been
@@ -1755,12 +1760,11 @@ Implementing correct engines is challenging because the specification
 is intentionally incomplete and evolves frequently. Finding bugs in
 \js\ engines is challenging for similar reasons.
 
-This paper reports on a study to evaluate two diversity-aware
+This paper reports on a study to evaluate two
 techniques for finding bugs in \js{}--test transplantation and
-cross-engine differential testing. The first technique explores
-diversity of test sources; it runs the test suite of one given engine
-in another engine. The second technique explores diversity of
-implementations; it fuzzes existing inputs and then compares the
+cross-engine differential testing. The first technique 
+runs the test suite of one given engine in another engine. 
+The second technique fuzzes existing inputs and then compares the
 output produced by different engines with a differential oracle.
 
 We found that both techniques were very effective at finding bugs in
@@ -1768,8 +1772,8 @@ We found that both techniques were very effective at finding bugs in
 study. Of which, \totalBugsConfirmed\ were confirmed by developers and
 \totalBugsFixed\ were fixed. Although more work is necessary to reduce
 cost of manual analysis, we found that our results provide strong
-evidence that exploring diversity should be encouraged to find
-functional bugs in JavaScript engines.
+evidence that exploring test transplantation and differential testing 
+should be encouraged to find functional bugs in JavaScript engines.
 
 In the near future, we plan to explore techniques to prioritize the
 warnings reported by these techniques and to continue involving
