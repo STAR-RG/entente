@@ -2,7 +2,7 @@
 \documentclass[smallextended]{svjour3}
 %\biboptions{numbers,sort&compress}
 %\documentclass[sigconf,review, anonymous]{acmart}
-%\hyphenation{on-tol-o-gy ad-di-tion-al in-fra-struc-ture an-a-lyze a-nal-y-sis} 
+%\hyphenation{on-tol-o-gy ad-di-tion-al in-fra-struc-ture an-a-lyze a-nal-y-sis}
 %\input{packages}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,6 +29,7 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{tikz}
+\usepackage{xspace}
 \usetikzlibrary{matrix,fit,shapes,calc,positioning,shadows,arrows,shapes,backgrounds,decorations.markings,fadings}
 \usepackage{listings}
 \usepackage[caption=false, font=footnotesize]{subfig}
@@ -102,7 +103,7 @@ for the language encourages constant improvements in its specification~\cite{ecm
 lead to sensible changes in engine implementations~\cite{kangax}. Even small
 changes can have high practical impact. For example, in October 2014 a
 new attribute added to Array objects resulted in the MS Outlook
-Calendar web app, which is built in \js{}, to fail under 
+Calendar web app, which is built in \js{}, to fail under
 Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
 
 Finding bugs in \js\ engines is an important problem given the range
@@ -196,25 +197,27 @@ on \javascript\ engines.
 %% analytical whereas our main contribution is empirical--
 
 \begin{figure}[t]
-%  \vspace{-2ex}  
+%  \vspace{-2ex}
   \centering
-  \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
+  \subfloat[\label{fig:stacked-engine}Bug reports per engine.\Gustavo{Não esquecer de atualizar as figuras.
+  }]{
     \includegraphics[trim=0 190 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
     \vspace{-5ex}
   }\\
   \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
     \includegraphics[trim=0 180 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
-    \vspace{-5ex}        
+    \vspace{-5ex}
   }
   \caption{\label{fig:summary}Summary of bug reports.}
   \vspace{-3ex}
 \end{figure}
 
 \sloppy \emph{Results.}~We considered the following engines--\chakra{}
-(Microsoft), JavaScriptCore (Apple), \veight{} (Google), and
-\smonkey{} (Mozilla). Figure~\ref{fig:summary} shows the breakdown of
-bug reports per engine (\ref{fig:stacked-engine}) and per technique
-(\ref{fig:stacked-technique}). Each stacked bar breaks down the bugs
+(Microsoft), JavaScriptCore (Apple), \veight{} (Google),
+\smonkey{} (Mozilla), and \hermes (Facebook). Figure~\ref{fig:summary} shows the breakdown of bug reports per engine (\ref{fig:stacked-engine}) and per technique
+(\ref{fig:stacked-technique}).
+\Fix{Jefferson, atualize a figura!}
+Each stacked bar breaks down the bugs
 per status (\eg{}, ``1-New''). The prefix number indicates the
 ordering that status labels are assigned. Several of these
 reports have the label ``3-Fixed'', indicating that bug fixes have
@@ -236,7 +239,7 @@ confirmed or fixed. Most bugs we found are of moderate severity.
 
 %% Considering cost per bug found, we found that test
 %% transplantation, compared to differential testing, demanded less
-%% effort from the developers who inspected the alarms. 
+%% effort from the developers who inspected the alarms.
 
 %% All in all, these simple techniques
 %% seem promising to improve reliability of engines that continuously
@@ -253,15 +256,15 @@ software. Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
-\emph{Contributions.}~The most important contribution of this work is empirical: 
+\emph{Contributions.}~The most important contribution of this work is empirical:
 we provide a comprehensive study analyzing the effectiveness of diversity-aware
 techniques to find functional bugs in popular \javascript\ engines.
 Additional contributions are:
-1)~A number of bugs found and fixed. 
-We reported a total of \totalBugsReported{} bugs. 
-Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed. 
+1)~A number of bugs found and fixed.
+We reported a total of \totalBugsReported{} bugs.
+Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed.
 2)~An infrastructure for diversity-aware testing.
-The scripts to run the experiments will be available upon request. 
+The scripts to run the experiments will be available upon request.
 The data is publicly available \dataRepo{}.
 
 \vspace{1ex} To summarize, this paper provides initial, yet strong evidence
@@ -337,7 +340,7 @@ mentioned, all those aspects make testing \js\ engines challenging.
 
 \section{Engines Studied}
 \label{sec:methodology}
-\label{sec:methodology:engines}~We selected 
+\label{sec:methodology:engines}~We selected
 JS engines according to the following criteria: 1) Released latest
 version after Jan 1, 2018, 2) Contains more than 1K stars on GitHub,
 and 3) Uses a public issue tracker. We looked for highly-maintained
@@ -371,7 +374,7 @@ reporting old and already-fixed bugs to developers.
     Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009\\
     Mozilla & \smonkey{} & \cite{spidermonkey2018repo} &
     \multicolumn{1}{c}{1100+} & Mar 1996\\
-   \bottomrule     
+   \bottomrule
   \end{tabular}
 \end{table}
 
@@ -396,10 +399,10 @@ each engine. Column ``pass-in-par.''  shows the number of test cases
 that pass in their parent engine. We discarded tests that fail in
 their parent engine as we could not reliably indicate the reason for
 the failure, so we assumed the test could be broken. We removed \testsThatFail{}
-test cases that fail for that reason--\testsThatFailJSC{} tests from \jsc{} and 
-\testsThatFailSM{} tests from \smonkey. Column ``type-in-all'' 
-shows the number of test cases whose executions do not throw 
-dynamic type errors in any of the engines because of an undefined variable or property. 
+test cases that fail for that reason--\testsThatFailJSC{} tests from \jsc{} and
+\testsThatFailSM{} tests from \smonkey. Column ``type-in-all''
+shows the number of test cases whose executions do not throw
+dynamic type errors in any of the engines because of an undefined variable or property.
 These cases were captured by looking for the presence of \CodeIn{ReferenceError} and
 \CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
 (respectively, \CodeIn{TypeError}) is raised when test execution
@@ -424,11 +427,11 @@ all engines assures that, if discrepancies occur, they are related to
 the changes in the input as opposed to the original cause of failure.
 
 \newcommand\marktopleft[1]{%
-    \tikz[overlay,remember picture] 
+    \tikz[overlay,remember picture]
         \node (marker-#1-a) at (0,2ex) {};%
 }
 \newcommand\markbottomright[1]{%
-    \tikz[overlay,remember picture] 
+    \tikz[overlay,remember picture]
         \node (marker-#1-b) at (0,0) {};%
     \tikz[overlay,remember picture,thick,dashed,inner sep=2pt]
         \node[draw,rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};%
@@ -454,13 +457,13 @@ the changes in the input as opposed to the original cause of failure.
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v8} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
     \midrule
-    Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\ 
+    Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
     \jerry{} & \cite{jerryscript} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
     Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
     \midrule
      &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
-   \bottomrule 
+   \bottomrule
   \end{tabular}
 \end{table}
 
@@ -479,7 +482,7 @@ depend on external libraries, which not all selected engines
 support. We decided to discard those. For example, many tests we found
 required a Node.js runtime~\cite{node} for execution. Also, we did not
 consider tests from the \chakra{} repository because they depend on
-non-portable objects. 
+non-portable objects.
 Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
 Mozilla and \jsc{}; we discarded those to avoid repetition and to give
@@ -549,7 +552,7 @@ component.
 %%   solve the problem? Are there two separate embeddings (one for
 %%   English and one for JS)? If not, how they are combined? What about
 %%   the classification scheme?  It needs to answer yes/no (not a
-%%   distance).}  
+%%   distance).}
 
 %% For space, we summarize the solution that worked the best in
 %% the following. The classifier that performed best for this case uses a
@@ -569,14 +572,14 @@ component.
 %% \Fix{98\%}. This classifier is publicly available from our website as
 %% a separate component.
 
-%% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos. 
+%% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos.
 %% Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
 %% Para obter o codigo extraido dos reports, foi criado um modelo de aprendizagem para reconhecer
 %% se um bloco de texto eh um bloco de codigo.
 
 %% Motivacao:
 %% Utilizamos a tecnica de Embeddings que eh reconhecida pela comunidade pelo seu uso em PLN (Processing Language Natural),
-%% onde atraves de uma rede neural, consegue-se montar um dicionario de palavras com a distancia 
+%% onde atraves de uma rede neural, consegue-se montar um dicionario de palavras com a distancia
 %% de similaridade entre elas.
 %% Para treinamenteo, foi utilizado uma rede neural simples CNN (Convolutional Neural network) com apenas 2 camadas, uma de entrada e outra de saida.
 %% Utilizando as variaveis \Fix{XYZ} e as funcoes \Fix{XYZ}. Obtivemos 98\% de acuracia em nosso treinamento.
@@ -593,7 +596,7 @@ component.
 
 
 %% \Fix{revise this}
-%% For example to run the \jerry{} tests it was necessary 
+%% For example to run the \jerry{} tests it was necessary
 %% use the unit-test package to run it, but with our changes we added the assertion
 %% does not have an assertion in the test file
 %% \Fix{add code to explain}
@@ -601,7 +604,7 @@ component.
 \begin{figure}[t]
   \centering
   \includegraphics[trim=0 350 0 0,clip,width=1.0\textwidth]{diff-testing-runtimes}
-  \vspace{-5ex}  
+  \vspace{-5ex}
   \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
   \vspace{-2ex}
 \end{figure}
@@ -654,8 +657,8 @@ without that.
 
 %% \Mar{any difference in
 %%   output is considered for reporting? are there any
-%%   filtering?}\Igor{acho que nos equivocamos ao deixar o "eshost-cli", 
-%%   nao estamos mais utilizando isso devido a essa ferramenta nao 
+%%   filtering?}\Igor{acho que nos equivocamos ao deixar o "eshost-cli",
+%%   nao estamos mais utilizando isso devido a essa ferramenta nao
 %%   capturar certos tipo de issues (e.g. crash), retirar tambem da Figura 2.
 %%   A respeito de filtros nos reports, nao. Nos so capturamos o output,
 %%   o que modificamos eh apenas a formatacao do output para coletar apenas a
@@ -875,7 +878,7 @@ in \javascript\ engines. Based on that, we pose three questions:
 \begin{description}[leftmargin=.5in]
 \item[RQ1.] How conformant are the engines to the Test262 suite?
 \item[RQ2.] How effective is test transplantation to find bugs?
-\item[RQ3.] How effective is cross-engine differential testing to find bugs?  
+\item[RQ3.] How effective is cross-engine differential testing to find bugs?
 \end{description}
 
 The first question focuses on the conformance of our selected engines
@@ -901,7 +904,7 @@ acceptable to release engines fulfilling the specification only
 partially~\cite{kangax}. We expect that the pass rate on this suite
 provide some indication of the engine's maturity. In the limit, it is
 not desirable to flood bug reports on engines at early stages of
-development. 
+development.
 
 For this experiment, we ran the suite once a day for seven consecutive
 days and averaged the passing ratios. Table~\ref{tab:test262} shows
@@ -910,7 +913,7 @@ results was negligible; for that reason, we omitted standard
 deviations. We noticed that all four engines but \chakra{} used some
 variant of the Test262 suite as part of their regression process, but
 we used the same version in this
-experiment~\cite{ecma262-conformance-suite}. 
+experiment~\cite{ecma262-conformance-suite}.
 
 \begin{table}
   %\vspace{-4ex}
@@ -924,7 +927,7 @@ experiment~\cite{ecma262-conformance-suite}.
     \midrule
     \jsc{} & \percentSuiteTestJSC{}\\
     \veight{} & \percentSuiteTestVeight{} \\
-    \chakra{} & \percentSuiteTestChakra{} \\    
+    \chakra{} & \percentSuiteTestChakra{} \\
     \smonkey{} & \percentSuiteTestSM{} \\
     \bottomrule
   \end{tabular}
@@ -987,8 +990,8 @@ issue tracker of the affected engine.
     % \Fix{Versions (03.08)} & 234555 & 7.0.158 & 62.0b14 & 1.10.1 \\
     \Comment{
       Lembrar dos testes que os testes da propria engine falham:
-      V8 0 
-      JSC 2 
+      V8 0
+      JSC 2
       Spidermonkey 58
     }
     \jsc{} & - & 10 & 10 & 59   \\
@@ -997,11 +1000,11 @@ issue tracker of the affected engine.
     \smonkey{} & 218 & 107 & - & 281 \\
     Duktape & 0 & 4 & 4 & 1   \\
     \jerry{} & 23 & 25 & 22 & 23   \\
-    JSI & 0 & 0 & 0 & 0   \\ 
+    JSI & 0 & 0 & 0 & 0   \\
    Tiny-js & 0 & 0 & 0 & 0  \\
     \midrule
    \textbf{total} & 282 & 146 & 39 & 369 \\
-    \bottomrule 
+    \bottomrule
   \end{tabular}
   \vspace{-3ex}
 \end{table}
@@ -1034,7 +1037,7 @@ Table~\ref{tab:test-suites}).
 %% implementation-dependent description message\Mar{what is the name of
 %%   the property?} encapsulated in an \CodeIn{Error} object in
 %% assertions. As such, those tests fail in all engines but
-%% \Fix{Y}. 
+%% \Fix{Y}.
 
 \sloppy The sources of false positives found in this experiment are as
 follows: \textbf{Undefined Behavior.} False positives of this kind are
@@ -1073,7 +1076,7 @@ spec but is no longer valid for the current spec.
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
     of False (FP) and True Positives (TP).}
-  %\setlength{\tabcolsep}{3pt}      
+  %\setlength{\tabcolsep}{3pt}
   \renewcommand*{\arraystretch}{0.9}
   \begin{tabular}{ccr}
     \toprule
@@ -1129,12 +1132,12 @@ tracker of \chakra, we found that severity-1 bugs are indeed
 rare. Considering the number of bug reports confirmed by developers,
 \chakra{} was the engine with the highest number--\bugsChakra{} (with \bugsChakraFixed{} bugs
 fixed). Considering the remaining engines, \veight{} developers
-confirmed the \noTransVeightBugsReported{} bugs we reported, fixing 
+confirmed the \noTransVeightBugsReported{} bugs we reported, fixing
 \noTransVeightBugsFixed{}. Curiously, Google
 engineers confirmed the issued bug reports in a few hours. Overall, we
 found that development teams of other engines, specially \jsc\, took
 much longer to analyze bug reports as can be observed in the
-\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}. 
+\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}.
 However, the bugs the \jsc{} team confirmed were quickly fixed.
 
 %% Overall, we found these results promising given that precision (\ie{},
@@ -1186,7 +1189,7 @@ that are syntactically invalid.
 
 %%  That
 %% finding would be important to reduce inspection cost and guide future
-%% developments of this approach. 
+%% developments of this approach.
 
 \vspace{0.5ex} \lbrack{}Exploratory Phase.\rbrack{} For the first
 three months of the study, our inspection process was exploratory.  In
@@ -1311,18 +1314,18 @@ expression (\eg{}, some string expression or regular expression).
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{4}{*}{FP} & Undefined Behavior & 42 & 16 \\ % 26 & 9 
+    \multirow{4}{*}{FP} & Undefined Behavior & 42 & 16 \\ % 26 & 9
     & Timeout/OME & 30 & 15 \\ % 28 & 13
     & * Invalid Input & 46 & 55 \\ % 39 & 48
     & * Error Message Mismatch & 41 & 12 \\ % 41 & 12
     \midrule
     \multirow{2}{*}{TP} & Duplicate & 36 & 28\\ % 34 & 28
     & Bug & 15 & 7\\
-    \bottomrule     
+    \bottomrule
   \end{tabular}
 \end{table}
 
-%% \Igor{devemos remover isso da 
+%% \Igor{devemos remover isso da
 %% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
 %% The source ``Upcoming Feature''
 %% indicates that the test fails because it uses a feature that is
@@ -1349,8 +1352,8 @@ were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was considered to be acceptable. As
 of now, we did not find any new bugs on \smonkey{}; the bugs we found
-were duplicates and were not reported. For \veight{}, 
-we reported \noDiffVeight{} bugs, 
+were duplicates and were not reported. For \veight{},
+we reported \noDiffVeight{} bugs,
 all of them confirmed, with \noDiffVeightFixed{} fixed.
 
 \input{table_differential}
@@ -1361,7 +1364,7 @@ all of them confirmed, with \noDiffVeightFixed{} fixed.
 %% relative to \chakra's.\Comment{\Igor{ The bugs reported on \chakra{}'s
 %%     bug tracker was defined as confirmed, however the bugs are
 %%     included on a milestone for the next release following an internal
-%%     priority.  }} 
+%%     priority.  }}
 
 %% Finally, it is worth noting that \Fix{11 of the 19}
 %% JS files that manifested discrepancies were \emph{not} produced with
@@ -1415,7 +1418,7 @@ code snippet below shows a test that reveals a bug in \chakra.
 %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
+    morekeywords={assertEq, var, yield, in, function,
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
@@ -1425,7 +1428,7 @@ code snippet below shows a test that reveals a bug in \chakra.
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
   %% \label{fig:hi-priority}
-  \vspace{-1ex}  
+  \vspace{-1ex}
 \end{figure}
 
 The object property \CodeIn{valueOf} stores a function that returns a
@@ -1465,10 +1468,10 @@ nested in an iterable or a switch statement. All engines, but
 %%   que por ser um fuzzer mutacional, usa uma gramatica \js{} que auxilia na geracao
 %%   de entradas validas. In Figure~\ref{fig:bug-veight}, we observed a \CodeIn{eval} statement
 %%   that try to evaluate a \CodeIn{function f()}, this test case specify the ecma spec
-%%   B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a 
-%%   function declaration. The fuzzer removes the function declaration and 
+%%   B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a
+%%   function declaration. The fuzzer removes the function declaration and
 %%   injects a function with a break statement outside a loop. According to specification~\cite{break-statement},
-%%   the break statement should throw an early error (in this case a SyntaxError) 
+%%   the break statement should throw an early error (in this case a SyntaxError)
 %%   if the break statement is not nested in an iterational or a switch statement. All engines works
 %%   as expected but \veight{} pass without failures.
 %% }
@@ -1481,14 +1484,14 @@ originates from \jerry{} test suite; the bug was found during the test
 transplantation experiment.
 
 \begin{figure}[h!]
-  \vspace{-0.5ex}  
+  \vspace{-0.5ex}
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
 %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
+    morekeywords={assertEq, var, yield, in, function,
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
@@ -1499,7 +1502,7 @@ transplantation experiment.
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
   %% \label{fig:hi-priority}
-  \vspace{-1ex}  
+  \vspace{-1ex}
 \end{figure}
 
 According to the specification~\cite{ecmas262-array-sort}, the
@@ -1514,14 +1517,14 @@ code snippet below shows an example input related to a bug report that
 we issued to the \chakra\ development team, but they did not accept.
 
 \begin{figure}[h!]
-  \vspace{-0.5ex}  
+  \vspace{-0.5ex}
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
 %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function, 
+    morekeywords={assertEq, var, yield, in, function,
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
@@ -1532,7 +1535,7 @@ we issued to the \chakra\ development team, but they did not accept.
   \normalsize
   %% \caption{Warning captured as \hi{} priority.}
   %% \label{fig:hi-priority}
-  \vspace{-1ex}  
+  \vspace{-1ex}
 \end{figure}
 
 
