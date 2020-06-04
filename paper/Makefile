@@ -21,9 +21,13 @@ clean:
 	-rm -f *aux *bbl *blg *log *.dvi $(DIFFNAME).pdf $(DIFFNAME).fdb_latexmk $(DIFFNAME).fls $(DIFFNAME).out $(NEW) $(DIFFNAME).pdf $(DIFFNAME).tex
 
 diff:
+# TOFIX: Error \DIFdelend already defined...
+	sudo apt install texlive-extra-utils latexdiff
 	latexpand $(NAME).tex > $(NEW)
 	latexdiff $(OLD) $(NEW) > $(DIFFNAME).tex
 	latexmk -pdf $(DIFFNAME)
+# remove auto-generated file
+	rm $(NEW)
 
 tags: TAGS
 TAGS: ${TEX_FILES}
