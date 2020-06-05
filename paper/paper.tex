@@ -218,7 +218,6 @@ on \javascript\ engines.
 (Microsoft), JavaScriptCore (Apple), \veight{} (Google),
 \smonkey{} (Mozilla), and \hermes (Facebook). Figure~\ref{fig:summary} shows the breakdown of bug reports per engine (\ref{fig:stacked-engine}) and per technique
 (\ref{fig:stacked-technique}).
-\Fix{Jefferson, atualize a figura!}
 Each stacked bar breaks down the bugs
 per status (\eg{}, ``1-New''). The prefix number indicates the
 ordering that status labels are assigned. Several of these
@@ -267,8 +266,7 @@ Additional contributions are:
 We reported a total of \totalBugsReported{} bugs.
 Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed.
 2)~An infrastructure for performing test transplantation and differential testing.
-The scripts to run the experiments will be available upon request.
-The data is publicly available \dataRepo{}.
+Both the scripts to run the experiments and the data processed are publicly available at \dataRepo{}.
 
 \vspace{1ex} To summarize, this paper provides initial, yet strong evidence
 that exploring test transplantation and differential testing
@@ -300,11 +298,11 @@ ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 
 The specification of JavaScript is incomplete for different
 reasons. Certain parts of the specification are undefined; it is
-responsibility of engineers to decide how to implement these
+the responsibility of engineers to decide how to implement these
 functionalities. The JavaScript spec uses the label
 ``implementation-dependent'' to indicate these cases, where behavior
 may differ from engine to engine. One reason this flexibility in the
-spec exists is to enable compiler optimizations. For example, the
+spec exists to enable compiler optimizations. For example, the
 \js\ \mcodeid{for-in} loop construct does not clearly specify the
 iteration order of
 elements~\cite{so-forin-undefined,javascript-in-chrome} and different
@@ -320,7 +318,7 @@ are not fully implemented as can be observed by the Kangax
 compatibility table~\cite{kangax}.  It is also worth noting that, as
 in other languages, some elements in JS have non-deterministic
 behavior (\eg{}, \mcodeid{Math.random} and \mcodeid{Date}). A test
-that make decisions based on these elements could, in principle,
+that makes decisions based on these elements could, in principle,
 produce different outcomes on different runs. Carefully-written test
 cases should not manifest this kind of flaky behavior.  As previously
 mentioned, all those aspects make testing \js\ engines challenging.
@@ -368,19 +366,20 @@ reporting old and already-fixed bugs to developers.
   \small
   \centering
   \caption{\label{tab:engines}Engines selected.}
-  \begin{tabular}{cccrr}
+  \begin{tabular}{cccrrr}
     \toprule
-    Team & Name & URL & \# Stars  & DOB \\
+    Team & Name & URL & \# Stars  & DOB & Version \\
     \midrule
-    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} &
-    \multicolumn{1}{c}{3300+} & Jun 2001\\
-    Google & \veight{} & \cite{v82018repo} & 9800+ & Jun 2008\\
-    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009\\
-    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} &
-    \multicolumn{1}{c}{1100+} & Mar 1996\\
+    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} & 3300+ & Jun 2001 & xxxx\\
+    Google & \veight{} & \cite{v82018repo} & 9800+ & Jun 2008 & 8.4.138\\
+    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009 & xxxx\\
+    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} & 1100+ & Mar 1996 & 76.0b6\\
+    Facebook & \hermes & \cite{hermes2020repo} & 5400+ & Jul 2019 & 0.5.0\\
    \bottomrule
   \end{tabular}
 \end{table}
+
+% hermes very first commit: https://github.com/facebook/hermes/commit/f22a18f67da3f03db59c1ec715d6ec3776b03fbf
 
 \section{Mined JS Files}
 \label{sec:seeds}
