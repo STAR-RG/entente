@@ -66,12 +66,15 @@
 \title{Exposing Bugs in JavaScript Engines through Test Transplantation and Differential Testing}
 %\titlerunning{Leveraging Diversity to Find Bugs in JavaScript Engines}        % if too long for running head
 
-\author{Igor Lima \and Breno Miranda\footnotemark \and Marcelo d'Amorim}
+\author{Jefferson Silva \and Igor Lima \and Breno Miranda\footnotemark
+  \and Gustavo Pinto \and Marcelo d'Amorim}
 %\authorrunning{Short form of author list} % if too long for running head
 
 \institute{
 * Corresponding author: Breno Miranda \and \email{bafm@cin.ufpe.br}\\ \\
+Jefferson Silva \and \email{jefferson.alves.silva@icen.ufpa.br}\\
 Igor Lima \and \email{isol2@cin.ufpe.br} \\
+Gustavo Pinto \and \email{gpinto@ufpa.br} \\
 Breno Miranda \and \email{bafm@cin.ufpe.br} \\
 Marcelo d'Amorim \and \email{damorim@cin.ufpe.br} \\
 \at Universidade Federal de Pernambuco, Recife, PE, Brazil}
@@ -86,27 +89,25 @@ Marcelo d'Amorim \and \email{damorim@cin.ufpe.br} \\
 
 \maketitle
 
-
 \begin{abstract}
   \input{abstract}
   %\keywords{Diversity \and Test Transplantation \and Differential Testing \and JavaScript}
   \keywords{Test Transplantation \and Differential Testing \and JavaScript}
 \end{abstract}
 
-
-
 \section{Introduction}
 
 JavaScript (\js{}) is one of the most popular programming languages
-today~\cite{stackify,redmonk-javascript}, with penetration in various software development segments including, web, mobile,
-and, more recently, the Internet of
-Things~(IoT)~\cite{simply-technologies}. The interest of the community
-for the language encourages constant improvements in its specification~\cite{ecmas262-spec}. It is natural to expect that such improvements
-lead to sensible changes in engine implementations~\cite{kangax}. Even small
-changes can have high practical impact. For example, in October 2014 a
-new attribute added to Array objects resulted in the MS Outlook
-Calendar web app, which is built in \js{}, to fail under
-Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
+today~\cite{stackify,redmonk-javascript}, with penetration in various
+software development segments including, web, mobile, and, more
+recently, the Internet of Things~(IoT)~\cite{simply-technologies}. The
+interest of the community for the language encourages constant
+improvements in its specification~\cite{ecmas262-spec}. It is natural
+to expect that such improvements lead to sensible changes in engine
+implementations~\cite{kangax}. Even small changes can have high
+practical impact. For example, in October 2014 a new attribute added
+to Array objects resulted in the MS Outlook Calendar web app to fail
+under Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
 
 Finding bugs in \js\ engines is an important problem given the range
 of applications that could be affected with those bugs. It is also
@@ -116,8 +117,8 @@ accommodate the pressing demands from
 developers~\cite{ecmas262-spec-repo}. An official conformance test
 suite exists for \js~\cite{tc39-github}, but, naturally, many test
 scenarios are not covered in the suite. In addition, we noticed that a
-significant fraction (5 to 15\%) of the tests fail regularly in the
-most popular engines, reflecting the struggle of developers in keeping
+significant fraction (5 to 15\%) of the tests in that stuite fail
+regularly in the most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
 %% WHAT WE DID
@@ -134,17 +135,17 @@ the ability of two testing techniques to expose bugs in JavaScript engines.
   such, replaying these tests in different engines could reveal
   unanticipated problems.
 
-\item \emph{Cross-engine differential testing}.
-  This technique fuzzes existing test
-  inputs~\cite{fuzz-testing-history} and then compares the output
-  produced by different engines using a differential
-  oracle. The intuition is that interesting inputs can be created
-  from existing inputs and multiple engines can be used to address the
-  lack of oracles.
+\item \emph{Cross-engine differential testing}.  This technique fuzzes
+  existing test inputs~\cite{fuzz-testing-history} and then compares
+  the output produced by different engines using a differential
+  oracle. The intuition is that interesting inputs can be created from
+  existing inputs and multiple engines can be used to address the lack
+  of oracles for the newly created inputs.
 \end{itemize}
 
 The study measures the ability of these techniques in finding bugs and
-the impact of false positives on their practicality.
+the impact of false positives on their practicality. \Mar{seria bom
+  adicionar uma frase com rationale para escolha destas tecnicas.}
 
 %One of
 %various causes of output discrepancy is a bug.
@@ -159,8 +160,8 @@ the impact of false positives on their practicality.
 %diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
 %elaborates related work on this topic.
 %
-\emph{Related Ideas.}~Differential Testing~\cite{Brumley-etal-ss07} (DT)
-has been applied in a variety of contexts to find
+\emph{Related Ideas.}~Differential Testing~\cite{Brumley-etal-ss07}
+(DT) has been applied in a variety of contexts to find
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
 It has shown to be specially practical in scenarios where the
 observation of difference gives a strong signal of a real problem. For
@@ -175,15 +176,17 @@ identical. The Mozilla team uses this approach since 2002; they have
 been able to find over 270 bugs since
 then~\cite{jsfunfuzz-at-mozilla}, including security
 bugs. Cross-engine differential testing, in contrast, has not been
-widely popularized. One possible reason is that it is still not
-practical to fully automate the technique. In contrast to other
-applications of differential testing, a number of legitimate reasons
+widely popularized because the reported differences are more unlikely
+to be false alarms. In this context, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
-~\ref{tab:false-positives}). Variations of these ideas have
-been explored before in different contexts.  The goal of the paper is
-to assess the ability of the techniques aforementioned in finding bugs
-on \javascript\ engines.
+~\ref{tab:false-positives}). As consequence, humans need to inspect
+the reports.
+
+%Variations of these ideas have been explored before in different contexts.
+
+%It is important to note that the goal of the paper is to assess the
+%ability of the techniques aforementioned in finding bugs on \javascript\ engines.
 
 %% This paper evaluates the benefits of
 %% test case diversity and engine diversity in finding bugs on
@@ -214,18 +217,20 @@ on \javascript\ engines.
   \vspace{-3ex}
 \end{figure}
 
-\sloppy \emph{Results.}~We considered the following engines--\chakra{}
-(Microsoft), JavaScriptCore (Apple), \veight{} (Google),
-\smonkey{} (Mozilla), and \hermes (Facebook). Figure~\ref{fig:summary} shows the breakdown of bug reports per engine (\ref{fig:stacked-engine}) and per technique
-(\ref{fig:stacked-technique}).
-\Fix{Jefferson, atualize a figura!}
-Each stacked bar breaks down the bugs
-per status (\eg{}, ``1-New''). The prefix number indicates the
-ordering that status labels are assigned. Several of these
-reports have the label ``3-Fixed'', indicating that bug fixes have
-been incorporated into the code already. Note that most of these bugs
-affected two engines--\chakra{} and JavaScriptCore (\jsc{}).  We
-reported \noBugsBugsReportedGoogle{} bugs in \veight{}
+\sloppy \emph{Results.}~Our study considered the following
+engines--\chakra{}~(Microsoft), \hermes~(Facebook),
+JavaScriptCore~(Apple), \smonkey{}~(Mozilla), and
+\veight{}~(Google). Figure~\ref{fig:summary} shows the breakdown of
+bug reports per engine (\ref{fig:stacked-engine}) and per technique
+(\ref{fig:stacked-technique}).  \Fix{Jefferson, atualize a figura!
+  Estranho nao ter pilha para as 5 engines.}  Each stacked bar breaks
+down the bugs per status (\eg{}, ``1-New''). The number indicates the
+ordering that status labels are assigned by developers: ``New'', then
+``Confirmed'', then ``Fixed''. Several of these reports have the label
+``3-Fixed'', indicating that bug fixes have been incorporated into the
+code already. Note that most of these bugs affected two
+engines--\chakra{} and JavaScriptCore (\jsc{}).  We reported
+\noBugsBugsReportedGoogle{} bugs in \veight{}
 (\noBugsBugsConfirmedGoogle{} confirmed) and none in \smonkey{}.
 Furthermore, our results show that both techniques revealed several
 bugs, most of which confirmed by developers. Test transplantation
@@ -247,33 +252,29 @@ confirmed or fixed. Most bugs we found are of moderate severity.
 %% seem promising to improve reliability of engines that continuously
 %% evolve with their specifications.
 
-\emph{Key Findings.}~The list of findings of this work includes--1)
-Not only multiple different implementations can be leveraged in
-differential testing, but differences in test suites can also be
-important. 2) Even for problems with fairly clear specifications, as
-in \javascript{}, there is likely to be (a lot of) variation between
-different implementations. 3) Differential testing is feasible on
-real, complex, widely used pieces of
-software. Section~\ref{sec:lessons} expands and elaborates key
+\emph{Key Findings.}~We found that--1)~Differential testing and Test
+Transplation are practical and effective to find bugs on real,
+complex, and widely used pieces of software, 2)~Even for problems with
+fairly clear specifications, as in \javascript{}, there is likely (a
+lot of) variation between different
+implementations. Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
-\emph{Contributions.}~The most important contribution of this work is empirical:
-we provide a comprehensive study analyzing the effectiveness of
-test transplantation and differential testing
-in revealing functional bugs in popular \javascript\ engines.
-Additional contributions are:
-1)~A number of bugs found and fixed.
-We reported a total of \totalBugsReported{} bugs.
-Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed.
-2)~An infrastructure for performing test transplantation and differential testing.
-The scripts to run the experiments will be available upon request.
-The data is publicly available \dataRepo{}.
+\emph{Contributions.}~The most important contribution of this work is
+empirical: we provide a comprehensive study analyzing the
+effectiveness of two practical techniques in revealing functional bugs
+in popular \javascript\ engines. The results of the study include:
+1)~A number of bugs found and fixed and 2)~An infrastructure for
+performing test transplantation and differential testing. Our data and
+tools are publicly available under the following link:
 
-\vspace{1ex} To summarize, this paper provides initial, yet strong evidence
-that exploring test transplantation and differential testing
-should be encouraged to find functional bugs
-in JavaScript engines.
+\dataRepo{}.
+
+\vspace{1ex} To summarize, this paper provides initial, yet strong
+evidence, that exploring test transplantation and differential testing
+is practical to find functional bugs in JavaScript engines and should
+be encouraged.
 
 \section{JavaScript}
 \label{sec:es6-design}
