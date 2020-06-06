@@ -1,54 +1,33 @@
-%\documentclass[final,5p,times,twocolumn]{elsarticle}
 \documentclass[smallextended]{svjour3}
-%\biboptions{numbers,sort&compress}
-%\documentclass[sigconf,review, anonymous]{acmart}
-%\hyphenation{on-tol-o-gy ad-di-tion-al in-fra-struc-ture an-a-lyze a-nal-y-sis}
-%\input{packages}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Comment the \draftmodetrue line before submission
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newif\ifdraftmode
 \draftmodetrue
 
-%% avoid footnotes across pages
 \interfootnotelinepenalty=10000
-%\raggedbottom
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Uncomment \showsplattexttrue to show text from our splat paper
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newif\ifshowsplattext
-%\showsplattexttrue
 
 \pagenumbering{arabic}
 
-%% paragraphs within margins
 \usepackage[english]{babel}
 \setlength{\emergencystretch}{2pt}
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{tikz}
-\usepackage{xspace}
 \usetikzlibrary{matrix,fit,shapes,calc,positioning,shadows,arrows,shapes,backgrounds,decorations.markings,fadings}
 \usepackage{listings}
 \usepackage[caption=false, font=footnotesize]{subfig}
-%%%%%%%%%%%%% code listing
 \renewcommand{\ttdefault}{pcr}
 \lstset{
   basicstyle=\scriptsize\ttfamily,
   keywordstyle=\scriptsize\ttfamily\bfseries,
-  language=Java,             % choose the language of the code
-  frame=single,              % adds a frame around the code
+  language=Java,             
+  frame=single,              
   aboveskip=0pt,
   belowskip=0pt,
-  breaklines=true,           % sets automatic line breaking
-  breakatwhitespace=false,   % sets if automatic breaks should only happen at
+  breaklines=true,           
+  breakatwhitespace=false,   
   showspaces=false,
-  %numbersep=5pt,              % Abstand der Nummern zum Text
-  %tabsize=2,                  % Groesse von Tabs
-  %extendedchars=true,         %
-  %breaklines=true,            % Zeilen werden Umgebrochen
   keywords=[2]{class, incorporateUserFeedback, testPushPop, testPopPush},
 }
 \usepackage{balance}
@@ -56,58 +35,311 @@
 \usepackage{enumitem}
 \usepackage{url}
 
-\input{macros}
+\newcommand{\js}{JS}
+\newcommand{\javascript}{JavaScript}
+\newcommand{\es}{ES}
+\newcommand{\ecmascript}{\es{}}
+\newcommand{\tname}{TNAME}
+\newcommand{\Comment}[1]{}
+\newcommand{\numsubjects}{5}
+\newcommand{\etal}{and colleagues'}
+\newcommand{\ie}{i.e.}
+\newcommand{\eg}{e.g.}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{{\color{red}\ding{55}}}
+\newcommand{\pGoodGood}{$\mathit{P}${\small\cmark\!\cmark}}
+\newcommand{\pGoodBad}{$\mathit{P}${\small\cmark\!\xmark}}
+\newcommand{\pBadDontCare}{$\mathit{P_?}$}
+\newcommand{\sfl}{SFL\xspace}
+\newcommand{\ddg}{DDG\xspace}
+\newcommand{\totfiles}{$\sim$38K}
 
+\newif\ifdraftmode
+\draftmodetrue
+\ifdraftmode
+ \newcommand{\Fix}[1]{\textbf{[[}{\color{red} #1}\textbf{]]}}
+ \newcommand{\Mar}[1]{\textbf{[[Marcelo: }{\color{magenta} #1}\textbf{]]}}
+ \newcommand{\Igor}[1]{\textbf{[[Igor: }{\color{blue} #1}\textbf{]]}}
+ \newcommand{\notes}[1]{\todo[inline,color=red!30,caption={}]{#1}}
+\else
+ \newcommand{\Fix}[1]{\relax}
+ \newcommand{\Mar}[1]{\relax}
+ \newcommand{\Igor}[1]{\relax}
+ \newcommand{\notes}[1]{\relax}
+\fi
+
+\pagenumbering{arabic}
+
+
+\newcommand{\codesize}{\small}
+\newcommand{\CodeIn}[1]{\mcodeid{#1}}
+\newcommand{\CodeInM}[1]{\mcodeid{#1}}
+\def\|#1|{\mathid{#1}}
+\newcommand{\mathid}[1]{\ensuremath{\mathit{#1}}}
+\def\<#1>{\codeid{#1}}
+\newcommand{\codeid}[1]{\ifmmode{\mbox{\codesize\ttfamily{#1}}}\else{\codesize\ttfamily #1}\fi}
+\def\<#1>{\mcodeid{#1}}
+\newcommand{\mcodeid}[1]{\mbox{\codesize\ttfamily{#1}}}
+\newcommand{\CodeInSmaller}[1]{\mbox{\scriptsize\ttfamily{#1}}}
+
+\newcommand*{\RightThumbsUpAux}[1]{
+  \begingroup
+    \sbox0{Ag}
+    \raisebox{-\dp0}{
+      \includegraphics[{
+        height=\dimexpr\dp0+\ht0\relax,
+        #1
+      }]{thumbsup.pdf}
+    }
+  \endgroup
+}
+\newcommand*{\RightThumbsUp}{
+  \RightThumbsUpAux{}
+}
+\newcommand*{\RightThumbsDown}{
+  \RightThumbsUpAux{origin=c,angle=180}
+}
+\newcommand*{\LeftThumbsUp}{
+  \scalebox{-1}[1]{\RightThumbsUp}
+}
+\newcommand*{\LeftThumbsDown}{
+  \scalebox{-1}[1]{\RightThumbsDown}
+}
+
+\newcommand{\checkm}{Y}
+\newcommand{\crossmark}{N}
+
+\newcommand{\totalTestFiles}{40,041} 
+\newcommand{\totalTestFilesPassInPar}{7,061} 
+\newcommand{\totalTestFilesCompileInAll}{36,448} 
+\newcommand{\totalTestFilesPassInAll}{23,808} 
+\newcommand{\totalTestFilesForTestTransplantation}{6,602} 
+
+
+
+
+\newcommand{\nofuzzAll}{209}
+\newcommand{\nofuzzBugs}{\Fix{XX}}
+\newcommand{\nofuzzDuplicates}{63}
+\newcommand{\nofuzzFalsePositives}{24}
+\newcommand{\nofuzzHITotal}{177}
+\newcommand{\nofuzzLOTotal}{32}
+\newcommand{\nofuzzTotalFiles}{977} 
+\newcommand{\nofuzzFilesHI}{940} 
+\newcommand{\nofuzzFilesLO}{37} 
+\newcommand{\nofuzzBucketsBugsHI}{\Fix{124}} 
+\newcommand{\nofuzzBucketsBugsLO}{\Fix{11}} 
+\newcommand{\nofuzzDupsHI}{\Fix{X}}
+\newcommand{\nofuzzDupsLO}{\Fix{Y}}
+\newcommand{\tableBugsNum}{\Fix{26}} 
+
+\newcommand{\noBugsTransplantation}{28}
+\newcommand{\noBugsTransplantationConfirmed}{20}
+\newcommand{\noBugsTransplantationFixed}{12}
+
+\newcommand{\noBugsDifferentialTesting}{22}
+\newcommand{\noBugsDifferentialTestingConfirmed}{16}
+\newcommand{\noBugsDifferentialTestingFixed}{10}
+
+
+\newcommand{\totalBugsReported}{49}
+\newcommand{\totalBugsConfirmed}{33}
+\newcommand{\totalBugsFixed}{22}
+
+
+\newcommand{\noBugsBugsReportedGoogle}{five}
+\newcommand{\noBugsBugsConfirmedGoogle}{four}
+
+
+\newcommand{\percChakra}{\Fix{52\%}} 
+\newcommand{\percJSC}{\Fix{45\%}}
+
+
+\newcommand{\noTransConfirmed}{18}
+\newcommand{\noTransSeverityTwo}{16}
+\newcommand{\noTransChakraBugs}{13}
+\newcommand{\noTransChakraBugsFixed}{7}
+\newcommand{\noTransVeightBugsConfirmed}{two}
+\newcommand{\noTransVeightBugsReported}{three}
+\newcommand{\noTransVeightBugsFixed}{two}
+
+\newcommand{\noTransUndefined}{204} 
+\newcommand{\noTransTimeout}{23} 
+\newcommand{\noTransNotImplemented}{54} 
+\newcommand{\noTransNonStandard}{122} 
+\newcommand{\noTransOther}{174} 
+\newcommand{\noTransTPDuplicated}{11} 
+\newcommand{\noTransTPBugs}{24} 
+
+\newcommand{\noDiffConfirmed}{fifteen}
+\newcommand{\noDiffFixed}{ten}
+\newcommand{\noDiffVeight}{2}
+\newcommand{\noDiffVeightConfirmed}{2}
+\newcommand{\noDiffVeightFixed}{1}
+
+\newcommand{\warningsIteration}{five} 
+
+
+\ifdraftmode
+\newcommand{\anonym}[1]{{\tiny\colorbox{black}{xxx}}}
+\else
+\newcommand{\anonym}[1]{{\tiny\colorbox{black}{#1}}}
+\fi
+
+
+
+\newcommand{\radamsa}{radamsa}
+\newcommand{\quickfuzz}{quickfuzz}
+
+\newcommand{\jsc}{JSC}
+\newcommand{\veight}{V8}
+\newcommand{\chakra}{Chakra}
+\newcommand{\smonkey}{SpiderMonkey}
+\newcommand{\jerry}{JerryScript}
+
+\newcommand{\lo}{lo}
+\newcommand{\hi}{hi}
+
+
+\newcommand{\testsThatFail}{63}
+\newcommand{\testsThatFailJSC}{6}
+\newcommand{\testsThatFailSM}{57}
+\newcommand{\filesAttached}{490}
+\newcommand{\filesAttachedSM}{110}
+\newcommand{\filesAttachedJSC}{10}
+\newcommand{\filesAttachedVeight}{370}
+\newcommand{\filesMining}{1,240}
+\newcommand{\filesMiningSM}{377}
+\newcommand{\filesMiningJSC}{224}
+\newcommand{\filesMiningVeight}{639}
+\newcommand{\samplesEnglish}{25K}
+\newcommand{\samplesJSSnippets}{25K}
+\newcommand{\accuracyMining}{98\%}
+
+\newcommand{\percentSuiteTestJSC}{92\%}
+\newcommand{\percentSuiteTestVeight}{95\%}
+\newcommand{\percentSuiteTestChakra}{75\%}
+\newcommand{\percentSuiteTestSM}{93\%}
+
+\newcommand{\failuresTestTrans}{836}
+\newcommand{\failuresTestTransDistictFiles}{612} 
+\newcommand{\failuresTestTransPercent}{9.2\%}
+\newcommand{\noBugsTransplantationSeverityTwo}{16}
+\newcommand{\bugsChakra}{12}
+\newcommand{\bugsChakraFixed}{3}
+
+
+
+\newcommand{\testOriginal}{31,276} 
+\newcommand{\testPassInPar}{-}
+\newcommand{\testCompileAll}{29,846} 
+\newcommand{\testNoFailAll}{17,639} 
+
+\newcommand{\veightOriginal}{1,084} 
+\newcommand{\veightPassInPar}{482} 
+\newcommand{\veightCompileAll}{478} 
+\newcommand{\veightNoFailAll}{426} 
+
+\newcommand{\smOriginal}{3,122} 
+\newcommand{\smPassInPar}{2,155} 
+\newcommand{\smCompileAll}{2,103} 
+\newcommand{\smNoFailAll}{1,837} 
+
+\newcommand{\jscOriginal}{1,265} 
+\newcommand{\jscPassInPar}{1,130} 
+\newcommand{\jscCompileAll}{1,122} 
+\newcommand{\jscNoFailAll}{1,054} 
+
+\newcommand{\duktapeOriginal}{1,195}
+\newcommand{\duktapePassInPar}{1,195}
+\newcommand{\duktapeCompileAll}{921}
+\newcommand{\duktapeNoFailAll}{915}
+
+\newcommand{\jerryOriginal}{1,951}
+\newcommand{\jerryPassInPar}{1,951}
+\newcommand{\jerryCompileAll}{1,878}
+\newcommand{\jerryNoFailAll}{1,837}
+
+\newcommand{\jsiOriginal}{99}
+\newcommand{\jsiPassInPar}{99}
+\newcommand{\jsiCompileAll}{63}
+\newcommand{\jsiNoFailAll}{63}
+
+\newcommand{\tinyOriginal}{49}
+\newcommand{\tinyPassInPar}{49}
+\newcommand{\tinyCompileAll}{37}
+\newcommand{\tinyNoFailAll}{37}
+
+\newcommand{\dataRepo}{\url{https://figshare.com/s/ee2e3821c2f022c7f5cc}}
+ 
 \journalname{Software Quality Journal}
 
 \begin{document}
 
-%\title{Leveraging Diversity to Find Bugs in JavaScript Engines}
-\title{Exposing Bugs in JavaScript Engines through Test Transplantation and Differential Testing}
-%\titlerunning{Leveraging Diversity to Find Bugs in JavaScript Engines}        % if too long for running head
+\title{Leveraging Diversity to Find Bugs in JavaScript Engines}
 
-\author{Jefferson Silva \and Igor Lima \and Breno Miranda\footnotemark
-  \and Gustavo Pinto \and Marcelo d'Amorim}
-%\authorrunning{Short form of author list} % if too long for running head
+\author{Igor Lima \and Breno Miranda\footnotemark \and Marcelo d'Amorim}
 
 \institute{
 * Corresponding author: Breno Miranda \and \email{bafm@cin.ufpe.br}\\ \\
-Jefferson Silva \and \email{jefferson.alves.silva@icen.ufpa.br}\\
 Igor Lima \and \email{isol2@cin.ufpe.br} \\
-Gustavo Pinto \and \email{gpinto@ufpa.br} \\
 Breno Miranda \and \email{bafm@cin.ufpe.br} \\
 Marcelo d'Amorim \and \email{damorim@cin.ufpe.br} \\
 \at Universidade Federal de Pernambuco, Recife, PE, Brazil}
 
 \date{Received: date / Accepted: date}
-% The correct dates will be entered by the editor
-
-%\institute{Corresponding author.}
 
 
-%\renewcommand{\shortauthors}{Lima et al.}
+
 
 \maketitle
 
+
 \begin{abstract}
-  \input{abstract}
-  %\keywords{Diversity \and Test Transplantation \and Differential Testing \and JavaScript}
-  \keywords{Test Transplantation \and Differential Testing \and JavaScript}
+  \textbf{Context.} JavaScript is a very popular programming language today with several
+implementations competing for market dominance. Although a
+specification document and a conformance test suite exist to guide
+engine development, bugs occur and have important practical
+consequences. Implementing correct
+engines is challenging because the spec is intentionally
+incomplete and evolves frequently.
+\textbf{Objective.} This paper evaluates the importance of
+diversity to find functional bugs in JavaScript engines. \textbf{Method.} For that, we
+studied two existing diversity-aware techniques---test transplantation and
+cross-engine differential testing. The first technique runs test
+suites of a given engine in another engine. The second technique
+fuzzes existing inputs and then compares the output produced by
+different engines with a differential oracle.
+\textbf{Results.} We considered engines from four major players in our
+experiments--Apple, Google, Microsoft, and Mozilla. Our results
+indicate that both techniques revealed several bugs, many of which
+confirmed by developers. We reported \noBugsTransplantation{} bugs
+with test transplantation (\noBugsTransplantationConfirmed{} of these bugs
+confirmed and \noBugsTransplantationFixed{} fixed) and reported
+\noBugsDifferentialTesting{} bugs with differential testing
+(\noBugsDifferentialTestingConfirmed{} of these confirmed
+and \noBugsDifferentialTestingFixed{} fixed). Results indicate that
+most of these bugs affected two engines--Apple's
+\jsc{} and Microsoft's \chakra{}. To summarize, our results show that
+diversity-aware techniques are easy to apply and very effective in
+finding bugs in complex software, such as JavaScript engines.
+   \keywords{Diversity \and Test Transplantation \and Differential Testing \and JavaScript}
 \end{abstract}
+
+
 
 \section{Introduction}
 
 JavaScript (\js{}) is one of the most popular programming languages
-today~\cite{stackify,redmonk-javascript}, with penetration in various
-software development segments including, web, mobile, and, more
-recently, the Internet of Things~(IoT)~\cite{simply-technologies}. The
-interest of the community for the language encourages constant
-improvements in its specification~\cite{ecmas262-spec}. It is natural
-to expect that such improvements lead to sensible changes in engine
-implementations~\cite{kangax}. Even small changes can have high
-practical impact. For example, in October 2014 a new attribute added
-to Array objects resulted in the MS Outlook Calendar web app to fail
-under Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
+today~\cite{stackify,redmonk-javascript}, with penetration in various software development segments including, web, mobile,
+and, more recently, the Internet of
+Things~(IoT)~\cite{simply-technologies}. The interest of the community
+for the language encourages constant improvements in its specification~\cite{ecmas262-spec}. It is natural to expect that such improvements
+lead to sensible changes in engine implementations~\cite{kangax}. Even small
+changes can have high practical impact. For example, in October 2014 a
+new attribute added to Array objects resulted in the MS Outlook
+Calendar web app, which is built in \js{}, to fail under 
+Chrome~\cite{array-bug-chromium-issue4247,array-bug-discussion}.
 
 Finding bugs in \js\ engines is an important problem given the range
 of applications that could be affected with those bugs. It is also
@@ -117,51 +349,43 @@ accommodate the pressing demands from
 developers~\cite{ecmas262-spec-repo}. An official conformance test
 suite exists for \js~\cite{tc39-github}, but, naturally, many test
 scenarios are not covered in the suite. In addition, we noticed that a
-significant fraction (5 to 15\%) of the tests in that stuite fail
-regularly in the most popular engines, reflecting the struggle of developers in keeping
+significant fraction (5 to 15\%) of the tests fail regularly in the
+most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
-%% WHAT WE DID
-This work, which is empirical in nature, reports on a study to evaluate
-the ability of two testing techniques to expose bugs in JavaScript engines.
+This work, which is empirical in nature, reports on a study to evaluate the importance of diversity
+to find bugs in JavaScript engines; it covers two complementary
+diversity-aware testing techniques.
 
-%\vspace{-1ex}
-%noitemsep,
 \begin{itemize}[topsep=0pt,parsep=0pt,partopsep=2pt,labelwidth=0cm,align=left,itemindent=-0.25cm]
-\item \emph{Test transplantation}.
-  This technique evaluates the effect of running test files
+\item \emph{Test transplantation} leverages diversity of test
+  cases. This technique evaluates the effect of running test files
   written for a given engine in other engines. The intuition is that
   developers design test cases with different objectives in mind. As
   such, replaying these tests in different engines could reveal
   unanticipated problems.
 
-\item \emph{Cross-engine differential testing}.  This technique fuzzes
-  existing test inputs~\cite{fuzz-testing-history} and then compares
-  the output produced by different engines using a differential
-  oracle. The intuition is that interesting inputs can be created from
-  existing inputs and multiple engines can be used to address the lack
-  of oracles for the newly created inputs.
+\item \emph{Cross-engine differential testing} leverages diversity of
+  engine implementations. This technique fuzzes existing test
+  inputs~\cite{fuzz-testing-history} and then compares the output
+  produced by different engines.\Comment{ using a differential
+    oracle.} The intuition is that interesting inputs can be created
+  from existing inputs and multiple engines can be used to address the
+  lack of oracles.
 \end{itemize}
 
 The study measures the ability of these techniques in finding bugs and
-the impact of false positives on their practicality. \Mar{seria bom
-  adicionar uma frase com rationale para escolha destas tecnicas.}
+the impact of false positives on their practicality.
 
-%One of
-%various causes of output discrepancy is a bug.
 
-%% It automates test generation in scenarios where multiple
-%% implementations of a system exist. DT leverages diversity across
-%% system's implementations to detect anomalous behavior.
-%\emph{Related Ideas.}~The idea of test set diversity dates back to the
-%eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. In contrast
-%to prior work on this topic, this paper explores diversity of
-%implementations and diversity of sources of test cases as opposed to
-%diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
-%elaborates related work on this topic.
-%
-\emph{Related Ideas.}~Differential Testing~\cite{Brumley-etal-ss07}
-(DT) has been applied in a variety of contexts to find
+\emph{Related Ideas.}~The idea of test set diversity dates back to the
+eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. In contrast
+to prior work on this topic, this paper explores diversity of
+implementations and diversity of sources of test cases as opposed to
+diversity of the test cases themselves. Section~\ref{sec:related:diversity-testing}
+elaborates related work on this topic. Differential
+Testing~\cite{Brumley-etal-ss07} (DT) has been applied in a variety of
+contexts to find
 bugs~\cite{Yang-etal-pldi11,Chen-etal-fse2015,Argyros-etla-ccs16,Chen-etal-pldi16,petsios-etal-sp2017,SivakornAPKJ17,Zhang:2017:ATD:3097368.3097448}.
 It has shown to be specially practical in scenarios where the
 observation of difference gives a strong signal of a real problem. For
@@ -176,33 +400,20 @@ identical. The Mozilla team uses this approach since 2002; they have
 been able to find over 270 bugs since
 then~\cite{jsfunfuzz-at-mozilla}, including security
 bugs. Cross-engine differential testing, in contrast, has not been
-widely popularized because the reported differences are more unlikely
-to be false alarms. In this context, a number of legitimate reasons
+widely popularized. One possible reason is that it is still not
+practical to fully automate the technique. In contrast to other
+applications of differential testing, a number of legitimate reasons
 exist, other than a bug, for a test execution to manifest discrepancy
 (see Tables~\ref{fig:piecharts-transplantation} and
-~\ref{tab:false-positives}). As consequence, humans need to inspect
-the reports.
+~\ref{tab:false-positives}). To sum up, variations of these ideas have
+been explored before in different contexts.  The goal of the paper is
+to assess the ability of the techniques aforementioned in finding bugs
+on \javascript\ engines.
 
-%Variations of these ideas have been explored before in different contexts.
 
-%It is important to note that the goal of the paper is to assess the
-%ability of the techniques aforementioned in finding bugs on \javascript\ engines.
 
-%% This paper evaluates the benefits of
-%% test case diversity and engine diversity in finding bugs on
-%% \javascript\ engines.
-
-%% Recently, Patra and
-%% Pradel~\cite{patra2016learning} proposed a language-agnostic fuzzer to
-%% find cross-browser HTML+JS discrepancies. The main difference of our
-%% work to theirs is in goal; our goal is to evaluate ability and cost of
-%% simple diversity-aware approaches to find bugs in \js\ engines.
-
-%% Their main contribution was
-%% analytical whereas our main contribution is empirical--
 
 \begin{figure}[t]
-%  \vspace{-2ex}
   \centering
   \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
     \includegraphics[trim=0 190 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
@@ -210,18 +421,17 @@ the reports.
   }\\
   \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
     \includegraphics[trim=0 180 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
-    \vspace{-5ex}
+    \vspace{-5ex}        
   }
-  \caption{\label{fig:summary}Summary of bug reports.\Gustavo{Não esquecer de atualizar as figuras.
-  }}
+  \caption{\label{fig:summary}Summary of bug reports.}
   \vspace{-3ex}
 \end{figure}
 
 \sloppy \emph{Results.}~We considered the following engines--\chakra{}
-(Microsoft), JavaScriptCore (Apple), \veight{} (Google),
-\smonkey{} (Mozilla), and \hermes (Facebook). Figure~\ref{fig:summary} shows the breakdown of bug reports per engine (\ref{fig:stacked-engine}) and per technique
-(\ref{fig:stacked-technique}).
-Each stacked bar breaks down the bugs
+(Microsoft), JavaScriptCore (Apple), \veight{} (Google), and
+\smonkey{} (Mozilla). Figure~\ref{fig:summary} shows the breakdown of
+bug reports per engine (\ref{fig:stacked-engine}) and per technique
+(\ref{fig:stacked-technique}). Each stacked bar breaks down the bugs
 per status (\eg{}, ``1-New''). The prefix number indicates the
 ordering that status labels are assigned. Several of these
 reports have the label ``3-Fixed'', indicating that bug fixes have
@@ -241,38 +451,31 @@ indicate that both techniques were successful at finding bugs. The
 number of bug reports were similar, if we consider only those
 confirmed or fixed. Most bugs we found are of moderate severity.
 
-%% Considering cost per bug found, we found that test
-%% transplantation, compared to differential testing, demanded less
-%% effort from the developers who inspected the alarms.
 
-%% All in all, these simple techniques
-%% seem promising to improve reliability of engines that continuously
-%% evolve with their specifications.
 
-\emph{Key Findings.}~We found that--1)~Differential testing and Test
-Transplation are practical and effective techniques to find bugs on real,
-complex, and widely used software systems, 2)~Even for problems with
-fairly clear specifications, as in \javascript{}, there is likely (a
-lot of) variation between different implementations, which brings instrinsic
-challenges to developers that work on them.
-Section~\ref{sec:lessons} expands and elaborates key
+\emph{Key Findings.}~The list of findings of this work includes--1)
+Not only multiple different implementations can be leveraged in
+differential testing, but differences in test suites can also be
+important. 2) Even for problems with fairly clear specifications, as
+in \javascript{}, there is likely to be (a lot of) variation between
+different implementations. 3) Differential testing is feasible on
+real, complex, widely used pieces of
+software. Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
 
-%% LIST OF CONTRIBUTIONS
-\emph{Contributions.}~The most important contribution of this work is empirical:
-we provide a comprehensive study analyzing the effectiveness of
-test transplantation and differential testing
-in revealing functional bugs in popular \javascript\ engines.
+\emph{Contributions.}~The most important contribution of this work is empirical: 
+we provide a comprehensive study analyzing the effectiveness of diversity-aware
+techniques to find functional bugs in popular \javascript\ engines.
 Additional contributions are:
-1)~A number of bugs found and fixed.
-We reported a total of \totalBugsReported{} bugs.
-Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed.
-2)~An infrastructure for performing test transplantation and differential testing.
-Both the scripts to run the experiments and the data processed are publicly available at \dataRepo{}.
+1)~A number of bugs found and fixed. 
+We reported a total of \totalBugsReported{} bugs. 
+Of these, \totalBugsConfirmed{} bugs were confirmed and \totalBugsFixed{} bugs were fixed. 
+2)~An infrastructure for diversity-aware testing.
+The scripts to run the experiments will be available upon request. 
+The data is publicly available \dataRepo{}.
 
 \vspace{1ex} To summarize, this paper provides initial, yet strong evidence
-that exploring test transplantation and differential testing
-should be encouraged to find functional bugs
+that exploring diversity should be encouraged to find functional bugs
 in JavaScript engines.
 
 \section{JavaScript}
@@ -291,20 +494,14 @@ new version of the \es{} specification is produced with new features
 and minor fixes. The canonical spec today is
 ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 
-%% In the following, we briefly describe different sources of
-%% discrepancies that can emerge across different engine implementations
-%% as results of the active changes in the \es{} specification.
-%% .........
-%% A compatibility table relating features and supporting engines is
-%% publicly available~\cite{kangax}.
 
 The specification of JavaScript is incomplete for different
 reasons. Certain parts of the specification are undefined; it is
-the responsibility of engineers to decide how to implement these
+responsibility of engineers to decide how to implement these
 functionalities. The JavaScript spec uses the label
 ``implementation-dependent'' to indicate these cases, where behavior
 may differ from engine to engine. One reason this flexibility in the
-spec exists to enable compiler optimizations. For example, the
+spec exists is to enable compiler optimizations. For example, the
 \js\ \mcodeid{for-in} loop construct does not clearly specify the
 iteration order of
 elements~\cite{so-forin-undefined,javascript-in-chrome} and different
@@ -320,31 +517,20 @@ are not fully implemented as can be observed by the Kangax
 compatibility table~\cite{kangax}.  It is also worth noting that, as
 in other languages, some elements in JS have non-deterministic
 behavior (\eg{}, \mcodeid{Math.random} and \mcodeid{Date}). A test
-that makes decisions based on these elements could, in principle,
+that make decisions based on these elements could, in principle,
 produce different outcomes on different runs. Carefully-written test
 cases should not manifest this kind of flaky behavior.  As previously
 mentioned, all those aspects make testing \js\ engines challenging.
 
 
-%\subsection{Randomness}
 
 
-%\subsection{\Fix{Other}}
 
-%% 1) The stack depth in JS is often close to the real (native) C stack
-%% depth, nevertheless observable by JS through recursion. This causes
-%% differential behavior even on the same engine when JITs are enabled or
-%% disabled, as the stack frame sizes vary. LangFuzz in particular
-%% produces a lot of recursions and hits these problems even more often
-%% than jsfunfuzz.\Mar{ask C. Holler. it is unclear to me how the output
-%%   could be different.}
 
-%% \section{Objects of Study}
-%% This section discusses the objects we used in our study.
 
 \section{Engines Studied}
 \label{sec:methodology}
-\label{sec:methodology:engines}~We selected
+\label{sec:methodology:engines}~We selected 
 JS engines according to the following criteria: 1) Released latest
 version after Jan 1, 2018, 2) Contains more than 1K stars on GitHub,
 and 3) Uses a public issue tracker. We looked for highly-maintained
@@ -357,20 +543,14 @@ different JS engines in our host environment. This is important as we
 aim to use the most recent stable versions of each engine as to avoid
 reporting old and already-fixed bugs to developers.
 
-%% Table~\ref{tab:engines} shows the engines we selected in this
-%% study. We made an exception to the second criterion with
-%% XS~\cite{xs2018repo}. As the project is young, created in Oct 2017, we
-%% thought there was insufficient time to obtain 1K stars for XS. We
-%% still considered this project as it seems to be attracting interest
-%% from the community\Fix{is this true?}
 
 \begin{table}[t]
   \small
   \centering
   \caption{\label{tab:engines}Engines selected.}
-  \begin{tabular}{cccrrr}
+  \begin{tabular}{cccrr}
     \toprule
-    Team & Name & URL & \# Stars  & DOB & Version \\
+    Team & Name & URL & \# Stars  & DOB \\
     \midrule
     Apple & \jsc{} (WebKit) & \cite{jsc2018repo} &
     \multicolumn{1}{c}{3300+} & Jun 2001\\
@@ -378,13 +558,9 @@ reporting old and already-fixed bugs to developers.
     Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009\\
     Mozilla & \smonkey{} & \cite{spidermonkey2018repo} &
     \multicolumn{1}{c}{1100+} & Mar 1996\\
-    Facebook & \hermes{} & \cite{hermes2020repo} &
-    \multicolumn{1}{c}{5400+} & Jun 2019\\
-   \bottomrule
+   \bottomrule     
   \end{tabular}
 \end{table}
-
-% hermes very first commit: https://github.com/facebook/hermes/commit/f22a18f67da3f03db59c1ec715d6ec3776b03fbf
 
 \section{Mined JS Files}
 \label{sec:seeds}
@@ -398,8 +574,6 @@ from the engine's official repositories, 3) test files from the suites
 of public engines, and 4) test files mined from issue trackers of
 these engines.
 
-%% accessible from GitHub using the GitHub REST
-%% API~\cite{github-rest-api}.
 
 Table~\ref{tab:test-suites} shows the breakdown of tests per
 engine. Column ``full'' shows the number of test cases associated with
@@ -407,10 +581,10 @@ each engine. Column ``pass-in-par.''  shows the number of test cases
 that pass in their parent engine. We discarded tests that fail in
 their parent engine as we could not reliably indicate the reason for
 the failure, so we assumed the test could be broken. We removed \testsThatFail{}
-test cases that fail for that reason--\testsThatFailJSC{} tests from \jsc{} and
-\testsThatFailSM{} tests from \smonkey. Column ``type-in-all''
-shows the number of test cases whose executions do not throw
-dynamic type errors in any of the engines because of an undefined variable or property.
+test cases that fail for that reason--\testsThatFailJSC{} tests from \jsc{} and 
+\testsThatFailSM{} tests from \smonkey. Column ``type-in-all'' 
+shows the number of test cases whose executions do not throw 
+dynamic type errors in any of the engines because of an undefined variable or property. 
 These cases were captured by looking for the presence of \CodeIn{ReferenceError} and
 \CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
 (respectively, \CodeIn{TypeError}) is raised when test execution
@@ -434,15 +608,15 @@ differential testing as fuzzing seeds. The guarantee that they pass in
 all engines assures that, if discrepancies occur, they are related to
 the changes in the input as opposed to the original cause of failure.
 
-\newcommand\marktopleft[1]{%
-    \tikz[overlay,remember picture]
-        \node (marker-#1-a) at (0,2ex) {};%
+\newcommand\marktopleft[1]{
+    \tikz[overlay,remember picture] 
+        \node (marker-#1-a) at (0,2ex) {};
 }
-\newcommand\markbottomright[1]{%
-    \tikz[overlay,remember picture]
-        \node (marker-#1-b) at (0,0) {};%
+\newcommand\markbottomright[1]{
+    \tikz[overlay,remember picture] 
+        \node (marker-#1-b) at (0,0) {};
     \tikz[overlay,remember picture,thick,dashed,inner sep=2pt]
-        \node[draw,rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};%
+        \node[draw,rectangle,fit=(marker-#1-a.center) (marker-#1-b.center)] {};
 }
 
 \begin{table}[t]
@@ -465,33 +639,24 @@ the changes in the input as opposed to the original cause of failure.
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v8} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
     \midrule
-    Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
+    Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\ 
     \jerry{} & \cite{jerryscript} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
     Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
-    Hermes & \cite{jsi} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{}\\
     \midrule
      &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
-   \bottomrule
+   \bottomrule 
   \end{tabular}
 \end{table}
 
 
-%% The main source of test
-%% cases is the official Test262~\cite{tc39-github} conformance test
-%% suite for the ECMA262 specification~\cite{ecmas262-spec}.\Comment{
-%%   This test suite contains 87\% of all the tests we used.} We also
-%% considered test suites of three of the four engines mentioned in
-%% Section~\ref{sec:methodology:engines} and four other engines. Overall,
-%% we selected a total of \totfiles{} JS
-%% files.
 
 \lbrack{}Cleansing\rbrack{}~We noticed that some of the tests we found
 depend on external libraries, which not all selected engines
 support. We decided to discard those. For example, many tests we found
 required a Node.js runtime~\cite{node} for execution. Also, we did not
 consider tests from the \chakra{} repository because they depend on
-non-portable objects.
+non-portable objects. 
 Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
 Mozilla and \jsc{}; we discarded those to avoid repetition and to give
@@ -514,8 +679,6 @@ cases embedded in issue descriptions whereas the latter are more
 common. Consequently, we thought we should handle both
 cases.
 
-% (\jsc{}=147, \veight{}=370, and \smonkey{}=110).
-% (\jsc{}=\Fix{XX}, \veight{}=\Fix{XX}, \smonkey{}=\Fix{XX})
 To obtain test files included as attachments, we wrote a crawler to
 visit the issue trackers of all engines listed in
 Table~\ref{tab:engines} and we were able to retrieve a total of
@@ -551,69 +714,19 @@ and test the classifier and obtained an accuracy of 98\%. This
 classifier is publicly available from our website as a separate
 component.
 
-%% With that mapping it is
-%% possible to measure distance between two sentences as the distance
-%% between the vectors characterizing them. Consequently, one can
-%% measure, for example, the minimum distance between a sentence in
-%% English and a sentence in a \js\ embedding, built with word2vec using
-%% a corpus of \js\ sentences. \Mar{Please confirm if this is the idea!
-%%   If yes, shouldn't just one corpus (e.g., the JS corpus) be enough to
-%%   solve the problem? Are there two separate embeddings (one for
-%%   English and one for JS)? If not, how they are combined? What about
-%%   the classification scheme?  It needs to answer yes/no (not a
-%%   distance).}
-
-%% For space, we summarize the solution that worked the best in
-%% the following. The classifier that performed best for this case uses a
-%% standard Embeddings NLP technique~\Fix{cite}\Mar{needs to explain what
-%%   this ``Embeddings'' thing does at a high-level. Also, if this stuff
-%%   exists why we did not find a solution off-the-shelf?}  that builds
-%% on a neural net~\Fix{cite} to keep a dictionary of words and the
-%% similarity distance among them\Mar{but we are talking about
-%%   sentences. how does it go from words to sentences? Note that many
-%%   words from the ``code'' vocabulary are from English!}. In more
-%% detail, the classification model uses a Convolutional Neural
-%% Network~\Fix{cite} classifier with two layers\Mar{why two? is there a
-%%   meaning for each layer?} and has been trained and evaluated using a
-%% dataset with 25K samples of English paragraphs and 25K snippets of
-%% \js{}. We ran a standard \Fix{X}-repeated 10-fold cross validation to
-%% evaluate the model and obtained a predicted accuracy of
-%% \Fix{98\%}. This classifier is publicly available from our website as
-%% a separate component.
-
-%% N\'os mineramos as issues em bug trackers dos engines javascript mais conhecidos.
-%% Foi necessario capturar tanto os arquivos javascript anexados quanto os codigos escritos nos reports.
-%% Para obter o codigo extraido dos reports, foi criado um modelo de aprendizagem para reconhecer
-%% se um bloco de texto eh um bloco de codigo.
-
-%% Motivacao:
-%% Utilizamos a tecnica de Embeddings que eh reconhecida pela comunidade pelo seu uso em PLN (Processing Language Natural),
-%% onde atraves de uma rede neural, consegue-se montar um dicionario de palavras com a distancia
-%% de similaridade entre elas.
-%% Para treinamenteo, foi utilizado uma rede neural simples CNN (Convolutional Neural network) com apenas 2 camadas, uma de entrada e outra de saida.
-%% Utilizando as variaveis \Fix{XYZ} e as funcoes \Fix{XYZ}. Obtivemos 98\% de acuracia em nosso treinamento.
-%% (melhorar definicao do modelo)
-
-%% Inputs:
-%% Para nosso modelo de dados, foi necessario gerar um arquivo CSV com cerca de 50K de dados extraidos
-%% de arquivos javascript (nossas seeds) e de linguagem natural, utilizamos 25K para cada classe.
-%% Os rotulos das classes sao definidas em 0 (is not code) ou 1 (is code).
-
-%% Com isso, extraimos cerca de \Fix{X} codigo e apos realizar o parser para validar o arquivo, obtivemos um total de \Fix{X} novas seeds.
-
-%% \Fix{...elaborate...}
 
 
-%% \Fix{revise this}
-%% For example to run the \jerry{} tests it was necessary
-%% use the unit-test package to run it, but with our changes we added the assertion
-%% does not have an assertion in the test file
-%% \Fix{add code to explain}
+
+
+
+
+
+
 
 \begin{figure}[t]
   \centering
   \includegraphics[trim=0 350 0 0,clip,width=1.0\textwidth]{diff-testing-runtimes}
-  \vspace{-5ex}
+  \vspace{-5ex}  
   \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
   \vspace{-2ex}
 \end{figure}
@@ -664,15 +777,6 @@ properly parse the error message to retrieve the error types. We left
 that as future work as we already found several discrepancies even
 without that.
 
-%% \Mar{any difference in
-%%   output is considered for reporting? are there any
-%%   filtering?}\Igor{acho que nos equivocamos ao deixar o "eshost-cli",
-%%   nao estamos mais utilizando isso devido a essa ferramenta nao
-%%   capturar certos tipo de issues (e.g. crash), retirar tambem da Figura 2.
-%%   A respeito de filtros nos reports, nao. Nos so capturamos o output,
-%%   o que modificamos eh apenas a formatacao do output para coletar apenas a
-%%   mensagem e nao o stack trace.
-%%   }
 
 
 \subsection{Prioritization}
@@ -721,9 +825,6 @@ release of \chakra.
 \subsection{Clusterization}
 \label{sec:clusterization}
 
-%% Prioritization helps to steer our focus to the warnings more likely to
-%% reveal bugs, but there could be several tests producing similar
-%% warnings.
 
 Clusterization is complementary to prioritization; it helps to group
 similar warnings reported by our infrastructure. We only clustered
@@ -810,29 +911,7 @@ shown effective to find real
 bugs~\cite{Holler:2012:FCF:2362793.2362831}, we did not consider those
 fuzzers in this study for the reasons above.
 
-%% Our
-%% infrastructure supports any grammar fuzzer with a few
-%% adjusts. However, we try to integrate several grammar-based fuzzers,
-%% for example
-%% and \Fix{others fuzzers} to
-%% generate new JavaScript files based on grammar, but after several runs
-%% it was observed that this approach was ineffective due the amount of
-%% invalid files and/or files without discrepancies.
-%% For example, if we
-%% ran Grammarinator to generate 1K JS files ten times with a random seed
-%% generation, we obtained \Fix{XX\%} of valid files. Checking in our
-%% environment almost \Fix{XX\%} are js files that shows undefined
-%% variables and due the differential testing in our environment all
-%% engines will raise a SyntaxError and this approach was not relevant to
-%% our experiment.
 
-%% We initially considered used representatives of popular fuzzing approaches. For
-%% random-based fuzzing we used Radamsa~\cite{radamsa}; for
-%% coverage-based fuzzing we used
-%% \Fix{AFL~\cite{afl}/libfuzzer~\cite{libfuzzer}?}, and for
-%% generative-based fuzzing we used
-%% \Fix{grammarinator,jsfunfuzz?}. Details on how these fuzzers work can
-%% be found elsewhere~\cite{fuzz-bart}.
 
 Mutational fuzzers can be either white-box or black-box. White-box
 mutational fuzzers are typically coverage-based. American Fuzz Loop
@@ -881,14 +960,13 @@ tree~\cite{grieco2016quickfuzz} with trees created anew.
 \section{Results}
 \label{sec:results}
 
-The goal of this paper is to assess ability of
-test transplantation and differential testing
-to find functional bugs
+The goal of this paper is to assess ability of techniques that
+leverage diversity to find functional bugs
 in \javascript\ engines. Based on that, we pose three questions:
 \begin{description}[leftmargin=.5in]
 \item[RQ1.] How conformant are the engines to the Test262 suite?
 \item[RQ2.] How effective is test transplantation to find bugs?
-\item[RQ3.] How effective is cross-engine differential testing to find bugs?
+\item[RQ3.] How effective is cross-engine differential testing to find bugs?  
 \end{description}
 
 The first question focuses on the conformance of our selected engines
@@ -903,7 +981,7 @@ scenarios not covered by a different engine. The third question
 evaluates the effectiveness of cross-engine differential testing to
 find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
 rationale for this question is that fuzzing inputs may explore
-scenarios not well-tested by at least one of the engines.
+scenarios not well tested by at least one of the engines.
 
 \subsection{Answering RQ1 (Conformance)}
 \label{sec:stability}
@@ -914,7 +992,7 @@ acceptable to release engines fulfilling the specification only
 partially~\cite{kangax}. We expect that the pass rate on this suite
 provide some indication of the engine's maturity. In the limit, it is
 not desirable to flood bug reports on engines at early stages of
-development.
+development. 
 
 For this experiment, we ran the suite once a day for seven consecutive
 days and averaged the passing ratios. Table~\ref{tab:test262} shows
@@ -923,25 +1001,22 @@ results was negligible; for that reason, we omitted standard
 deviations. We noticed that all four engines but \chakra{} used some
 variant of the Test262 suite as part of their regression process, but
 we used the same version in this
-experiment~\cite{ecma262-conformance-suite}.
+experiment~\cite{ecma262-conformance-suite}. 
 
 \begin{table}
-  %\vspace{-4ex}
   \centering
   \caption{\label{tab:test262}Percentage of passing tests on
     the Test262 conformance suite.}
-  %\small
   \begin{tabular}{rr}
     \toprule
     engine & \% passing \\
     \midrule
     \jsc{} & \percentSuiteTestJSC{}\\
     \veight{} & \percentSuiteTestVeight{} \\
-    \chakra{} & \percentSuiteTestChakra{} \\
+    \chakra{} & \percentSuiteTestChakra{} \\    
     \smonkey{} & \percentSuiteTestSM{} \\
     \bottomrule
   \end{tabular}
-  %\normalsize
 \end{table}
 
 Results show that there are still many unsupported scenarios as can be observed from the
@@ -976,7 +1051,6 @@ suite original from a given engine in another engine. Intuitively, we
 want to assess how effective is the idea of cross-fertilization of
 testing knowledge among \js\ developers.
 
-%\vspace{0.5ex}
 \subsubsection{Methodology}
 \label{sec:methodology}
 In this experiment, a developer with experience in \js\ analyzed each
@@ -997,24 +1071,22 @@ issue tracker of the affected engine.
     \toprule
     test suite\textbackslash{}engine & \jsc{} & \veight{} & \smonkey{} & \chakra{}\\
     \midrule
-    % \Fix{Versions (03.08)} & 234555 & 7.0.158 & 62.0b14 & 1.10.1 \\
     \Comment{
       Lembrar dos testes que os testes da propria engine falham:
-      V8 0
-      JSC 2
+      V8 0 
+      JSC 2 
       Spidermonkey 58
     }
     \jsc{} & - & 10 & 10 & 59   \\
     \veight{} & 41 & - & 3 & 5  \\
-%    \chakra{} & - & - & - & -  \\
     \smonkey{} & 218 & 107 & - & 281 \\
     Duktape & 0 & 4 & 4 & 1   \\
     \jerry{} & 23 & 25 & 22 & 23   \\
-    JSI & 0 & 0 & 0 & 0   \\
+    JSI & 0 & 0 & 0 & 0   \\ 
    Tiny-js & 0 & 0 & 0 & 0  \\
     \midrule
    \textbf{total} & 282 & 146 & 39 & 369 \\
-    \bottomrule
+    \bottomrule 
   \end{tabular}
   \vspace{-3ex}
 \end{table}
@@ -1043,11 +1115,6 @@ that it is the suite with more tests (see
 Table~\ref{tab:test-suites}).
 
 
-%%  As another example, some tests from \Fix{Y} use the
-%% implementation-dependent description message\Mar{what is the name of
-%%   the property?} encapsulated in an \CodeIn{Error} object in
-%% assertions. As such, those tests fail in all engines but
-%% \Fix{Y}.
 
 \sloppy The sources of false positives found in this experiment are as
 follows: \textbf{Undefined Behavior.} False positives of this kind are
@@ -1086,7 +1153,6 @@ spec but is no longer valid for the current spec.
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
     of False (FP) and True Positives (TP).}
-  %\setlength{\tabcolsep}{3pt}
   \renewcommand*{\arraystretch}{0.9}
   \begin{tabular}{ccr}
     \toprule
@@ -1113,8 +1179,60 @@ source. Considering true positives, we found a reasonable number of
 duplicate reports, but not high enough to justify attempting to
 automate the detection of duplicates.
 
-\input{table_transplantation}
+\begin{table}[t!]
+  \renewcommand{\arraystretch}{0.95}
+      \centering
+      \caption{List of bugs reports from Test Transplantation.}
+      \label{tab:test-transplantation-bugs}
+    
+      \begin{tabular}{rccccc}
+        \toprule Issue\#\Comment{    & Date} & Engine  & Status  \Comment{& \multicolumn{1}{c}{Url}}  & Severity & Suite \\
+        \midrule    
+        1  \Comment{& 4/18  }& \jsc{}  & New  \Comment{& \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184749}{\#184749}}} & - & \jerry{}      \\
+       2  \Comment{& 4/23 }& \chakra{}  & \textbf{Confirmed}  \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5033}{\#5033}}} & 2 & \smonkey{}      \\
+    
+       3  \Comment{& 4/29 }& \chakra{}  & \textbf{Fixed}   \Comment{&
+        \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5065}{\#5065}}}
+        & 2 & \smonkey{} \\
+       4\Comment{& \multirow{2}{*}{4/29}} & \chakra{} &
+       \textbf{Confirmed} \Comment{&
+       \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5067}{\#5067}}} & 2 & \smonkey{}\\
+       5                    &\Comment{  &}
+        \jsc{} & New \Comment{&    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185130}{\#185130}}} &  -  & \smonkey{}\\
+       6 \Comment{& 5/02  }& \jsc{} & New  \Comment{& \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185208}{\#185208}}} & - & \smonkey{} \\
+       7 \Comment{& 5/02  }& \jsc{} & \textbf{Confirmed} \Comment{ & \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=185211}{\#185211}}} & 2 & \smonkey{}\\ 
+       8 \Comment{& 5/17  }& \chakra{} & \textbf{Confirmed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5187}{\#5187}}} & 2 & \jsc{}\\
+       9 \Comment{& 5/21  }& \chakra{} & \textbf{Fixed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5203}{\#5203}}} & 2 & \smonkey{}\\
+       10 \Comment{& 6/28  }& \chakra{} & \textbf{Confirmed}  \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5388}{\#5388}}} & 2 & \jsc{}\\
+       11 \Comment{& 7/10  }& \chakra{} & \textbf{Confirmed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5442}{\#5442}}} & 2 & \jerry{}\\ 
+       12 \Comment{& 7/18  }& \chakra{} & \textbf{Fixed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5478}{\#5478}}} & 2 & \smonkey{}\\
+       13 \Comment{& 7/18  }& \jsc{} & New \Comment{& \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187777}{\#187777}}} & - & \jerry{}\\
+       14 \Comment{& 7/18  }& \chakra{} & \textbf{Fixed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5549}{\#5549}}} & 2 & \jerry{}\\ 
+       15 \Comment{& 8/07  }& \chakra{} & \textbf{Fixed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5576}{\#5576}}} & 3 & \jerry{}\\
+       16 \Comment{& 8/07  }& \jsc{} & \textbf{Fixed} \Comment{& \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188378}{\#188378}}} & 2 & \jerry{}\\
+       17 \Comment{& 8/07  }& \chakra{} & \textbf{Confirmed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5579}{\#5579}}} & 3 & \jerry{}\\
+       18 \Comment{& 8/07  }& \jsc{} & \textbf{Fixed} \Comment{& \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188382}{\#188382}}} & 2 & \jerry{}\\
+       19 \Comment{& 8/08  }& \veight{} & \textbf{Fixed} \Comment{& \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8033}{\#8033}}} & 3 & \jerry{}\\
+       20 \Comment{& 8/08  }& \jsc{} & New \Comment{& \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188407}{\#188407}}} & - & \jerry{}\\
+       21 \Comment{& 8/16  }& \veight{} & WontFix \Comment{& \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8064}{\#8064}}} & 2 & Duktape\\
+       22 \Comment{& 8/22  }& \chakra{} & \textbf{Fixed} \Comment{& \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5621}{\#5621}}} & 2 & \smonkey{}\\
+       23 \Comment{& 8/22  }& \jsc{} & \textbf{Fixed} \Comment{& \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188874}{\#188874}}} & 2 & \smonkey{}\\
 
+       24\Comment{& 
+        \multirow{3}{*}{8/22}} & \jsc{} & New \Comment{&
+       \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188875}{\#188875}}}
+       & - & \smonkey{}\\
+       25 &  \Comment{&}
+        \veight{} & \textbf{Fixed} \Comment{& \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8082}{\#8082}}} &  2  & \smonkey{}\\
+       26 &  \Comment{&}
+        \chakra{} & \textbf{Fixed} \Comment{& \anonym{\href{https://github.com/Microsoft/ChakraCore/issues/5624}{\#5624}}} &  2  & \smonkey{}\\
+
+       27 \Comment{& 8/23  }& \jsc{} & New \Comment{& \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188877}{\#188877}}} & - & \smonkey{}\\
+       \bottomrule
+      \end{tabular}
+      \vspace{-2ex}
+\end{table}
+ 
 
 Table~\ref{tab:test-transplantation-bugs} lists all bugs we found with
 test transplantation. The first column shows the identifier we
@@ -1142,22 +1260,14 @@ tracker of \chakra, we found that severity-1 bugs are indeed
 rare. Considering the number of bug reports confirmed by developers,
 \chakra{} was the engine with the highest number--\bugsChakra{} (with \bugsChakraFixed{} bugs
 fixed). Considering the remaining engines, \veight{} developers
-confirmed the \noTransVeightBugsReported{} bugs we reported, fixing
+confirmed the \noTransVeightBugsReported{} bugs we reported, fixing 
 \noTransVeightBugsFixed{}. Curiously, Google
 engineers confirmed the issued bug reports in a few hours. Overall, we
 found that development teams of other engines, specially \jsc\, took
 much longer to analyze bug reports as can be observed in the
-\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}.
+\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}. 
 However, the bugs the \jsc{} team confirmed were quickly fixed.
 
-%% Overall, we found these results promising given that precision (\ie{},
-%% the ratio of true positives over all reports) needs to take into
-%% account the cost of inspecting the failure~\cite{harman-ohearn-2018};
-%% it took a week for the developer to inspect the entire set of
-%% failures. The precision for \jsc\ was \Fix{X\%} (\ie, XX/270), which
-%% seems a low rate, but it took approximately \Fix{x} days to find
-%% \Fix{y} real bugs on this engine. Section~\ref{sec:bugs} shows samples
-%% of false and true positives.
 
 \begin{center}
   \fbox{
@@ -1197,11 +1307,8 @@ well-formed fuzzed files per input file, \ie{}, the number of fuzzing
 iterations can exceed the number above as we discard generated files
 that are syntactically invalid.
 
-%%  That
-%% finding would be important to reduce inspection cost and guide future
-%% developments of this approach.
 
-\vspace{0.5ex} \lbrack{}Exploratory Phase\rbrack{} For the first
+\vspace{0.5ex} \lbrack{}Exploratory Phase.\rbrack{} For the first
 three months of the study, our inspection process was exploratory.  In
 this phase, we wanted to learn whether or not black-box fuzzers could
 reveal real bugs and how effective was the \hi{}-\lo\ warning
@@ -1231,7 +1338,7 @@ was filed only after one of the authors reviewed the diagnosis. Each
 student found at least one bug using this methodology.
 
 \vspace{0.5ex}
-\lbrack{}Non-Exploratory Phase\rbrack{} Results obtained in the
+\lbrack{}Non-Exploratory Phase.\rbrack{} Results obtained in the
 exploratory phase confirmed our expectations that most of the bugs
 found during the initial period of investigation were related to
 \hi\ warnings. For that reason, we changed our inspection
@@ -1249,29 +1356,7 @@ engines diverge. The rationale for this methodology was to give
 attention to each engine more uniformly, enabling more fair comparison
 across engines.
 
-%% Table~\ref{tab:summary-lo}
-%% shows statistics of \lo\ warnings obtained when fuzzing inputs with
-%% different tools. Column ``\# buckets'' shows the number of buckets
-%% associated with ``\lo'' warnings, column ``\# files'' shows the total
-%% number of files involved in these warnings, and column ``avg. \# files
-%% per bucket'' shows the average number of files per bucket. Note that,
-%% although the number of buckets and files differ substantially across
-%% fuzzers, the difference of files per bucket was not very high.\Mar{not
-%% sure how relevant is this par.}
 
-%% \begin{table}[t]
-%%   \small
-%%   \centering
-%%   \caption{\label{tab:summary-lo}Summary of \lo\ warning reports.}
-%%   \begin{tabular}{crrr}
-%%     \toprule
-%%     & \# buckets & \# files & avg. \# files per bucket \\
-%%     \midrule
-%%     \radamsa{} & 82 & 319 & 3.8 \\
-%%     \quickfuzz{} & 78 & 218 & 2.7 \\
-%%     \bottomrule
-%%   \end{tabular}
-%% \end{table}
 
 \vspace{0.5ex}
 \subsubsection{Results}~Table~\ref{tab:summary-hi} shows statistics of \hi\ warnings. The table breaks down \hi\ warning by the affected
@@ -1293,10 +1378,10 @@ second places, respectively, in number of warnings.
     \toprule
     fuzzer\textbackslash{}engine & \jsc\ & \veight\ & \chakra & \smonkey & +1\\
     \midrule
-    \radamsa{} & 151 & 50 & 331 & 94 & 628 \\ % 137 & 47 & 323 & 21 & 483
-    \quickfuzz{} & 83 & 63 & 351 & 21 & 403 \\ % 81 & 62 & 349 & 13 & 369
+    \radamsa{} & 151 & 50 & 331 & 94 & 628 \\ 
+    \quickfuzz{} & 83 & 63 & 351 & 21 & 403 \\ 
     \midrule
-    \textbf{total} & 234 & 113 & 682 & 115 & 1031 \\ % 218 & 109 & 672 & 34 & 852
+    \textbf{total} & 234 & 113 & 682 & 115 & 1031 \\ 
     \bottomrule
   \end{tabular}
 \end{table}
@@ -1324,30 +1409,19 @@ expression (\eg{}, some string expression or regular expression).
     \toprule
     & & \radamsa\ & \quickfuzz\ \\
     \midrule
-    \multirow{4}{*}{FP} & Undefined Behavior & 42 & 16 \\ % 26 & 9
-    & Timeout/OME & 30 & 15 \\ % 28 & 13
-    & * Invalid Input & 46 & 55 \\ % 39 & 48
-    & * Error Message Mismatch & 41 & 12 \\ % 41 & 12
+    \multirow{4}{*}{FP} & Undefined Behavior & 42 & 16 \\ 
+    & Timeout/OME & 30 & 15 \\ 
+    & * Invalid Input & 46 & 55 \\ 
+    & * Error Message Mismatch & 41 & 12 \\ 
     \midrule
-    \multirow{2}{*}{TP} & Duplicate & 36 & 28\\ % 34 & 28
+    \multirow{2}{*}{TP} & Duplicate & 36 & 28\\ 
     & Bug & 15 & 7\\
-    \bottomrule
+    \bottomrule     
   \end{tabular}
 \end{table}
 
-%% \Igor{devemos remover isso da
-%% etapa de fuzzing upcoming feature falha mesmo sem fuzzing...$\rightarrow$
-%% The source ``Upcoming Feature''
-%% indicates that the test fails because it uses a feature that is
-%% available in the original engine, but it is still not standard, and
-%% the target engine does not support that feature}. For example,
-%% \Fix{provide concrete example}. \Fix{explain error message mismatch}
 
 
-%% The table is
-%% organized in two sections. The top section shows results obtained
-%% during the exploratory phase of the study and the bottom section shows
-%% the results obtained during the non-exploratory phase.
 
 
 Table~\ref{tab:bugs} shows the list of bugs we reported. The table
@@ -1362,27 +1436,111 @@ were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was considered to be acceptable. As
 of now, we did not find any new bugs on \smonkey{}; the bugs we found
-were duplicates and were not reported. For \veight{},
-we reported \noDiffVeight{} bugs,
+were duplicates and were not reported. For \veight{}, 
+we reported \noDiffVeight{} bugs, 
 all of them confirmed, with \noDiffVeightFixed{} fixed.
 
-\input{table_differential}
+\begin{table}[t]
+  \vspace{-3ex}
+  \centering
+  \caption{List of bugs reports from Differential Testing.}
+  \label{tab:bugs}
+  \setlength{\tabcolsep}{1.5pt}
+  \renewcommand{\arraystretch}{0.95}
+  \begin{tabular}{rcccccc}
+    \toprule
+    Issue\# \Comment{ & Date} & Fuzzer & Engine  & Status \Comment{&
+    \multicolumn{1}{c}{Url}}  & Sev. & Priority & Suite \\
+    \midrule
+    1  \Comment{& 4/12} & radamsa & \chakra{}   & \textbf{Fixed}  \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4978}{\#4978}}}
+    & 2 & \textbf{\lo} & \jsc{} \\ 
+    2  \Comment{& 4/12} & radamsa & \chakra{}   & WontFix  \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4979}{\#4979}}}
+    & - & \hi{} & \jsc{} \\
+    3  \Comment{& 4/14} & radamsa & \jsc{}  & New \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}}
+    } & -  & \hi{} & \jsc{}    \\
+    4  \Comment{& 4/25} & radamsa & \chakra{}  & \textbf{Fixed}     \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5038}{\#5038}}}
+    & 2 & \hi{} & \jerry{}   \\
+    5  \Comment{& 4/29} & radamsa & \jsc{}  & \textbf{Fixed}  \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}}
+    } & 2  & \hi{}  & \jerry{}\\
+    
+    6 \Comment{& 4/30}  & radamsa & \chakra{} & \textbf{Confirmed} \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}}
+    & 2 & \hi{} & TinyJS\\
+    
+    7                    \Comment{& 4/30}                       &  radamsa   &
+    \jsc{} & New \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}}
+    & - & \hi{} & TinyJS \\
 
-%% Note from the table that all bug reports still waiting for
-%% confirmation are associated with the \jsc{} engine. A closer look at
-%% the \jsc{} issue tracker showed that their triage process is slow
-%% relative to \chakra's.\Comment{\Igor{ The bugs reported on \chakra{}'s
-%%     bug tracker was defined as confirmed, however the bugs are
-%%     included on a milestone for the next release following an internal
-%%     priority.  }}
 
-%% Finally, it is worth noting that \Fix{11 of the 19}
-%% JS files that manifested discrepancies were \emph{not} produced with
-%% fuzzing (column ``Fuzz''). These are test files from suites of
-%% different engines. This observation emphasizes the importance of
-%% continuously collecting test suites from multiple sources; today, we
-%% use test suites from seven different open source engines, including a
-%% total of 30K test files.
+    
+    8 \Comment{& 5/02} & radamsa & \jsc{}  & \textbf{Fixed} \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}}
+    & 2 & \textbf{\lo} & \smonkey{} \\
+    9 \Comment{& 5/10} & radamsa & \chakra{} & \textbf{Confirmed} \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}}
+    & 3 & \hi{} & \jerry{} \\
+    10 \Comment{& 5/17} & radamsa & \chakra{} & \textbf{Fixed} \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}}
+    & 2 & \hi{} & \veight{}\\
+    11 \Comment{& 5/24} & radamsa & \jsc{} & \textbf{Fixed}  \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}}
+    & 2 & \hi{} & \jsc{}\\
+    12 \Comment{& 6/26} & radamsa & \jsc{} & \textbf{Fixed}  \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}}
+    & 2 & \hi{} & \jerry{}\\
+    13 \Comment{& 7/10} & quickfuzz & \jsc{} & \textbf{Fixed}  \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}}
+    & 2 & \hi{} & \jerry{}\\
+    14 \Comment{& 7/10} & quickfuzz & \chakra{} & \textbf{Confirmed}  \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}}
+    & 2 & \hi{} & \jerry{}\\
+
+
+
+    15 \Comment{& 8/21}  & radamsa & \chakra{} & \textbf{Fixed} \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5617}{\#5617}}}
+    & 3 & \hi{} & Test262\\    
+
+    16 \Comment{& 8/21} & radamsa &
+    \veight{} & \textbf{Fixed} \Comment{&
+    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}}
+    & 2 & \hi{} & Test262 \\
+
+    
+    17 \Comment{& 8/23} & quickfuzz & \jsc{} & New  \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}}
+    & - & \hi{} & Test262\\
+    18 \Comment{& 8/23} & quickfuzz & \veight{} & \textbf{Confirmed}  \Comment{&
+    \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}}
+    & 2 & \hi{} & Test262\\
+
+    19 \Comment{& 8/24}  & quickfuzz & \chakra{} & \textbf{Confirmed} \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5630}{\#5630}}}
+    & 2 & \hi{} & Test262\\
+    
+    20 \Comment{& 8/24} &  quickfuzz & 
+    \jsc{} & New \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188920}{\#188920}}}
+    & - & \hi{} & Test262 \\
+
+    21 \Comment{& 8/24} & quickfuzz & \jsc{}  & New \Comment{&
+    \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=188930}{\#188930}}}
+    & - & \hi{} & Test262\\
+    
+    22 \Comment{& 8/21}  & radamsa & \chakra{} & \textbf{Confirmed} \Comment{&
+    \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5968}{\#5968}}}
+    & - & \hi{} & \smonkey{}\\
+   \bottomrule
+  \end{tabular}
+\end{table}
+ 
+
 
 \begin{center}
   \fbox{
@@ -1412,9 +1570,6 @@ and differential testing (with \radamsa\ and with \quickfuzz), (iii)
 to cover a case of rejected bug report, and (iv) to use short tests
 (for space).
 
-%% \CodeIn{\{var a =
-%%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
-%%   assert(+a === 0)\}}
 
 \sloppy
 \vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
@@ -1425,10 +1580,9 @@ code snippet below shows a test that reveals a bug in \chakra.
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
+    morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
@@ -1436,9 +1590,7 @@ code snippet below shows a test that reveals a bug in \chakra.
    assert(+a === 0) }
   \end{lstlisting}
   \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
-  \vspace{-1ex}
+  \vspace{-1ex}  
 \end{figure}
 
 The object property \CodeIn{valueOf} stores a function that returns a
@@ -1472,19 +1624,6 @@ error--in this case, a SyntaxError--if the break statement is not
 nested in an iterable or a switch statement. All engines, but
 \veight{}, behave as expected in this case.
 
-%% \Igor{
-%%   Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
-%%   Este test case oriundo da suite Test262 foi fuzzado pelo \quickfuzz{}
-%%   que por ser um fuzzer mutacional, usa uma gramatica \js{} que auxilia na geracao
-%%   de entradas validas. In Figure~\ref{fig:bug-veight}, we observed a \CodeIn{eval} statement
-%%   that try to evaluate a \CodeIn{function f()}, this test case specify the ecma spec
-%%   B.3.3.3~\cite{spec-b333} that describe an evaluation of a block statement in eval code containing a
-%%   function declaration. The fuzzer removes the function declaration and
-%%   injects a function with a break statement outside a loop. According to specification~\cite{break-statement},
-%%   the break statement should throw an early error (in this case a SyntaxError)
-%%   if the break statement is not nested in an iterational or a switch statement. All engines works
-%%   as expected but \veight{} pass without failures.
-%% }
 
 
 \vspace{1ex}\noindent\textbf{Issue \#18,
@@ -1494,14 +1633,13 @@ originates from \jerry{} test suite; the bug was found during the test
 transplantation experiment.
 
 \begin{figure}[h!]
-  \vspace{-0.5ex}
+  \vspace{-0.5ex}  
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
+    morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
@@ -1510,9 +1648,7 @@ transplantation experiment.
  catch (e) { assert(e instanceof TypeError); }
   \end{lstlisting}
   \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
-  \vspace{-1ex}
+  \vspace{-1ex}  
 \end{figure}
 
 According to the specification~\cite{ecmas262-array-sort}, the
@@ -1527,14 +1663,13 @@ code snippet below shows an example input related to a bug report that
 we issued to the \chakra\ development team, but they did not accept.
 
 \begin{figure}[h!]
-  \vspace{-0.5ex}
+  \vspace{-0.5ex}  
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
+    morekeywords={assertEq, var, yield, in, function, 
     typeof, return, throw, new, Error, if},
   }
   \begin{lstlisting}
@@ -1543,9 +1678,7 @@ we issued to the \chakra\ development team, but they did not accept.
      && "foo".repeat(657604378) === "foofoofoo"; }
   \end{lstlisting}
   \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
-  \vspace{-1ex}
+  \vspace{-1ex}  
 \end{figure}
 
 
@@ -1578,15 +1711,6 @@ bugs confirmed and fixed and severity). Engine developers were
 responsible for determining the labels of the bug reports and their
 severity. Consequently, these metrics originate from a trusted source.
 
-%% there might be errors in the implementation of our
-%% infrastructure. To mitigate this threat, we extensively inspected the
-%% results of our evaluation manually and, when we found the need for
-%% implementing a different component we kept the old one for
-%% cross-checking. For example, we used eshost-cli~\cite{eshost-cli} to
-%% validate our fork-join implementation of the ``Checker'' component
-%% from Figure~\ref{fig:workflow} that, for efficiency, is tightly
-%% integrated to our infrastructure.
-%% \Fix{elaborate}
 
 \subsection{Key Findings and Lessons}
 \label{sec:lessons}
@@ -1596,9 +1720,6 @@ The main findings of this study are as follows.
 \begin{itemize}
   \item Both techniques we investigated were successful in revealing
     bugs (several of them);
-  %% \item We have found more bugs with test transplantation than we have
-  %%   with cross-engine differential testing. In addition, test
-  %%   transplantation demanded less effort per bug;
   \item Even simple black-box fuzzers can create surprisingly
     interesting inputs. We conjecture that there is room to find more
     bugs using other fuzzers;
@@ -1642,26 +1763,26 @@ industrial project.
 \section{Related Work}
 \label{sec:related-work}
 
-%\subsection{\label{sec:related:diversity-testing}Diversity in Testing}
-%The idea of test set diversity dates back to the
-%eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. The
-%assumption behind test set diversity is that faults often spread
-%contiguously in the input domain. Consequently, it should be
-%beneficial to partition the input domain and explore it more evenly as
-%to find bugs faster. Later in the nineties, Chen and
-%Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
-%the continuity assumption. They found that faults, most often,
-%manifest themselves in regular patterns across the input
-%domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
-%observations led researchers to investigate generalizations of the
-%approach to non-numerical data types and strategies to explore the
-%input (or output) space to solve different problems in Software
-%Engineering (\eg{}, test input generation and test
-%selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
-%paper explores diversity of sources of test cases and diversity of
-%engine implementations. We remain to investigate the diversity of test
-%cases themselves. In principle, that could help reduce the number of
-%alarms to inspect, for example.
+\subsection{\label{sec:related:diversity-testing}Diversity in Testing}
+The idea of test set diversity dates back to the
+eighties~\cite{white-cohen-tse1980,ostrand-balcer-1988}. The
+assumption behind test set diversity is that faults often spread
+contiguously in the input domain. Consequently, it should be
+beneficial to partition the input domain and explore it more evenly as
+to find bugs faster. Later in the nineties, Chen and
+Yu~\cite{chen-yu-tse1996} analyzed numerical software and confirmed
+the continuity assumption. They found that faults, most often,
+manifest themselves in regular patterns across the input
+domain~\cite{Chen:2010:ART:1663656.1663914,7515474}.  Such
+observations led researchers to investigate generalizations of the
+approach to non-numerical data types and strategies to explore the
+input (or output) space to solve different problems in Software
+Engineering (\eg{}, test input generation and test
+selection)~\cite{mayer-ase2005,bueno-etal-ase2007,ciupa-etal-icse08,alshahwan-harman-icse2012,alshahwan-harman-issta2014,7515474}. This
+paper explores diversity of sources of test cases and diversity of
+engine implementations. We remain to investigate the diversity of test
+cases themselves. In principle, that could help reduce the number of
+alarms to inspect, for example.
 
 \subsection{Differential Testing}
 Several different applications of differential testing have been
@@ -1758,9 +1879,6 @@ Tables~\ref{tab:test-transplantation-bugs} and~\ref{tab:bugs}.
 
 \section{Conclusions}
 
-%% \Fix{
-%% although more research needs be done to automate
-%% parts of the inspection process (\eg{}, reduction of false alarms),}
 
 JavaScript (\js{}) is very popular today. Bugs in engine
 implementations often affect lots of people and organizations.
@@ -1768,11 +1886,12 @@ Implementing correct engines is challenging because the specification
 is intentionally incomplete and evolves frequently. Finding bugs in
 \js\ engines is challenging for similar reasons.
 
-This paper reports on a study to evaluate two
+This paper reports on a study to evaluate two diversity-aware
 techniques for finding bugs in \js{}--test transplantation and
-cross-engine differential testing. The first technique
-runs the test suite of one given engine in another engine.
-The second technique fuzzes existing inputs and then compares the
+cross-engine differential testing. The first technique explores
+diversity of test sources; it runs the test suite of one given engine
+in another engine. The second technique explores diversity of
+implementations; it fuzzes existing inputs and then compares the
 output produced by different engines with a differential oracle.
 
 We found that both techniques were very effective at finding bugs in
@@ -1780,8 +1899,8 @@ We found that both techniques were very effective at finding bugs in
 study. Of which, \totalBugsConfirmed\ were confirmed by developers and
 \totalBugsFixed\ were fixed. Although more work is necessary to reduce
 cost of manual analysis, we found that our results provide strong
-evidence that exploring test transplantation and differential testing
-should be encouraged to find functional bugs in JavaScript engines.
+evidence that exploring diversity should be encouraged to find
+functional bugs in JavaScript engines.
 
 In the near future, we plan to explore techniques to prioritize the
 warnings reported by these techniques and to continue involving
@@ -1802,18 +1921,7 @@ INES 2.0, FACEPE grants PRONEX APQ 0388-1.03/14 and APQ-0399-1.03/17,
 and CNPq grant 465614/2014-0.
 
 \balance
-%\bibliographystyle{elsarticle-num}
 \bibliographystyle{spmpsci}
 \bibliography{references,tmp}
 
 \end{document}
-
-%%  LocalWords:  IoT DT JS JIT fuzzer jsfunfuzz jit funfuzz bytecodes
-%%  LocalWords:  JavaScriptCore JScript Ecma toPrecision Kangax JSVU
-%%  LocalWords:  cccrr WebKit ReferenceError TypeError lineNumber sep
-%%  LocalWords:  drainMicrotasks ccrrrr Duktape js runtime formedness
-%%  LocalWords:  NN NLP vec embeddings perceptron arrowed toolchain
-%%  LocalWords:  fuzzers eshost cli pre ArrayBuffer RangeError getInt
-%%  LocalWords:  ToIndex Clusterization byteOffset SpiderMonkey AFL
-%%  LocalWords:  DataView setInt Radamsa QuickFuzz Grammarinator
-%%  LocalWords:  LangFuzz Megadeth libFuzzer sanitizers

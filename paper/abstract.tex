@@ -1,22 +1,23 @@
-\textbf{Context.} 
-JavaScript is a very popular programming language today with several
+\textbf{Context.}
+JavaScript is a popular programming language today with several
 implementations competing for market dominance. Although a
 specification document and a conformance test suite exist to guide
 engine development, bugs occur and have important practical
 consequences. Implementing correct
 engines is challenging because the spec is intentionally
 incomplete and evolves frequently.
-\textbf{Objective.} 
-This paper investigates the use of test transplantation and differential testing
-for revealing functional bugs in JavaScript engines.
-The former technique runs test suites of a given engine on another engine. 
-The latter technique fuzzes existing inputs 
-and then compares the output produced by different engines with a differential oracle.
-\textbf{Method.} 
-We conducted experiments with engines from four major players
---Apple, Google, Microsoft, and Mozilla--to assess the effectiveness of 
-test transplantation and differential testing.
-\textbf{Results.} 
+\textbf{Objective.}
+This paper investigates the use of test transplantation and
+differential testing for revealing functional bugs in JavaScript
+engines.  The former technique runs the regression test suite of a
+given engine on another engine.  The latter technique fuzzes existing
+inputs and then compares the output produced by different engines with
+a differential oracle.
+\textbf{Method.}
+We conducted experiments with engines from five major players--Apple,
+Google, Microsoft, Facebook, and Mozilla--to assess the effectiveness
+of test transplantation and differential testing.
+\textbf{Results.}
 Our results indicate that both techniques revealed several bugs, many of which
 confirmed by developers. We reported \noBugsTransplantation{} bugs
 with test transplantation (\noBugsTransplantationConfirmed{} of these bugs
@@ -25,7 +26,7 @@ confirmed and \noBugsTransplantationFixed{} fixed) and reported
 (\noBugsDifferentialTestingConfirmed{} of these confirmed
 and \noBugsDifferentialTestingFixed{} fixed). Results indicate that
 most of these bugs affected two engines--Apple's
-\jsc{} and Microsoft's \chakra{}. 
+\jsc{} and Microsoft's \chakra{}.
 To summarize, our results show that
 test transplantation and differential testing
 are easy to apply and very effective in
