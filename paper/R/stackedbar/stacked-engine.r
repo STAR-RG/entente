@@ -1,20 +1,23 @@
 library(ggplot2)
 
-table <- read.table("stacked.data", header = TRUE, sep = "", quote = "\"")
+table <- read.table("/home/jefferson/Documentos/PPGCC UFPA/PESQUISA (Prof. Gustavo)/jsengines-differential-testing/paper/R/stackedbar/stacked.data", header = TRUE, sep = "", quote = "\"")
 counts <- table(table$Status, table$Engine)
 
 vector <- c(counts["2-Confirmed","Chakra"],
             counts["2-Confirmed","JavaScriptCore"],
             counts["2-Confirmed","V8"],
+            counts["2-Confirmed","Hermes"],
             counts["3-Fixed","Chakra"],
             counts["3-Fixed","JavaScriptCore"],
             counts["3-Fixed","V8"],
+            counts["3-Fixed","Hermes"],
             counts["1-New","Chakra"],
             counts["1-New","JavaScriptCore"],
-            counts["1-New","V8"])
+            counts["1-New","V8"],
+            counts["1-New","Hermes"])
 
-df <- data.frame(status=rep(c("2-Confirmed", "3-Fixed", "1-New"), each=3),
-                 engine=rep(c("Chakra", "JavaScriptCore", "V8"), each=1),
+df <- data.frame(status=rep(c("2-Confirmed", "3-Fixed", "1-New"), each=4),
+                 engine=rep(c("Chakra", "JavaScriptCore", "V8", "Hermes"), each=1),
                  number=vector)
 
 ggplot(data=df, aes(x=engine, y=number, fill=status)) +
