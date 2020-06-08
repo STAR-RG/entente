@@ -6,96 +6,83 @@
   \label{tab:bugs}
   \setlength{\tabcolsep}{1.5pt}
   \renewcommand{\arraystretch}{0.95}
-  \begin{tabular}{rcccccc}
+  \begin{tabular}{rccccccc}
     \toprule
-    Issue\# \Comment{ & Date} & Fuzzer & Engine  & Status \Comment{&
+    Issue\# \Comment{ & Date} & Fuzzer & Engine & Version & Status \Comment{&
     \multicolumn{1}{c}{Url}}  & Sev. & Priority & Suite \\
     \midrule
-    1  \Comment{& 4/12} & radamsa & \chakra{}   & \textbf{Fixed}  \Comment{&
+    1  \Comment{& 4/12} & radamsa & \chakra{} & 1.9 & \textbf{Fixed}  \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4978}{\#4978}}}
-    & 2 & \textbf{\lo} & \jsc{} \\ 
-    2  \Comment{& 4/12} & radamsa & \chakra{}   & WontFix  \Comment{&
+    & 2 & \textbf{\lo} & \jsc{} \\
+    2  \Comment{& 4/12} & radamsa & \chakra{} & 1.9 & WontFix  \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/4979}{\#4979}}}
     & - & \hi{} & \jsc{} \\
-    3  \Comment{& 4/14} & radamsa & \jsc{}  & New \Comment{&
+    3  \Comment{& 4/14} & radamsa & \jsc{} & 606.1.9.4 & New \Comment{&
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=184629}{\#184629}}
     } & -  & \hi{} & \jsc{}    \\
-    4  \Comment{& 4/25} & radamsa & \chakra{}  & \textbf{Fixed}     \Comment{&
+    4  \Comment{& 4/25} & radamsa & \chakra{} & 1.9 & \textbf{Fixed}     \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5038}{\#5038}}}
     & 2 & \hi{} & \jerry{}   \\
-    5  \Comment{& 4/29} & radamsa & \jsc{}  & \textbf{Fixed}  \Comment{&
+    5  \Comment{& 4/29} & radamsa & \jsc{} & 606.1.9.4 & \textbf{Fixed}  \Comment{&
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185127}{\#185127}}
     } & 2  & \hi{}  & \jerry{}\\
-    
-    6 \Comment{& 4/30}  & radamsa & \chakra{} & \textbf{Confirmed} \Comment{&
+    6 \Comment{& 4/30}  & radamsa & \chakra{} & 1.10-beta & \textbf{Confirmed} \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5076}{\#5076}}}
     & 2 & \hi{} & TinyJS\\
-    
     7                    \Comment{& 4/30}                       &  radamsa   &
-    \jsc{} & New \Comment{&
+    \jsc{} & 606.1.9.4 & New \Comment{&
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185156}{\#185156}}}
     & - & \hi{} & TinyJS \\
-
-
-    
-    8 \Comment{& 5/02} & radamsa & \jsc{}  & \textbf{Fixed} \Comment{&
+    8 \Comment{& 5/02} & radamsa & \jsc{} & 606.1.9.4 & \textbf{Fixed} \Comment{&
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185197}{\#185197}}}
     & 2 & \textbf{\lo} & \smonkey{} \\
-    9 \Comment{& 5/10} & radamsa & \chakra{} & \textbf{Confirmed} \Comment{&
+    9 \Comment{& 5/10} & radamsa & \chakra{} & 1.10-beta & \textbf{Confirmed} \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5128}{\#5128}}}
     & 3 & \hi{} & \jerry{} \\
-    10 \Comment{& 5/17} & radamsa & \chakra{} & \textbf{Fixed} \Comment{&
+    10 \Comment{& 5/17} & radamsa & \chakra{} & 1.10-beta & \textbf{Fixed} \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5182}{\#5182}}}
     & 2 & \hi{} & \veight{}\\
-    11 \Comment{& 5/24} & radamsa & \jsc{} & \textbf{Fixed}  \Comment{&
+    11 \Comment{& 5/24} & radamsa & \jsc{} & 606.1.9.4 & \textbf{Fixed}  \Comment{&
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=185943}{\#185943}}}
     & 2 & \hi{} & \jsc{}\\
-    12 \Comment{& 6/26} & radamsa & \jsc{} & \textbf{Fixed}  \Comment{&
+    12 \Comment{& 6/26} & radamsa & \jsc{} & 606.1.9.4 & \textbf{Fixed}  \Comment{&
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187042}{\#187042}}}
     & 2 & \hi{} & \jerry{}\\
-    13 \Comment{& 7/10} & quickfuzz & \jsc{} & \textbf{Fixed}  \Comment{&
+    13 \Comment{& 7/10} & quickfuzz & \jsc{} & 606.1.9.4 & \textbf{Fixed}  \Comment{&
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=187520}{\#187520}}}
     & 2 & \hi{} & \jerry{}\\
-    14 \Comment{& 7/10} & quickfuzz & \chakra{} & \textbf{Confirmed}  \Comment{&
+    14 \Comment{& 7/10} & quickfuzz & \chakra{} & 1.11-beta & \textbf{Confirmed}  \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5443}{\#5443}}}
     & 2 & \hi{} & \jerry{}\\
-    %    \multicolumn{9}{c}{\emph{Non-Exploratory Phase}} \\
-
-
-
-    15 \Comment{& 8/21}  & radamsa & \chakra{} & \textbf{Fixed} \Comment{&
+    15 \Comment{& 8/21}  & radamsa & \chakra{} & 1.10.2 & \textbf{Fixed} \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5617}{\#5617}}}
-    & 3 & \hi{} & Test262\\    
-
+    & 3 & \hi{} & Test262\\
     16 \Comment{& 8/21} & radamsa &
-    \veight{} & \textbf{Fixed} \Comment{&
+    \veight{} & 7.0.244 & \textbf{Fixed} \Comment{&
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8078}{\#8078}}}
     & 2 & \hi{} & Test262 \\
-
-    
-    17 \Comment{& 8/23} & quickfuzz & \jsc{} & New  \Comment{&
+    17 \Comment{& 8/23} & quickfuzz & \jsc{} & 235121 &  New  \Comment{&
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188899}{\#188899}}}
     & - & \hi{} & Test262\\
-    18 \Comment{& 8/23} & quickfuzz & \veight{} & \textbf{Confirmed}  \Comment{&
+    18 \Comment{& 8/23} & quickfuzz & \veight{}  & 7.0.244 & \textbf{Confirmed}  \Comment{&
     \anonym{\href{https://bugs.chromium.org/p/v8/issues/detail?id=8088}{\#8088}}}
     & 2 & \hi{} & Test262\\
-
-    19 \Comment{& 8/24}  & quickfuzz & \chakra{} & \textbf{Confirmed} \Comment{&
+    19 \Comment{& 8/24}  & quickfuzz & \chakra{} & 1.10.2 & \textbf{Confirmed} \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5630}{\#5630}}}
     & 2 & \hi{} & Test262\\
-    
-    20 \Comment{& 8/24} &  quickfuzz & 
-    \jsc{} & New \Comment{&
+    20 \Comment{& 8/24} &  quickfuzz &
+    \jsc{} & 235318 &  New \Comment{&
     \anonym{\href{https://bugs.webkit.org/show_bug.cgi?id=188920}{\#188920}}}
     & - & \hi{} & Test262 \\
-
-    21 \Comment{& 8/24} & quickfuzz & \jsc{}  & New \Comment{&
+    21 \Comment{& 8/24} & quickfuzz & \jsc{} & 235318 & New \Comment{&
     \anonym{\href{https://bugs.webkit.org/show\_bug.cgi?id=188930}{\#188930}}}
     & - & \hi{} & Test262\\
-    
-    22 \Comment{& 8/21}  & radamsa & \chakra{} & \textbf{Confirmed} \Comment{&
+    22 \Comment{& 8/21}  & radamsa & \chakra{} & 1.11.6.0 & \textbf{Confirmed} \Comment{&
     \anonym{\href{https://github.com/Microsoft/\chakra{}Core/issues/5968}{\#5968}}}
     & - & \hi{} & \smonkey{}\\
+    23 & radamsa & \chakra & 1.11.19 & New & - & - & \hermes \\
+    24 & radamsa & \hermes & 0.5.0   & New & - & - & BlogEngine.NET \\
+
    \bottomrule
   \end{tabular}
 \end{table}
