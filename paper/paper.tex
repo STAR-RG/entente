@@ -370,16 +370,13 @@ reporting old and already-fixed bugs to developers.
   \caption{\label{tab:engines}Engines selected.}
   \begin{tabular}{cccrrr}
     \toprule
-    Team & Name & URL & \# Stars  & DOB & Version \\
+    Team & Name & URL & \# Stars  & DOB \\
     \midrule
-    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} &
-    \multicolumn{1}{c}{3300+} & Jun 2001\\
-    Google & \veight{} & \cite{v82018repo} & 9800+ & Jun 2008\\
-    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009\\
-    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} &
-    \multicolumn{1}{c}{1100+} & Mar 1996\\
-    Facebook & \hermes{} & \cite{hermes2020repo} &
-    \multicolumn{1}{c}{5400+} & Jun 2019\\
+    Apple & \jsc{} (WebKit) & \cite{jsc2018repo} & 3300+ & Jun 2001 \\
+    Google & \veight{} & \cite{v82018repo} & 9800+ & Jun 2008 \\
+    Microsoft & \chakra{} & \cite{chakra2018repo} & 7200+ & Nov 2009 \\
+    Mozilla & \smonkey{} & \cite{spidermonkey2018repo} & 1100+ & Mar 1996 \\
+    Facebook & \hermes & \cite{hermes2020repo} & 5400+ & Jul 2019 \\
    \bottomrule
   \end{tabular}
 \end{table}
@@ -451,7 +448,7 @@ the changes in the input as opposed to the original cause of failure.
   \caption{\label{tab:test-suites}Number of test files. Dashed
     rectangle under column ``type-in-all'' (resp., ``no-fail-in-all'')
     shows the tests used for test transplantation (resp., cross-engine
-    differential testing).}  \setlength{\tabcolsep}{2pt}
+    differential testing).\Gustavo{Terminar essa tabela}}  \setlength{\tabcolsep}{2pt}
   \begin{tabular}{ccrrrr}
     \toprule
     \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
@@ -464,6 +461,8 @@ the changes in the input as opposed to the original cause of failure.
     \jsc{} & \cite{webkit} & \jscOriginal{} & \jscPassInPar{} &\marktopleft{c1}\jscCompileAll{} & \jscNoFailAll{}\\
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v8} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
+    \chakra & \cite{chakracore}\\
+    \hermes & \cite{hermes2020repo}\\
     \midrule
     Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
     \jerry{} & \cite{jerryscript} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
@@ -939,6 +938,7 @@ experiment~\cite{ecma262-conformance-suite}.
     \veight{} & \percentSuiteTestVeight{} \\
     \chakra{} & \percentSuiteTestChakra{} \\
     \smonkey{} & \percentSuiteTestSM{} \\
+    \hermes & xxx \\
     \bottomrule
   \end{tabular}
   %\normalsize
