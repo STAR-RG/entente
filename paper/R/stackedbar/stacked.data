@@ -25,7 +25,7 @@ Issue    Source   Engine    Status
 23       Trans    V8       "3-Fixed"
 24       Trans    Chakra       "3-Fixed"
 25       Trans    JavaScriptCore       "1-New"
-
+26       Trans    Hermes       "1-New"
 
 
 1        Diff     Chakra    "3-Fixed"
@@ -49,3 +49,4 @@ Issue    Source   Engine    Status
 19       Diff     JavaScriptCore    "1-New"
 20       Diff     JavaScriptCore    "1-New"
 21       Diff     Chakra    "1-New"
+22       Diff     Hermes    "1-New"
