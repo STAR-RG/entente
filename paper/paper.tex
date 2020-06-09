@@ -393,8 +393,9 @@ suite of the ECMA262 specification~\cite{ecmas262-spec}, 2) test files
 from the test suite of the selected engines (see
 Section~\ref{sec:methodology:engines}); these files are accessible
 from the engine's official repositories, 3) test files from the suites
-of public engines, and 4) test files mined from issue trackers of
-these engines.
+of public engines (ie., Duktape, JerryScript, JSI, and Tiny-js),
+4) test files mined from issue trackers of
+these engines, and 5) test files from other GitHub projects.
 
 %% accessible from GitHub using the GitHub REST
 %% API~\cite{github-rest-api}.
@@ -418,7 +419,15 @@ they clearly indicate some missing feature as opposed to bugs. For
 example, some tests use non-portable names (\eg{}, \jsc's
 \CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
 or use functions that, albeit part of the spec, not all engines
-currently support. For the evaluation of test transplantation, we used
+currently support. \Fix{Similarly, the \chakra project does not use the default
+well-known assertions available in JS, which the other JS engines use.
+Instead, it uses its own testing framework, WScript. In this case, we could
+not easily reproduce the \chakra unit tests in the other engines since it would
+raise a ReferenceError. Also, updating the other engines to use WScript would
+require a non-trivial manual process. This is why \chakra is not showed
+in Table~\ref{tab:test-suites}.}
+
+For the evaluation of test transplantation, we used
 the \totalTestFilesForTestTransplantation{} tests included in the
 dashed rectangle under column ``type-in-all'', \ie{}, all tests under
 that column but the Test262 tests. We did not consider tests from the
@@ -462,7 +471,7 @@ the changes in the input as opposed to the original cause of failure.
     \jsc & \cite{jsc2018repo} & \jscOriginal{} & \jscPassInPar{} &\marktopleft{c1}\jscCompileAll{} & \jscNoFailAll{}\\
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v82018repo} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
-    \chakra & \cite{chakra2018repo}\\
+    %\chakra & \cite{chakra2018repo}\\
     \hermes & \cite{hermes2020repo} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{} \\
     \midrule
     Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
@@ -504,7 +513,20 @@ tests uniformly across all engines. More precisely, we needed to mock
 non-portable harness functions, which are only available in certain
 engines.
 
-\subsection{Mining Tests from Issue Trackers}
+\subsection{Mining Tests}
+
+\subsubsection{from GitHub projects}
+
+\Fix{We mined JS programs from the GitHub repository. In this case, we searched
+for projects written in JavaScript, that were tagged with ``javascript-engine",
+and that have both ``Javascript" and ``engine" the name or the description of
+the project. After this process, we ended up with 2200 JS programs, which we
+downloaded locally. However, after careful investigation, we noted that 160 of
+these projects do not  have any JS file, which were excluded from our study.
+We used the 2040 remaining ones as input to our testing approaches.}
+
+\subsubsection{from Issue Trackers}
+
 
 \sloppy{}We observed that issue trackers are an important source of
 test data and should not be ignored. Analyzing a sample of issues, we
