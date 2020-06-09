@@ -424,7 +424,8 @@ well-known assertions available in JS, which the other JS engines use.
 Instead, it uses its own testing framework, WScript. In this case, we could
 not easily reproduce the \chakra unit tests in the other engines since it would
 raise a ReferenceError. Also, updating the other engines to use WScript would
-require a non-trivial manual process.}
+require a non-trivial manual process. This is why \chakra is not showed
+in Table~\ref{tab:test-suites}.}
 
 For the evaluation of test transplantation, we used
 the \totalTestFilesForTestTransplantation{} tests included in the
@@ -470,7 +471,7 @@ the changes in the input as opposed to the original cause of failure.
     \jsc & \cite{jsc2018repo} & \jscOriginal{} & \jscPassInPar{} &\marktopleft{c1}\jscCompileAll{} & \jscNoFailAll{}\\
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v82018repo} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
-    \chakra & \cite{chakra2018repo}\\
+    %\chakra & \cite{chakra2018repo}\\
     \hermes & \cite{hermes2020repo} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{} \\
     \midrule
     Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
