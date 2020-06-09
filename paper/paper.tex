@@ -205,15 +205,14 @@ the reports.
 %  \vspace{-2ex}
   \centering
   \subfloat[\label{fig:stacked-engine}Bug reports per engine.]{
-    \includegraphics[trim=0 190 0 180,clip,width=\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
+    \includegraphics[trim=0 150 0 180,clip,width=\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
     \vspace{-5ex}
   }\\
   \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
-    \includegraphics[trim=0 180 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
+    \includegraphics[trim=0 150 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
     \vspace{-5ex}
   }
-  \caption{\label{fig:summary}Summary of bug reports.\Gustavo{Não esquecer de atualizar as figuras.
-  }}
+  \caption{\label{fig:summary}Summary of bug reports.}
   \vspace{-3ex}
 \end{figure}
 
@@ -732,7 +731,13 @@ similar warnings reported by our infrastructure. We only clustered
 ``\lo'' warnings as ``\hi'' warnings produce messages that arise from
 the test case, which are typically distinct.
 
-Figure~\ref{fig:lo-truepositive} shows, at the bottom, a sequence of
+\Fix{Figure~\ref{fig:lo-truepositive} shows a test was originally
+available in the \jsc codebase.  The \radamsa fuzzing technique
+mutated the test. In particular, it introduced the negative
+long \texttt{-1770523502845470856} as a parameter of the
+\texttt{view.getInt8()} method. Before the mutation, the
+\texttt{view.getInt8()} method received a zero integer.}
+At the botom of this figure, there is a sequence of
 three elements that we use to characterize a warning--1) the
 identifier of an engine, 2) the exception it raises, and 3) the
 message it produces on a ``\lo'' warning.  This sequence of triples
@@ -1574,7 +1579,16 @@ mitigate this threat, we carefully selected inputs from various
 sources according to a well-defined criteria. Likewise, we selected
 the engines by using using a well-defined criteria and found that the
 engines selected were associated, certainly not by coincidence, with
-the browsers informally considered the most popular in the market. In
+the browsers informally considered the most popular in the market.
+\Fix{One reader might argue that since we mined files from other JS engines,
+such as Duktape, JerryScript, JSI, and Tiny-js, we could also run test
+transplantation on them. We did not run test transplantation on these
+JS engines due to several reasons, including: JSI was deprecated,
+TinyJS is not actively maintained. Finally, at the time we started this work,
+Duktape and JerryScript did not provide support to ES6. We checked this
+information again in Jun 2020, and they are still only partially supporting ES6.
+}
+In
 terms of construct validity, we used standard metrics to determine the
 effectiveness of the testing techniques we studied (\eg{}, number of
 bugs confirmed and fixed and severity). Engine developers were
