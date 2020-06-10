@@ -423,7 +423,7 @@ currently support. \Fix{Similarly, the \chakra project does not use the default
 well-known assertions available in JS, which the other JS engines use.
 Instead, it uses its own testing framework, WScript. In this case, we could
 not easily reproduce the \chakra unit tests in the other engines since it would
-raise a ReferenceError. Also, updating the other engines to use WScript would
+raise a \texttt{ReferenceError}. Also, updating the other engines to use WScript would
 require a non-trivial manual process. This is why \chakra is not showed
 in Table~\ref{tab:test-suites}.}
 
@@ -944,9 +944,15 @@ partially~\cite{kangax}. We expect that the pass rate on this suite
 provide some indication of the engine's maturity. In the limit, it is
 not desirable to flood bug reports on engines at early stages of
 development.
-
-For this experiment, we ran the suite once a day for seven consecutive
-days and averaged the passing ratios. Table~\ref{tab:test262} shows
+\Fix{For this experiment, we ran the suite once a day for seven consecutive
+days and averaged the passing ratios.
+We performed seven consecutive executions because,
+since the studied JS engines release new versions on a daily basis,
+we wanted to make sure if the failing tests raised by the Test262 suite
+were rapidly fixed by the maintenance team. If these errors were quickly
+fixed, that would suggest that this given engine would be aligned with
+the ECMAScript specification.}
+Table~\ref{tab:test262} shows
 the average number of passing tests over this period. The variance of
 results was negligible; for that reason, we omitted standard
 deviations. We noticed that all four engines but \chakra{} used some
