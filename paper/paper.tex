@@ -144,9 +144,12 @@ the ability of two testing techniques to expose bugs in JavaScript engines.
   of oracles for the newly created inputs.
 \end{itemize}
 
-The study measures the ability of these techniques in finding bugs and
-the impact of false positives on their practicality. \Mar{seria bom
-  adicionar uma frase com rationale para escolha destas tecnicas.}
+These techniques demand different effort from developers. Cross-engine
+differential testing is semi-automated as developers need to decide if
+alarms are manifestations of real bugs. Test transplantation is fully
+automated, but it can only reveal bugs that the original tests could
+reveal. This study measures the ability of these techniques in finding
+bugs and the human cost associated with each technique.
 
 %One of
 %various causes of output discrepancy is a bug.
@@ -755,12 +758,12 @@ similar warnings reported by our infrastructure. We only clustered
 the test case, which are typically distinct.
 
 \Fix{Figure~\ref{fig:lo-truepositive} shows a test was originally
-available in the \jsc codebase.  The \radamsa fuzzing technique
+available in the \jsc code base.  The \radamsa fuzzing technique
 mutated the test. In particular, it introduced the negative
 long \texttt{-1770523502845470856} as a parameter of the
 \texttt{view.getInt8()} method. Before the mutation, the
 \texttt{view.getInt8()} method received a zero integer.}
-At the botom of this figure, there is a sequence of
+At the bottom of this figure, there is a sequence of
 three elements that we use to characterize a warning--1) the
 identifier of an engine, 2) the exception it raises, and 3) the
 message it produces on a ``\lo'' warning.  This sequence of triples
@@ -1405,8 +1408,8 @@ expression (\eg{}, some string expression or regular expression).
 Table~\ref{tab:bugs} shows the list of bugs we reported. The table
 shows the fuzzing tool used
 (``Fuzzer''), the \js\ engine affected (``Engine''), the status of the
-bug report (``Status'')\Comment{ as of Aug. 24, 2018, the Url of the bug report
-(``Url'')}, the severity of the bug report (``Sev.''), the priority
+bug report (``Status'')\Comment{ as of Aug. 24, 2018, the URL of the bug report
+(``URL'')}, the severity of the bug report (``Sev.''), the priority
 that we assigned to the warning that revealed the bug (``Priority''),
 and the test suite from the original test input (``Suite''). So far,
 \noDiffConfirmed{} of the bugs we reported were confirmed, \noDiffFixed{} of which
@@ -1601,7 +1604,7 @@ we issued to the \chakra\ development team, but they did not accept.
 \end{figure}
 
 
-This is a testcase original from the \jsc suite that the
+This is a test case original from the \jsc suite that the
 \radamsa\ fuzzer modified. The original test used the integer literal
 3 as argument to \CodeIn{repeat()}, but this test uses a long integer
 instead. As result, the engine crashes. The team answered that this
@@ -1877,5 +1880,13 @@ and CNPq grant 465614/2014-0.
 %%  LocalWords:  fuzzers eshost cli pre ArrayBuffer RangeError getInt
 %%  LocalWords:  ToIndex Clusterization byteOffset SpiderMonkey AFL
 %%  LocalWords:  DataView setInt Radamsa QuickFuzz Grammarinator de
-%%  LocalWords:  LangFuzz Megadeth libFuzzer sanitizers Breno
-% LocalWords:  d'Amorim Universidade Pernambuco
+%%  LocalWords:  LangFuzz Megadeth libFuzzer sanitizers Breno cccrrr
+% LocalWords:  d'Amorim Universidade Pernambuco JerryScript JSI RQ FP
+% LocalWords:  WScript conformant TP ccr OME FPs TPs crrrrr ccrr NaN
+% LocalWords:  ascii unary ToNumber valueOf eval SyntaxError iterable
+% LocalWords:  escapeinside basicstyle boxpos numberstyle assertEq
+% LocalWords:  morekeywords typeof instanceof foofoofoo TinyJS SSL
+% LocalWords:  TLS Lidbury OpenCL SIMD GPUs Purdom parsers Lammel APQ
+% LocalWords:  Shulte Geno XPath combinatorial CSmith LLVM Patra CNPq
+% LocalWords:  disassemblers Pradel namespaces Eshkevari FACEPE
+% LocalWords:  PRONEX
