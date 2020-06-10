@@ -5,9 +5,6 @@ from fuzz_drivers import *  #pylint: disable=W0614
 from jsfuzz.fuzzer.validator import validate
 from jsfuzz.utils import multicall, constants
 
-search_libfiles = ['shell.js']
-IGNORED_FILES = []
-
 
 # @pytest.mark.skip(reason="temporarilly disabling")
 def test_tinyjs():
@@ -15,5 +12,6 @@ def test_tinyjs():
     multicall.multicall_directories(
         path_name,
         validator=validate,
+        fuzzer='quickfuzz',
         shell='shell.js'
     )

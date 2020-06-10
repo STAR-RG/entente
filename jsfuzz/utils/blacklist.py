@@ -110,6 +110,9 @@ V8_KEYWORDS = [
     "Array.prototype.values",
 ]
 
+# features not implemented on hermes
+HERMES_KEYWORDS = []
+
 # features not implemented on jscore
 JSCORE_KEYWORDS = []
 
@@ -118,7 +121,7 @@ SPIDERMONKEY_KEYWORDS = [
     "dotAll"
 ]
 
-REPORT_PASS_KEYWORDS =[
+REPORT_PASS_KEYWORDS = [
     "PASSED!"
 ]
 
@@ -127,7 +130,8 @@ ENGINES_KEYWORDS = {
     "chakra": CHAKRA_KEYWORDS,
     "jscore": JSCORE_KEYWORDS,
     "spidermonkey": SPIDERMONKEY_KEYWORDS,
-    "v8": V8_KEYWORDS
+    "v8": V8_KEYWORDS,
+    "hermes": HERMES_KEYWORDS
 }
 
 # suites/directories that the engine always throw error (ie. feature unimplemented)
@@ -3094,6 +3098,7 @@ SEED_INVALID = {
     "spidermonkey": [],
     "v8": [],
     "jsc": [],
+    "hermes": []
 }
 
 # add here hash code that we already obtained on previously executions

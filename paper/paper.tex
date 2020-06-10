@@ -66,16 +66,17 @@
 \title{Exposing Bugs in JavaScript Engines through Test Transplantation and Differential Testing}
 %\titlerunning{Leveraging Diversity to Find Bugs in JavaScript Engines}        % if too long for running head
 
-\author{Jefferson Silva \and Igor Lima \and Breno Miranda\footnotemark
+\author{Igor Lima \and Jefferson Silva \and Breno Miranda\footnotemark
   \and Gustavo Pinto \and Marcelo d'Amorim}
 %\authorrunning{Short form of author list} % if too long for running head
 
 \institute{
-* Corresponding author: Breno Miranda \and \email{bafm@cin.ufpe.br}\\ \\
-Jefferson Silva \and \email{jefferson.alves.silva@icen.ufpa.br}\\
+* Corresponding author: Breno Miranda \and
+\email{bafm@cin.ufpe.br}\\ \\
 Igor Lima \and \email{isol2@cin.ufpe.br} \\
-Gustavo Pinto \and \email{gpinto@ufpa.br} \\
+Jefferson Silva \and \email{jefferson.alves.silva@icen.ufpa.br}\\
 Breno Miranda \and \email{bafm@cin.ufpe.br} \\
+Gustavo Pinto \and \email{gpinto@ufpa.br} \\
 Marcelo d'Amorim \and \email{damorim@cin.ufpe.br} \\
 \at Universidade Federal de Pernambuco, Recife, PE, Brazil}
 
@@ -117,7 +118,7 @@ accommodate the pressing demands from
 developers~\cite{ecmas262-spec-repo}. An official conformance test
 suite exists for \js~\cite{tc39-github}, but, naturally, many test
 scenarios are not covered in the suite. In addition, we noticed that a
-significant fraction (5 to 15\%) of the tests in that stuite fail
+significant fraction (5 to 15\%) of the tests in that suite fail
 regularly in the most popular engines, reflecting the struggle of developers in keeping
 up with the pace of spec evolution (see Table~\ref{tab:test262}).
 
@@ -251,10 +252,10 @@ confirmed or fixed. Most bugs we found are of moderate severity.
 %% evolve with their specifications.
 
 \emph{Key Findings.}~We found that--1)~Differential testing and Test
-Transplation are practical and effective techniques to find bugs on real,
+Transplantation are practical and effective techniques to find bugs on real,
 complex, and widely used software systems, 2)~Even for problems with
 fairly clear specifications, as in \javascript{}, there is likely (a
-lot of) variation between different implementations, which brings instrinsic
+lot of) variation between different implementations, which brings intrinsic
 challenges to developers that work on them.
 Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
@@ -393,7 +394,7 @@ suite of the ECMA262 specification~\cite{ecmas262-spec}, 2) test files
 from the test suite of the selected engines (see
 Section~\ref{sec:methodology:engines}); these files are accessible
 from the engine's official repositories, 3) test files from the suites
-of public engines (ie., Duktape, JerryScript, JSI, and Tiny-js),
+of public engines (\ie{}, Duktape, JerryScript, JSI, and Tiny-js),
 4) test files mined from issue trackers of
 these engines, and 5) test files from other GitHub projects.
 
@@ -1860,5 +1861,6 @@ and CNPq grant 465614/2014-0.
 %%  LocalWords:  NN NLP vec embeddings perceptron arrowed toolchain
 %%  LocalWords:  fuzzers eshost cli pre ArrayBuffer RangeError getInt
 %%  LocalWords:  ToIndex Clusterization byteOffset SpiderMonkey AFL
-%%  LocalWords:  DataView setInt Radamsa QuickFuzz Grammarinator
-%%  LocalWords:  LangFuzz Megadeth libFuzzer sanitizers
+%%  LocalWords:  DataView setInt Radamsa QuickFuzz Grammarinator de
+%%  LocalWords:  LangFuzz Megadeth libFuzzer sanitizers Breno
+% LocalWords:  d'Amorim Universidade Pernambuco
