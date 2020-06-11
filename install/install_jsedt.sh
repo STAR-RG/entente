@@ -1,5 +1,5 @@
 # cd to it path from directory and clone to it
-cd $HOME && git clone https://github.com/damorimRG/jsengines-differential-testing.git
+cd $HOME && git clone git@github.com:damorimRG/entente.git
 
 sudo apt update
 
