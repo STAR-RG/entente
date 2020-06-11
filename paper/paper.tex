@@ -989,7 +989,7 @@ percentages in the table. The number of passing tests is high and
 similar for \jsc, \veight{}, and \smonkey\ whereas \hermes performs
 worse when compared to the other engines.
 \Fix{This happens because \hermes
-still has many unsupported features, such as Proxy, Promisse, and XXX.}
+still has many unsupported features, such as Proxy, Promisse, and Async.}
 Moreover, one can also note that \chakra\ also a low passing ratio
 in this test suite and the one we were able to find more bugs (as per
 Figure~\ref{fig:summary}). Although it is plausible to find
@@ -1050,7 +1050,7 @@ issue tracker of the affected engine.
     \jsc & - & 10 & 10 & 59 & 340  \\
     \veight{} & 41 & - & 3 & 5 & 315 \\
 %    \chakra{} & - & - & - & -  \\
-    \smonkey{} & 218 & 107 & - & 281 & * \\
+    \smonkey{} & 218 & 107 & - & 281 & - \\
     Hermes & 8 & 14 & 8 & 26 & -  \\
     Duktape & 0 & 4 & 4 & 1 & 140  \\
     \jerry{} & 23 & 25 & 22 & 23 & 311  \\
@@ -1070,7 +1070,15 @@ Table~\ref{tab:cross-testing} shows the number of failures observed
 for each pair of test suite and engine. The first column shows the
 test suites and the first row shows the engines that run those
 tests. We use a dash (``-'') to indicate that we did not consider the
-combinations that associate a test suite with its parent engine;
+combinations that associate a test suite with its parent engine.
+\Fix{
+In particular, we were not able to reuse the \smonkey tests on the
+\hermes engine. This happened because \smonkey has its own assertion
+framework, but \hermes did not interpret these assertions, resulting
+in failures in all test executions from this engine. These failures
+did not happen when the \smonkey tests were transplanted to the other engines,
+though.
+}
 failures in those cases would either indicate regressions or flaky
 tests as opposed to unknown bugs for that engine. As explained in
 Section~\ref{sec:seeds}, we used in this experiment the
