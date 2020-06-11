@@ -576,27 +576,46 @@ fragment. Using that method we were able to retrieve a total of
 \filesMining{} additional files. All those files were included in
 Table~\ref{tab:test-suites}.
 
-For the classification of ``code'' vs. ``not code'', we used a
-pipeline of two Neural Networks (NN), a popular design for solving NLP
-classification problems~\cite{kusner2015word}. The first net in the
-pipeline takes as input an arbitrary sentence and produces on output a
-characterization vector for that sentence. The second net in the
-pipeline takes that vector on input and produces a yes/no answer,
-determining whether or not the input sentence was code.  During the
-training phase, the second neural net in the pipeline takes
-additionally on input the value for the class attribute for the sample;
-in this case, ``code'' or ``not code''. More in detail, for the first
-net, we used word2vec~\cite{mikolov2013distributed}, a popular NLP
-technique to produce word embeddings. A word embedding is a mapping of
-words to vectors of real numbers. For the second net, we used a
-multi-layer perceptron~\cite{Rumelhart:1986:LIR:104279.104293} to
-infer the probability of the input belonging or not to the class. The
-classifier labels the input input as code if the predicted probability
-of the input being code is 0.7 or higher. We used a corpus with 25K
-samples of English paragraphs and 25K snippets of \js{} code to train
+% For the classification of ``code'' vs. ``not code'', we used a
+% pipeline of two Neural Networks (NN), a popular design for solving NLP
+% classification problems~\cite{kusner2015word}. The first net in the
+% pipeline takes as input an arbitrary sentence and produces on output a
+% characterization vector for that sentence. The second net in the
+% pipeline takes that vector on input and produces a yes/no answer,
+% determining whether or not the input sentence was code.  During the
+% training phase, the second neural net in the pipeline takes
+% additionally on input the value for the class attribute for the sample;
+% in this case, ``code'' or ``not code''. More in detail, for the first
+% net, we used word2vec~\cite{mikolov2013distributed}, a popular NLP
+% technique to produce word embeddings. A word embedding is a mapping of
+% words to vectors of real numbers. For the second net, we used a
+% multi-layer perceptron~\cite{Rumelhart:1986:LIR:104279.104293} to
+% infer the probability of the input belonging or not to the class. The
+% classifier labels the input input as code if the predicted probability
+% of the input being code is 0.7 or higher. We used a corpus with 25K
+% samples of English paragraphs and 25K snippets of \js{} code to train
+% and test the classifier and obtained an accuracy of 98\%. This
+% classifier is publicly available from our website as a separate
+% component.
+\Igor{
+For the classification of ``code'' vs. ``not code'', we used popular 
+techniques for solving NLP classification problems~\cite{kusner2015word}.
+More in detail, we used word2vec~\cite{mikolov2013distributed},
+a popular NLP technique to produce word embeddings. A word embedding is 
+a mapping of words to vectors of real numbers. We chose word2vec for
+two mainly reasons: i) similarity between sentences and ii)
+to obtaining a low-dimensional vector that can be used in
+a traditional classifier. The next step we used a
+ multi-layer perceptron~\cite{Rumelhart:1986:LIR:104279.104293}
+to infer the probability of the input belonging or not to the class based 
+on the distance of similarity of sentences, the classifier takes that vector
+on input and produces a ``code'' or ``not code'' answer. The classifier labels
+the input as code if the predicted probability of the input being code is 0.7 or higher. 
+We used a corpus with 25K samples of English paragraphs and 25K snippets of \js{} code to train
 and test the classifier and obtained an accuracy of 98\%. This
 classifier is publicly available from our website as a separate
 component.
+}
 
 %% With that mapping it is
 %% possible to measure distance between two sentences as the distance
