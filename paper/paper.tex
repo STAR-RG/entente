@@ -144,12 +144,15 @@ the ability of two testing techniques to expose bugs in JavaScript engines.
   of oracles for the newly created inputs.
 \end{itemize}
 
-These techniques demand different effort from developers. Cross-engine
-differential testing is semi-automated as developers need to decide if
-alarms are manifestations of real bugs. Test transplantation is fully
-automated, but it can only reveal bugs that the original tests could
-reveal. This study measures the ability of these techniques in finding
-bugs and the human cost associated with each technique.
+\Mar{@Gustavo,@Breno, can you please make this par a bit stronger
+  (more coherent/compelling) as to justify the selection of these two
+  techniques?}These techniques demand different effort from
+developers. Cross-engine differential testing is semi-automated as
+developers need to decide if alarms are manifestations of real
+bugs. Test transplantation is fully automated, but it can only reveal
+bugs that the original tests could reveal. This study measures the
+ability of these techniques in finding bugs and the human cost
+associated with each technique.
 
 %One of
 %various causes of output discrepancy is a bug.
@@ -221,19 +224,22 @@ the reports.
 \end{figure}
 
 \sloppy \emph{Results.}~We considered the following engines--\chakra{}
-(Microsoft), JavaScriptCore (Apple), \veight{} (Google),
-\smonkey{} (Mozilla), and \hermes (Facebook). Figure~\ref{fig:summary} shows the breakdown of bug reports per engine (\ref{fig:stacked-engine}) and per technique
-(\ref{fig:stacked-technique}).
-Each stacked bar breaks down the bugs
-per status (\eg{}, ``1-New''). The prefix number indicates the
-ordering that status labels are assigned. Several of these
-reports have the label ``3-Fixed'', indicating that bug fixes have
-been incorporated into the code already. Note that most of these bugs
-affected two engines--\chakra{} and JavaScriptCore (\jsc).  We
-reported \noBugsBugsReportedGoogle{} bugs in \veight{}
-(\noBugsBugsConfirmedGoogle{} confirmed),
-\noBugsBugsReportedHermes in \hermes,
-and \noBugsBugsReportedSMonkey in \smonkey{}.
+(Microsoft), JavaScriptCore (Apple), \veight{} (Google), \smonkey{}
+(Mozilla), and \hermes (Facebook). Figure~\ref{fig:summary} shows the
+breakdown of bug reports per engine (\ref{fig:stacked-engine}) and per
+technique (\ref{fig:stacked-technique}).  Each stacked bar breaks down
+the bugs per status (\eg{}, ``1-New''). The prefix number indicates
+the ordering that status labels are assigned. Several of these reports
+have the label ``3-Fixed'', indicating that bug fixes have been
+incorporated into the code already. Note that most of these bugs
+affected two engines--\chakra{}\footnote{Microsoft announced in
+  December 2018 that the Edge browser will be based on Chromium and
+  ChakraCore development would be
+  discontinued~\cite{chakra-discontinued}.} and JavaScriptCore (\jsc).
+We reported \noBugsBugsReportedGoogle{} bugs in \veight{}
+(\noBugsBugsConfirmedGoogle{} confirmed), \noBugsBugsReportedHermes in
+\hermes (\Fix{? confirmed}\Mar{by the color, there is some, no?}), and
+\noBugsBugsReportedSMonkey in \smonkey{} (\Fix{? confirmed}).
 Furthermore, our results show that both techniques revealed several
 bugs, most of which confirmed by developers. Test transplantation
 revealed \noBugsTransplantation bugs (of which,
@@ -243,8 +249,8 @@ revealed \noBugsDifferentialTesting bugs (of which,
 \noBugsDifferentialTestingConfirmed were confirmed and
 \noBugsDifferentialTestingFixed were fixed).  Overall, results
 indicate that both techniques were successful at finding bugs. The
-number of bug reports were similar, if we consider only those
-confirmed or fixed. Most bugs we found are of moderate severity.
+number of fixed bugs were similar, if we consider only those confirmed
+or fixed. Most bugs we found are of moderate severity.
 
 %% Considering cost per bug found, we found that test
 %% transplantation, compared to differential testing, demanded less
@@ -256,7 +262,7 @@ confirmed or fixed. Most bugs we found are of moderate severity.
 
 \emph{Key Findings.}~We found that--1)~Differential testing and Test
 Transplantation are practical and effective techniques to find bugs on real,
-complex, and widely used software systems, 2)~Even for problems with
+complex, and widely used software systems and 2)~Even for problems with
 fairly clear specifications, as in \javascript{}, there is likely (a
 lot of) variation between different implementations, which brings intrinsic
 challenges to developers that work on them.
@@ -264,21 +270,23 @@ Section~\ref{sec:lessons} expands and elaborates key
 findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
-\emph{Contributions.}~The most important contribution of this work is empirical:
-we provide a comprehensive study analyzing the effectiveness of
-test transplantation and differential testing
-in revealing functional bugs in popular \javascript\ engines.
-Additional contributions are:
-1)~A number of bugs found and fixed.
-We reported a total of \totalBugsReported bugs.
-Of these, \totalBugsConfirmed bugs were confirmed and \totalBugsFixed bugs were fixed.
-2)~An infrastructure for performing test transplantation and differential testing.
-Both the scripts to run the experiments and the data processed are publicly available at \dataRepo.
+\emph{Contributions.}~The most important contribution of this work is
+empirical: we provide a comprehensive study analyzing the
+effectiveness of test transplantation and differential testing in
+revealing functional bugs in popular \javascript\ engines.  Additional
+contributions include: 1)~A number of bugs found and fixed.  We
+reported a total of \totalBugsReported bugs.  Of these,
+\totalBugsConfirmed bugs were confirmed and \totalBugsFixed bugs were
+fixed.  2)~An infrastructure for performing test transplantation and
+differential testing.  The tools we used and the data sets of tests
+and bugs are publicly available online at the following link:
 
-\vspace{1ex} To summarize, this paper provides initial, yet strong evidence
-that exploring test transplantation and differential testing
-should be encouraged to find functional bugs
-in JavaScript engines.
+\dataRepo.
+
+\vspace{1ex} To summarize, this paper provides initial, yet strong
+evidence that test transplantation and differential testing are simple
+and effective techniques to find functional bugs in JavaScript engines
+and should be encouraged.
 
 \section{JavaScript}
 \label{sec:es6-design}
@@ -292,9 +300,8 @@ JavaScript and Microsoft's JScript\footnote{The name JavaScript still
   prevails today, certainly for historical reasons.}. The \es{}
 specification is regulated by Ecma International~\cite{es6-website}
 under the TC39~\cite{tc39-github} technical committee.  Every year, a
-new version of the \es{} specification is produced with new features
-and minor fixes. The canonical spec today is
-ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
+new version of the \es{} specification is released with new features
+and minor fixes~\cite{ecmas262-spec-repo,ecmas262-spec}.
 
 %% In the following, we briefly describe different sources of
 %% discrepancies that can emerge across different engine implementations
@@ -304,12 +311,12 @@ ES6~\cite{ecmas262-spec-repo,ecmas262-spec}.
 %% publicly available~\cite{kangax}.
 
 The specification of JavaScript is incomplete for different
-reasons. Certain parts of the specification are undefined; it is
-the responsibility of engineers to decide how to implement these
+reasons. Certain parts of the specification are undefined; it is the
+responsibility of engineers to decide how to implement these
 functionalities. The JavaScript spec uses the label
 ``implementation-dependent'' to indicate these cases, where behavior
-may differ from engine to engine. One reason this flexibility in the
-spec exists to enable compiler optimizations. For example, the
+may differ from engine to engine. One reason for suchs flexibility in
+the spec is to enable compiler optimizations. For example, the
 \js\ \mcodeid{for-in} loop construct does not clearly specify the
 iteration order of
 elements~\cite{so-forin-undefined,javascript-in-chrome} and different
@@ -319,16 +326,17 @@ specification states that if the \mcodeid{Number.toPrecision()}
 function is called with multiple arguments then the floating-point
 approximation is
 implementation-dependent~\cite{es6-toPrecision}. Various other cases
-like these exist in the specification. Given the speed the
-specification changes and the complexity of the language some features
-are not fully implemented as can be observed by the Kangax
+like these exist in the specification. Added to that, given the speed
+the specification changes and the complexity of the language some
+features are not fully implemented as can be observed by the Kangax
 compatibility table~\cite{kangax}.  It is also worth noting that, as
 in other languages, some elements in JS have non-deterministic
 behavior (\eg{}, \mcodeid{Math.random} and \mcodeid{Date}). A test
 that makes decisions based on these elements could, in principle,
 produce different outcomes on different runs. Carefully-written test
 cases should not manifest this kind of flaky behavior.  As previously
-mentioned, all those aspects make testing \js\ engines challenging.
+mentioned, all those aspects make testing \js\ engines challenging,
+albeit very important given the its tremendous popularity.
 
 
 %\subsection{Randomness}
