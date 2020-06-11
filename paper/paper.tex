@@ -676,14 +676,6 @@ component.
 %% does not have an assertion in the test file
 %% \Fix{add code to explain}
 
-\begin{figure}[t]
-  \centering
-  \includegraphics[trim=0 350 0 0,clip,width=1.0\textwidth]{diff-testing-runtimes}
-  \vspace{-5ex}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
-  \vspace{-2ex}
-\end{figure}
-
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
 
@@ -695,6 +687,12 @@ data processors and arrowed lines denote data flows. The cycle icons
 indicate repetition--the leftmost icon indicates that each file in the
 input list will be analyzed in separate whereas the rightmost icon
 shows that a single file will be fuzzed multiple times.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.85\textwidth]{diff-testing-runtimes}
+  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+\end{figure}
 
 The bug-finding process works as follows. For a given test input, the
 toolchain produces new inputs using some off-the-shelf input fuzzer
@@ -709,13 +707,21 @@ facilitate the human inspection process, the infrastructure
 prioritizes warnings and clusters them in groups (step 3). We describe
 these features in Sections~\ref{sec:prioritization} and
 \ref{sec:clusterization}. Note that a number of reasons exist, other
-than a bug, to explain discrepancy (see
+than a bug, for discrepancy to arise (see
 Tables~\ref{fig:piecharts-transplantation} and
 ~\ref{tab:false-positives}) and there is no clear automatic approach
 to precisely distinguish false and true positives. As such, a human
 needs to inspect the warning to classify the issue. As mentioned
 earlier, this justifies why differential testing is challenging to
-automate at the functional level.
+automate at the functional level. Existing techniques that use
+differential testing control rate of false alarms differently. For
+example, Mozilla uses varies the configurations of thei
+\smonkey\ engine, but the implementation is the
+same~\cite{mozilla-severity}. The sources of non-determinism are
+therefore similar. CSmith~\cite{Yang:2011:FUB:1993498.1993532}
+addresses the problem by trying to avoid generating C files that
+produce undefined behavior. However, mapping all sources of
+undefinedness in JS is impractical.
 
 For step 2, we considered using the open-source tool
 eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
