@@ -38,3 +38,7 @@ All data used and generated in this project is available online at:
 https://drive.google.com/open?id=1YHXatZ5KO19yHxg73FN32Xtn5ayEXw7F
 
 We are storing in a different medium because GitHub cannot handle such sized files.
+
+### License
+
+ENTENTE is licensed under MIT. 
