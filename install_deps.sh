@@ -25,7 +25,7 @@ unzip bin_fuzzers/QuickFuzz.zip -d bin_fuzzers/
 
 # configures jsvu and fuzzers
 PROJECT_DIR=`pwd`
-FUZZERS_DIR=$PROJECT_DIR/entente/_/
+FUZZERS_DIR=$PROJECT_DIR/entente/bin_fuzzers/
 echo 'export PATH="${PATH}:${HOME}/.jsvu:${FUZZERS_DIR}"' >> ~/.bashrc && source ~/.bashrc
 jsvu --os=linux64 --engines=chakra,javascriptcore,spidermonkey,v8,hermes
 eshost --configure-jsvu
