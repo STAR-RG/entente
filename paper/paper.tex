@@ -597,25 +597,27 @@ Table~\ref{tab:test-suites}.
 % and test the classifier and obtained an accuracy of 98\%. This
 % classifier is publicly available from our website as a separate
 % component.
-\Igor{
-For the classification of ``code'' vs. ``not code'', we used popular 
-techniques for solving NLP classification problems~\cite{kusner2015word}.
-More in detail, we used word2vec~\cite{mikolov2013distributed},
-a popular NLP technique to produce word embeddings. A word embedding is 
-a mapping of words to vectors of real numbers. We chose word2vec for
-two mainly reasons: i) similarity between sentences and ii)
-to obtaining a low-dimensional vector that can be used in
-a traditional classifier. The next step we used a
- multi-layer perceptron~\cite{Rumelhart:1986:LIR:104279.104293}
-to infer the probability of the input belonging or not to the class based 
-on the distance of similarity of sentences, the classifier takes that vector
-on input and produces a ``code'' or ``not code'' answer. The classifier labels
-the input as code if the predicted probability of the input being code is 0.7 or higher. 
-We used a corpus with 25K samples of English paragraphs and 25K snippets of \js{} code to train
-and test the classifier and obtained an accuracy of 98\%. This
-classifier is publicly available from our website as a separate
-component.
-}
+
+For the classification of ``code'' vs. ``nocode'', we used popular
+techniques for solving NLP classification
+problems~\cite{kusner2015word}.  First, we used
+word2vec~\cite{mikolov2013distributed}, a popular NLP technique to
+produce word embeddings. A word embedding is a mapping of words to
+vectors of real numbers. Then, we used a multi-layer
+perceptron~\cite{Rumelhart:1986:LIR:104279.104293} to infer the
+probability of the input belonging or not to the class based on the
+distance between sentences (\ie{}, the distance from an input sentence
+to a code example or to a nocode example) as induced by the distance
+of comprising words computed with word2vec. The classifier labels the
+input as code if the predicted probability of the input being code is
+0.7 or higher.  We used a corpus with 25K samples of English
+paragraphs and 25K snippets of \js{} code to train and test the
+classifier and obtained an accuracy of 98\%. This classifier is
+publicly available from our website as a separate component.
+
+% We chose word2vec for two main reasons: i) similarity between
+% sentences and ii) to obtaining a low-dimensional vector that can be used in a traditional classifier. 
+
 
 %% With that mapping it is
 %% possible to measure distance between two sentences as the distance
