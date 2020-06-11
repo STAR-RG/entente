@@ -981,23 +981,29 @@ experiment~\cite{ecma262-conformance-suite}.
   %\normalsize
 \end{table}
 
+%Nao envolver o hermes nos experimentos antigos pq o hermes vai
+%lancar erros pq a funcionalidade não foi implementada
+
 Results show that there are still many unsupported scenarios as can be observed from the
 percentages in the table. The number of passing tests is high and
-similar for \jsc, \veight{}, and \smonkey\ whereas \chakra\ performs
-worse compared to the other engines. Note also that \chakra\ is both
-the engine that has the lowest passing ratio in this test suite and
-the one we were able to find more bugs (as per
+similar for \jsc, \veight{}, and \smonkey\ whereas \hermes performs
+worse when compared to the other engines.
+\Fix{This happens because \hermes
+still has many unsupported features, such as Proxy, Promisse, and XXX.}
+Moreover, one can also note that \chakra\ also a low passing ratio
+in this test suite and the one we were able to find more bugs (as per
 Figure~\ref{fig:summary}). Although it is plausible to find
 correlation between the passing ratios and reliability as measured by
-the number of bugs found, we do not imply causality. It is important
+the number of bugs found, we do not imply causality. As aforementioned,
+it is important
 to note that failures in this conformance test suite indicates missing
 features as opposed to bugs.
 
 \begin{center}
   \fbox{
     \begin{minipage}{8cm}
-      \textit{Summary:}~All engines seem to adhere well to the
-      \js\ standard. Except for \chakra, the passing ratio of all
+      \textit{Summary:}~Most of the engines seem to adhere well to the
+      \js\ standard. Except for \hermes and \chakra, the passing ratio of all
       engines is above 90\%.
       \end{minipage}
     }
