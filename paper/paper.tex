@@ -398,60 +398,19 @@ reporting old and already-fixed bugs to developers.
 
 \section{Mined JS Files}
 \label{sec:seeds}
-A good test set is critical for finding bugs with the techniques used
-in this paper. For that reason, we looked for \js\ files from various
-sources: 1) test files from the Test262~\cite{tc39-github} conformance
-suite of the ECMA262 specification~\cite{ecmas262-spec}, 2) test files
-from the test suite of the selected engines (see
-Section~\ref{sec:methodology:engines}); these files are accessible
-from the engine's official repositories, 3) test files from the suites
-of public engines (\ie{}, Duktape, JerryScript, JSI, and Tiny-js),
-4) test files mined from issue trackers of
-these engines, and 5) test files from other GitHub projects.
+
+Obtaining good sets of JS test cases is imperative to evaluate the
+techniques in this paper. For that, we looked for \js\ files from
+various sources: 1) test files from the Test262~\cite{tc39-github}
+conformance suite of the ECMA262 specification~\cite{ecmas262-spec},
+2) test files from the test suite of our selected engines; these files
+are accessible from the engine's official repositories, 3) test files
+from the suites of other public engines (\ie{}, Duktape, JerryScript,
+JSI, and Tiny-js), 4) test files mined from issue trackers of these
+engines, and 5) test files from other GitHub projects.
 
 %% accessible from GitHub using the GitHub REST
 %% API~\cite{github-rest-api}.
-
-Table~\ref{tab:test-suites} shows the breakdown of tests per
-engine. Column ``full'' shows the number of test cases associated with
-each engine. Column ``pass-in-par.''  shows the number of test cases
-that pass in their parent engine. We discarded tests that fail in
-their parent engine as we could not reliably indicate the reason for
-the failure, so we assumed the test could be broken. We removed \testsThatFail{}
-test cases that fail for that reason--\testsThatFailJSC{} tests from \jsc and
-\testsThatFailSM{} tests from \smonkey. Column ``type-in-all''
-shows the number of test cases whose executions do not throw
-dynamic type errors in any of the engines because of an undefined variable or property.
-These cases were captured by looking for the presence of \CodeIn{ReferenceError} and
-\CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
-(respectively, \CodeIn{TypeError}) is raised when test execution
-attempts to access an undefined variable (respectively, property of an
-object). We discarded those tests to avoid noise in the experiments as
-they clearly indicate some missing feature as opposed to bugs. For
-example, some tests use non-portable names (\eg{}, \jsc's
-\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
-or use functions that, albeit part of the spec, not all engines
-currently support. \Fix{Similarly, the \chakra project does not use the default
-well-known assertions available in JS, which the other JS engines use.
-Instead, it uses its own testing framework, WScript. In this case, we could
-not easily reproduce the \chakra unit tests in the other engines since it would
-raise a \texttt{ReferenceError}. Also, updating the other engines to use WScript would
-require a non-trivial manual process. This is why \chakra is not showed
-in Table~\ref{tab:test-suites}.}
-
-For the evaluation of test transplantation, we used
-the \totalTestFilesForTestTransplantation{} tests included in the
-dashed rectangle under column ``type-in-all'', \ie{}, all tests under
-that column but the Test262 tests. We did not consider tests from the
-conformance suite as they are more likely to indicate missing features
-as opposed to bugs. In addition, engine developers have access to
-these test and are encouraged to run them. Finally, column
-``no-fail-in-all'' shows the tests for which all engines pass. Note
-that the set of tests in this column is a subset of the
-``type-in-all'' test set. This test set is used in the evaluation of
-differential testing as fuzzing seeds. The guarantee that they pass in
-all engines assures that, if discrepancies occur, they are related to
-the changes in the input as opposed to the original cause of failure.
 
 \newcommand\marktopleft[1]{%
     \tikz[overlay,remember picture]
@@ -468,9 +427,12 @@ the changes in the input as opposed to the original cause of failure.
   \small
   \centering
   \caption{\label{tab:test-suites}Number of test files. Dashed
-    rectangle under column ``type-in-all'' (resp., ``no-fail-in-all'')
-    shows the tests used for test transplantation (resp., cross-engine
-    differential testing).\Gustavo{Terminar essa tabela}}  \setlength{\tabcolsep}{2pt}
+    rectangle under column ``type-in-all'' shows the tests used for
+    test transplantation whereas the rectangle under column
+    ``no-fail-in-all''---a subset of the ``type-in-all'' tests---shows
+    the tests used in cross-engine differential
+    testing.\Gustavo{Terminar essa tabela}}
+  \setlength{\tabcolsep}{2pt}
   \begin{tabular}{ccrrrr}
     \toprule
     \multirow{2}{*}{Name}      &  \multirow{2}{*}{Source} &
@@ -497,6 +459,53 @@ the changes in the input as opposed to the original cause of failure.
    \bottomrule
   \end{tabular}
 \end{table}
+
+Table~\ref{tab:test-suites} shows the breakdown of tests. Column
+``Name'' and ``Source'' show the origin of the test suite. Column
+``total'' shows the number of test cases associated with a givem
+source. Column ``pass-in-par.''  shows the number of test cases that
+pass in their parent engine. We discarded tests that fail in their
+parent engine as we could not reliably indicate the reason for the
+failure, so we assumed the test could be broken. We removed
+\testsThatFail{} test cases that fail for that
+reason--\testsThatFailJSC{} tests from \jsc and \testsThatFailSM{}
+tests from \smonkey. Column ``type-in-all'' shows the number of test
+cases whose executions do not throw dynamic type errors in any of the
+engines because of an undefined variable or property.  These cases
+were captured by looking for the presence of \CodeIn{ReferenceError}
+and \CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
+(respectively, \CodeIn{TypeError}) is raised when test execution
+attempts to access an undefined variable (respectively, property of an
+object). We discarded those tests to avoid noise in the experiments as
+they clearly indicate some missing feature as opposed to bugs. For
+example, some tests use non-portable names (\eg{}, \jsc's
+\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
+or use functions that, albeit part of the spec, not all engines
+currently support. \Fix{Similarly, the \chakra project does not use
+  the default well-known assertions available in JS, which the other
+  JS engines use.  Instead, it uses its own testing framework,
+  WScript. In this case, we could not easily reproduce the \chakra
+  unit tests in the other engines since it would raise a
+  \texttt{ReferenceError}. Also, updating the other engines to use
+  WScript would require a non-trivial manual process. This is why
+  \chakra is not showed in Table~\ref{tab:test-suites}.}\Mar{did not
+  review part in red}
+
+\Mar{Numbers seem inconsistent. I will stop here...}
+For the evaluation of test transplantation, we used
+the \totalTestFilesForTestTransplantation{} tests included in the
+dashed rectangle under column ``type-in-all'', \ie{}, all tests under
+that column but the Test262 tests. We did not consider tests from the
+conformance suite as they are more likely to indicate missing features
+as opposed to bugs. In addition, engine developers have access to
+these test and are encouraged to run them. Finally, column
+``no-fail-in-all'' shows the tests for which all engines pass. Note
+that the set of tests in this column is a subset of the
+``type-in-all'' test set. This test set is used in the evaluation of
+differential testing as fuzzing seeds. The guarantee that they pass in
+all engines assures that, if discrepancies occur, they are related to
+the changes in the input as opposed to the original cause of failure.
+
 
 
 %% The main source of test
@@ -527,7 +536,7 @@ engines.
 
 \subsection{Mining Tests}
 
-\subsubsection{from GitHub projects}
+\subsubsection{From GitHub projects}
 
 \Fix{We mined JS programs from the GitHub repository. In this case, we searched
 for projects written in JavaScript, that were tagged with ``javascript-engine",
@@ -537,16 +546,19 @@ downloaded locally. However, after careful investigation, we noted that 160 of
 these projects do not  have any JS file, which were excluded from our study.
 We used the 2040 remaining ones as input to our testing approaches.}
 
-\subsubsection{from Issue Trackers}
+\subsubsection{From Issue Trackers}
 
-
-\sloppy{}We observed that issue trackers are an important source of
-test data and should not be ignored. Analyzing a sample of issues, we
-observed that developers either 1) add test cases as attachments of
-issues or 2) embed test cases within the textual description of an
-issue. The test cases in attachments are longer compared to the test
-cases embedded in issue descriptions whereas the latter are more
-common. Consequently, we thought we should handle both
+Teste cases embedded in issue trackers are an important source of data
+as they may have already shown usefulness to reveal problems in some
+engine. For example, a developer may have found a corner case that a
+given engine did not handle properly. Therefore, it is possible that
+other engine do not handle those cases. We thought that we should not
+ignore issue trackers for that reason. By manually analyzing a sample
+of issues, we observed that developers either 1) add test cases as
+attachments of an issue or 2) embed the test cases within the textual
+description of an issue. The test cases in attachments are longer
+compared to the test cases embedded in issue descriptions whereas the
+latter are more common. Consequently, we thought we should handle both
 cases.
 
 % (\jsc=147, \veight{}=370, and \smonkey{}=110).
@@ -557,11 +569,11 @@ Table~\ref{tab:engines} and we were able to retrieve a total of
 \filesAttached{} files.  To mine tests from the textual descriptions we
 proceeded as follows. First, we broke the text describing the issue in
 paragraphs and used a binary classifier to label each paragraph as
-``code'' or ``not code'' (\ie{}, natural language). Then, based on
+``code'' or ``not code'' (\ie{}, text written in natural language). Then, based on
 that information, we merged consecutive paragraphs labeled as ``code''
 and used a \js\ parser to check well-formedness of the retrieved code
 fragment. Using that method we were able to retrieve a total of
-\filesMining{} files. All those files were included in
+\filesMining{} additional files. All those files were included in
 Table~\ref{tab:test-suites}.
 
 For the classification of ``code'' vs. ``not code'', we used a
