@@ -701,7 +701,10 @@ automate at the functional level.
 For step 2, we considered using the open-source tool
 eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
 output discrepancy. However, we noticed that eshost-cli does not
-handle discrepancies involving crashes. As such, we forked the
+handle discrepancies involving crashes, \Igor{If the criteria is to
+find crashes or fatal errors, it is possible to run the
+infrastructure with any runner(?) tool, including the
+javascript binaries itself.}. As such, we forked the
 eshost-cli GitHub project and implemented that functionality on it. It
 is also important to note that our checker does not support the case
 where the test fails in all engines but the kind of failure (\eg{},
