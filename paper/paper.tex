@@ -964,7 +964,10 @@ operators, which are typically simple. We chose these specific fuzzers
 because, conceptually, one complements the other. \quickfuzz\ creates
 mutations like \radamsa. However, in contrast to \radamsa, \quickfuzz\ is aware
 of the \js\ syntax; it is able to replace sub-trees of the syntax
-tree~\cite{grieco2016quickfuzz} with trees created anew.
+tree~\cite{grieco2016quickfuzz} with trees created anew. Notwithstanding,
+since \radamsa performs simpler syntactic source code modifications,
+it also produces a higher number of valid inputs (when compared with, 
+for instance, AFL).
 
 \section{Results}
 \label{sec:results}
