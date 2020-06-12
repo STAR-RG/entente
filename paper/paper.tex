@@ -1790,12 +1790,12 @@ returns a integer 8 that represents 010 in octal.
 \CodeIn{b+/v/a} represents a bug confirmed in \hermes\ engine with 
 differential testing using radamsa on a repository mined from GitHub.
 The original test case contains a string concatenation. 
-This is a case of validation of RegExp flags. The fuzzer mutate
-the file with a regular expression "/v/" between the plus operator and
-the variable. The plus operator in this case is used as a flag of the RegExp "+/v/",
-but in this case the plus operator is not valid. The behavior expected
-is throws an early SyntaxError due to a invalid regular expression flag,
-but \hermes Hermes seems not treats the early validation of the regexp flags
+This is a case of validation of RegExp flags. The fuzzer mutates
+the file with a regular expression \CodeIn{/v/} after the plus operator.
+In this case, the plus operator turns into a flag of the RegExp \CodeIn{+/v/},
+but this flag is not valid. The behavior expected is throws an early
+SyntaxError due to a invalid regular expression flag,
+but \hermes\ seems not treats the early validation of the regexp flags
 as commented by a maintainer.
 
 \subsection{Threats To Validity}
