@@ -416,8 +416,9 @@ conformance suite of the ECMA262 specification~\cite{ecmas262-spec},
 2) test files from the test suite of our selected engines; these files
 are accessible from the engine's official repositories, 3) test files
 from the suites of other public engines (\ie{}, Duktape, JerryScript,
-JSI, and Tiny-js), 4) test files mined from issue trackers of these
-engines, and 5) test files from other GitHub projects.
+JSI, Tiny-js, Babel, and BlogEngine.NET),
+and 4) test files mined from issue trackers of these
+engines.
 
 %% accessible from GitHub using the GitHub REST
 %% API~\cite{github-rest-api}.
@@ -456,12 +457,14 @@ engines, and 5) test files from other GitHub projects.
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v82018repo} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
     %\chakra & \cite{chakra2018repo}\\
-    %\hermes & \cite{hermes2020repo} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{} \\
+    \hermes & \cite{hermes2020repo} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{} \\
     \midrule
     Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
     \jerry{} & \cite{jerryscript2018repo} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
     Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
+    Babel &&&&& \\
+    BlogEngine.NET &&&&& \\
     \midrule
     %GitHub Projects & - & 494,394 & - & - & - \\
     %\midrule
@@ -486,7 +489,9 @@ were captured by looking for the presence of \CodeIn{ReferenceError}
 and \CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
 (respectively, \CodeIn{TypeError}) is raised when test execution
 attempts to access an undefined variable (respectively, property of an
-object). We discarded those tests to avoid noise in the experiments as
+object).
+
+We discarded those tests to avoid noise in the experiments as
 they clearly indicate some missing feature as opposed to bugs. For
 example, some tests use non-portable names (\eg{}, \jsc's
 \CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
@@ -499,6 +504,12 @@ currently support. Similarly, the \chakra project does not use
   \texttt{ReferenceError}. Also, updating the other engines to use
   WScript would require a non-trivial manual effort. This is why
   \chakra does not appear in Table~\ref{tab:test-suites}.
+  Moreover, we also did not include \hermes in the table because,
+  as the reader shall see in Table~\ref{tab:test262}, \hermes presents
+  a very low adherence to the Test262 conformance stuite. If we decided
+  to keep \hermes, considering only the number of passing tests
+  (the ``no-fail-in-all'' column), it would significantly reduce our
+  amount of test files.
 
 \Mar{Numbers seem inconsistent. I will stop here...}
 For the evaluation of test transplantation, we used
@@ -552,26 +563,26 @@ If the change would require more substantial manual work, we opted to
 discard the test instead. Overall we may have manually refactored more
 than a thousand test files.
 
-\subsection{Mining Tests}
+\subsection{Mining Tests From Issue Trackers}
 
-To enrich our dataset of test files, we mined additional tests available on
-JavaScript GitHub projects as well as in the issue trackers of the studied
-JS engines. We explain this process next.
+%o enrich our dataset of test files, we mined additional tests available on
+%JavaScript GitHub projects as well as in the issue trackers of the studied
+%JS engines. We explain this process next.
 
-\subsubsection{From GitHub projects}
+%\subsubsection{From GitHub projects}
 
-We mined JS programs from the GitHub repository. In this case, we searched
-for projects written in JavaScript, that were tagged with ``javascript-engine",
-and that have both ``Javascript" and ``engine" the name or the description of
-the project. After this process, we ended up with 2,200 JS programs, which we
-downloaded locally. However, after careful investigation, we noted that 160 of
-these projects do not have any JS file, which were excluded from our study.
-From these 2,040 projects, we could select 494,394 test files,
-which we as input to our testing approaches.
+%We mined JS programs from the GitHub repository. In this case, we searched
+%for projects written in JavaScript, that were tagged with ``javascript-engine",
+%and that have both ``Javascript" and ``engine" the name or the description of
+%the project. After this process, we ended up with 2,200 JS programs, which we
+%downloaded locally. However, after careful investigation, we noted that 160 of
+%these projects do not have any JS file, which were excluded from our study.
+%From these 2,040 projects, we could select 494,394 test files,
+%which we as input to our testing approaches.
 
 
 
-\subsubsection{From Issue Trackers}
+%\subsubsection{From Issue Trackers}
 
 Teste cases embedded in issue trackers are an important source of data
 as they may have already shown usefulness to reveal problems in some
@@ -1112,15 +1123,15 @@ potentially fault-revealing cases, one of the authors inspected the
 scenario and, if agreed on the classification, reported the bug to the
 issue tracker of the affected engine.
 
-\begin{table}[t]
+\begin{table}[b]
   \small
   \centering
   \caption{\label{tab:cross-testing}Number of failures with
     Test Transplantation.}
   \renewcommand*{\arraystretch}{0.9}
-  \begin{tabular}{crrrrr}
+  \begin{tabular}{crrrr}
     \toprule
-    test suite\textbackslash{}engine & \jsc & \veight{} & \smonkey{} & \chakra{} & \hermes{} \\
+    test suite\textbackslash{}engine & \jsc & \veight{} & \smonkey{} & \chakra{} \\
     \midrule
     % \Fix{Versions (03.08)} & 234555 & 7.0.158 & 62.0b14 & 1.10.1 \\
     \Comment{
@@ -1129,17 +1140,17 @@ issue tracker of the affected engine.
       JSC 2
       Spidermonkey 58
     }
-    \jsc & - & 10 & 10 & 59 & 340  \\
-    \veight{} & 41 & - & 3 & 5 & 315 \\
+    \jsc & - & 10 & 10 & 59 \\
+    \veight{} & 41 & - & 3 & 5 \\
 %    \chakra{} & - & - & - & -  \\
-    \smonkey{} & 218 & 107 & - & 281 & - \\
-    Hermes & 8 & 14 & 8 & 26 & -  \\
-    Duktape & 0 & 4 & 4 & 1 & 140  \\
-    \jerry{} & 23 & 25 & 22 & 23 & 311  \\
-    JSI & 0 & 0 & 0 & 0 & 40\\
-   Tiny-js & 0 & 0 & 0 & 0 & 10  \\
+    \smonkey{} & 218 & 107 & - & 281 \\
+    %Hermes & 8 & 14 & 8 & 26 & -  \\
+    Duktape & 0 & 4 & 4 & 1 \\
+    \jerry{} & 23 & 25 & 22 & 23 \\
+    JSI & 0 & 0 & 0 & 0 \\
+   Tiny-js & 0 & 0 & 0 & 0 \\
     \midrule
-   \textbf{total} & 290 & 160 & 47 & 395 & 1156 \\
+   \textbf{total} & 282 & 146 & 39 & 369  \\
     \bottomrule
   \end{tabular}
   \vspace{-3ex}
@@ -1161,7 +1172,8 @@ in failures in all test executions from this engine. These failures
 did not happen when the \smonkey tests were transplanted to the other engines,
 though.
 }
-failures in those cases would either indicate regressions or flaky
+\Gustavo{Falar pq Hermes nao esta na tabela}
+Failures in those cases would either indicate regressions or flaky
 tests as opposed to unknown bugs for that engine. As explained in
 Section~\ref{sec:seeds}, we used in this experiment the
 \totalTestFilesForTestTransplantation{} tests included in the
@@ -1184,37 +1196,50 @@ Table~\ref{tab:test-suites}).
 %% \Fix{Y}.
 
 \sloppy The sources of false positives found in this experiment are as
-follows: \textbf{Undefined Behavior.} False positives of this kind are
-manifested when tests cover implementation-dependent behavior, as
-defined in the ECMA262 specification~\cite{ecmas262-spec}. For
-example, one of the tests from \jerry\ uses the function
-\CodeIn{Number.toPrecision([precision])}, which translates a number to
-a string, considering a given number of significant digits. The
-floating-point approximation of the real value is
-implementation-dependent, making that test to pass only in
-\chakra. \textbf{Timeout/OME\footnote{ome is for out of memory
-    error.}.} False positives of this kind typically manifest when the
-engine that runs the test does not optimize the code as the original
-engine of the test. As result, the test fails to finish at the
-specified time budget or it exceeds the memory budget. For example, a
-test case from \jsc defines a function with a tail-call
-recursion. The test fails in all engines but \jsc, which implements
-tail-call optimization. \textbf{Not implemented.} False positives of
+follows:
+
+\begin{description}
+  \item[\textbf{Undefined Behavior.}] False positives of this kind are
+  manifested when tests cover implementation-dependent behavior, as
+  defined in the ECMA262 specification~\cite{ecmas262-spec}. For
+  example, one of the tests from \jerry\ uses the function
+  \CodeIn{Number.toPrecision([precision])}, which translates a number to
+  a string, considering a given number of significant digits. The
+  floating-point approximation of the real value is
+  implementation-dependent, making that test to pass only in
+  \chakra.
+  \item[\textbf{Timeout/OME\footnote{ome is for out of memory
+      error.}.}] False positives of this kind typically manifest when the
+     engine that runs the test does not optimize the code as the original
+     engine of the test. As result, the test fails to finish at the
+     specified time budget or it exceeds the memory budget. For example, a
+     test case from \jsc defines a function with a tail-call
+     recursion. The test fails in all engines but \jsc, which implements
+     tail-call optimization.
+
+  \item[\textbf{Not implemented.}] False positives of
 this kind manifest when a test fails because it covers a function that
 is part of the official spec, but is not implemented in the target
 engine yet. For example, at the time of writing, \chakra{} did not
 implement by default various properties from the \mcodeid{Symbol}
 object. These properties are only available activating the ES6
 experimental mode with the flag \CodeIn{-ES6Experimental}.
-\textbf{Non-Standard Element.} These cases manifest when a function or
+
+\item[\textbf{Non-Standard Element.}] These cases manifest when a function or
 an object property is undefined in the execution engine but we were
 unable to capture that by looking for error types like
 \CodeIn{ReferenceError} and \CodeIn{TypeError}.\Comment{ For example,
   we found cases where the test (or its harness) fails in an assertion
-  because of an undefined property.}  \textbf{Other.} This category
+  because of an undefined property.}
+
+\item[\textbf{Other.}] This category
 includes other sources of false positives. For example, it includes
 the cases where the test was valid for some previous version of the
 spec but is no longer valid for the current spec.
+
+\end{description}
+
+
 
 \begin{table}
   \centering
@@ -1802,10 +1827,10 @@ returns a integer 8 that represents 010 in octal.
 
 
 
-\vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet 
-\CodeIn{b+/v/a} represents a bug confirmed in \hermes\ engine with 
+\vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet
+\CodeIn{b+/v/a} represents a bug confirmed in \hermes\ engine with
 differential testing using radamsa on a repository mined from GitHub.
-The original test case contains a string concatenation. 
+The original test case contains a string concatenation.
 This is a case of validation of RegExp flags. The fuzzer mutates
 the file with a regular expression \CodeIn{/v/} after the plus operator.
 In this case, the plus operator turns into a flag of the RegExp \CodeIn{+/v/},
@@ -1854,7 +1879,7 @@ metrics originate from a trusted source.
 %% \Fix{elaborate}
 
 \subsection{Key Findings}
-\label{sec:findings} 
+\label{sec:findings}
 
 The main findings of this study are as follows.
 
@@ -1873,7 +1898,7 @@ The main findings of this study are as follows.
 
 %% 3)~Not only multiple different
 %% implementations can be leveraged in differential testing, but
-%% differences in test suites can also be important. 
+%% differences in test suites can also be important.
 
 The main findings of this study are as follows: 1) The techniques we
 selected found, with relatively low effort, several bugs even in very
