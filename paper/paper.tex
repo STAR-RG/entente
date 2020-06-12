@@ -1787,34 +1787,16 @@ returns a integer 8 that represents 010 in octal.
 
 
 \vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet 
-above represents a bug confirmed in \hermes\ engine with 
+\CodeIn{b+/v/a} represents a bug confirmed in \hermes\ engine with 
 differential testing using radamsa on a repository mined from GitHub.
-
-\begin{figure}[h!]
-  \vspace{-0.5ex}
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
-    b+/v/a
-  \end{lstlisting}
-  \normalsize
-  \vspace{-1ex}
-\end{figure}
-
 The original test case contains a string concatenation. 
-This is a case of validation of RegExp flags because the fuzzer mutated
-the file with a regular expression "/v/" between the variables.
-The plus operator in this case is set as a flag of the RegExp "+/v/",
-but in this case the plus operator is not valid as a flag. The behavior expected
+This is a case of validation of RegExp flags. The fuzzer mutate
+the file with a regular expression "/v/" between the plus operator and
+the variable. The plus operator in this case is used as a flag of the RegExp "+/v/",
+but in this case the plus operator is not valid. The behavior expected
 is throws an early SyntaxError due to a invalid regular expression flag,
-but \hermes seems not threat the early validation of the regexp flags as 
-commented by a team developer.
+but \hermes Hermes seems not treats the early validation of the regexp flags
+as commented by a maintainer.
 
 \subsection{Threats To Validity}
 
