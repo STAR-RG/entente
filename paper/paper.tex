@@ -144,10 +144,10 @@ the ability of two testing techniques to expose bugs in JavaScript engines.
   of oracles for the newly created inputs.
 \end{itemize}
 
-\Mar{@Gustavo,@Breno, can you please make this par a bit stronger
-  (more coherent/compelling) as to justify the selection of these two
-  techniques?}
-\Breno{Changed the paragraph a bit to include the reuse argument.}
+%\Mar{@Gustavo,@Breno, can you please make this par a bit stronger
+%  (more coherent/compelling) as to justify the selection of these two
+%  techniques?}
+%\Breno{Changed the paragraph a bit to include the reuse argument.}
 We selected these two techniques because they can take advantage
 of existing test suites and reuse them --- in a semi-automated way
 as we propose here --- to enhance the coverage of the engine under testing.
@@ -282,8 +282,8 @@ revealing functional bugs in popular \javascript\ engines.  Additional
 contributions include: 1)~A number of bugs found and fixed.  We
 reported a total of \totalBugsReported bugs.  Of these,
 \totalBugsConfirmed bugs were confirmed and \totalBugsFixed bugs were
-fixed.  2)~An infrastructure called \entente for performing test transplantation and
-differential testing.  Both \entente code and the data sets of tests
+fixed.  2)~An infrastructure for performing test transplantation and
+differential testing. The soruce code produced and the generated data sets of tests
 and bugs are publicly available online at the following link:
 
 \dataRepo.
@@ -368,7 +368,12 @@ version after Jan 1, 2018, 2) Contains more than 1K stars on GitHub,
 and 3) Uses a public issue tracker. We looked for highly-maintained
 (as per the first criterion) and popular (as per the second criterion)
 engines. As we wanted to report bugs, we also looked for project with
-public issue trackers. Table~\ref{tab:engines} lists the engines we
+public issue trackers. We initially selected four JS engines:
+\jsc, \veight, \chakra, and \smonkey. Additionally, we also included
+\hermes in the list of studied engines. The main reason for this was
+to investigate how our approach would work on a recently introduced JS
+engined. More about \hermes on Section~\ref{sec:hermes}.
+Table~\ref{tab:engines} lists the engines we
 analyzed. It is worth noting that we used Google Chrome Lab's JSVU
 tool~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
@@ -436,7 +441,7 @@ engines, and 5) test files from other GitHub projects.
     test transplantation whereas the rectangle under column
     ``no-fail-in-all''---a subset of the ``type-in-all'' tests---shows
     the tests used in cross-engine differential
-    testing.\Gustavo{Terminar essa tabela}}
+    testing.}
   \setlength{\tabcolsep}{2pt}
   \begin{tabular}{ccrrrr}
     \toprule
@@ -451,14 +456,14 @@ engines, and 5) test files from other GitHub projects.
     \smonkey\ & \cite{mozilla} & \smOriginal{} & \smPassInPar{} & \smCompileAll{} & \smNoFailAll{}\\
     \veight{} & \cite{v82018repo} & \veightOriginal{} & \veightPassInPar{} & \veightCompileAll{} & \veightNoFailAll{}\\
     %\chakra & \cite{chakra2018repo}\\
-    \hermes & \cite{hermes2020repo} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{} \\
+    %\hermes & \cite{hermes2020repo} & \hermesOriginal{} & \hermesPassInPar{} & \hermesCompileAll{} & \hermesNoFailAll{} \\
     \midrule
     Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
     \jerry{} & \cite{jerryscript2018repo} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
     Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
-    \midrule
-    GitHub Projects & - & 494,394 & - & - & - \\
+    %\midrule
+    %GitHub Projects & - & 494,394 & - & - & - \\
     \midrule
      &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
    \bottomrule
@@ -964,7 +969,10 @@ operators, which are typically simple. We chose these specific fuzzers
 because, conceptually, one complements the other. \quickfuzz\ creates
 mutations like \radamsa. However, in contrast to \radamsa, \quickfuzz\ is aware
 of the \js\ syntax; it is able to replace sub-trees of the syntax
-tree~\cite{grieco2016quickfuzz} with trees created anew.
+tree~\cite{grieco2016quickfuzz} with trees created anew. Notwithstanding,
+since \radamsa performs simpler syntactic source code modifications,
+it also produces a higher number of valid inputs (when compared with,
+for instance, AFL).
 
 \section{Results}
 \label{sec:results}
@@ -1512,7 +1520,7 @@ reports, and diagnostic outcomes, is publicly available from a
 preserved repository \dataRepo.
 
 \section{Case Study: \hermes}
-\label{sec:bugs}
+\label{sec:hermes}
 
 This section describes the experiment we conducted to evaluate the
 effectiveness of the techniques we studied to find new bugs in
@@ -1523,7 +1531,7 @@ optimized for fast start-up of React Native apps on
 Android''~\cite{hermes2020repo}.\Mar{short sentence saying where it is
   used.}
 
-%  for performing 
+%  for performing
 As a preparatory step to apply test transplantation and differential
 testing to \hermes, we ran the Test262 conformance suite on the most
 recent version of \hermes, 0.5.0. We observed that only 26\% of the
@@ -1593,8 +1601,8 @@ discuss in the following. The selection criteria we used was:
 \item to cover each technique--test transplantation and differential
   testing;
 \item to cover a case of rejected bug report;
-\item to use short tests (for space).  
-\end{enumerate}  
+\item to use short tests (for space).
+\end{enumerate}
 
 %% \CodeIn{\{var a =
 %%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
@@ -1602,7 +1610,7 @@ discuss in the following. The selection criteria we used was:
 
 \sloppy
 \vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
-code snippet below shows a test that reveals a bug in \chakra.
+code snippet below shows a test that reveals a bug in \textbf{\chakra}.
 
 \begin{figure}[h!]
   \vspace{-1ex}
@@ -1643,7 +1651,7 @@ fixed the issue soon after our report.
 
 \vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.} The
 snippet {\footnotesize\ttfamily{eval(function b(a)\{break;\});}}
-revealed a bug in \veight{} version 7.0.244. This code snippet was
+revealed a bug in \textbf{\veight{}} version 7.0.244. This code snippet was
 obtained by fuzzing a Test262 test with \quickfuzz. In its original
 version, a string (omitted for space), passed as argument to the
 \CodeIn{eval} function, encoded the actual test. The fuzzer replaced
@@ -1672,7 +1680,7 @@ behave as expected in this case.
 
 \vspace{1ex}\noindent\textbf{Issue \#19,
   Table~\ref{tab:test-transplantation-bugs}.} The code snippet below
-shows the test input we used to reveal a bug in \jsc. 
+shows the test input we used to reveal a bug in \textbf{\jsc} version 234555.
 
 \begin{figure}[h!]
   \vspace{-0.5ex}
@@ -1706,7 +1714,7 @@ to \CodeIn{sort} and the test fails in the subsequent step. The other
 engines raise a \CodeIn{TypeError} as expected.
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.} We
-reported the code snippet below to the \chakra\ development team as a
+reported the code snippet below to the \textbf{\chakra} development team as a
 bug, but they did \emph{not} accept.
 
 \begin{figure}[h!]
@@ -1743,34 +1751,39 @@ by design\footnote{We interpreted as a violation of an undocumented
 long value.
 
 \vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:test-transplantation-bugs}.} We
-reported the code snippet below to the \smonkey\ development team as a
-bug, the bug was confirmed in a few hours.
+reported the snippet \CodeIn{"use strict" 010} to the
+\textbf{\smonkey} development team as a bug and the bug was confirmed
+in a few hours.  This is a test case original from the \hermes suite
+using test transplantation.  According the specification, in strict
+mode, the engine must use the prefix '0o' or '0O' to represents octal
+numeric literals. It was an issue which explores a deprecated octal
+token after ASI (Automatic Semicolon Insertion).  The others engine
+throws a SyntaxError due the missing of the octal token, but \smonkey
+returns a integer 8 that represents 010 in octal.
 
-\begin{figure}[h!]
-  \vspace{-0.5ex}
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
-    "use strict"
-    010
-  \end{lstlisting}
-  \normalsize
-  \vspace{-1ex}
-\end{figure}
+%% \begin{figure}[h!]
+%%   \vspace{-0.5ex}
+%%   \centering
+%%   \scriptsize
+%%   \lstset{escapeinside={@}{@},
+%% %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%%     numberstyle=\tiny,
+%%     morekeywords={assertEq, var, yield, in, function,
+%%     typeof, return, throw, new, Error, if},
+%%   }
+%%   \begin{lstlisting}
+%%     "use strict"
+%%     010
+%%   \end{lstlisting}
+%%   \normalsize
+%%   %% \caption{Warning captured as \hi{} priority.}
+%%   %% \label{fig:hi-priority}
+%%   \vspace{-1ex}
+%% \end{figure}
 
 
-This is a test case original from the \hermes suite using test transplantation.
-According the specification, in strict mode, the engine must use 
-the prefix '0o' or '0O' to represents octal numeric literals. It was an
-issue which explores a deprecated octal token after ASI (Automatic Semicolon Insertion).
-The others engine throws a SyntaxError due the missing of the octal token, but 
-\smonkey returns a integer 8 that represents 010 in octal literal.
+
 
 
 \vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet 
@@ -1842,49 +1855,75 @@ metrics originate from a trusted source.
 %% integrated to our infrastructure.
 %% \Fix{elaborate}
 
-\subsection{Key Findings and Lessons}
-\label{sec:lessons}
+\subsection{Key Findings}
+\label{sec:findings} 
 
 The main findings of this study are as follows.
 
-\begin{itemize}
-  \item Both techniques we investigated were successful in revealing
-    bugs (several of them);
-  %% \item We have found more bugs with test transplantation than we have
-  %%   with cross-engine differential testing. In addition, test
-  %%   transplantation demanded less effort per bug;
+\begin{enumerate}
+  \item Both techniques we studied have shown to be practical and
+    effective to find bugs on real, complex, and widely used software
+    systems;
+  \item Even for language APIs with fairly clear specs, as it is the
+    case of JavaScript, there is likely (a lot of) variation between
+    different implementations, which brings intrinsic challenges to
+    developers that work on them;
   \item Even simple black-box fuzzers can create surprisingly
-    interesting inputs. We conjecture that there is room to find more
-    bugs using other fuzzers;
-  \item Mozilla's \smonkey\ appears to be the most reliable
-    \js\ engine we analyzed, with Google's \veight\ after it.
-\end{itemize}
+    interesting inputs;
 
-The main lessons we learned from this study are as follows: 1)~Even
-for software projects with fairly clear specifications, as the case of
-\javascript{}~\cite{ecmas262-spec}, there is likely to be (a lot of)
-variation between different implementations and, therefore,
-opportunities for bugs. 2)~Not only multiple different implementations
-can be leveraged in differential testing, but differences in test
-suites can also be important. 3)~Finding functional/non-crash bugs
-with differential testing is feasible on real, complex, widely used
-pieces of software. 4)~Further reducing cost of inspection is an
-important problem. Although the inspection activity was not
-uninterrupted, it is safe to say that each warning required a
-substantial amount of time to analyze for potential false alarms. In
-fact, many \hi\ warnings reported with differential testing were not
-analyzed. In determining cost, we observed, from experience, that the
-complexity of the \js\ specifications that the original test covers
-increases cost of diagnosing (as developers need to read and
-understand those) and the availability of alternative implementations
-(for the cases warnings are revealed through differential testing)
-reduces the cost of diagnosis. We prefer to see such problem as an
-opportunity for future research. For example, applying learning
-techniques to prioritize the warnings more likely to be faulty (in the
-spirit of the work of Chen and
+\end{enumerate}
+
+%% 3)~Not only multiple different
+%% implementations can be leveraged in differential testing, but
+%% differences in test suites can also be important. 
+
+The main findings of this study are as follows: 1) The techniques we
+selected found, with relatively low effort, several bugs even in very
+robust engines, such as Mozilla's \smonkey, 2)~Even for software
+projects with fairly clear specifications, as the case of
+\javascript{}~\cite{ecmas262-spec}, there are lots of undefined
+implementation-specific behaviors whose implementation can
+inadvertedly lead to interference in the well-specified parts of the
+spec, leading to clear bugs. 3)~Finding functional/non-crash bugs with
+differential testing is feasible on real, complex, widely used pieces
+of software. Even black-box mutational fuzzers revealed bugs. We do
+expected that other kinds of fuzzers (\eg{}, graybox fuzzers and
+black-box grammar-based generational fuzzers) could reveal even more
+bugs
+
+\subsection{Key Lessons}
+\label{sec:lessons}
+
+The key lessons of this study are as follows:
+
+\begin{enumerate}
+\item The use of Mozilla's \smonkey\ and Google's \veight\ engines
+  should be encouraged;
+\item The cost of inspection of the warnings in differential testing
+  should be reduced;
+\item Finding bugs in large software is a very effective way to engage
+  student in contributing to open-source software and learning
+  Software Testing practices.
+\end{enumerate}
+
+1)~When taking into consideration our bug finding campaign, Mozilla's
+\smonkey\ and Google's \veight\ stood out as the most reliable
+engines. Therefore, we recommend the use of these engine for running
+\js\ applications. 2)~Further reducing cost of inspection in
+differential testing is an important problem. Although the inspection
+activity was not uninterrupted, it is safe to say that each warning
+required a substantial amount of time to analyze for potential false
+alarms. In fact, many \hi\ warnings reported with differential testing
+were not analyzed. We observed empirically that the cost of analysis
+was proportional to (i) the \js\ specification covered by the original
+test (as developers need to read and understand those parts) and (ii)
+the availability of alternative implementations. We prefer to see such
+problem as an opportunity for future research. For example, applying
+learning techniques to prioritize the warnings more likely to be
+faulty (in the spirit of the work of Chen and
 colleagues~\cite{Chen:2017:LPT:3097368.3097451}) may be a promising
 avenue to explore. Recall that the rate of true positives of the
-techniques we studied is rather small.  5)~We learned that reporting
+techniques we studied is rather small. 3)~We learned that reporting
 real bugs is a great way to train (and encourage) students in software
 testing. Students praised the experience of diagnosing failures,
 understanding part of the specs (as needed), writing bug reports,
@@ -2080,3 +2119,4 @@ and CNPq grant 465614/2014-0.
 % LocalWords:  Shulte Geno XPath combinatorial CSmith LLVM Patra CNPq
 % LocalWords:  disassemblers Pradel namespaces Eshkevari FACEPE
 % LocalWords:  PRONEX
+<
