@@ -1829,15 +1829,15 @@ returns an integer \CodeIn{8} that represents \CodeIn{010} in octal.
 
 \vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet
 \CodeIn{b+/v/a} represents a bug confirmed in \textbf{\hermes} engine with
-differential testing using radamsa on a repository mined from GitHub.
+differential testing using radamsa.
 The original test case contains a string concatenation.
-This is a case of validation of RegExp flags. The fuzzer mutates
+This is a case of validation of RegEx flags. The fuzzer mutates
 the file with a regular expression \CodeIn{/v/} after the plus operator.
-In this case, the plus operator turns into a flag of the RegExp \CodeIn{+/v/},
+In this case, the plus operator turns into a flag of the RegEx \CodeIn{+/v/},
 but this flag is not valid. The expected behavior is to throw an early
 SyntaxError due to the invalid regular expression flag,
 but \hermes\ seems not to treat the early validation of the regexp flags
-as commented by a maintainer.
+as explained by one of their developers.
 
 \subsection{Threats To Validity}
 
