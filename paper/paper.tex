@@ -1584,12 +1584,13 @@ findings and lessons learned.
 
 \subsection{Bug Reports}
 
-This section discusses a sample of bugs reports. The selection
-criteria we used was: (i) to cover all engines we found bugs--\chakra,
-\jsc, and \veight, (ii) to cover each technique--test transplantation
-and differential testing (with \radamsa\ and with \quickfuzz), (iii)
-to cover a case of rejected bug report, and (iv) to use short tests
-(for space).
+We issued several bug reports as result of this work. For space, we
+are unable to discuss all of them. We sampled some bug reports to
+discuss in the following. The selection criteria we used was: (i) to
+cover all engines we found bugs--\chakra, \jsc, and \veight, (ii) to
+cover each technique--test transplantation and differential testing
+(with \radamsa\ and with \quickfuzz), (iii) to cover a case of
+rejected bug report, and (iv) to use short tests (for space).
 
 %% \CodeIn{\{var a =
 %%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
@@ -1624,17 +1625,19 @@ The object property \CodeIn{valueOf} stores a function that returns a
 primitive value identifying the target object~\cite{valueof}. The
 original version of this code returns an empty string whereas the
 version of the code modified by the \radamsa{} fuzzer~\cite{radamsa}
-returns a string representation of a null character (\CodeIn{NUL})\Comment{ in
-ascii}. The unary plus expression ``\CodeIn{+a}", used in the
-assertion, is equivalent to the operation
+returns a string representation of a null character
+(\CodeIn{NUL})\Comment{ in ascii}. The unary plus expression
+``\CodeIn{+a}", used in the assertion, is equivalent to the operation
 \CodeIn{ToNumber(a.valueOf())} that converts a string to a number,
 otherwise the operation returns NaN (Not a
 Number)~\cite{unary-plus}. This test fails in all engines but
 \chakra{}. For all three engines the string cannot be parsed as an
-hexadecimal. As such, they produce a NaN as result and the test fails
-as expected. \chakra{}, instead, incorrectly converts the string
-to zero, making the test to pass. As Table~\ref{tab:bugs} shows, the
-\chakra{} team fixed the issue soon after we reported the problem.
+hexadecimal. As such, they produce a NaN and the test fails as
+expected. \chakra{}, instead, incorrectly converts the string to zero,
+and the test passes. As Table~\ref{tab:bugs} shows, the \chakra{} team
+fixed the issue soon after our report.
+
+\Mar{--------------- estou aqui}
 
 \vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.}  The
 code {\footnotesize\ttfamily{eval(function b(a)\{break;\});}} shows
