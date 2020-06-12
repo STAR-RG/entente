@@ -1670,8 +1670,6 @@ behave as expected in this case.
 %%   as expected but \veight{} pass without failures.
 %% }
 
-\Mar{--------------- estou aqui}
-
 \vspace{1ex}\noindent\textbf{Issue \#19,
   Table~\ref{tab:test-transplantation-bugs}.} The code snippet below
 shows the test input we used to reveal a bug in \jsc. 
@@ -1744,7 +1742,7 @@ by design\footnote{We interpreted as a violation of an undocumented
   precondition} as the function was not expected to receive such a
 long value.
 
-\vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:bugs}.} We
+\vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:test-transplantation-bugs}.} We
 reported the code snippet below to the \smonkey\ development team as a
 bug, the bug was confirmed in a few hours.
 
@@ -1753,7 +1751,6 @@ bug, the bug was confirmed in a few hours.
   \centering
   \scriptsize
   \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
     basicstyle=\ttfamily\scriptsize, boxpos=c,
     numberstyle=\tiny,
     morekeywords={assertEq, var, yield, in, function,
@@ -1764,8 +1761,6 @@ bug, the bug was confirmed in a few hours.
     010
   \end{lstlisting}
   \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
   \vspace{-1ex}
 \end{figure}
 
@@ -1778,6 +1773,35 @@ The others engine throws a SyntaxError due the missing of the octal token, but
 \smonkey returns a integer 8 that represents 010 in octal literal.
 
 
+\vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet 
+above represents a bug confirmed in \hermes\ engine with 
+differential testing using radamsa on a repository mined from GitHub.
+
+\begin{figure}[h!]
+  \vspace{-0.5ex}
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function,
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+    b+/v/a
+  \end{lstlisting}
+  \normalsize
+  \vspace{-1ex}
+\end{figure}
+
+The original test case contains a string concatenation. 
+This is a case of validation of RegExp flags because the fuzzer mutated
+the file with a regular expression "/v/" between the variables.
+The plus operator in this case is set as a flag of the RegExp "+/v/",
+but in this case the plus operator is not valid as a flag. The behavior expected
+is throws an early SyntaxError due to a invalid regular expression flag,
+but \hermes seems not threat the early validation of the regexp flags as 
+commented by a team developer.
 
 \subsection{Threats To Validity}
 
