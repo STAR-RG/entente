@@ -1794,13 +1794,13 @@ long value.
 \vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:test-transplantation-bugs}.} We
 reported the snippet \CodeIn{"use strict" 010} to the
 \textbf{\smonkey} development team as a bug and the bug was confirmed
-in a few hours.  This is a test case original from the \hermes suite
+in a few hours.  This is a test case originally from the \hermes suite
 using test transplantation.  According the specification, in strict
-mode, the engine must use the prefix '0o' or '0O' to represents octal
-numeric literals. It was an issue which explores a deprecated octal
-token after ASI (Automatic Semicolon Insertion).  The others engine
-throws a SyntaxError due the missing of the octal token, but \smonkey
-returns a integer 8 that represents 010 in octal.
+mode, the engine must use the prefix '0o' or '0O' to represent octal
+numeric literals. This is an issue that explores a deprecated octal
+token after ASI (Automatic Semicolon Insertion). The other engines
+throw a SyntaxError due to the missing of the octal token, but \smonkey
+returns an integer \CodeIn{8} that represents \CodeIn{010} in octal.
 
 %% \begin{figure}[h!]
 %%   \vspace{-0.5ex}
@@ -1828,15 +1828,15 @@ returns a integer 8 that represents 010 in octal.
 
 
 \vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet
-\CodeIn{b+/v/a} represents a bug confirmed in \hermes\ engine with
+\CodeIn{b+/v/a} represents a bug confirmed in \textbf{\hermes} engine with
 differential testing using radamsa on a repository mined from GitHub.
 The original test case contains a string concatenation.
 This is a case of validation of RegExp flags. The fuzzer mutates
 the file with a regular expression \CodeIn{/v/} after the plus operator.
 In this case, the plus operator turns into a flag of the RegExp \CodeIn{+/v/},
-but this flag is not valid. The behavior expected is throws an early
-SyntaxError due to a invalid regular expression flag,
-but \hermes\ seems not treats the early validation of the regexp flags
+but this flag is not valid. The expected behavior is to throw an early
+SyntaxError due to the invalid regular expression flag,
+but \hermes\ seems not to treat the early validation of the regexp flags
 as commented by a maintainer.
 
 \subsection{Threats To Validity}
