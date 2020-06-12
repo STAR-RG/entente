@@ -220,7 +220,7 @@ the reports.
     \includegraphics[trim=0 150 0 180,clip,width=\textwidth,scale=0.4]{R/stackedbar/stacked-engine}
     \vspace{-5ex}
   }\\
-  \subfloat[\label{fig:stacked-technique}Bugs reports per technique.]{
+  \subfloat[\label{fig:stacked-technique}Bug reports per technique.]{
     \includegraphics[trim=0 150 0 180,clip,width=0.7\textwidth,scale=0.4]{R/stackedbar/stacked-technique}
     \vspace{-5ex}
   }
@@ -1586,11 +1586,15 @@ findings and lessons learned.
 
 We issued several bug reports as result of this work. For space, we
 are unable to discuss all of them. We sampled some bug reports to
-discuss in the following. The selection criteria we used was: (i) to
-cover all engines we found bugs--\chakra, \jsc, and \veight, (ii) to
-cover each technique--test transplantation and differential testing
-(with \radamsa\ and with \quickfuzz), (iii) to cover a case of
-rejected bug report, and (iv) to use short tests (for space).
+discuss in the following. The selection criteria we used was:
+\begin{enumerate}
+\item to cover all engines we found bugs--\chakra, \hermes, \jsc,
+  \smonkey, \veight (see Figure~\ref{fig:summary});
+\item to cover each technique--test transplantation and differential
+  testing;
+\item to cover a case of rejected bug report;
+\item to use short tests (for space).  
+\end{enumerate}  
 
 %% \CodeIn{\{var a =
 %%   \{valueOf:~function()\{} \CodeIn{return ``\textbackslash{}x00''\}\}
@@ -1637,22 +1641,20 @@ expected. \chakra{}, instead, incorrectly converts the string to zero,
 and the test passes. As Table~\ref{tab:bugs} shows, the \chakra{} team
 fixed the issue soon after our report.
 
-\Mar{--------------- estou aqui}
-
-\vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.}  The
-code {\footnotesize\ttfamily{eval(function b(a)\{break;\});}} shows
-the test input we used to reveal a bug in \veight{}. This code snippet
-was obtained by fuzzing a Test262 test with \quickfuzz. In its
-original version, a string (omitted for space), passed as argument to
-the \CodeIn{eval} function, encoded the actual test. The fuzzer
-replaced the string argument with a function whose body is a
-\CodeIn{break} statement outside a valid block statement. Section
-B.3.3.3 from the spec~\cite{spec-b333} documents how eval should
-handle code containing function declarations.  According to the
+\vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.} The
+snippet {\footnotesize\ttfamily{eval(function b(a)\{break;\});}}
+revealed a bug in \veight{} version 7.0.244. This code snippet was
+obtained by fuzzing a Test262 test with \quickfuzz. In its original
+version, a string (omitted for space), passed as argument to the
+\CodeIn{eval} function, encoded the actual test. The fuzzer replaced
+the string argument with a function whose body is a \CodeIn{break}
+statement outside a valid block statement. Section B.3.3.3 from the
+\es\ spec~\cite{spec-b333} documents how eval should handle code
+containing function declarations.  According to the
 spec~\cite{break-statement}, the virtual machine should throw an early
 error--in this case, a SyntaxError--if the break statement is not
-nested in an iterable or a switch statement. All engines, but
-\veight{}, behave as expected in this case.
+nested in a loop or switch statement. All engines, but \veight{},
+behave as expected in this case.
 
 %% \Igor{
 %%   Este foi caso de bug confirmado que foi manifestado no engenho \veight{}.
@@ -1668,12 +1670,12 @@ nested in an iterable or a switch statement. All engines, but
 %%   as expected but \veight{} pass without failures.
 %% }
 
+\Mar{--------------- estou aqui}
 
 \vspace{1ex}\noindent\textbf{Issue \#18,
-  Table~\ref{tab:test-transplantation-bugs}.}  The code snippet below
-shows the test input we used to reveal a bug in \jsc. This test
-originates from \jerry{} test suite; the bug was found during the test
-transplantation experiment.
+  Table~\ref{tab:test-transplantation-bugs}.}\Mar{$\leftarrow$ isto
+  esta errado! A tabela diz que eh Chakra}  The code snippet below
+shows the test input we used to reveal a bug in \jsc. 
 
 \begin{figure}[h!]
   \vspace{-0.5ex}
@@ -1697,16 +1699,18 @@ transplantation experiment.
   \vspace{-1ex}
 \end{figure}
 
-According to the specification~\cite{ecmas262-array-sort}, the
-parameter to the \CodeIn{Array.sort} function should be a comparable
-object or an undefined value, otherwise it should throw a
-\CodeIn{TypeError}. In this case, \jsc accepts a non-callable object
-as argument to \CodeIn{sort} and the test fails in the subsequent
-step. The other engines raise a \CodeIn{TypeError} as expected.
+This is a test case of the \jerry{} suite. The bug was found during
+the test transplantation experiment. According to the
+\es\ spec~\cite{ecmas262-array-sort}, the parameter to the
+\CodeIn{Array.sort} function should be a comparable object or an
+undefined value, otherwise it should throw a \CodeIn{TypeError}. In
+this case, \jsc incorrectly accepts a non-callable object as argument
+to \CodeIn{sort} and the test fails in the subsequent step. The other
+engines raise a \CodeIn{TypeError} as expected.
 
-\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.}  The
-code snippet below shows an example input related to a bug report that
-we issued to the \chakra\ development team, but they did not accept.
+\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.} We
+reported the code snippet below to the \chakra\ development team as a
+bug, but they did \emph{not} accept.
 
 \begin{figure}[h!]
   \vspace{-0.5ex}
@@ -1733,10 +1737,13 @@ we issued to the \chakra\ development team, but they did not accept.
 
 This is a test case original from the \jsc suite that the
 \radamsa\ fuzzer modified. The original test used the integer literal
-3 as argument to \CodeIn{repeat()}, but this test uses a long integer
-instead. As result, the engine crashes. The team answered that this
-was an incompatibility by design as the function was not expected to
-receive such a long value.
+3 as argument to \CodeIn{repeat()}, \ie{}, the expression produced a
+string with three repetitiong of the string ``foo''. The new test uses
+a long integer instead as parameter to \CodeIn{repeat()}. As result,
+the engine crashes. The team answered that this was an incompatibility
+by design\footnote{We interpreted as a violation of an undocumented
+  precondition} as the function was not expected to receive such a
+long value.
 
 
 \subsection{Threats To Validity}
