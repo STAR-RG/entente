@@ -1748,9 +1748,9 @@ long value.
 
 \subsection{Threats To Validity}
 
-As it is the case for most empirical evaluations, our findings are
-subject to internal, external, and construct validity
-threats. Considering internal validity, conceptually, it is possible
+As it is the case of most empirical evaluations, our findings are
+subject to internal, external, and construct threats to
+validity. Considering internal validity, conceptually, it is possible
 that the authors of this paper made mistakes in the implementation of
 the scripts supporting the experiments. To mitigate this threat, we
 carefully inspected the implementation and results, looking for
@@ -1758,23 +1758,22 @@ inconsistencies whenever possible. As for external validity, our
 results might not generalize to other test inputs and engines. To
 mitigate this threat, we carefully selected inputs from various
 sources according to a well-defined criteria. Likewise, we selected
-the engines by using using a well-defined criteria and found that the
+the engines by using using a documented criteria and found that the
 engines selected were associated, certainly not by coincidence, with
-the browsers informally considered the most popular in the market.
-\Fix{One reader might argue that since we mined files from other JS engines,
-such as Duktape, JerryScript, JSI, and Tiny-js, we could also run test
-transplantation on them. We did not run test transplantation on these
-JS engines due to several reasons, including: JSI was deprecated,
-TinyJS is not actively maintained. Finally, at the time we started this work,
-Duktape and JerryScript did not provide support to ES6. We checked this
-information again in Jun 2020, and they are still only partially supporting ES6.
-}
-In
-terms of construct validity, we used standard metrics to determine the
-effectiveness of the testing techniques we studied (\eg{}, number of
-bugs confirmed and fixed and severity). Engine developers were
-responsible for determining the labels of the bug reports and their
-severity. Consequently, these metrics originate from a trusted source.
+the browsers informally considered the most popular in the market.  A
+reader might argue that since we mined files from other JS engines,
+such as Duktape, JerryScript, JSI, and Tiny-js, we could also have ran
+test transplantation on them. We decided not to do so for different
+reasons: JSI was deprecated, TinyJS is not actively
+maintained. Finally, at the time we started this work, Duktape and
+JerryScript did not provide support to ES6. We checked this
+information again in Jun 2020, and they are still only partially
+supporting ES6. In terms of construct validity, we used standard
+metrics to determine the effectiveness of the testing techniques we
+studied (\eg{}, number of bugs confirmed and fixed and
+severity). Engine developers were responsible for determining the
+labels of the bug reports and their severity. Consequently, these
+metrics originate from a trusted source.
 
 %% there might be errors in the implementation of our
 %% infrastructure. To mitigate this threat, we extensively inspected the
