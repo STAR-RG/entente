@@ -1744,6 +1744,40 @@ by design\footnote{We interpreted as a violation of an undocumented
   precondition} as the function was not expected to receive such a
 long value.
 
+\vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:bugs}.} We
+reported the code snippet below to the \smonkey\ development team as a
+bug, the bug was confirmed in a few hours.
+
+\begin{figure}[h!]
+  \vspace{-0.5ex}
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function,
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+    "use strict"
+    010
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+  \vspace{-1ex}
+\end{figure}
+
+
+This is a test case original from the \hermes suite using test transplantation.
+According the specification, in strict mode, the engine must use 
+the prefix '0o' or '0O' to represents octal numeric literals. It was an
+issue which explores a deprecated octal token after ASI (Automatic Semicolon Insertion).
+The others engine throws a SyntaxError due the missing of the octal token, but 
+\smonkey returns a integer 8 that represents 010 in octal literal.
+
+
 
 \subsection{Threats To Validity}
 
