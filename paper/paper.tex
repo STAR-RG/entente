@@ -368,7 +368,12 @@ version after Jan 1, 2018, 2) Contains more than 1K stars on GitHub,
 and 3) Uses a public issue tracker. We looked for highly-maintained
 (as per the first criterion) and popular (as per the second criterion)
 engines. As we wanted to report bugs, we also looked for project with
-public issue trackers. Table~\ref{tab:engines} lists the engines we
+public issue trackers. We initially selected four JS engines:
+\jsc, \veight, \chakra, and \smonkey. Additionally, we also included
+\hermes in the list of studied engines. The main reason for this was
+to investigate how our approach would work on a recently introduced JS
+engined. More about \hermes on Section~\ref{sec:hermes}.
+Table~\ref{tab:engines} lists the engines we
 analyzed. It is worth noting that we used Google Chrome Lab's JSVU
 tool~\cite{jsvu} to automatically install and configure versions of
 different JS engines in our host environment. This is important as we
@@ -1515,7 +1520,7 @@ reports, and diagnostic outcomes, is publicly available from a
 preserved repository \dataRepo.
 
 \section{Case Study: \hermes}
-\label{sec:bugs}
+\label{sec:hermes}
 
 This section describes the experiment we conducted to evaluate the
 effectiveness of the techniques we studied to find new bugs in
@@ -1774,10 +1779,10 @@ bug, the bug was confirmed in a few hours.
 
 
 This is a test case original from the \hermes suite using test transplantation.
-According the specification, in strict mode, the engine must use 
+According the specification, in strict mode, the engine must use
 the prefix '0o' or '0O' to represents octal numeric literals. It was an
 issue which explores a deprecated octal token after ASI (Automatic Semicolon Insertion).
-The others engine throws a SyntaxError due the missing of the octal token, but 
+The others engine throws a SyntaxError due the missing of the octal token, but
 \smonkey returns a integer 8 that represents 010 in octal literal.
 
 
