@@ -462,9 +462,9 @@ engines, and 5) test files from other GitHub projects.
     \jerry{} & \cite{jerryscript2018repo} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
     Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
-    %\midrule
-    %GitHub Projects & - & 494,394 & - & - & - \\
     \midrule
+    %GitHub Projects & - & 494,394 & - & - & - \\
+    %\midrule
      &  & \totalTestFiles{} & \totalTestFilesPassInPar{} & \totalTestFilesCompileInAll{} & \totalTestFilesPassInAll{}\\
    \bottomrule
   \end{tabular}
@@ -491,15 +491,14 @@ they clearly indicate some missing feature as opposed to bugs. For
 example, some tests use non-portable names (\eg{}, \jsc's
 \CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
 or use functions that, albeit part of the spec, not all engines
-currently support. \Fix{Similarly, the \chakra project does not use
+currently support. Similarly, the \chakra project does not use
   the default well-known assertions available in JS, which the other
   JS engines use.  Instead, it uses its own testing framework,
   WScript. In this case, we could not easily reproduce the \chakra
   unit tests in the other engines since it would raise a
   \texttt{ReferenceError}. Also, updating the other engines to use
   WScript would require a non-trivial manual effort. This is why
-  \chakra does not appear in Table~\ref{tab:test-suites}.}\Mar{did not
-  review part in red}
+  \chakra does not appear in Table~\ref{tab:test-suites}.
 
 \Mar{Numbers seem inconsistent. I will stop here...}
 For the evaluation of test transplantation, we used
@@ -530,8 +529,8 @@ the changes in the input as opposed to the original cause of failure.
 \lbrack{}Cleansing\rbrack{}~We noticed that some of the tests we found
 depend on external libraries, which not all selected engines
 support. We decided to discard those. For example, many tests we found
-required a Node.js runtime~\cite{node} for execution. Also, we did not
-consider tests from the \chakra{} repository because they depend on
+required a Node.js runtime~\cite{node} for execution. Also, as aforementioned,
+we did not consider tests from the \chakra{} repository because they depend on
 non-portable objects.
 Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
@@ -540,21 +539,37 @@ credit where it is due. \lbrack{}Test Harness\rbrack{}~It is also
 worth mentioning that some engines use a custom shell to run tests,
 including a harness with specific assertions.  For that, we needed to
 make minor changes in the testing infrastructure to be able to run the
-tests uniformly across all engines. More precisely, we needed to mock
+tests uniformly across all engines.
+
+More precisely, we needed to mock
 non-portable harness functions, which are only available in certain
-engines.
+engines. Since we had to transplant more than 40k test files,
+we tried to mock the minimum amount of code possible to
+make the test file work in the other engine.
+For instance, if a test had a statement such as \texttt{print(1==1);}
+we manually refactored that statement to \texttt{assertEquals(1,1)}.
+If the change would require more substantial manual work, we opted to
+discard the test instead. Overall we may have manually refactored more
+than a thousand test files.
 
 \subsection{Mining Tests}
 
+To enrich our dataset of test files, we mined additional tests available on
+JavaScript GitHub projects as well as in the issue trackers of the studied
+JS engines. We explain this process next.
+
 \subsubsection{From GitHub projects}
 
-\Fix{We mined JS programs from the GitHub repository. In this case, we searched
+We mined JS programs from the GitHub repository. In this case, we searched
 for projects written in JavaScript, that were tagged with ``javascript-engine",
 and that have both ``Javascript" and ``engine" the name or the description of
-the project. After this process, we ended up with 2200 JS programs, which we
+the project. After this process, we ended up with 2,200 JS programs, which we
 downloaded locally. However, after careful investigation, we noted that 160 of
-these projects do not  have any JS file, which were excluded from our study.
-We used the 2040 remaining ones as input to our testing approaches.}
+these projects do not have any JS file, which were excluded from our study.
+From these 2,040 projects, we could select 494,394 test files,
+which we as input to our testing approaches.
+
+
 
 \subsubsection{From Issue Trackers}
 
@@ -817,14 +832,14 @@ similar warnings reported by our infrastructure. We only clustered
 ``\lo'' warnings as ``\hi'' warnings produce messages that arise from
 the test case, which are typically distinct.
 
-\Fix{Figure~\ref{fig:lo-truepositive} shows a test was originally
+Figure~\ref{fig:lo-truepositive} shows a test was originally
 available in the \jsc code base.  The \radamsa fuzzing technique
 mutated the test. In particular, it introduced the negative
 long \texttt{-1770523502845470856} as a parameter of the
 \texttt{view.getInt8()} method. Before the mutation, the
-\texttt{view.getInt8()} method received a zero integer.}
+\texttt{view.getInt8()} method received a zero integer.
 At the bottom of this figure, there is a sequence of
-three elements that we use to characterize a warning--1) the
+three elements that we use to characterize a warning: 1) the
 identifier of an engine, 2) the exception it raises, and 3) the
 message it produces on a ``\lo'' warning.  This sequence of triples
 defines a warning signature that we use for clustering. It is worth
@@ -961,7 +976,7 @@ to create the calling context to invoke the fuzz target. For that, we
 decide not to consider coverage-based in this study.
 
 We used two black-box mutational fuzzers in this
-study--\radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
+study: \radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
 fuzzers require no instrumentation and domain-knowledge. They mutate
 existing inputs randomly. The strength of the approach is
 limited by the quality of the test suite and the supported mutation
@@ -1011,20 +1026,20 @@ partially~\cite{kangax}. We expect that the pass rate on this suite
 provide some indication of the engine's maturity. In the limit, it is
 not desirable to flood bug reports on engines at early stages of
 development.
-\Fix{For this experiment, we ran the suite once a day for seven consecutive
+For this experiment, we ran the suite once a day for seven consecutive
 days and averaged the passing ratios.
 We performed seven consecutive executions because,
 since the studied JS engines release new versions on a daily basis,
 we wanted to make sure if the failing tests raised by the Test262 suite
 were rapidly fixed by the maintenance team. If these errors were quickly
-fixed, that would suggest that this given engine would be aligned with
-the ECMAScript specification.}
+fixed, this would suggest that this given engine would be closely aligned with
+the ECMAScript specification.
 Table~\ref{tab:test262} shows
 the average number of passing tests over this period. The variance of
 results was negligible; for that reason, we omitted standard
-deviations. We noticed that all four engines but \chakra{} used some
-variant of the Test262 suite as part of their regression process, but
-we used the same version in this
+deviations. We noticed that all engines but \chakra used some
+variant of the Test262 suite as part of their regression process.
+We used the same version in this
 experiment~\cite{ecma262-conformance-suite}.
 
 \begin{table}
@@ -1052,12 +1067,13 @@ experiment~\cite{ecma262-conformance-suite}.
 
 Results show that there are still many unsupported scenarios as can be observed from the
 percentages in the table. The number of passing tests is high and
-similar for \jsc, \veight{}, and \smonkey\ whereas \hermes performs
-worse when compared to the other engines.
-\Fix{This happens because \hermes
-still has many unsupported features, such as Proxy, Promisse, and Async.}
-Moreover, one can also note that \chakra\ also a low passing ratio
-in this test suite and the one we were able to find more bugs (as per
+similar for \jsc, \veight, and \smonkey
+%, whereas \chakra performs
+%worse when compared to the other engines.
+%\Fix{This happens because \hermes
+%still has many unsupported features, such as Proxy, Promisse, and Async.}
+Moreover, one can also note that \chakra has a low passing ratio
+in this test suite. Intestingly, it is also the one we were able to find more bugs (as per
 Figure~\ref{fig:summary}). Although it is plausible to find
 correlation between the passing ratios and reliability as measured by
 the number of bugs found, we do not imply causality. As aforementioned,
