@@ -29,8 +29,8 @@ Issue    Source   Engine    Status
 27       Trans    Hermes    "1-New"
 28       Trans    Hermes    "1-New"
 29       Trans    Hermes    "2-Confirmed"
-30       Trans    SpiderMonkey  "2-Confirmed"
-
+30       Trans    Chakra    "2-Confirmed"
+31       Trans    SpiderMonkey  "2-Confirmed"
 
 
 1        Diff     Chakra    "3-Fixed"
@@ -54,5 +54,6 @@ Issue    Source   Engine    Status
 19       Diff     JSC    "1-New"
 20       Diff     JSC    "1-New"
 21       Diff     Chakra    "1-New"
-22       Diff     Hermes    "1-New"
+22       Diff     Hermes    "2-Confirmed"
 23       Diff     Chakra    "2-Confirmed"
+24       Diff     JSC    "1-New"
