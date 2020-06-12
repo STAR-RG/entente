@@ -1610,7 +1610,7 @@ discuss in the following. The selection criteria we used was:
 
 \sloppy
 \vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
-code snippet below shows a test that reveals a bug in \chakra.
+code snippet below shows a test that reveals a bug in \textbf{\chakra}.
 
 \begin{figure}[h!]
   \vspace{-1ex}
@@ -1651,7 +1651,7 @@ fixed the issue soon after our report.
 
 \vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.} The
 snippet {\footnotesize\ttfamily{eval(function b(a)\{break;\});}}
-revealed a bug in \veight{} version 7.0.244. This code snippet was
+revealed a bug in \textbf{\veight{}} version 7.0.244. This code snippet was
 obtained by fuzzing a Test262 test with \quickfuzz. In its original
 version, a string (omitted for space), passed as argument to the
 \CodeIn{eval} function, encoded the actual test. The fuzzer replaced
@@ -1678,11 +1678,9 @@ behave as expected in this case.
 %%   as expected but \veight{} pass without failures.
 %% }
 
-\Mar{--------------- estou aqui}
-
 \vspace{1ex}\noindent\textbf{Issue \#19,
   Table~\ref{tab:test-transplantation-bugs}.} The code snippet below
-shows the test input we used to reveal a bug in \jsc.
+shows the test input we used to reveal a bug in \textbf{\jsc} version 234555.
 
 \begin{figure}[h!]
   \vspace{-0.5ex}
@@ -1716,7 +1714,7 @@ to \CodeIn{sort} and the test fails in the subsequent step. The other
 engines raise a \CodeIn{TypeError} as expected.
 
 \vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.} We
-reported the code snippet below to the \chakra\ development team as a
+reported the code snippet below to the \textbf{\chakra} development team as a
 bug, but they did \emph{not} accept.
 
 \begin{figure}[h!]
@@ -1753,37 +1751,39 @@ by design\footnote{We interpreted as a violation of an undocumented
 long value.
 
 \vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:bugs}.} We
-reported the code snippet below to the \smonkey\ development team as a
-bug, the bug was confirmed in a few hours.
+reported the snippet \CodeIn{"use strict" 010} to the
+\textbf{\smonkey} development team as a bug and the bug was confirmed
+in a few hours.  This is a test case original from the \hermes suite
+using test transplantation.  According the specification, in strict
+mode, the engine must use the prefix '0o' or '0O' to represents octal
+numeric literals. It was an issue which explores a deprecated octal
+token after ASI (Automatic Semicolon Insertion).  The others engine
+throws a SyntaxError due the missing of the octal token, but \smonkey
+returns a integer 8 that represents 010 in octal.
 
-\begin{figure}[h!]
-  \vspace{-0.5ex}
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
-    "use strict"
-    010
-  \end{lstlisting}
-  \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
-  \vspace{-1ex}
-\end{figure}
+%% \begin{figure}[h!]
+%%   \vspace{-0.5ex}
+%%   \centering
+%%   \scriptsize
+%%   \lstset{escapeinside={@}{@},
+%% %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%%     numberstyle=\tiny,
+%%     morekeywords={assertEq, var, yield, in, function,
+%%     typeof, return, throw, new, Error, if},
+%%   }
+%%   \begin{lstlisting}
+%%     "use strict"
+%%     010
+%%   \end{lstlisting}
+%%   \normalsize
+%%   %% \caption{Warning captured as \hi{} priority.}
+%%   %% \label{fig:hi-priority}
+%%   \vspace{-1ex}
+%% \end{figure}
 
 
-This is a test case original from the \hermes suite using test transplantation.
-According the specification, in strict mode, the engine must use
-the prefix '0o' or '0O' to represents octal numeric literals. It was an
-issue which explores a deprecated octal token after ASI (Automatic Semicolon Insertion).
-The others engine throws a SyntaxError due the missing of the octal token, but
-\smonkey returns a integer 8 that represents 010 in octal literal.
+
 
 
 
