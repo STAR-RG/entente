@@ -59,15 +59,14 @@ def run(seed1, seed2, output):
                         "Similarity": similarity
                     }
                 )
-
                 # print(f"arquivo: {index} de {index_2}: {similarity}")
-        with open(f'{output}.csv', 'a+', newline='') as file:
-            # writer = csv.writer(file)
-            fieldnames = ["File1", "File2", "Similarity"]
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            #writer.writeheader()
-            for arquivo in lista:
-                writer.writerow(arquivo)
+                with open(f'{output}.csv', 'a+', newline='') as file:
+                    # writer = csv.writer(file)
+                    fieldnames = ["File1", "File2", "Similarity"]
+                    writer = csv.DictWriter(file, fieldnames=fieldnames)
+                    #writer.writeheader()
+                    for arquivo in lista:
+                        writer.writerow(arquivo)
         print("--- ok ---")
 
 if __name__ == "__main__":
@@ -76,6 +75,8 @@ if __name__ == "__main__":
     ]
     t_init = time.time()
     for i in range(len(seeds)):
+        if (i == len(seeds) - 1):
+           continue
         run(seeds[i], seeds[i+1], time.asctime())
         with open('time_spent.log', 'a+') as doc:
             doc.write(f'{time.time() - t_init}')
