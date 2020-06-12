@@ -1459,6 +1459,8 @@ expression (\eg{}, some string expression or regular expression).
 %% during the exploratory phase of the study and the bottom section shows
 %% the results obtained during the non-exploratory phase.
 
+\input{table_differential}
+
 
 Table~\ref{tab:bugs} shows the list of bugs we reported. The table
 shows the fuzzing tool used
@@ -1476,7 +1478,7 @@ were duplicates and were not reported. For \veight{},
 we reported \noDiffVeight{} bugs,
 all of them confirmed, with \noDiffVeightFixed{} fixed.
 
-\input{table_differential}
+
 
 %% Note from the table that all bug reports still waiting for
 %% confirmation are associated with the \jsc engine. A closer look at
@@ -1509,21 +1511,78 @@ all of them confirmed, with \noDiffVeightFixed{} fixed.
 reports, and diagnostic outcomes, is publicly available from a
 preserved repository \dataRepo.
 
-\section{Case Study}
+\section{Case Study: \hermes}
 \label{sec:bugs}
 
-In this section we describe additional experiments to better understand the effectiveness of \entente in a recently introduced JavaScript engine. We also cover additional description of a sample of bug reports.
+This section describes the experiment we conducted to evaluate the
+effectiveness of the techniques we studied to find new bugs in
+\hermes, a JavaScript engine that has started development very
+recently. \hermes is a JavaScript engine introduced by Facebook in
+2019. According to its website, \hermes is ``a JavaScript engine
+optimized for fast start-up of React Native apps on
+Android''~\cite{hermes2020repo}.\Mar{short sentence saying where it is
+  used.}
 
-\subsection{Finding bugs in Hermes}
+%  for performing 
+As a preparatory step to apply test transplantation and differential
+testing to \hermes, we ran the Test262 conformance suite on the most
+recent version of \hermes, 0.5.0. We observed that only 26\% of the
+Test262 tests passed. When taking a closer look, we noticed that this
+high percentage of failing tests was due to the high number of
+features not yet suported by \hermes\footnote{See
+  \url{https://github.com/facebook/hermes/blob/master/doc/Features.md}}. For
+instance, in its most recent release, \hermes still does not support
+for features such as Proxy, Promise, and Async calls. For this
+reason---low coverage on Test262---, we opted not to include \hermes
+with other JavaScript engines. Since we only fuzz test files that pass
+in all engines, this would require us to significantly reduce the
+number of tests used in the experiments, affecting overall results.
 
-\hermes is a JavaScript engine introduced by Facebook in 2019. According to its website, \hermes is ``a JavaScript engine optimized for fast start-up of React Native apps on Android''~\cite{hermes2020repo}.
-Before applying \entente on \hermes for performing test transplantation and differential testing, we ran the Test262 conformance suite on the most recent version of \hermes, 0.5.0. We observed that only 26\% of the Test262 tests were passing at the \hermes project. When taking a closer look, we noticed that this high percentage of failing tests was due to the high number of features not yet suported by \hermes. For instance, in its most recent release, \hermes still does not offer support for features such as Proxy, Promisse, and Async. For this reason (the low coverage of Test262 tests), we opted not to include \hermes along with the other JavaScript engines. Since we only fuzz test files that pass in all engines, this would require us to significantly reduce the number of tests used in the experiments.
+We followed the same methodology described in previous sections to
+evaluate \hermes. When experimenting with test transplantation, we
+noted many errors when replaying the test suite of \smonkey on
+\hermes. This happened because \smonkey has its own assertion
+framework, but \hermes was unable to interpret those assertions,
+resulting in failures in all test executions from this engine. These
+failures did not happen when the \smonkey tests were transplanted to
+the other engines, though\Mar{Why? Was the framework using some of the
+  features aforementioned? Say it, please.}. Overall, we repoted three
+issues to the \hermes bug tracker as result of using test
+transplantation\footnote{\url{https://github.com/facebook/hermes/issues/<id>},
+  with id 265, 266, 267.}. One of them was confirmed by the \hermes
+maintainers by the time of this submission. For another, the
+maintainer explained the issue was related to a feature not yet
+supported---a \texttt{return} statement outside the scope of a
+block. For the third issue, developers disagreed on the proper
+implementation of one particular part of the specification involved in
+the issue (i.e., whether a numeric escape character (non-octal-eight,
+\texttt{\textbackslash{8}}) should be allowed or not in strict
+mode. The issue was closed, but the maintainers opened a new one to
+discuss this matter. By following the discussion, it was interesting
+to observe that maintainers are aware that this feature is implemented
+by other engines such as \veight, \chakra, and \smonkey. Yet, they
+were unsure how they should treat it in \hermes.  Considering
+differential testing, we found and reported one bug on \hermes using
+\radamsa. As of this writing, this particular bug report was not yet
+addressed by any \hermes maintainer.
 
-We then ran both test transplantation and differential testing on \hermes. To do this work, we follow the same methodology described for the others JavaScript engines. When experimenting with test transplantation, we noted many errors when replaying the \smonkey testing stuite on \hermes. This happened because \smonkey has its own assertion framework, but \hermes did not interpret these assertions, resulting in failures in all test executions from this engine. These failures did not happen when the \smonkey tests were transplanted to the other engines, though. Overall, we found and repoted three bugs on \hermes using the test transplantation technique. One of them was already confirmed by the \hermes maintainers. For one of the other bugs reported, the maintainer mentioned that the bug in question is related to a feature not yet supported (a \texttt{return} statement outside the block scope). For the third one, the maintainers diverged regarding the proper implementation of one particular item of the specification (i.e., whether a numeric escape (non-octal-eight, \texttt{\textbackslash{8}}) should be allowed or not in strict mode. The issue was closed, but the maintainers opened a new one to discuss this matter. By following the discussion, it was interesting to observe that maintainers are aware that this feature is implemented by other engines such as \veight, \chakra, and \smonkey (yet they were unsure how they should treat it at \hermes).  As for the differential testing, we found and reported one bug on \hermes using \radamsa. As of this writing, this particular bug report was not yet addressed by any \hermes maintainer.
+Overall, we noted that test transplantation and differential testing
+were effective techniques in revealing potential bugs in non-trivial
+JavaScript engines of varying degrees of maturity. We found bugs both
+in extremely robust and largely adopted engines and also in recently
+developed engines. \Mar{check $\rightarrow$}The issue diagnosis of
+developers seem to differ though. Issues reported to stable engines
+are more likely to be real bugs---as lots of problems have been
+already scrutinized---whereas issues reported to new engines are more
+likely to be inconsistencies related to influx development as opposed
+to real bugs.
 
-Overall, we noted that the use of test transplantation and differential testing could be effective techniques in discovering bugs in non-trivial JavaScript software systems, regardless of their maintenance scenario (that is, we found bugs in both extremely roubust and largely adopted engines and also on a recently introduced one with many non-supported official features).
+\section{Discussion}
 
-\subsection{Example Bug Reports}
+This section discusses bug reports, threats to validity, and key
+findings and lessons learned.
+
+\subsection{Bug Reports}
 
 This section discusses a sample of bugs reports. The selection
 criteria we used was: (i) to cover all engines we found bugs--\chakra,
