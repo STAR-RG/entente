@@ -474,56 +474,57 @@ engines.
 
 Table~\ref{tab:test-suites} shows the breakdown of tests. Column
 ``Name'' and ``Source'' show the origin of the test suite. Column
-``total'' shows the number of test cases associated with a givem
-source. Column ``pass-in-par.''  shows the number of test cases that
-pass in their parent engine. We discarded tests that fail in their
-parent engine as we could not reliably indicate the reason for the
-failure, so we assumed the test could be broken. We removed
+``total'' shows the number of test cases associated with a given
+source of \js\ files. Column ``pass-in-par.''  shows the number of
+test cases that pass in the corresponding engine. We discarded tests
+that fail in their engine as we could not reliably indicate the reason
+for the failure, so we assumed the test could be broken. We removed
 \testsThatFail{} test cases that fail for that
 reason--\testsThatFailJSC{} tests from \jsc and \testsThatFailSM{}
-tests from \smonkey. Column ``type-in-all'' shows the number of test
-cases whose executions do not throw dynamic type errors in any of the
-engines because of an undefined variable or property.  These cases
-were captured by looking for the presence of \CodeIn{ReferenceError}
-and \CodeIn{TypeError} in the output. A \CodeIn{ReferenceError}
-(respectively, \CodeIn{TypeError}) is raised when test execution
-attempts to access an undefined variable (respectively, property of an
-object).
+tests from \smonkey.
 
-We discarded those tests to avoid noise in the experiments as
-they clearly indicate some missing feature as opposed to bugs. For
-example, some tests use non-portable names (\eg{}, \jsc's
-\CodeIn{drainMicrotasks()} and \smonkey{}'s \CodeIn{Error.lineNumber})
-or use functions that, albeit part of the spec, not all engines
-currently support. Similarly, the \chakra project does not use
-  the default well-known assertions available in JS, which the other
-  JS engines use.  Instead, it uses its own testing framework,
-  WScript. In this case, we could not easily reproduce the \chakra
-  unit tests in the other engines since it would raise a
-  \texttt{ReferenceError}. Also, updating the other engines to use
-  WScript would require a non-trivial manual effort. This is why
-  \chakra does not appear in Table~\ref{tab:test-suites}.
-  Moreover, we also did not include \hermes in the table because,
-  as the reader shall see in Table~\ref{tab:test262}, \hermes presents
-  a very low adherence to the Test262 conformance stuite. If we decided
-  to keep \hermes, considering only the number of passing tests
-  (the ``no-fail-in-all'' column), it would significantly reduce our
-  amount of test files.
-
-\Mar{Numbers seem inconsistent. I will stop here...}
-For the evaluation of test transplantation, we used
-the \totalTestFilesForTestTransplantation{} tests included in the
-dashed rectangle under column ``type-in-all'', \ie{}, all tests under
-that column but the Test262 tests. We did not consider tests from the
+Column ``type-in-all'' shows the number of test cases whose executions
+do not throw dynamic type errors in any of the engines because of an
+undefined variable or property.  These cases were captured by looking
+for the presence of \CodeIn{ReferenceError} and \CodeIn{TypeError} on
+the output. A \CodeIn{ReferenceError} (respectively,
+\CodeIn{TypeError}) is raised when test execution attempts to access
+an undefined variable (respectively, property of an object). We
+discarded those tests to avoid noise in the experiments as they
+indicate some missing feature in the implementation of the engine as
+opposed to bugs. For example, some tests use non-portable names
+(\eg{}, \jsc's \CodeIn{drainMicrotasks()} and \smonkey{}'s
+\CodeIn{Error.lineNumber}) or use functions that, albeit part of the
+spec, not all engines currently support. Similarly, the \chakra
+project does not use common assertions available used in JS program,
+which other JS engines support. Instead, it uses its own testing
+framework, WScript. In such cases, we are unable to reproduce the
+\chakra unit tests in other engines---it raises a
+\CodeIn{ReferenceError}. Also, updating the other engines to use
+WScript would require a non-trivial manual effort. This is why \chakra
+does not appear in Table~\ref{tab:test-suites}. For the evaluation of
+test transplantation, we used the
+\totalTestFilesForTestTransplantation{} tests included in the dashed
+rectangle under column ``type-in-all'', \ie{}, all tests under that
+column but the Test262 tests. We did not consider tests from the
 conformance suite as they are more likely to indicate missing features
 as opposed to bugs. In addition, engine developers have access to
-these test and are encouraged to run them. Finally, column
-``no-fail-in-all'' shows the tests for which all engines pass. Note
-that the set of tests in this column is a subset of the
-``type-in-all'' test set. This test set is used in the evaluation of
-differential testing as fuzzing seeds. The guarantee that they pass in
-all engines assures that, if discrepancies occur, they are related to
-the changes in the input as opposed to the original cause of failure.
+these tests and are encouraged to run them.
+
+Column ``no-fail-in-all'' shows the tests for which all engines
+pass. The set of tests in this column is a subset of the
+``type-in-all'' test set. The tests in this set are as fuzzing seeds
+in the evaluation of differential testing. The guarantee that they
+pass in all engines assures that, if discrepancies occur, they are
+related to the changes in the input as opposed to the original cause
+of failure. It is worth noting that we also did not include the tests
+from \hermes\ in the table because, as the reader shall see in
+Table~\ref{tab:test262}, \hermes presents a very low adherence to the
+Test262 conformance suite. If we decided to keep \hermes, considering
+only the number of passing tests in all engines (the
+``no-fail-in-all'' column), it would significantly \Mar{Not sure if I
+  understood the conclusion. Do you mean the total amount of test
+  (also from other suites)? Why?}reduce our amount of test files.
 
 
 
@@ -536,31 +537,35 @@ the changes in the input as opposed to the original cause of failure.
 %% we selected a total of \totfiles{} JS
 %% files.
 
-\lbrack{}Cleansing\rbrack{}~We noticed that some of the tests we found
-depend on external libraries, which not all selected engines
-support. We decided to discard those. For example, many tests we found
-required a Node.js runtime~\cite{node} for execution. Also, as aforementioned,
-we did not consider tests from the \chakra{} repository because they depend on
-non-portable objects.
-Finally, note that the number of tests in
+\lbrack{}Additional cleansing\rbrack{}~We noticed that some of the
+tests we found depend on external libraries, which not all selected
+engines support. We decided to discard those. For example, many tests
+we found were based on Node.js~\cite{node} which\Mar{@Igor, is this
+  the reason?  Please, confirm$\rightarrow$} require libraries to be
+installed before running the test and different tests require
+different sets of libraries. Also, as already mentioned, we did not
+consider tests from the \chakra{} repository because they depend on
+non-portable objects.  Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
 Mozilla and \jsc; we discarded those to avoid repetition and to give
-credit where it is due. \lbrack{}Test Harness\rbrack{}~It is also
-worth mentioning that some engines use a custom shell to run tests,
-including a harness with specific assertions.  For that, we needed to
-make minor changes in the testing infrastructure to be able to run the
-tests uniformly across all engines.
+credit where it is due\Mar{@Gustavo/@Breno, we can mention in the
+  author response that we did sanity/diligence check.}.
 
-More precisely, we needed to mock
-non-portable harness functions, which are only available in certain
-engines. Since we had to transplant more than 40k test files,
-we tried to mock the minimum amount of code possible to
-make the test file work in the other engine.
-For instance, if a test had a statement such as \texttt{print(1==1);}
-we manually refactored that statement to \texttt{assertEquals(1,1)}.
-If the change would require more substantial manual work, we opted to
-discard the test instead. Overall we may have manually refactored more
-than a thousand test files.
+\lbrack{}Test Harness\rbrack{}~It is also worth mentioning that some
+engines use a custom shell to run tests, including a harness with
+specific assertions\Mar{@Igor, can you name which?}. For that, we
+needed to make minor changes in the testing infrastructure to be able
+to run the tests uniformly across all engines. More precisely, we
+needed to mock non-portable functions, which are only available in
+certain engines. Since we had to transplant more than 40k test files,
+we tried to mock the minimum amount of code possible to make the test
+file work in the other engine.\Mar{This seems a different problem
+  (tests without assertions). I did not understand how this is related
+  to portability?}  For instance, if a test had a statement such as
+\texttt{print(1==1);} we manually refactored that statement to
+\texttt{assertEquals(1,1)}.  If the change would require more
+substantial manual work, we opted to discard the test instead. Overall
+we may have manually refactored more than a thousand test files.
 
 \subsection{Mining Tests From Issue Trackers}
 
