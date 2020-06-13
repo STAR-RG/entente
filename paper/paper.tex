@@ -1360,13 +1360,15 @@ confirmed those bugs they were then quickly fixed.
 \label{sec:cross-engine-diff-testing-results}
 
 This section reports the results obtained with cross-engine differential
-testing. More precisely, we report results obtained by fuzzing test
-inputs, running those inputs on different engines, and checking the
-outcomes with a differential oracle.
+testing.
 
-\vspace{0.5ex}
+%More precisely, we report results obtained by fuzzing test
+%inputs, running those inputs on different engines, and checking the
+%outcomes with a differential oracle.
+
+%\vspace{0.5ex}
 \subsubsection{Methodology}
-The experimental methodology we used is as follows. As explained in
+The experimental methodology we used is as follows. As explained on
 Section~\ref{sec:objects:fuzzers}, we used Radamsa~\cite{radamsa} and
 QuickFuzz~\cite{quickfuzz} for fuzzing. To avoid experimental noise,
 we only fuzz test files that pass in all engines--a total of
@@ -1395,7 +1397,7 @@ dramatically compared to the previous experiment and, if we realized
 that the ratio of bugs from \lo\ warnings was rather low, we could
 focus our inspection efforts on \hi\ warnings. To run this experiment,
 we trained eight students in analyzing the warnings that our
-infrastructure produces. The students were enrolled in a
+infrastructure produced. The students were enrolled in a
 graduate-level testing class. We listed warnings in a spreadsheet and
 requested the students to update an ``owner'' column indicating who
 was working on it, but we did not enforce a strict order on the
@@ -1415,12 +1417,11 @@ lithium~\cite{lithium} to minimize long test cases\Comment{; the tests
 was filed only after one of the authors reviewed the diagnosis. Each
 student found at least one bug using this methodology.
 
-\vspace{0.5ex}
-\lbrack{}Non-Exploratory Phase\rbrack{} Results obtained in the
-exploratory phase confirmed our expectations that most of the bugs
-found during the initial period of investigation were related to
-\hi\ warnings. For that reason, we changed our inspection
-strategy. This time, only the co-authors inspected the bugs using a
+\vspace{0.5ex} \lbrack{}Non-Exploratory Phase\rbrack{} Results
+obtained in the exploratory phase confirmed our expectations that most
+of the bugs found during the initial period of investigation were
+related to \hi\ warnings. For that reason, we changed our inspection
+strategy. This time, some of the co-authors inspected the bugs using a
 similar discipline as before. However, the set of warnings inspected
 and the order of inspection changed. We restricted our analysis to
 \hi\ warnings and, aware that we would be unable to analyze each and
@@ -1595,11 +1596,12 @@ effectiveness of the techniques we studied to find new bugs in
 recently. \hermes is a JavaScript engine introduced by Facebook in
 2019. According to its website, \hermes is ``a JavaScript engine
 optimized for fast start-up of React Native apps on
-Android''~\cite{hermes2020repo}.\Mar{short sentence saying where it is
-  used.}\Igor{Currently, hermes is being used in the react-native framework,
-  also maintained by Facebook, as a beta component to increase the performance of Android applications,
-  such as startup time, reduce memory consumption and application size\cite{reactnative2020hermes}.
-}
+Android''~\cite{hermes2020repo}. Currently, \hermes\ is used as a beta
+component of the react-native framework, which is also maintained by
+Facebook. The goal of \hermes\ at Facebook is to increase the
+performance of Android applications, such as startup time, to reduce
+memory consumption and application size~\cite{reactnative2020hermes}.
+
 
 %  for performing
 As a preparatory step to apply test transplantation and differential
@@ -1620,13 +1622,11 @@ We followed the same methodology described in previous sections to
 evaluate \hermes. When experimenting with test transplantation, we
 noted many errors when replaying the test suite of \smonkey on
 \hermes. This happened because \smonkey has its own assertion
-framework, but \hermes was unable to interpret those assertions \Igor{due to 
-the missing features mentioned before (\ie\ Class definitions, Proxy properties)}
-resulting in failures in all test executions from this engine. These
-failures did not happen when the \smonkey tests were transplanted to
-the other engines, though.\Mar{Why? Was the framework using some of the
-  features aforementioned? Say it, please}\Igor{fixed above}.
-Overall, we reported three issues to the \hermes bug tracker as result of using test
+framework, but \hermes was unable to interpret those assertions
+(because of missing features), resulting in failures in all test
+executions from. These failures did not happen when the \smonkey tests
+were transplanted to the other engines, though.  Overall, we reported
+three issues to the \hermes bug tracker as result of using test
 transplantation\footnote{\url{https://github.com/facebook/hermes/issues/<id>},
   with id 265, 266, 267.}. One of them was confirmed by the \hermes
 maintainers by the time of this submission. For another, the
