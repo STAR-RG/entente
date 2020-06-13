@@ -241,21 +241,21 @@ affected two engines--\chakra{}\footnote{Microsoft announced in
   December 2018 that the Edge browser will be based on Chromium and
   ChakraCore development would be
   discontinued~\cite{chakra-discontinued}.} and JavaScriptCore (\jsc).
-We reported \noBugsBugsReportedGoogle{} bugs in \veight{}
-(\noBugsBugsConfirmedGoogle{} confirmed), \noBugsBugsReportedHermes in
-\hermes (\noBugsBugsConfirmedHermes confirmed), and
-\noBugsBugsReportedSMonkey in \smonkey{} (\noBugsBugsConfirmedSMonkey confirmed).
-Furthermore, our results show that both techniques revealed several
-bugs, most of which confirmed by developers. Test transplantation
-revealed \noBugsTransplantation bugs (of which,
-\noBugsTransplantationConfirmed were confirmed and
+We also reported \noBugsBugsReportedGoogle{} bugs in \veight{}
+(\noBugsBugsConfirmedGoogle{} confirmed), \noBugsBugsReportedHermes
+bugs in \hermes (\noBugsBugsConfirmedHermes confirmed), and
+\noBugsBugsReportedSMonkey bugs in \smonkey{}
+(\noBugsBugsConfirmedSMonkey confirmed).  Our results show that both
+techniques revealed several bugs, most of which confirmed by
+developers. Test transplantation revealed \noBugsTransplantation bugs
+(of which, \noBugsTransplantationConfirmed were confirmed and
 \noBugsTransplantationFixed were fixed) whereas differential testing
 revealed \noBugsDifferentialTesting bugs (of which,
 \noBugsDifferentialTestingConfirmed were confirmed and
 \noBugsDifferentialTestingFixed were fixed).  Overall, results
 indicate that both techniques were successful at finding bugs. The
-number of fixed bugs were similar, if we consider only those confirmed
-or fixed. Most bugs we found are of moderate severity.
+number of confirmed or fixed bugs are similar. Most bugs we found are
+of moderate severity.
 
 %% Considering cost per bug found, we found that test
 %% transplantation, compared to differential testing, demanded less
@@ -265,14 +265,14 @@ or fixed. Most bugs we found are of moderate severity.
 %% seem promising to improve reliability of engines that continuously
 %% evolve with their specifications.
 
-\emph{Key Findings.}~We found that--1)~Differential testing and Test
-Transplantation are practical and effective techniques to find bugs on real,
-complex, and widely used software systems and 2)~Even for problems with
-fairly clear specifications, as in \javascript{}, there is likely (a
-lot of) variation between different implementations, which brings intrinsic
-challenges to developers that work on them.
-Section~\ref{sec:lessons} expands and elaborates key
-findings and lessons learned.
+\emph{Key Findings.}~To sum up, we found that 1)~Differential testing
+and Test Transplantation are practical and effective techniques to
+find bugs on real, complex, and widely used software systems and
+2)~Even for problems with fairly clear specifications, as in
+\javascript{}, there is likely (a lot of) variation between different
+implementations, which brings intrinsic challenges to developers that
+work on them.  Section~\ref{sec:lessons} expands and elaborates our
+key findings and lessons learned.
 
 %% LIST OF CONTRIBUTIONS
 \emph{Contributions.}~The most important contribution of this work is
@@ -283,7 +283,7 @@ contributions include: 1)~A number of bugs found and fixed.  We
 reported a total of \totalBugsReported bugs.  Of these,
 \totalBugsConfirmed bugs were confirmed and \totalBugsFixed bugs were
 fixed.  2)~An infrastructure for performing test transplantation and
-differential testing. The soruce code produced and the generated data sets of tests
+differential testing. The source code produced and the generated data sets of tests
 and bugs are publicly available online at the following link:
 
 \dataRepo.
