@@ -567,6 +567,9 @@ file work in the other engine.\Mar{This seems a different problem
 substantial manual work, we opted to discard the test instead. Overall
 we may have manually refactored more than a thousand test files.
 
+\lbrack{}Dedup\rbrack{}~\Fix{Explain what we did to avoid
+  dups. Consider moving to the the sentence ``Finally, note that the number of tests in V8''}
+
 \subsection{Mining Tests From Issue Trackers}
 
 %o enrich our dataset of test files, we mined additional tests available on
@@ -588,18 +591,18 @@ we may have manually refactored more than a thousand test files.
 
 %\subsubsection{From Issue Trackers}
 
-Teste cases embedded in issue trackers are an important source of data
-as they may have already shown usefulness to reveal problems in some
+Test cases embedded in issue trackers are an important source of data
+as they may have already shown useful to reveal problems in some
 engine. For example, a developer may have found a corner case that a
 given engine did not handle properly. Therefore, it is possible that
-other engine do not handle those cases. We thought that we should not
-ignore issue trackers for that reason. By manually analyzing a sample
-of issues, we observed that developers either 1) add test cases as
-attachments of an issue or 2) embed the test cases within the textual
-description of an issue. The test cases in attachments are longer
-compared to the test cases embedded in issue descriptions whereas the
-latter are more common. Consequently, we thought we should handle both
-cases.
+some other engine does not handle that case as well. For that reasons,
+we thought that we should not ignore issue trackers. By manually
+analyzing a sample of issues, we observed that developers either 1)
+add test cases as attachments of an issue or 2) embed the test cases
+within the textual description of an issue. The test cases in
+attachments are longer compared to the test cases embedded in issue
+descriptions whereas the latter are more common. Consequently, we
+thought we should handle both cases.
 
 % (\jsc=147, \veight{}=370, and \smonkey{}=110).
 % (\jsc=\Fix{XX}, \veight{}=\Fix{XX}, \smonkey{}=\Fix{XX})
@@ -717,6 +720,11 @@ publicly available from our website as a separate component.
 %% use the unit-test package to run it, but with our changes we added the assertion
 %% does not have an assertion in the test file
 %% \Fix{add code to explain}
+
+
+\subsection{Characterization of Test Suites}
+
+\Fix{...add and discuss histograms}
 
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
