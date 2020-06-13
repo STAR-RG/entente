@@ -733,7 +733,43 @@ publicly available from our website as a separate component.
 
 \subsection{Characterization of Test Suites}
 
-\Fix{...add and discuss histograms}
+To provide a brief overview of the test suites and understand if the engines
+have specific testing purposes, we investigated the most common
+objects and functions that each one of the JS engines employ.
+To achieve this goal, we started by filtering out many non-relevant source
+code statements available on the test suites. We started by removing JS language constructs (such as \textt{if}, \textt{for}, and \textt{var}). We then removed
+special characters (such as parentheses, mathematical symbols, and semicolons).
+For the remaining source code constructs, we search for the ``.'' character, which
+indicates a function call. We then stored the function and the object that host
+that function.  By manually analyzing this data, we noted many general purpose
+functions, that do not provide any hint on the kind of behavior the engine is
+more likely to test (such as \texttt{console.log}). We also removed these
+general purpose functions. The remaining object/functions are shown at
+Figure~\ref{fig:histograms}.
+
+
+\begin{figure}[thp]
+\begin{center}
+$
+\begin{array}{cc}
+Charka & Duktape \\
+\includegraphics[width=.5\textwidth, clip, trim= 0px 35px 10px 0px]{figs/hist/chakra.pdf} &
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/duktape.pdf} \\
+Hermes & JerryJS \\
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/hermes.pdf} &
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/jerryJS.pdf} \\
+JSI & Test262 \\
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/jsi.pdf} &
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/test262.pdf} \\
+TinyJS & V8 \\
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/tinyJS.pdf} &
+\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/v8.pdf} \\
+\end{array}
+$
+\end{center}
+\caption{histograms.}
+\label{fig:histograms}
+\end{figure}
 
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
