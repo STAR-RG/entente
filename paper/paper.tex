@@ -1031,7 +1031,7 @@ it also produces a higher number of valid inputs.
 The goal of this paper is to assess ability of
 test transplantation and differential testing
 to find functional bugs
-in \javascript\ engines. Based on that, we pose three questions:
+in \javascript\ engines. Based on that, we pose the following three questions:
 \begin{description}[leftmargin=.5in]
 \item[RQ1.] How conformant are the engines to the Test262 suite?
 \item[RQ2.] How effective is test transplantation to find bugs?
@@ -1052,7 +1052,7 @@ find bugs (Section~\ref{sec:cross-engine-diff-testing-results}). The
 rationale for this question is that fuzzing inputs may explore
 scenarios not well-tested by at least one of the engines.
 
-\subsection{Answering RQ1 (Conformance)}
+\subsection{Answering RQ1 (Test262 Conformance)}
 \label{sec:stability}
 
 The ECMA Test262~\cite{ecma262-conformance-suite} test suite serves to
@@ -1067,8 +1067,8 @@ days and averaged the passing ratios.
 We performed seven consecutive executions because,
 since the studied JS engines release new versions on a daily basis,
 we wanted to make sure if the failing tests raised by the Test262 suite
-were rapidly fixed by the maintenance team. If these errors were quickly
-fixed, this would suggest that this given engine would be closely aligned with
+were rapidly fixed by the maintenance team. If errors were quickly
+fixed, this would suggest that a given engine would be closely aligned with
 the ECMAScript specification.
 Table~\ref{tab:test262} shows
 the average number of passing tests over this period. The variance of
@@ -1109,17 +1109,17 @@ similar for \jsc, \veight, and \smonkey
 %\Fix{This happens because \hermes
 %still has many unsupported features, such as Proxy, Promisse, and Async.}
 Moreover, one can also note that \chakra has a low passing ratio
-in this test suite. Intestingly, it is also the one we were able to find more bugs (as per
+in this test suite. Interestingly, it is also the one we were able to find more bugs (as per
 Figure~\ref{fig:summary}). Although it is plausible to find
 correlation between the passing ratios and reliability as measured by
-the number of bugs found, we do not imply causality. As aforementioned,
+the number of bugs found, we do not imply causality. As discussed above,
 it is important
 to note that failures in this conformance test suite indicates missing
 features as opposed to bugs.
 
 \begin{center}
   \fbox{
-    \begin{minipage}{8cm}
+    \begin{minipage}{11cm}
       \textit{Summary:}~Most of the engines seem to adhere well to the
       \js\ standard. Except for \hermes and \chakra, the passing ratio of all
       engines is above 90\%.
@@ -1188,7 +1188,22 @@ Table~\ref{tab:cross-testing} shows the number of failures observed
 for each pair of test suite and engine. The first column shows the
 test suites and the first row shows the engines that run those
 tests. We use a dash (``-'') to indicate that we did not consider the
-combinations that associate a test suite with its parent engine.
+combinations that run the test suite of an engine in itself.  Failures
+in those cases would either indicate regressions or flaky tests as
+opposed to unknown bugs for that engine. As explained in
+Section~\ref{sec:seeds}, we used a total of
+\totalTestFilesForTestTransplantation{} tests in this
+experiment. These tests are included in the dashed rectangle under
+column ``type-in-all'' on Table~\ref{tab:test-suites}. Running those
+tests we observed a total of \failuresTestTrans{} failures manifested
+across \failuresTestTransDistictFiles{} distinct files
+(\failuresTestTransPercent{} of total).  Table~\ref{tab:cross-testing}
+shows that \smonkey\ was the engine that failed the least whereas
+\chakra\ was the engine that failed the most. The \smonkey\ test suite
+also revealed more failures than any other, perhaps as expected, given
+that it is the suite with more tests (see
+Table~\ref{tab:test-suites}).
+
 \Fix{
 In particular, we were not able to reuse the \smonkey tests on the
 \hermes engine. This happened because \smonkey has its own assertion
@@ -1198,20 +1213,6 @@ did not happen when the \smonkey tests were transplanted to the other engines,
 though.
 }
 \Gustavo{Falar pq Hermes nao esta na tabela}
-Failures in those cases would either indicate regressions or flaky
-tests as opposed to unknown bugs for that engine. As explained in
-Section~\ref{sec:seeds}, we used in this experiment the
-\totalTestFilesForTestTransplantation{} tests included in the
-rectangle area under column ``type-in-all'' from
-Table~\ref{tab:test-suites}. Running those tests we observed a total
-of \failuresTestTrans{} failures manifested across
-\failuresTestTransDistictFiles{} distinct files
-(\failuresTestTransPercent{} of total).  Table~\ref{tab:cross-testing}
-shows that \smonkey\ was the engine that failed the least whereas
-\chakra\ was the engine that failed the most. The \smonkey\ test suite
-also revealed more failures than any other, as expected, given
-that it is the suite with more tests (see
-Table~\ref{tab:test-suites}).
 
 
 %%  As another example, some tests from \Fix{Y} use the
@@ -1219,6 +1220,7 @@ Table~\ref{tab:test-suites}).
 %%   the property?} encapsulated in an \CodeIn{Error} object in
 %% assertions. As such, those tests fail in all engines but
 %% \Fix{Y}.
+
 
 \sloppy The sources of false positives found in this experiment are as
 follows:
@@ -1264,9 +1266,7 @@ spec but is no longer valid for the current spec.
 
 \end{description}
 
-
-
-\begin{table}
+\begin{table}[h!]
   \centering
   \caption{\label{fig:falsepositives}\label{fig:truepositives}\label{fig:piecharts-transplantation}Distribution
     of False (FP) and True Positives (TP).}
@@ -1290,7 +1290,7 @@ spec but is no longer valid for the current spec.
 
 Table~\ref{fig:piecharts-transplantation} shows the distribution of
 False Positives (FPs) and True Positives (TPs). The sum of the numbers
-in this table correspond to the number of files that manifested
+in this table corresponds to the number of files that manifested
 failures, \ie{}, \failuresTestTransDistictFiles{}. Considering false
 positives, ``Undefined Behavior'' was the most predominant
 source. Considering true positives, we found a reasonable number of
@@ -1309,30 +1309,31 @@ at the time of the writing. The status string appears in bold face for
 status ``Confirmed'' or higher, \ie{}, ``Assigned'' and ``Fixed''.
 Column ``Severity'' shows the severity of confirmed bugs, and,
 finally, column ``Suite'' shows the name of the engine that originated
-the test.  (We omitted the URLs of the issues to protect anonymity.)
-Considering severity levels, we found that \jsc~\cite{jsc-severity}
-and \smonkey{}~\cite{mozilla-severity} developers use five levels,
-whereas \chakra{}~\cite{chakra-severity} and
-\veight{}~\cite{v8-severity} developers use only three. As usual, the
-smallest the severity value the highest the severity of the bug. We
-use a dash (``-'') in place of the severity level for the cases where
-the bug report is pending confirmation. Of the
-\noBugsTransplantation{} bugs we reported in this experiment,
+the test. Considering severity levels, we found that
+\jsc~\cite{jsc-severity} and \smonkey{}~\cite{mozilla-severity}
+developers use five levels, whereas \chakra{}~\cite{chakra-severity}
+and \veight{}~\cite{v8-severity} developers use only three. As usual,
+the smallest the number the highest the severity of the bug. We use a
+dash (``-'') in place of the severity level for the cases where the
+bug report is pending confirmation. Of the \noBugsTransplantation{}
+bugs we reported in this experiment,
 \noBugsTransplantationConfirmed\ were promoted from the status ``New''
-to ``Confirmed''. Of these, \noBugsTransplantationSeverityTwo{} are severity-2 bugs.  Although we did
-not find any critical bugs, most of the bugs are seemingly important
-as per the categorization given by engineers. Analyzing the issue
-tracker of \chakra, we found that severity-1 bugs are indeed
-rare. Considering the number of bug reports confirmed by developers,
-\chakra{} was the engine with the highest number--\bugsChakra{} (with \bugsChakraFixed{} bugs
-fixed). Considering the remaining engines, \veight{} developers
-confirmed the \noTransVeightBugsReported{} bugs we reported, fixing
-\noTransVeightBugsFixed{}. Curiously, Google
-engineers confirmed the issued bug reports in a few hours. Overall, we
-found that development teams of other engines, specially \jsc\, took
-much longer to analyze bug reports as can be observed in the
-\jsc\ stacked bar from Figure~\ref{fig:stacked-engine}.
-However, the bugs the \jsc team confirmed were quickly fixed.
+to ``Confirmed''. Of these, \noBugsTransplantationSeverityTwo{} are
+severity-2 bugs.  Although we did not find any critical bugs, most of
+the bugs are seemingly important as per the categorization given by
+engineers. Analyzing the issue tracker of \chakra, we found that
+severity-1 bugs are indeed rare. Considering the number of bug reports
+confirmed by developers, \chakra{} was the engine with the highest
+number: \bugsChakra{}, with \bugsChakraFixed{} bugs fixed. Considering
+the remaining engines, \veight{} developers confirmed the
+\noTransVeightBugsReported{} bugs we reported, fixing
+\noTransVeightBugsFixed{}. Curiously, Google engineers confirmed the
+issued bug reports in a few hours. Likewise, we reported only one bug
+on Mozilla's \smonkey, which was quickly fixed.  Overall, we found
+that development teams of other engines, specially \jsc, took much
+longer to analyze bug reports as can be observed in the \jsc\ stacked
+bar from Figure~\ref{fig:stacked-engine}. However, once the team
+confirmed those bugs they were then quickly fixed.
 
 %% Overall, we found these results promising given that precision (\ie{},
 %% the ratio of true positives over all reports) needs to take into
@@ -1345,7 +1346,7 @@ However, the bugs the \jsc team confirmed were quickly fixed.
 
 \begin{center}
   \fbox{
-    \begin{minipage}{8cm}
+    \begin{minipage}{11cm}
       \textit{Summary:}~Test transplantation was effective at finding
       functional bugs. Although the cost of classifying failures was
       non-negligible, the approach revealed several non-trivial bugs
@@ -1572,7 +1573,7 @@ all of them confirmed, with \noDiffVeightFixed{} fixed.
 
 \begin{center}
   \fbox{
-    \begin{minipage}{8cm}
+    \begin{minipage}{11cm}
       \textit{Summary:}~Cross-engine differential testing was
       effective at finding \js\ engines bugs, several of which have
       been fixed already.
