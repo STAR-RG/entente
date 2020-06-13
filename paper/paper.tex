@@ -550,8 +550,7 @@ consider tests from the \chakra{} repository because they depend on
 non-portable objects.  Finally, note that the number of tests in
 \veight\ is low; that happens because \veight{} uses many tests from
 Mozilla and \jsc; we discarded those to avoid repetition and to give
-credit where it is due\Mar{@Gustavo/@Breno, we can mention in the
-  author response that we did sanity/diligence check.}.
+credit where it is due.
 
 \lbrack{}Test Harness\rbrack{}~It is also worth mentioning that some
 engines uses a custom shell to run tests, including a harness with
@@ -572,6 +571,9 @@ file work in the other engine.\Mar{This seems a different problem
 \texttt{assert(1==1)} which should throw an assertion violation if the condition returns false.
 If the change would require more substantial manual work, we opted to discard the test instead. Overall,
 we may have manually refactored more than a thousand test files.
+
+\lbrack{}Dedup\rbrack{}~\Fix{Explain what we did to avoid
+  dups. Consider moving to the the sentence ``Finally, note that the number of tests in V8''}
 
 \subsection{Mining Tests From Issue Trackers}
 
@@ -594,18 +596,18 @@ we may have manually refactored more than a thousand test files.
 
 %\subsubsection{From Issue Trackers}
 
-Teste cases embedded in issue trackers are an important source of data
-as they may have already shown usefulness to reveal problems in some
+Test cases embedded in issue trackers are an important source of data
+as they may have already shown useful to reveal problems in some
 engine. For example, a developer may have found a corner case that a
 given engine did not handle properly. Therefore, it is possible that
-other engine do not handle those cases. We thought that we should not
-ignore issue trackers for that reason. By manually analyzing a sample
-of issues, we observed that developers either 1) add test cases as
-attachments of an issue or 2) embed the test cases within the textual
-description of an issue. The test cases in attachments are longer
-compared to the test cases embedded in issue descriptions whereas the
-latter are more common. Consequently, we thought we should handle both
-cases.
+some other engine does not handle that case as well. For that reasons,
+we thought that we should not ignore issue trackers. By manually
+analyzing a sample of issues, we observed that developers either 1)
+add test cases as attachments of an issue or 2) embed the test cases
+within the textual description of an issue. The test cases in
+attachments are longer compared to the test cases embedded in issue
+descriptions whereas the latter are more common. Consequently, we
+thought we should handle both cases.
 
 % (\jsc=147, \veight{}=370, and \smonkey{}=110).
 % (\jsc=\Fix{XX}, \veight{}=\Fix{XX}, \smonkey{}=\Fix{XX})
@@ -724,6 +726,11 @@ publicly available from our website as a separate component.
 %% does not have an assertion in the test file
 %% \Fix{add code to explain}
 
+
+\subsection{Characterization of Test Suites}
+
+\Fix{...add and discuss histograms}
+
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
 
@@ -732,23 +739,25 @@ differential testing. Figure~\ref{fig:workflow} illustrates the
 workflow of the approach. It takes on input a list of JS files and
 generates warnings on output. Numbered boxes in the figure denote the
 data processors and arrowed lines denote data flows. The cycle icons
-indicate repetition--the leftmost icon indicates that each file in the
-input list will be analyzed in separate whereas the rightmost icon
-shows that a single file will be fuzzed multiple times.
+indicate repetition--the cycle icon close to the cylinder icon
+indicates that each file in the input list will be analyzed in
+separate whereas the other cycle icon shows that a single file will be
+fuzzed multiple times.
 
 \begin{figure}[t]
   \centering
   \includegraphics[trim=0 0 0 0,clip,width=0.85\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+  \caption{\label{fig:workflow}Differential Testing infrastructure
+    overview.\Fix{tem certeza que Hermes estah usando mesma fonte/tamanho?}}
 \end{figure}
 
-The bug-finding process works as follows. For a given test input, the
-toolchain produces new inputs using some off-the-shelf input fuzzer
-(step 1).  (Section~\ref{sec:objects:fuzzers} describes the fuzzers we
-selected.)  Then, the oracle checks whether or not the output produced
-for the fuzzed file is consistent across all engines (step 2). In case
-the test passes in all engines or fails in all engines (\ie{}, the
-output is consistent), the infrastructure ignores the
+The bug-finding process works as follows. First, for a given test
+input, the toolchain produces new inputs using some off-the-shelf
+input fuzzer (step 1). Section~\ref{sec:objects:fuzzers} describes the
+fuzzers we selected. Then, the oracle checks whether or not the output
+produced for the fuzzed file is consistent across all engines (step
+2). In case the test passes in all engines or fails in all engines
+(\ie{}, the output is consistent), the infrastructure ignores the
 input. Otherwise, it considers the input as potentially
 fault-revealing; hence, interesting for human inspection. Finally, to
 facilitate the human inspection process, the infrastructure
@@ -759,32 +768,38 @@ than a bug, for discrepancy to arise (see
 Tables~\ref{fig:piecharts-transplantation} and
 ~\ref{tab:false-positives}) and there is no clear automatic approach
 to precisely distinguish false and true positives. As such, a human
-needs to inspect the warning to classify the issue. As mentioned
+needs to inspect a warning to classify the issue. As mentioned
 earlier, this justifies why differential testing is challenging to
 automate at the functional level. Existing techniques that use
-differential testing control rate of false alarms differently. For
-example, Mozilla uses varies the configurations of thei
-\smonkey\ engine, but the implementation is the
-same~\cite{mozilla-severity}. The sources of non-determinism are
-therefore similar. CSmith~\cite{Yang:2011:FUB:1993498.1993532}
-addresses the problem by trying to avoid generating C files that
-produce undefined behavior. However, mapping all sources of
-undefinedness in JS is impractical.
+differential testing deal with false alarms differently. For example,
+Mozilla varies the configurations of their \smonkey\ engine, but the
+implementation is the same~\cite{mozilla-severity}. Non-determinism is
+therefore more likely to be associated with the variations across
+version as these version use the same core
+implementation. CSmith~\cite{Yang:2011:FUB:1993498.1993532} addresses
+the problem by trying to avoid generating C files that produce
+undefined behavior. Mapping all sources of undefinedness in JS is
+impractical.
+
+%\Igor{If the criteria is to find crashes or fatal errors, it is
+%possible to run the infrastructure with any runner(?) tool, including
+%the javascript binaries itself.}
 
 For step 2, we considered using the open-source tool
 eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
 output discrepancy. However, we noticed that eshost-cli does not
-handle discrepancies involving crashes, \Igor{If the criteria is to
-find crashes or fatal errors, it is possible to run the
-infrastructure with any runner tool, including the
-javascript binaries itself, in this case the tool captures all output provided by the binaries}.
-It is also important to note that our checker does not support the case
-where the test fails in all engines but the kind of failure (\eg{},
-exception thrown) is different. Currently, our infrastructure does not
-report discrepancy for that case. For that, it would be necessary to
-properly parse the error message to retrieve the error types. We left
-that as future work as we already found several discrepancies even
-without that.
+handle discrepancies involving crashes. Our tool supports the execution of the
+binaries themselves to obtain these fatal errors.
+It is important to note that our checker does not support the case where
+the test fails in all engines with a different kind of failure as it
+is unclear how to properly relate those failures. Currently, our
+infrastructure does not report discrepancy on that case. We left that
+as future work as we already found several discrepancies even without
+that.
+
+%% For that, it would be
+%% necessary to properly parse the error message to retrieve the error
+%% types. 
 
 %% \Mar{any difference in
 %%   output is considered for reporting? are there any
@@ -800,30 +815,48 @@ without that.
 \subsection{Prioritization}
 \label{sec:prioritization}
 
-We prioritized warnings based on their types, reflecting likelihood of
-manifesting a real bug. We defined two types---``\hi{}'' and
-``\lo{}''.
-
-Warnings of the kind ``\hi{}'' are associated with the cases where the
-test code executes without violating any internal checks, but it
-violates an assertion declared in the test itself or its harness. The
-rationale is that the test data is more likely to be valid in this
-case as execution does not raise exceptions in application
-code. Warnings of kind ``lo'' cover the remaining cases. These
-warnings are more likely to be associated with invalid inputs. They
-reflect the cases where the anomaly is observed during the execution
-of application functions as opposed to assertions. We observed that
-different engines often check pre-conditions of functions
-differently. It can happen, for example, that one engine enforces a
-weaker pre-condition, compared to another engine, on the inputs of a
-function and that is acceptable.\Comment{ For instance, it is
-  acceptable to pass values greater than \Fix{x} to function
+We prioritized warnings based on their likelihood of manifesting a
+real bug. We defined two types of warnings based on empirical evidence
+weobtained while analyzing bugs. The types ``\hi{}'' and
+``\lo{}''. Warnings of the kind ``\hi{}'' are associated with the
+cases where the test code executes without violating any internal
+checks, but it violates an assertion declared in the test itself or
+its harness. The rationale is that the test data is more likely to be
+valid in this case as execution does not raise exceptions in
+application code. Warnings of kind ``lo'' cover the remaining
+cases. These warnings are more likely to be associated with invalid
+inputs. They reflect the cases where the anomaly is observed during
+the execution of application functions as opposed to assertions. We
+observed that different engines often check pre-conditions of
+functions differently. It can happen, for example, that one engine
+enforces a weaker pre-condition, compared to another engine, on the
+inputs of a function and that is acceptable.\Comment{ For instance, it
+  is acceptable to pass values greater than \Fix{x} to function
   \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those cases,
 the infrastructure would report a warning that is more likely to be
 associated with an invalid input produced by the fuzzer, \ie{}, it is
 likely to be a ``bug'' in the test code as opposed to a bug in the
 engine. Recall that, for differential testing, we only use seed tests
 that pass in all engines.
+
+\begin{figure}[h!]
+  \centering
+  \begin{lstlisting}
+var buffer = new ArrayBuffer(64);
+var view = new DataView(buffer);
+view.setInt8(0,0x80);
+assert(view.getInt8(-1770523502845470856) === -0x80);
+
+Message from Engines (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
+1. RangeError: Offset is outside the bounds of the DataView
+2. RangeError: byteOffset cannot be negative
+3. RangeError: invalid or out-of-range index
+  \end{lstlisting}
+  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
+    that led to a confirmed bug report in \chakra. The bug is caused
+    by a required precondition check in the implementation of function
+    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
+\end{figure}
 
 Despite the problem mentioned above, ``\lo'' warnings can reveal bugs.
 Figure~\ref{fig:lo-truepositive} shows one of these cases. In this
@@ -836,9 +869,8 @@ function call \CodeIn{getInt8()}. In this case, however, the \chakra{}
 engine did not throw any exception, as can be confirmed from the
 report that our infrastructure produces starting with text ``Engine
 Messages'' at the bottom of Figure~\ref{fig:lo-truepositive}. This is
-a case of undocumented precondition. It was fixed by
-\chakra\ developers and is no longer present in the most recent
-release of \chakra.
+a case of undocumented precondition. It was fixed by developers and is
+no longer present in the most recent release of the engine.
 
 \subsection{Clusterization}
 \label{sec:clusterization}
@@ -873,24 +905,6 @@ be [(JavaScriptCore, ``RangeError'', ``byteOffset cannot be
   out-of-range index''), (V8, ``RangeError'', ``Offset is outside the
   bounds of the DataView'')].
 
-\begin{figure}[t!]
-  \centering
-  \begin{lstlisting}
-var buffer = new ArrayBuffer(64);
-var view = new DataView(buffer);
-view.setInt8(0,0x80);
-assert(view.getInt8(-1770523502845470856) === -0x80);
-
-Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
-1. RangeError: Offset is outside the bounds of the DataView
-2. RangeError: byteOffset cannot be negative
-3. RangeError: invalid or out-of-range index
-  \end{lstlisting}
-  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
-    that led to a confirmed bug report in \chakra. The bug is caused
-    by a required precondition check in the implementation of function
-    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
-\end{figure}
 
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
