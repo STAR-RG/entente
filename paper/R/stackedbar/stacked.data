@@ -30,7 +30,7 @@ Issue    Source   Engine    Status
 28       Trans    Hermes    "1-New"
 29       Trans    Hermes    "2-Confirmed"
 30       Trans    Chakra    "2-Confirmed"
-31       Trans    SpiderMonkey  "2-Confirmed"
+31       Trans    SpiderMonkey  "3-Fixed"
 
 
 1        Diff     Chakra    "3-Fixed"

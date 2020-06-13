@@ -1,6 +1,6 @@
 library(ggplot2)
 
-table <- read.table("/home/jefferson/Documentos/PPGCC UFPA/PESQUISA (Prof. Gustavo)/jsengines-differential-testing/paper/R/stackedbar/stacked.data", header = TRUE, sep = "", quote = "\"")
+table <- read.table("stacked.data", header = TRUE, sep = "", quote = "\"")
 counts <- table(table$Status, table$Engine)
 
 vector <- c(counts["2-Confirmed","Chakra"],
