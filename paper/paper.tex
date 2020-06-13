@@ -734,23 +734,25 @@ differential testing. Figure~\ref{fig:workflow} illustrates the
 workflow of the approach. It takes on input a list of JS files and
 generates warnings on output. Numbered boxes in the figure denote the
 data processors and arrowed lines denote data flows. The cycle icons
-indicate repetition--the leftmost icon indicates that each file in the
-input list will be analyzed in separate whereas the rightmost icon
-shows that a single file will be fuzzed multiple times.
+indicate repetition--the cycle icon close to the cylinder icon
+indicates that each file in the input list will be analyzed in
+separate whereas the other cycle icon shows that a single file will be
+fuzzed multiple times.
 
 \begin{figure}[t]
   \centering
   \includegraphics[trim=0 0 0 0,clip,width=0.85\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure overview.}
+  \caption{\label{fig:workflow}Differential Testing infrastructure
+    overview.\Fix{tem certeza que Hermes estah usando mesma fonte/tamanho?}}
 \end{figure}
 
-The bug-finding process works as follows. For a given test input, the
-toolchain produces new inputs using some off-the-shelf input fuzzer
-(step 1).  (Section~\ref{sec:objects:fuzzers} describes the fuzzers we
-selected.)  Then, the oracle checks whether or not the output produced
-for the fuzzed file is consistent across all engines (step 2). In case
-the test passes in all engines or fails in all engines (\ie{}, the
-output is consistent), the infrastructure ignores the
+The bug-finding process works as follows. First, for a given test
+input, the toolchain produces new inputs using some off-the-shelf
+input fuzzer (step 1). Section~\ref{sec:objects:fuzzers} describes the
+fuzzers we selected. Then, the oracle checks whether or not the output
+produced for the fuzzed file is consistent across all engines (step
+2). In case the test passes in all engines or fails in all engines
+(\ie{}, the output is consistent), the infrastructure ignores the
 input. Otherwise, it considers the input as potentially
 fault-revealing; hence, interesting for human inspection. Finally, to
 facilitate the human inspection process, the infrastructure
@@ -761,33 +763,38 @@ than a bug, for discrepancy to arise (see
 Tables~\ref{fig:piecharts-transplantation} and
 ~\ref{tab:false-positives}) and there is no clear automatic approach
 to precisely distinguish false and true positives. As such, a human
-needs to inspect the warning to classify the issue. As mentioned
+needs to inspect a warning to classify the issue. As mentioned
 earlier, this justifies why differential testing is challenging to
 automate at the functional level. Existing techniques that use
-differential testing control rate of false alarms differently. For
-example, Mozilla uses varies the configurations of thei
-\smonkey\ engine, but the implementation is the
-same~\cite{mozilla-severity}. The sources of non-determinism are
-therefore similar. CSmith~\cite{Yang:2011:FUB:1993498.1993532}
-addresses the problem by trying to avoid generating C files that
-produce undefined behavior. However, mapping all sources of
-undefinedness in JS is impractical.
+differential testing deal with false alarms differently. For example,
+Mozilla varies the configurations of their \smonkey\ engine, but the
+implementation is the same~\cite{mozilla-severity}. Non-determinism is
+therefore more likely to be associated with the variations across
+version as these version use the same core
+implementation. CSmith~\cite{Yang:2011:FUB:1993498.1993532} addresses
+the problem by trying to avoid generating C files that produce
+undefined behavior. Mapping all sources of undefinedness in JS is
+impractical.
+
+%\Igor{If the criteria is to find crashes or fatal errors, it is
+%possible to run the infrastructure with any runner(?) tool, including
+%the javascript binaries itself.}
 
 For step 2, we considered using the open-source tool
 eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
 output discrepancy. However, we noticed that eshost-cli does not
-handle discrepancies involving crashes, \Igor{If the criteria is to
-find crashes or fatal errors, it is possible to run the
-infrastructure with any runner(?) tool, including the
-javascript binaries itself.}. As such, we forked the
+handle discrepancies involving crashes. As such, we forked the
 eshost-cli GitHub project and implemented that functionality on it. It
-is also important to note that our checker does not support the case
-where the test fails in all engines but the kind of failure (\eg{},
-exception thrown) is different. Currently, our infrastructure does not
-report discrepancy for that case. For that, it would be necessary to
-properly parse the error message to retrieve the error types. We left
-that as future work as we already found several discrepancies even
-without that.
+is important to note that our checker does not support the case where
+the test fails in all engines with a different kind of failure as it
+is unclear how to properly relate those failures. Currently, our
+infrastructure does not report discrepancy on that case. We left that
+as future work as we already found several discrepancies even without
+that.
+
+%% For that, it would be
+%% necessary to properly parse the error message to retrieve the error
+%% types. 
 
 %% \Mar{any difference in
 %%   output is considered for reporting? are there any
