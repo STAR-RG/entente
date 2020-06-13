@@ -879,31 +879,27 @@ no longer present in the most recent release of the engine.
 %% reveal bugs, but there could be several tests producing similar
 %% warnings.
 
-Clusterization is complementary to prioritization; it helps to group
+Clusterization is complementary to prioritization. It helps to group
 similar warnings reported by our infrastructure. We only clustered
 ``\lo'' warnings as ``\hi'' warnings produce messages that arise from
 the test case, which are typically distinct.
-
-Figure~\ref{fig:lo-truepositive} shows a test was originally
-available in the \jsc code base.  The \radamsa fuzzing technique
-mutated the test. In particular, it introduced the negative
-long \texttt{-1770523502845470856} as a parameter of the
-\texttt{view.getInt8()} method. Before the mutation, the
-\texttt{view.getInt8()} method received a zero integer.
-At the bottom of this figure, there is a sequence of
-three elements that we use to characterize a warning: 1) the
-identifier of an engine, 2) the exception it raises, and 3) the
-message it produces on a ``\lo'' warning.  This sequence of triples
-defines a warning signature that we use for clustering. It is worth
-mentioning that we filter references to code in messages as to
-increase ability to aggregate warnings. Any warnings, including this
-one, that has this same signature will be included in the same
-``bucket''. Considering the example from
-Figure~\ref{fig:lo-truepositive}, the signature for that cluster will
-be [(JavaScriptCore, ``RangeError'', ``byteOffset cannot be
-  negative''), (SpiderMonkey, ``RangeError'', ``invalid or
-  out-of-range index''), (V8, ``RangeError'', ``Offset is outside the
-  bounds of the DataView'')].
+Figure~\ref{fig:lo-truepositive} shows a test that was originally
+available in the \jsc suite. The \radamsa fuzzer mutated the test. It
+introduced the negative long \CodeIn{-1770523502845470856} as a
+parameter of the \CodeIn{view.getInt8()} method. Before the mutation,
+the \CodeIn{view.getInt8()} method received zero as parameter.  At the
+bottom of this figure, there is a sequence of three elements that we
+use to characterize a warning: 1) the identifier of an engine, 2) the
+exception it raises, and 3) the message it produces on a ``\lo''
+warning.  This sequence of triples defines a warning signature that we
+use for clustering. It is worth mentioning that we filter references
+to code in messages as to increase ability to aggregate warnings. Any
+warnings, including this one, that has this same signature will be
+included in the same ``bucket''. Considering this particular example,
+the signature for that cluster will be [(JavaScriptCore,
+  ``RangeError'', ``byteOffset cannot be negative''), (SpiderMonkey,
+  ``RangeError'', ``invalid or out-of-range index''), (V8,
+  ``RangeError'', ``Offset is outside the bounds of the DataView'')].
 
 
 \subsection{Fuzzers}
