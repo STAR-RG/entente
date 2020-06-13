@@ -1680,6 +1680,119 @@ discuss in the following. The selection criteria we used was:
 %%   assert(+a === 0)\}}
 
 \sloppy
+
+%-----Issue \#19, Table~\ref{tab:test-transplantation-bugs}
+\vspace{1ex}\noindent\textbf{Issue \#19,
+  Table~\ref{tab:test-transplantation-bugs}.} The code snippet below
+shows the test input we used to reveal a bug in \textbf{\jsc} version 234555.
+
+\begin{figure}[h!]
+  \vspace{-0.5ex}
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function,
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+ var obj = {}; var arr = [];
+ try { arr.sort(obj); assert(false);}
+ catch (e) { assert(e instanceof TypeError); }
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+  \vspace{-1ex}
+\end{figure}
+
+This is a test case of the \jerry{} suite. The bug was found during
+the test transplantation experiment. According to the
+\es\ spec~\cite{ecmas262-array-sort}, the parameter to the
+\CodeIn{Array.sort} function should be a comparable object or an
+undefined value, otherwise it should throw a \CodeIn{TypeError}. In
+this case, \jsc incorrectly accepts a non-callable object as argument
+to \CodeIn{sort} and the test fails in the subsequent step. The other
+engines raise a \CodeIn{TypeError} as expected.
+
+%-----Issue \#35, Table~\ref{tab:test-transplantation-bugs}
+\vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:test-transplantation-bugs}.} We
+reported the snippet \CodeIn{"use strict" 010} to the
+\textbf{\smonkey} development team as a bug and the bug was confirmed
+in a few hours.  This is a test case originally from the \hermes suite
+using test transplantation.  According the specification, in strict
+mode, the engine must use the prefix '0o' or '0O' to represent octal
+numeric literals. This is an issue that explores a deprecated octal
+token after ASI (Automatic Semicolon Insertion). The other engines
+throw a SyntaxError due to the missing of the octal token, but \smonkey
+returns an integer \CodeIn{8} that represents \CodeIn{010} in octal.
+
+%% \begin{figure}[h!]
+%%   \vspace{-0.5ex}
+%%   \centering
+%%   \scriptsize
+%%   \lstset{escapeinside={@}{@},
+%% %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+%%     basicstyle=\ttfamily\scriptsize, boxpos=c,
+%%     numberstyle=\tiny,
+%%     morekeywords={assertEq, var, yield, in, function,
+%%     typeof, return, throw, new, Error, if},
+%%   }
+%%   \begin{lstlisting}
+%%     "use strict"
+%%     010
+%%   \end{lstlisting}
+%%   \normalsize
+%%   %% \caption{Warning captured as \hi{} priority.}
+%%   %% \label{fig:hi-priority}
+%%   \vspace{-1ex}
+%% \end{figure}
+
+
+
+
+%-----Issue \#2, Table~\ref{tab:bugs}
+\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.} We
+reported the code snippet below to the \textbf{\chakra} development team as a
+bug, but they did \emph{not} accept.
+
+\begin{figure}[h!]
+  \vspace{-0.5ex}
+  \centering
+  \scriptsize
+  \lstset{escapeinside={@}{@},
+%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
+    basicstyle=\ttfamily\scriptsize, boxpos=c,
+    numberstyle=\tiny,
+    morekeywords={assertEq, var, yield, in, function,
+    typeof, return, throw, new, Error, if},
+  }
+  \begin{lstlisting}
+ function test() {
+   return typeof String.prototype.repeat === "function"
+     && "foo".repeat(657604378) === "foofoofoo"; }
+  \end{lstlisting}
+  \normalsize
+  %% \caption{Warning captured as \hi{} priority.}
+  %% \label{fig:hi-priority}
+  \vspace{-1ex}
+\end{figure}
+
+
+This is a test case original from the \jsc suite that the
+\radamsa\ fuzzer modified. The original test used the integer literal
+3 as argument to \CodeIn{repeat()}, \ie{}, the expression produced a
+string with three repetitiong of the string ``foo''. The new test uses
+a long integer instead as parameter to \CodeIn{repeat()}. As result,
+the engine crashes. The team answered that this was an incompatibility
+by design\footnote{We interpreted as a violation of an undocumented
+  precondition} as the function was not expected to receive such a
+long value.
+
+
+%-----Issue \#4, Table~\ref{tab:bugs}
 \vspace{1ex}\noindent\textbf{Issue \#4, Table~\ref{tab:bugs}.} The
 code snippet below shows a test that reveals a bug in \textbf{\chakra}.
 
@@ -1720,6 +1833,7 @@ expected. \chakra{}, instead, incorrectly converts the string to zero,
 and the test passes. As Table~\ref{tab:bugs} shows, the \chakra{} team
 fixed the issue soon after our report.
 
+%-----Issue \#18, Table~\ref{tab:bugs}
 \vspace{1ex}\noindent\textbf{Issue \#18, Table~\ref{tab:bugs}.} The
 snippet {\footnotesize\ttfamily{eval(function b(a)\{break;\});}}
 revealed a bug in \textbf{\veight{}} version 7.0.244. This code snippet was
@@ -1749,114 +1863,10 @@ behave as expected in this case.
 %%   as expected but \veight{} pass without failures.
 %% }
 
-\vspace{1ex}\noindent\textbf{Issue \#19,
-  Table~\ref{tab:test-transplantation-bugs}.} The code snippet below
-shows the test input we used to reveal a bug in \textbf{\jsc} version 234555.
-
-\begin{figure}[h!]
-  \vspace{-0.5ex}
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
- var obj = {}; var arr = [];
- try { arr.sort(obj); assert(false);}
- catch (e) { assert(e instanceof TypeError); }
-  \end{lstlisting}
-  \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
-  \vspace{-1ex}
-\end{figure}
-
-This is a test case of the \jerry{} suite. The bug was found during
-the test transplantation experiment. According to the
-\es\ spec~\cite{ecmas262-array-sort}, the parameter to the
-\CodeIn{Array.sort} function should be a comparable object or an
-undefined value, otherwise it should throw a \CodeIn{TypeError}. In
-this case, \jsc incorrectly accepts a non-callable object as argument
-to \CodeIn{sort} and the test fails in the subsequent step. The other
-engines raise a \CodeIn{TypeError} as expected.
-
-\vspace{1ex}\noindent\textbf{Issue \#2, Table~\ref{tab:bugs}.} We
-reported the code snippet below to the \textbf{\chakra} development team as a
-bug, but they did \emph{not} accept.
-
-\begin{figure}[h!]
-  \vspace{-0.5ex}
-  \centering
-  \scriptsize
-  \lstset{escapeinside={@}{@},
-%    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-    basicstyle=\ttfamily\scriptsize, boxpos=c,
-    numberstyle=\tiny,
-    morekeywords={assertEq, var, yield, in, function,
-    typeof, return, throw, new, Error, if},
-  }
-  \begin{lstlisting}
- function test() {
-   return typeof String.prototype.repeat === "function"
-     && "foo".repeat(657604378) === "foofoofoo"; }
-  \end{lstlisting}
-  \normalsize
-  %% \caption{Warning captured as \hi{} priority.}
-  %% \label{fig:hi-priority}
-  \vspace{-1ex}
-\end{figure}
-
-
-This is a test case original from the \jsc suite that the
-\radamsa\ fuzzer modified. The original test used the integer literal
-3 as argument to \CodeIn{repeat()}, \ie{}, the expression produced a
-string with three repetitiong of the string ``foo''. The new test uses
-a long integer instead as parameter to \CodeIn{repeat()}. As result,
-the engine crashes. The team answered that this was an incompatibility
-by design\footnote{We interpreted as a violation of an undocumented
-  precondition} as the function was not expected to receive such a
-long value.
-
-\vspace{1ex}\noindent\textbf{Issue \#35, Table~\ref{tab:test-transplantation-bugs}.} We
-reported the snippet \CodeIn{"use strict" 010} to the
-\textbf{\smonkey} development team as a bug and the bug was confirmed
-in a few hours.  This is a test case originally from the \hermes suite
-using test transplantation.  According the specification, in strict
-mode, the engine must use the prefix '0o' or '0O' to represent octal
-numeric literals. This is an issue that explores a deprecated octal
-token after ASI (Automatic Semicolon Insertion). The other engines
-throw a SyntaxError due to the missing of the octal token, but \smonkey
-returns an integer \CodeIn{8} that represents \CodeIn{010} in octal.
-
-%% \begin{figure}[h!]
-%%   \vspace{-0.5ex}
-%%   \centering
-%%   \scriptsize
-%%   \lstset{escapeinside={@}{@},
-%% %    numbers=left,xleftmargin=1em,frame=single,framexleftmargin=0.5em,
-%%     basicstyle=\ttfamily\scriptsize, boxpos=c,
-%%     numberstyle=\tiny,
-%%     morekeywords={assertEq, var, yield, in, function,
-%%     typeof, return, throw, new, Error, if},
-%%   }
-%%   \begin{lstlisting}
-%%     "use strict"
-%%     010
-%%   \end{lstlisting}
-%%   \normalsize
-%%   %% \caption{Warning captured as \hi{} priority.}
-%%   %% \label{fig:hi-priority}
-%%   \vspace{-1ex}
-%% \end{figure}
 
 
 
-
-
+%-----Issue \#24, Table~\ref{tab:bugs}
 \vspace{1ex}\noindent\textbf{Issue \#24, Table~\ref{tab:bugs}.} The snippet
 \CodeIn{b+/v/a} represents a bug confirmed in \textbf{\hermes} engine with
 differential testing using radamsa.
@@ -1868,6 +1878,8 @@ but this flag is not valid. The expected behavior is to throw an early
 SyntaxError due to the invalid regular expression flag,
 but \hermes\ seems not to treat the early validation of the regexp flags
 as explained by one of their developers.
+
+
 
 \subsection{Threats To Validity}
 
