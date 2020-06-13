@@ -462,8 +462,8 @@ engines.
     \jerry{} & \cite{jerryscript2018repo} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
     Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
-    Babel &&&&& \\
-    BlogEngine.NET &&&&& \\
+    Babel & \cite{babel2020repo} & \babelOriginal{} & \babelPassInPar{} & \babelCompileAll{} & \babelNoFailAll{} \\
+    BlogEngine.NET & \cite{babel2020repo} & \blogEngineNetOriginal{} & \blogEngineNetPassInPar{} & \blogEngineNetCompileAll{} & \blogEngineNetNoFailAll{} \\
     \midrule
     %GitHub Projects & - & 494,394 & - & - & - \\
     %\midrule
@@ -541,7 +541,9 @@ only the number of passing tests in all engines (the
 tests we found depend on external libraries, which not all selected
 engines support. We decided to discard those. For example, many tests
 we found were based on Node.js~\cite{node} which\Mar{@Igor, is this
-  the reason?  Please, confirm$\rightarrow$} require libraries to be
+  the reason?  Please, confirm$\rightarrow$}\Igor{yes, it is. Some Node internal features are 
+not included in the JS engine, including some keywords (ie. require, module).
+In addiction, a project with nodejs require a package.json with a lot of external dependencies.} require libraries to be
 installed before running the test and different tests require
 different sets of libraries. Also, as already mentioned, we did not
 consider tests from the \chakra{} repository because they depend on
@@ -552,8 +554,11 @@ credit where it is due\Mar{@Gustavo/@Breno, we can mention in the
   author response that we did sanity/diligence check.}.
 
 \lbrack{}Test Harness\rbrack{}~It is also worth mentioning that some
-engines use a custom shell to run tests, including a harness with
-specific assertions\Mar{@Igor, can you name which?}. For that, we
+engines uses a custom shell to run tests, including a harness with
+specific assertions, \Igor{for example, tests provided by Mozilla contains a lot 
+of custom functions (\ie\ assertThrowsInstanceOf, assertEqArray, getPromiseResult).
+The shell contains those functions to made the test run correctly.}
+\Mar{@Igor, can you name which?}. For that, we
 needed to make minor changes in the testing infrastructure to be able
 to run the tests uniformly across all engines. More precisely, we
 needed to mock non-portable functions, which are only available in
@@ -561,10 +566,11 @@ certain engines. Since we had to transplant more than 40k test files,
 we tried to mock the minimum amount of code possible to make the test
 file work in the other engine.\Mar{This seems a different problem
   (tests without assertions). I did not understand how this is related
-  to portability?}  For instance, if a test had a statement such as
+  to portability?}\Igor{A test is a simple JS file input.
+  Some tests are not well-defined.}  For instance, if a test had a statement such as
 \texttt{print(1==1);} we manually refactored that statement to
-\texttt{assertEquals(1,1)}.  If the change would require more
-substantial manual work, we opted to discard the test instead. Overall
+\texttt{assert(1==1)} which should throw an assertion violation if the condition returns false.
+If the change would require more substantial manual work, we opted to discard the test instead. Overall,
 we may have manually refactored more than a thousand test files.
 
 \subsection{Mining Tests From Issue Trackers}
@@ -770,10 +776,9 @@ eshost-cli~\cite{eshost-cli}, also used at Microsoft, for checking
 output discrepancy. However, we noticed that eshost-cli does not
 handle discrepancies involving crashes, \Igor{If the criteria is to
 find crashes or fatal errors, it is possible to run the
-infrastructure with any runner(?) tool, including the
-javascript binaries itself.}. As such, we forked the
-eshost-cli GitHub project and implemented that functionality on it. It
-is also important to note that our checker does not support the case
+infrastructure with any runner tool, including the
+javascript binaries itself, in this case the tool captures all output provided by the binaries}.
+It is also important to note that our checker does not support the case
 where the test fails in all engines but the kind of failure (\eg{},
 exception thrown) is different. Currently, our infrastructure does not
 report discrepancy for that case. For that, it would be necessary to
@@ -1574,7 +1579,10 @@ recently. \hermes is a JavaScript engine introduced by Facebook in
 2019. According to its website, \hermes is ``a JavaScript engine
 optimized for fast start-up of React Native apps on
 Android''~\cite{hermes2020repo}.\Mar{short sentence saying where it is
-  used.}
+  used.}\Igor{Currently, hermes is being used in the react-native framework,
+  also maintained by Facebook, as a beta component to increase the performance of Android applications,
+  such as startup time, reduce memory consumption and application size\cite{reactnative2020hermes}.
+}
 
 %  for performing
 As a preparatory step to apply test transplantation and differential
@@ -1595,12 +1603,13 @@ We followed the same methodology described in previous sections to
 evaluate \hermes. When experimenting with test transplantation, we
 noted many errors when replaying the test suite of \smonkey on
 \hermes. This happened because \smonkey has its own assertion
-framework, but \hermes was unable to interpret those assertions,
+framework, but \hermes was unable to interpret those assertions \Igor{due to 
+the missing features mentioned before (\ie\ Class definitions, Proxy properties)}
 resulting in failures in all test executions from this engine. These
 failures did not happen when the \smonkey tests were transplanted to
-the other engines, though\Mar{Why? Was the framework using some of the
-  features aforementioned? Say it, please.}. Overall, we repoted three
-issues to the \hermes bug tracker as result of using test
+the other engines, though.\Mar{Why? Was the framework using some of the
+  features aforementioned? Say it, please}\Igor{fixed above}.
+Overall, we reported three issues to the \hermes bug tracker as result of using test
 transplantation\footnote{\url{https://github.com/facebook/hermes/issues/<id>},
   with id 265, 266, 267.}. One of them was confirmed by the \hermes
 maintainers by the time of this submission. For another, the
