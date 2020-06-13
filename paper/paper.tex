@@ -317,10 +317,10 @@ and minor fixes~\cite{ecmas262-spec-repo,ecmas262-spec}.
 
 The specification of JavaScript is incomplete for different
 reasons. Certain parts of the specification are undefined; it is the
-responsibility of engineers to decide how to implement these
-functionalities. The JavaScript spec uses the label
+responsibility of the community to regulate the evolution of the
+language. The JavaScript spec uses the label
 ``implementation-dependent'' to indicate these cases, where behavior
-may differ from engine to engine. One reason for suchs flexibility in
+may differ from engine to engine. One reason for such flexibility in
 the spec is to enable compiler optimizations. For example, the
 \js\ \mcodeid{for-in} loop construct does not clearly specify the
 iteration order of
@@ -368,17 +368,16 @@ version after Jan 1, 2018, 2) Contains more than 1K stars on GitHub,
 and 3) Uses a public issue tracker. We looked for highly-maintained
 (as per the first criterion) and popular (as per the second criterion)
 engines. As we wanted to report bugs, we also looked for project with
-public issue trackers. We initially selected four JS engines:
-\jsc, \veight, \chakra, and \smonkey. Additionally, we also included
-\hermes in the list of studied engines. The main reason for this was
-to investigate how our approach would work on a recently introduced JS
-engined. More about \hermes on Section~\ref{sec:hermes}.
-Table~\ref{tab:engines} lists the engines we
-analyzed. It is worth noting that we used Google Chrome Lab's JSVU
-tool~\cite{jsvu} to automatically install and configure versions of
-different JS engines in our host environment. This is important as we
-aim to use the most recent stable versions of each engine as to avoid
-reporting old and already-fixed bugs to developers.
+public issue trackers. We initially selected four JS engines: \jsc,
+\veight, \chakra, and \smonkey. Later, we included \hermes in the list
+of studied engines. The main reason was to investigate how our
+approach would work on a recently introduced JS engined. More about
+\hermes on Section~\ref{sec:hermes}.  Table~\ref{tab:engines} lists
+the engines we analyzed. It is worth noting that we used Google Chrome
+Lab's JSVU tool~\cite{jsvu} to automatically install and configure
+versions of different JS engines in our host environment. This is
+important as we aim to use the most recent stable versions of each
+engine as to avoid reporting old and already-fixed bugs to developers.
 
 %% Table~\ref{tab:engines} shows the engines we selected in this
 %% study. We made an exception to the second criterion with
