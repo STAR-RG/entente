@@ -1,5 +1,5 @@
 Issue    Source   Engine    Status
-1        Trans    JavaScriptCore       "1-New"
+1        Trans    JSC       "1-New"
 2        Trans    Chakra    "2-Confirmed"
 3        Trans    Chakra    "3-Fixed"
 4        Trans    Chakra    "2-Confirmed"
@@ -34,7 +34,7 @@ Issue    Source   Engine    Status
 
 
 1        Diff     Chakra    "3-Fixed"
-3        Diff     JavaScriptCore       "1-New"
+3        Diff     JSC       "1-New"
 4        Diff     Chakra    "3-Fixed"
 5        Diff     JSC       "3-Fixed"
 6        Diff     Chakra    "2-Confirmed"
