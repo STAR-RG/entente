@@ -809,30 +809,48 @@ that.
 \subsection{Prioritization}
 \label{sec:prioritization}
 
-We prioritized warnings based on their types, reflecting likelihood of
-manifesting a real bug. We defined two types---``\hi{}'' and
-``\lo{}''.
-
-Warnings of the kind ``\hi{}'' are associated with the cases where the
-test code executes without violating any internal checks, but it
-violates an assertion declared in the test itself or its harness. The
-rationale is that the test data is more likely to be valid in this
-case as execution does not raise exceptions in application
-code. Warnings of kind ``lo'' cover the remaining cases. These
-warnings are more likely to be associated with invalid inputs. They
-reflect the cases where the anomaly is observed during the execution
-of application functions as opposed to assertions. We observed that
-different engines often check pre-conditions of functions
-differently. It can happen, for example, that one engine enforces a
-weaker pre-condition, compared to another engine, on the inputs of a
-function and that is acceptable.\Comment{ For instance, it is
-  acceptable to pass values greater than \Fix{x} to function
+We prioritized warnings based on their likelihood of manifesting a
+real bug. We defined two types of warnings based on empirical evidence
+weobtained while analyzing bugs. The types ``\hi{}'' and
+``\lo{}''. Warnings of the kind ``\hi{}'' are associated with the
+cases where the test code executes without violating any internal
+checks, but it violates an assertion declared in the test itself or
+its harness. The rationale is that the test data is more likely to be
+valid in this case as execution does not raise exceptions in
+application code. Warnings of kind ``lo'' cover the remaining
+cases. These warnings are more likely to be associated with invalid
+inputs. They reflect the cases where the anomaly is observed during
+the execution of application functions as opposed to assertions. We
+observed that different engines often check pre-conditions of
+functions differently. It can happen, for example, that one engine
+enforces a weaker pre-condition, compared to another engine, on the
+inputs of a function and that is acceptable.\Comment{ For instance, it
+  is acceptable to pass values greater than \Fix{x} to function
   \CodeIn{\Fix{WWW}} in \Fix{y} but not in \Fix{z}.} In those cases,
 the infrastructure would report a warning that is more likely to be
 associated with an invalid input produced by the fuzzer, \ie{}, it is
 likely to be a ``bug'' in the test code as opposed to a bug in the
 engine. Recall that, for differential testing, we only use seed tests
 that pass in all engines.
+
+\begin{figure}[h!]
+  \centering
+  \begin{lstlisting}
+var buffer = new ArrayBuffer(64);
+var view = new DataView(buffer);
+view.setInt8(0,0x80);
+assert(view.getInt8(-1770523502845470856) === -0x80);
+
+Message from Engines (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
+1. RangeError: Offset is outside the bounds of the DataView
+2. RangeError: byteOffset cannot be negative
+3. RangeError: invalid or out-of-range index
+  \end{lstlisting}
+  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
+    that led to a confirmed bug report in \chakra. The bug is caused
+    by a required precondition check in the implementation of function
+    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
+\end{figure}
 
 Despite the problem mentioned above, ``\lo'' warnings can reveal bugs.
 Figure~\ref{fig:lo-truepositive} shows one of these cases. In this
@@ -845,9 +863,8 @@ function call \CodeIn{getInt8()}. In this case, however, the \chakra{}
 engine did not throw any exception, as can be confirmed from the
 report that our infrastructure produces starting with text ``Engine
 Messages'' at the bottom of Figure~\ref{fig:lo-truepositive}. This is
-a case of undocumented precondition. It was fixed by
-\chakra\ developers and is no longer present in the most recent
-release of \chakra.
+a case of undocumented precondition. It was fixed by developers and is
+no longer present in the most recent release of the engine.
 
 \subsection{Clusterization}
 \label{sec:clusterization}
@@ -882,24 +899,6 @@ be [(JavaScriptCore, ``RangeError'', ``byteOffset cannot be
   out-of-range index''), (V8, ``RangeError'', ``Offset is outside the
   bounds of the DataView'')].
 
-\begin{figure}[t!]
-  \centering
-  \begin{lstlisting}
-var buffer = new ArrayBuffer(64);
-var view = new DataView(buffer);
-view.setInt8(0,0x80);
-assert(view.getInt8(-1770523502845470856) === -0x80);
-
-Engines Messages (1:V8, 2:JavaScriptCore, 3:SpiderMonkey):
-1. RangeError: Offset is outside the bounds of the DataView
-2. RangeError: byteOffset cannot be negative
-3. RangeError: invalid or out-of-range index
-  \end{lstlisting}
-  \caption{\label{fig:lo-truepositive}Example of a ``\lo'' warning
-    that led to a confirmed bug report in \chakra. The bug is caused
-    by a required precondition check in the implementation of function
-    \CodeIn{ToIndex}~\cite{ecmas262-getviewvalue}, which is indirectly called by the test. }
-\end{figure}
 
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
