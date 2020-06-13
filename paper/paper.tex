@@ -517,14 +517,14 @@ pass. The set of tests in this column is a subset of the
 in the evaluation of differential testing. The guarantee that they
 pass in all engines assures that, if discrepancies occur, they are
 related to the changes in the input as opposed to the original cause
-of failure. 
+of failure.
 \Fix{It is worth noting that we also did not include the tests
 from \hermes\ in the table because, as the reader shall see in
 Table~\ref{tab:test262}, \hermes presents a very low adherence to the
 Test262 conformance suite. If we decided to keep \hermes, considering
 only the number of passing tests in all engines (the
 ``no-fail-in-all'' column), it would significantly reduce our amount of test files.}
-$\leftarrow$\Breno{Haven't we decided that Hermes should be removed from Table 3? 
+$\leftarrow$\Breno{Haven't we decided that Hermes should be removed from Table 3?
 If yes, maybe this explanation will only create confusing.}
 \Mar{Not sure if I understood the conclusion. Do you mean the total amount of test
   (also from other suites)? Why?}
@@ -545,9 +545,9 @@ tests we found depend on external libraries, which not all selected
 engines support. We decided to discard those. For example, many tests
 we found were based on Node.js~\cite{node} which
 %\Mar{@Igor, is this the reason?  Please, confirm$\rightarrow$}
-%\Igor{yes, it is. Some Node internal features are 
+%\Igor{yes, it is. Some Node internal features are
 %not included in the JS engine, including some keywords (ie. require, module).
-%In addiction, a project with nodejs require a package.json with a lot of external dependencies.} 
+%In addiction, a project with nodejs require a package.json with a lot of external dependencies.}
 require libraries to be
 installed before running the test and different tests require
 different sets of libraries. Also, as already mentioned, we did not
@@ -559,7 +559,7 @@ credit where it is due.
 
 \lbrack{}Test Harness\rbrack{}~It is also worth mentioning that some
 engines uses a custom shell to run tests, including a harness with
-specific assertions. For example, tests provided by Mozilla contain a lot 
+specific assertions. For example, tests provided by Mozilla contain a lot
 of custom functions (\eg\ assertThrowsInstanceOf, assertEqArray, getPromiseResult)
 and those are included in the shell to make the test run correctly.
 For that, we needed to make minor changes in the testing infrastructure to be able
@@ -750,9 +750,9 @@ fuzzed multiple times.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[trim=0 0 0 0,clip,width=0.85\textwidth]{diff-testing-runtimes}
+  \includegraphics[trim=0 330 170 0,clip,width=0.85\textwidth]{diff-testing-runtimes}
   \caption{\label{fig:workflow}Differential Testing infrastructure
-    overview.\Fix{tem certeza que Hermes estah usando mesma fonte/tamanho?}}
+    overview.}
 \end{figure}
 
 The bug-finding process works as follows. First, for a given test
@@ -803,7 +803,7 @@ that.
 
 %% For that, it would be
 %% necessary to properly parse the error message to retrieve the error
-%% types. 
+%% types.
 
 %% \Mar{any difference in
 %%   output is considered for reporting? are there any
