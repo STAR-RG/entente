@@ -909,38 +909,40 @@ the signature for that cluster will be [(JavaScriptCore,
 \subsection{Fuzzers}
 \label{sec:objects:fuzzers}
 
-Fuzzers are typically categorized in two main groups--those that build
-inputs anew (generational) and those that modify existing inputs
-(mutational). We used two black-box mutational
-fuzzers\Comment{Radamsa~\cite{radamsa} and QuickFuzz~\cite{quickfuzz}}
-in this study. In the following, we provide rationale for this
-selection.
+%% Fuzzers are typically categorized in two main groups--those that build
+%% inputs anew (generational) and those that modify existing inputs
+%% (mutational).
 
-Generational fuzzers are typically grammar-based. These fuzzers
-generate a new file using the grammar of the language whose inputs
-should be fuzzed. Intuitively, those fuzzers implement a traversal of
-the production rules of the input grammar to create syntax trees,
-which are then pretty-printed. Consequently, this approach produces
-inputs that are syntactically valid by construction. We analyzed four
+Fuzzers are tools for generating inputs for a given input
+format~\cite{8863940}. Different fuzzing strategies exist. We analyzed
+\emph{generational} and \emph{mutational} fuzzers.
+
+Generational fuzzers create inputs anew, typically following a
+language description, typically context-free grammars. Intuitively,
+those fuzzers implement a traversal of the production rules of the
+grammar to create syntax trees, which are then pretty-printed and used
+as a fresh input. Such strategy to create inputs produces inputs that
+are syntactically valid by construction. We analyzed four
 grammar-based fuzzers--Grammarinator~\cite{grammarinator},
 jsfunfuzz~\cite{jsfunfuzz},
 LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, and
 Megadeth~\cite{grieco2016quickfuzz}.  Unfortunately, none of those
-were effective out of the box. For example, we produced 100K inputs
-with Grammarinator and only few inputs were valid. With Megadeth, we
-were able to produce more\Comment{ \Fix{Y, Y$>$Y?}} valid inputs as it
-contains some heuristics to circumvent violations of certain typing
-rules.\Comment{ such as \Fix{variable used must be defined?}.}
-Nonetheless, running those inputs in our infrastructure we were unable
-to find discrepancies. Inspecting those inputs, we realized that they
-reflected very simple scenarios. To sum up, a high percentage of inputs
-that Grammarinator and Megadeth generated were semantically-invalid
-that we needed to discard whereas the valid inputs manifested no
-discrepancies. Considering jsfunfuzz~\cite{jsfunfuzz}, we noticed
-that, in addition to the issues mentioned above, it produces inputs
-that use functions that are only available in the \smonkey{}
-engine. We would need either to mock those functions in other engines
-or to discard those tests. Considering
+were effective out-of-the-box. For example, we produced 100K inputs
+with Grammarinator and only few inputs were semantically valid. With
+Megadeth, we were able to produce more\Comment{ \Fix{Y, Y$>$Y?}} valid
+inputs as it contains some heuristics to circumvent violations of
+certain typing rules.\Comment{ such as \Fix{variable used must be
+    defined?}.}  Nonetheless, running those inputs in our
+infrastructure we were unable to find discrepancies. Inspecting those
+inputs, we realized that they reflected very simple scenarios. To sum
+up, a high percentage of inputs that Grammarinator and Megadeth
+generated were semantically-invalid that we needed to discard whereas
+the valid inputs manifested no discrepancies. Considering
+jsfunfuzz~\cite{jsfunfuzz}, which has been developed by the Mozilla
+team, we noticed that, in addition to the issues mentioned above, it
+produces inputs that use functions that are only available in the
+\smonkey{} engine. We would need either to mock those functions in
+other engines or to discard those tests. Considering
 LangFuzz~\cite{Holler:2012:FCF:2362793.2362831}, the tool is not
 publicly available. Another fundamental issue associated with
 generational fuzzers in our context is that the tests they produce do
@@ -2169,4 +2171,3 @@ and CNPq grant 465614/2014-0.
 % LocalWords:  Shulte Geno XPath combinatorial CSmith LLVM Patra CNPq
 % LocalWords:  disassemblers Pradel namespaces Eshkevari FACEPE
 % LocalWords:  PRONEX
-<
