@@ -151,13 +151,17 @@ the ability of two testing techniques to expose bugs in JavaScript engines.
 We selected these two techniques because they can take advantage
 of existing test suites and reuse them --- in a semi-automated way
 as we propose here --- to enhance the coverage of the engine under testing.
-%These techniques demand different effort from developers.
+%These techniques are semi-automated and they can demand different effort from developers.
 Cross-engine differential testing is semi-automated as
 developers need to decide if alarms are manifestations of real
-bugs. Test transplantation is fully automated, but it can only reveal
-bugs that the original tests could reveal. This study measures the
-ability of these techniques in finding bugs and the human cost
-associated with each technique.
+bugs. 
+Test transplantation is also semi-automated
+and developer intervention may be required to ensure that a test case from one engine can be performed on another engine without adaptations; 
+or to verify that alarms are manifestations of real bugs and not the result of an unsupported feature or an obsolete specification.
+%Test transplantation is fully automated, but it can only reveal
+%bugs that the original tests could reveal. 
+This study measures the ability of these techniques 
+in finding bugs and the human cost associated with each technique.
 
 %One of
 %various causes of output discrepancy is a bug.
