@@ -375,7 +375,7 @@ engines. As we wanted to report bugs, we also looked for project with
 public issue trackers. We initially selected four JS engines: \jsc,
 \veight, \chakra, and \smonkey. Later, we included \hermes in the list
 of studied engines. The main reason was to investigate how our
-approach would work on a recently introduced JS engined. More about
+approach would work on a recently introduced JS engine. More about
 \hermes on Section~\ref{sec:hermes}.  Table~\ref{tab:engines} lists
 the engines we analyzed. It is worth noting that we used Google Chrome
 Lab's JSVU tool~\cite{jsvu} to automatically install and configure
@@ -572,7 +572,7 @@ substantial manual work, we opted to discard the test instead.
 %%   are not well-defined.}
 
 \lbrack{}Dedup\rbrack{}~The number of tests in \veight\ is low because
-we dicarded duplicate tests with Mozilla and \jsc. The rationale is to
+we discarded duplicate tests with Mozilla and \jsc. The rationale is to
 avoid inflating results and giving credit where it is due. We also
 wrote a script that compares each pair of tests from different suites
 for similarity. We did not find identical tests, although it is
@@ -860,7 +860,7 @@ that.
 
 We prioritized warnings based on their likelihood of manifesting a
 real bug. We defined two types of warnings based on empirical evidence
-weobtained while analyzing bugs. The types ``\hi{}'' and
+we obtained while analyzing bugs. The types ``\hi{}'' and
 ``\lo{}''. Warnings of the kind ``\hi{}'' are associated with the
 cases where the test code executes without violating any internal
 checks, but it violates an assertion declared in the test itself or
@@ -1053,7 +1053,7 @@ this study.
 
 We used two black-box mutational fuzzers in this
 study: \radamsa~\cite{radamsa} and \quickfuzz~\cite{quickfuzz}. These
-fuzzers require no instrumentation and domain-knowledge. They mutate
+fuzzers require no instrumentation and domain knowledge. They mutate
 existing inputs randomly. The strength of the approach is
 limited by the quality of the test suite and the supported mutation
 operators, which are typically simple. We chose these specific fuzzers
@@ -1247,12 +1247,12 @@ also revealed more failures than any other, perhaps as expected, given
 that it is the suite with more tests (see
 Table~\ref{tab:test-suites}).
 
-%In particular, we were not able to reuse the \smonkey tests on the
-%\hermes engine. This happened because \smonkey has its own assertion
-%framework, but \hermes did not interpret these assertions, resulting
-%in failures in all test executions from this engine. These failures
-%did not happen when the \smonkey tests were transplanted to the other engines,
-%though.
+In particular, we were not able to reuse the \smonkey tests on the
+\hermes engine. This happened because \smonkey has its own assertion
+framework, but \hermes did not interpret these assertions, resulting
+in failures in all test executions from this engine. These failures
+did not happen when the \smonkey tests were transplanted to the other engines,
+though.
 
 
 %%  As another example, some tests from \Fix{Y} use the
@@ -1355,7 +1355,7 @@ developers use five levels, whereas \chakra{}~\cite{chakra-severity}
 and \veight{}~\cite{v8-severity} developers use only three. As usual,
 the smallest the number the highest the severity of the bug. We use a
 dash (``-'') in place of the severity level for the cases where the
-bug report is pending confirmation. Of the 32
+bug report is pending confirmation. Of the \noBugsTransplantation{}
 bugs we reported in this experiment,
 \noBugsTransplantationConfirmed\ were promoted from the status ``New''
 to ``Confirmed''. Of these, \noBugsTransplantationSeverityTwo{} are
@@ -1589,8 +1589,7 @@ and the test suite from the original test input (``Suite''). So far,
 were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was considered to be acceptable. As
-of now, we did not find any new bugs on \smonkey{} using differential
-testing; the bugs we found
+of now, we did not find any new bugs on \smonkey{}; the bugs we found
 were duplicates and were not reported. For \veight{},
 we reported \noDiffVeight{} bugs,
 all of them confirmed, with \noDiffVeightFixed{} fixed.
@@ -1650,7 +1649,7 @@ testing to \hermes, we ran the Test262 conformance suite on the most
 recent version of \hermes, 0.5.0. We observed that only 26\% of the
 Test262 tests passed. When taking a closer look, we noticed that this
 high percentage of failing tests was due to the high number of
-features not yet suported by \hermes\footnote{See
+features not yet supported by \hermes\footnote{See
   \url{https://github.com/facebook/hermes/blob/master/doc/Features.md}}. For
 instance, in its most recent release, \hermes still does not support
 for features such as Proxy, Promise, and Async calls. For this
@@ -1838,7 +1837,7 @@ bug, but they did \emph{not} accept.
 This is a test case original from the \jsc suite that the
 \radamsa\ fuzzer modified. The original test used the integer literal
 3 as argument to \CodeIn{repeat()}, \ie{}, the expression produced a
-string with three repetitiong of the string ``foo''. The new test uses
+string with three repetitions of the string ``foo''. The new test uses
 a long integer instead as parameter to \CodeIn{repeat()}. As result,
 the engine crashes. The team answered that this was an incompatibility
 by design\footnote{We interpreted as a violation of an undocumented
@@ -2002,7 +2001,7 @@ robust engines, such as Mozilla's \smonkey, 2)~Even for software
 projects with fairly clear specifications, as the case of
 \javascript{}~\cite{ecmas262-spec}, there are lots of undefined
 implementation-specific behaviors whose implementation can
-inadvertedly lead to interference in the well-specified parts of the
+inadvertently lead to interference in the well-specified parts of the
 spec, leading to clear bugs. 3)~Finding functional/non-crash bugs with
 differential testing is feasible on real, complex, widely used pieces
 of software. Even black-box mutational fuzzers revealed bugs. We do
