@@ -1247,12 +1247,12 @@ also revealed more failures than any other, perhaps as expected, given
 that it is the suite with more tests (see
 Table~\ref{tab:test-suites}).
 
-In particular, we were not able to reuse the \smonkey tests on the
-\hermes engine. This happened because \smonkey has its own assertion
-framework, but \hermes did not interpret these assertions, resulting
-in failures in all test executions from this engine. These failures
-did not happen when the \smonkey tests were transplanted to the other engines,
-though.
+%In particular, we were not able to reuse the \smonkey tests on the
+%\hermes engine. This happened because \smonkey has its own assertion
+%framework, but \hermes did not interpret these assertions, resulting
+%in failures in all test executions from this engine. These failures
+%did not happen when the \smonkey tests were transplanted to the other engines,
+%though.
 
 
 %%  As another example, some tests from \Fix{Y} use the
@@ -1355,7 +1355,7 @@ developers use five levels, whereas \chakra{}~\cite{chakra-severity}
 and \veight{}~\cite{v8-severity} developers use only three. As usual,
 the smallest the number the highest the severity of the bug. We use a
 dash (``-'') in place of the severity level for the cases where the
-bug report is pending confirmation. Of the \noBugsTransplantation{}
+bug report is pending confirmation. Of the 32
 bugs we reported in this experiment,
 \noBugsTransplantationConfirmed\ were promoted from the status ``New''
 to ``Confirmed''. Of these, \noBugsTransplantationSeverityTwo{} are
@@ -1589,7 +1589,8 @@ and the test suite from the original test input (``Suite''). So far,
 were fixed. Note that one bug report that we submitted was rejected on
 the basis that the offending JS file manifested an incompatibility
 across engine implementations that was considered to be acceptable. As
-of now, we did not find any new bugs on \smonkey{}; the bugs we found
+of now, we did not find any new bugs on \smonkey{} using differential
+testing; the bugs we found
 were duplicates and were not reported. For \veight{},
 we reported \noDiffVeight{} bugs,
 all of them confirmed, with \noDiffVeightFixed{} fixed.
