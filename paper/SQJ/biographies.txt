@@ -1,6 +1,10 @@
-Igor Lima is a MSc. student in Computer Science at the Federal University of Pernambuco, Brazil. He is being advised by Professor Marcelo d’Amorim and he is interested in Software Enginnering, Test Analysis and Programming Languages.
+Igor Lima received his Masters degree in Computer Science from the Federal University of Pernambuco, Brazil. He was advised by Professor Marcelo d’Amorim and he is interested in Software Engineering, Test Analysis and Programming Languages.
 
-Breno Miranda received his PhD degree in computer science from the University of Pisa, Italy, in 2016. Currently, he is an assistant professor at the Federal University of Pernambuco, Brazil. His main research area is software engineering, with particular focus in software testing. 
+Jefferson Silva is an MSc. Computer Science student at the Federal University of Pará, Brazil. He is being supervised by Professor Gustavo Pinto and is interested in Software Engineering, Open Source Projects, Automated Tests, Agile Methods, Mobile Technologies, Internet of Things and Programming Languages.
+
+Breno Miranda received his PhD degree in computer science from the University of Pisa, Italy, in 2016. Currently, he is an assistant professor at the Federal University of Pernambuco, Brazil. His main research area is software engineering, with particular focus in software testing.
+
+Gustavo Pinto received his Ph.D. from de Federal University of Pernambuco, Brazil, in 2015. He is currently an assistant professor at the Federal University of Pará. He works on the intersection between people (what developers think about x?) and code (is x a feature or a bug?).
 
 Marcelo d’Amorim obtained his Ph.D. from the University of Illinois at Urbana-Champaign in 2007. Currently, he is an Associate Professor at the Federal University of Pernambuco, Brazil. Marcelo's research goal is to improve software quality through program analysis and testing. He is interested in preventing, finding, diagnosing, and repairing software bugs.
 
