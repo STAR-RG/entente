@@ -465,9 +465,9 @@ engines.
     Duktape & \cite{duktape} & \duktapeOriginal{} & \duktapePassInPar{} & \duktapeCompileAll{} & \duktapeNoFailAll{}\\
     \jerry{} & \cite{jerryscript2018repo} & \jerryOriginal{} & \jerryPassInPar{} & \jerryCompileAll{} & \jerryNoFailAll{}\\
     JSI & \cite{jsi} & \jsiOriginal{} & \jsiPassInPar{} & \jsiCompileAll{} & \jsiNoFailAll{}\\
-    Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{}\markbottomright{c1} & \tinyNoFailAll{}\markbottomright{c2}\\
+    Tiny-js & \cite{tinyjs} & \tinyOriginal{} & \tinyPassInPar{} & \tinyCompileAll{} & \tinyNoFailAll{}\\
     Babel & \cite{babel2020repo} & \babelOriginal{} & \babelPassInPar{} & \babelCompileAll{} & \babelNoFailAll{} \\
-    BlogEngine.NET & \cite{blogEngineNet2020repo} & \blogEngineNetOriginal{} & \blogEngineNetPassInPar{} & \blogEngineNetCompileAll{} & \blogEngineNetNoFailAll{} \\
+    BlogEngine.NET & \cite{blogEngineNet2020repo} & \blogEngineNetOriginal{} & \blogEngineNetPassInPar{} & \blogEngineNetCompileAll{}\markbottomright{c1} & \blogEngineNetNoFailAll{}\markbottomright{c2} \\
     \midrule
     %GitHub Projects & - & 494,394 & - & - & - \\
     %\midrule
@@ -514,24 +514,11 @@ column but the Test262 tests. We did not consider tests from the
 conformance suite as they are more likely to indicate missing features
 as opposed to bugs. In addition, engine developers have access to
 these tests and are encouraged to run them.
-
 Column ``no-fail-in-all'' shows the tests for which all engines
-pass. The set of tests in this column is a subset of the
-``type-in-all'' test set. The tests in this set are as fuzzing seeds
-in the evaluation of differential testing. The guarantee that they
-pass in all engines assures that, if discrepancies occur, they are
-related to the changes in the input as opposed to the original cause
-of failure.
-\Fix{It is worth noting that we also did not include the tests
-from \hermes\ in the table because, as the reader shall see in
-Table~\ref{tab:test262}, \hermes presents a very low adherence to the
-Test262 conformance suite. If we decided to keep \hermes, considering
-only the number of passing tests in all engines (the
-``no-fail-in-all'' column), it would significantly reduce our amount of test files.}
-$\leftarrow$\Breno{Haven't we decided that Hermes should be removed from Table 3?
-If yes, maybe this explanation will only create confusing.}
-\Mar{Not sure if I understood the conclusion. Do you mean the total amount of test
-  (also from other suites)? Why?}
+pass. The tests in this set are used as fuzzing seeds in the
+evaluation of differential testing. The guarantee that tests pass in
+all engines assures that discrepancies are related to the changes in
+the input produced by fuzzers.
 
 
 
@@ -544,44 +531,56 @@ If yes, maybe this explanation will only create confusing.}
 %% we selected a total of \totfiles{} JS
 %% files.
 
-\lbrack{}Additional cleansing\rbrack{}~We noticed that some of the
-tests we found depend on external libraries, which not all selected
-engines support. We decided to discard those. For example, many tests
-we found were based on Node.js~\cite{node} which
+\lbrack{}Cleansing\rbrack{}~We noticed that some of the tests we found
+depend on external libraries, which not all selected engines
+support. We decided to discard those. For example, we found many tests
+based on Node.js~\cite{node} that
 %\Mar{@Igor, is this the reason?  Please, confirm$\rightarrow$}
-%\Igor{yes, it is. Some Node internal features are
-%not included in the JS engine, including some keywords (ie. require, module).
-%In addiction, a project with nodejs require a package.json with a lot of external dependencies.}
-require libraries to be
-installed before running the test and different tests require
-different sets of libraries. Also, as already mentioned, we did not
+%\Igor{yes, it is. Some Node internal features are not included in the
+%JS engine, including some keywords (ie. require, module).  In
+%addiction, a project with nodejs require a package.json with a lot of
+%external dependencies.}
+require libraries to be installed before running the test and
+different tests require different sets of libraries. Supporting those
+tests would require an extra setup step and would slow down the
+execution of our experiments. Also, as already mentioned, we did not
 consider tests from the \chakra{} repository because they depend on
-non-portable objects.  Finally, note that the number of tests in
-\veight\ is low; that happens because \veight{} uses many tests from
-Mozilla and \jsc; we discarded those to avoid repetition and to give
-credit where it is due.
+non-portable objects.
 
-\lbrack{}Test Harness\rbrack{}~It is also worth mentioning that some
-engines uses a custom shell to run tests, including a harness with
-specific assertions. For example, tests provided by Mozilla contain a lot
-of custom functions (\eg\ assertThrowsInstanceOf, assertEqArray, getPromiseResult)
-and those are included in the shell to make the test run correctly.
-For that, we needed to make minor changes in the testing infrastructure to be able
+\lbrack{}Test Harness\rbrack{}~We noticed that some engines use a
+custom shell to run tests, including a harness with specific
+assertions. For example, tests provided by Mozilla contain a lot of
+custom functions (\eg{}, \CodeIn{assertThrowsInstanceOf},
+\CodeIn{assertEqArray}, and \CodeIn{getPromiseResult}) and those are
+included in the shell to make the test run correctly.  For that, we
+needed to make minor changes in the testing infrastructure to be able
 to run the tests uniformly across all engines. More precisely, we
 needed to mock non-portable functions, which are only available in
 certain engines. Since we had to transplant more than 40k test files,
 we tried to mock the minimum amount of code possible to make the test
-file work in the other engine.\Mar{This seems a different problem
-  (tests without assertions). I did not understand how this is related
-  to portability?}\Igor{A test is a simple JS file input.
-  Some tests are not well-defined.}  For instance, if a test had a statement such as
-\texttt{print(1==1);} we manually refactored that statement to
-\texttt{assert(1==1)} which should throw an assertion violation if the condition returns false.
-If the change would require more substantial manual work, we opted to discard the test instead. Overall,
-we may have manually refactored more than a thousand test files.
+file work in the other engine. For instance, if a test had a statement
+such as \texttt{print(1==1);} we manually refactored that statement to
+\texttt{assert(1==1)} which should throw an assertion violation if the
+condition returns false.  If we found the change would require
+substantial manual work, we opted to discard the test instead.
 
-\lbrack{}Dedup\rbrack{}~\Fix{Explain what we did to avoid
-  dups. Consider moving to the the sentence ``Finally, note that the number of tests in V8''}
+%Overall, we may have manually refactored more than a thousand test files.
+
+%% \Mar{This seems a different problem
+%%   (tests without assertions). I did not understand how this is related
+%%   to portability?}\Igor{A test is a simple JS file input.  Some tests
+%%   are not well-defined.}  
+
+\lbrack{}Dedup\rbrack{}~The number of tests in \veight\ is low because
+we dicarded duplicate tests with Mozilla and \jsc. The rationale is to
+avoid inflating results and giving credit where it is due. We also
+wrote a script that compares each pair of tests from different suites
+for similarity. We did not find identical tests, although it is
+possible there are equivalent tests modulo renaming.
+
+%\Fix{Explain what we did to avoid dups. Consider
+%  moving to the the sentence ``Finally, note that the number of tests
+%  in V8''}
 
 \subsection{Mining Tests From Issue Trackers}
 
@@ -735,45 +734,45 @@ publicly available from our website as a separate component.
 %% \Fix{add code to explain}
 
 
-\subsection{Characterization of Test Suites}
+%% \subsection{Characterization of Test Suites}
 
-To provide a brief overview of the test suites and understand if the engines
-have specific testing purposes, we investigated the most common
-objects and functions that each one of the JS engines employ.
-To achieve this goal, we started by filtering out many non-relevant source
-code statements available on the test suites. We started by removing JS language constructs (such as \texttt{if}, \texttt{for}, and \texttt{var}). We then removed
-special characters (such as parentheses, mathematical symbols, and semicolons).
-For the remaining source code constructs, we search for the ``.'' character, which
-indicates a function call. We then stored the function and the object that host
-that function.  By manually analyzing this data, we noted many general purpose
-functions, that do not provide any hint on the kind of behavior the engine is
-more likely to test (such as \texttt{console.log}). We also removed these
-general purpose functions. The remaining object/functions are shown at
-Figure~\ref{fig:histograms}.
+%% To provide a brief overview of the test suites and understand if the engines
+%% have specific testing purposes, we investigated the most common
+%% objects and functions that each one of the JS engines employ.
+%% To achieve this goal, we started by filtering out many non-relevant source
+%% code statements available on the test suites. We started by removing JS language constructs (such as \texttt{if}, \texttt{for}, and \texttt{var}). We then removed
+%% special characters (such as parentheses, mathematical symbols, and semicolons).
+%% For the remaining source code constructs, we search for the ``.'' character, which
+%% indicates a function call. We then stored the function and the object that host
+%% that function.  By manually analyzing this data, we noted many general purpose
+%% functions, that do not provide any hint on the kind of behavior the engine is
+%% more likely to test (such as \texttt{console.log}). We also removed these
+%% general purpose functions. The remaining object/functions are shown at
+%% Figure~\ref{fig:histograms}.
 
 
-\begin{figure}[thp]
-\begin{center}
-$
-\begin{array}{cc}
-Charka & Duktape \\
-\includegraphics[width=.5\textwidth, clip, trim= 0px 35px 10px 0px]{figs/hist/chakra.pdf} &
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/duktape.pdf} \\
-Hermes & JerryJS \\
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/hermes.pdf} &
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/jerryJS.pdf} \\
-JSI & Test262 \\
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/jsi.pdf} &
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/test262.pdf} \\
-TinyJS & V8 \\
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/tinyJS.pdf} &
-\includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/v8.pdf} \\
-\end{array}
-$
-\end{center}
-\caption{histograms.}
-\label{fig:histograms}
-\end{figure}
+%% \begin{figure}[thp]
+%% \begin{center}
+%% $
+%% \begin{array}{cc}
+%% Charka & Duktape \\
+%% \includegraphics[width=.5\textwidth, clip, trim= 0px 35px 10px 0px]{figs/hist/chakra.pdf} &
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/duktape.pdf} \\
+%% Hermes & JerryJS \\
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/hermes.pdf} &
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/jerryJS.pdf} \\
+%% JSI & Test262 \\
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/jsi.pdf} &
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/test262.pdf} \\
+%% TinyJS & V8 \\
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/tinyJS.pdf} &
+%% \includegraphics[width=.5\textwidth, clip,trim= 0px 35px 10px 0px]{figs/hist/v8.pdf} \\
+%% \end{array}
+%% $
+%% \end{center}
+%% \caption{histograms.}
+%% \label{fig:histograms}
+%% \end{figure}
 
 \section{Cross-Engine Differential Testing}
 \label{sec:design}
@@ -1697,6 +1696,22 @@ likely to be inconsistencies related to influx development as opposed
 to real bugs.
 
 \section{Discussion}
+
+\Mar{moved from Section 4. check if useful. $\rightarrow$}
+\Fix{It is worth noting that we also
+  did not include the tests from \hermes\ in the table because, as the
+  reader shall see in Table~\ref{tab:test262}, \hermes presents a very
+  low adherence to the Test262 conformance suite. If we decided to
+  keep \hermes, considering only the number of passing tests in all
+  engines (the ``no-fail-in-all'' column), it would significantly
+  reduce our amount of test files.}  $\leftarrow$\Breno{Haven't we
+  decided that Hermes should be removed from Table 3?  If yes, maybe
+  this explanation will only create confusing.}  \Mar{Not sure if I
+  understood the conclusion. Do you mean the total amount of test
+  (also from other suites)? Why?}
+
+
+
 
 This section discusses bug reports, threats to validity, and key
 findings and lessons learned.
