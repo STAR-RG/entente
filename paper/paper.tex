@@ -1083,11 +1083,11 @@ experiment~\cite{ecma262-conformance-suite}.
     \toprule
     engine & \% passing \\
     \midrule
-    \jsc & \percentSuiteTestJSC{}\\
     \veight{} & \percentSuiteTestVeight{} \\
-    \chakra{} & \percentSuiteTestChakra{} \\
     \smonkey{} & \percentSuiteTestSM{} \\
-    \hermes & \percentSuiteTestHermes{} \\
+    \jsc & \percentSuiteTestJSC{}\\
+    \chakra{} & \percentSuiteTestChakra{} \\
+    %\hermes & \percentSuiteTestHermes{} \\
     \bottomrule
   \end{tabular}
   %\normalsize
@@ -1116,7 +1116,7 @@ features as opposed to bugs.
   \fbox{
     \begin{minipage}{11cm}
       \textit{Summary:}~Most of the engines seem to adhere well to the
-      \js\ standard. Except for \hermes and \chakra, the passing ratio of all
+      \js\ standard. Except for \chakra, the passing ratio of all
       engines is above 90\%.
       \end{minipage}
     }
@@ -1199,15 +1199,12 @@ also revealed more failures than any other, perhaps as expected, given
 that it is the suite with more tests (see
 Table~\ref{tab:test-suites}).
 
-\Fix{
 In particular, we were not able to reuse the \smonkey tests on the
 \hermes engine. This happened because \smonkey has its own assertion
 framework, but \hermes did not interpret these assertions, resulting
 in failures in all test executions from this engine. These failures
 did not happen when the \smonkey tests were transplanted to the other engines,
 though.
-}
-\Gustavo{Falar pq Hermes nao esta na tabela}
 
 
 %%  As another example, some tests from \Fix{Y} use the
