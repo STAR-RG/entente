@@ -29,7 +29,7 @@ If your setup is already configured (keep reading if not), you just need to run 
 1. Clone this repository
 2. Run `install_deps.sh` to install all dependencies
 
-### Clone Entente Project
+### Clone ENTENTE project and go to project folder
 ![downloadind project](https://github.com/damorimRG/entente/blob/master/clone_entente.gif)
 
 ### Running
