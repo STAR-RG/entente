@@ -32,6 +32,9 @@ If your setup is already configured (keep reading if not), you just need to run 
 ### Clone ENTENTE project and go to project folder
 ![downloadind project](https://github.com/damorimRG/entente/blob/master/clone_entente.gif)
 
+### Run install_deps.sh to install all dependencies 
+![run install_deps.sh](https://github.com/damorimRG/entente/blob/master/run_install_deps.gif)
+
 ### Running
 - Open a terminal window, go to project folder and run: `$> tox`
 
