@@ -114,7 +114,7 @@ v8 = find('v8', engines_dir)
 # hermes
 hermes = find('hermes', engines_dir)
 
-fuzzers_dir = os.path.join(base_dir, 'js_engines')
+fuzzers_dir = os.path.join(base_dir, 'bin_fuzzers')
 # radamsa
 radamsa = find('radamsa', fuzzers_dir)
 # quickfuzz
