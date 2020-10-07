@@ -531,7 +531,9 @@ the input produced by fuzzers.
 %% we selected a total of \totfiles{} JS
 %% files.
 
-\lbrack{}Cleansing\rbrack{}~We noticed that some of the tests we found
+\vspace{0.2cm}
+\noindent
+\textbf{Cleansing}~We noticed that some of the tests we found
 depend on external libraries, which not all selected engines
 support. We decided to discard those. For example, we found many tests
 based on Node.js~\cite{node} that
@@ -547,7 +549,9 @@ execution of our experiments. Also, as already mentioned, we did not
 consider tests from the \chakra{} repository because they depend on
 non-portable objects.
 
-\lbrack{}Test Harness\rbrack{}~We noticed that some engines use a
+\vspace{0.2cm}
+\noindent
+\textbf{Test Harness}~We noticed that some engines use a
 custom shell to run tests, including a harness with specific
 assertions. For example, tests provided by Mozilla contain a lot of
 custom functions (\eg{}, \CodeIn{assertThrowsInstanceOf},
@@ -571,7 +575,9 @@ substantial manual work, we opted to discard the test instead.
 %%   to portability?}\Igor{A test is a simple JS file input.  Some tests
 %%   are not well-defined.}
 
-\lbrack{}Dedup\rbrack{}~The number of tests in \veight\ is low because
+\vspace{0.2cm}
+\noindent
+\textbf{Dedup}~The number of tests in \veight\ is low because
 we discarded duplicate tests with Mozilla and \jsc. The rationale is to
 avoid inflating results and giving credit where it is due. We also
 wrote a script that compares each pair of tests from different suites
@@ -789,9 +795,9 @@ fuzzed multiple times.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[trim=0 330 170 0,clip,width=0.85\textwidth]{diff-testing-runtimes}
-  \caption{\label{fig:workflow}Differential Testing infrastructure
-    overview.}
+  \includegraphics[width=0.85\textwidth]{figs/diff-testing-runtimes-2.pdf}
+  \caption{\label{fig:workflow}The workflow of the referred differential
+testing approach.}
 \end{figure}
 
 The bug-finding process works as follows. First, for a given test
@@ -1428,7 +1434,9 @@ that are syntactically invalid.
 %% finding would be important to reduce inspection cost and guide future
 %% developments of this approach.
 
-\vspace{0.5ex} \lbrack{}Exploratory Phase\rbrack{} For the first
+\vspace{0.2cm}
+\noindent
+\textbf{Exploratory Phase} For the first
 three months of the study, our inspection process was exploratory.  In
 this phase, we wanted to learn whether or not black-box fuzzers could
 reveal real bugs and how effective was the \hi{}-\lo\ warning
@@ -1457,7 +1465,9 @@ lithium~\cite{lithium} to minimize long test cases\Comment{; the tests
 was filed only after one of the authors reviewed the diagnosis. Each
 student found at least one bug using this methodology.
 
-\vspace{0.5ex} \lbrack{}Non-Exploratory Phase\rbrack{} Results
+\vspace{0.2cm}
+\noindent
+\textbf{Non-Exploratory Phase} Results
 obtained in the exploratory phase confirmed our expectations that most
 of the bugs found during the initial period of investigation were
 related to \hi\ warnings. For that reason, we changed our inspection
@@ -1943,10 +1953,12 @@ that the authors of this paper made mistakes in the implementation of
 the scripts supporting the experiments. To mitigate this threat, we
 carefully inspected the implementation and results, looking for
 inconsistencies whenever possible. As for external validity, our
-results might not generalize to other test inputs and engines. To
-mitigate this threat, we carefully selected inputs from various
-sources according to a well-defined criteria. Likewise, we selected
-the engines by using using a documented criteria and found that the
+results might not generalize to other test inputs and engines.
+We though carefully selected inputs from various
+sources according to a well-defined criteria (Section~\ref{sec:seeds}).
+Likewise, we selected
+the engines by using using a documented criteria (Section~\ref{sec:methodology:engines})
+and found that the
 engines selected were associated, certainly not by coincidence, with
 the browsers informally considered the most popular in the market.  A
 reader might argue that since we mined files from other JS engines,
